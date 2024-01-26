@@ -4,7 +4,7 @@
     "href": "index.html",
     "title": "Cartography",
     "section": "",
-    "text": "Preface\nThis is a Quarto book.\nTo learn more about Quarto books visit https://quarto.org/docs/books.\n\n1 + 1\n\n[1] 2",
+    "text": "Preface\n이것은 내가 최초로 만드는 웹북이다. 이번 학기에 수업을 진행하면서 챕터를 하나씩 덧붙여 여름방학 끝날 즈음에는 하나의 책으로 완성하고 싶다.",
     "crumbs": [
       "Preface"
     ]
@@ -37,6 +37,57 @@
     "text": "Knuth, Donald E. 1984. “Literate Programming.” Comput.\nJ. 27 (2): 97–111. https://doi.org/10.1093/comjnl/27.2.97.",
     "crumbs": [
       "References"
+    ]
+  },
+  {
+    "objectID": "part_1.html",
+    "href": "part_1.html",
+    "title": "Maps and Cartography",
+    "section": "",
+    "text": "이 장에서는 지도와 지도학에 대한 가장 기본적인 사항을 다룬다. 이 장은 다음과 같이 크게 세 부분으로 나뉘어진다.\n\n지도와 지도학\n지도의 종류\n지도학적 의사소통과 지도화 과정",
+    "crumbs": [
+      "Maps and Cartography"
+    ]
+  },
+  {
+    "objectID": "01_history.html",
+    "href": "01_history.html",
+    "title": "1  History of Cartography",
+    "section": "",
+    "text": "이상일의 번역서에 따르면, 그렇고 그렇다 (Harwood 2014).\n\n\n\n\nHarwood, Jeremy. 2014. 지구 끝까지: 세상을 바꾼 100장의 지도. 서울: 푸른길.",
+    "crumbs": [
+      "Maps and Cartography",
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>History of Cartography</span>"
+    ]
+  },
+  {
+    "objectID": "part_2.html",
+    "href": "part_2.html",
+    "title": "Map Projection",
+    "section": "",
+    "text": "이 장에서는 지도 투영과 관련된 궁극적인 테마를 다룬다. 이 장은 다음과 같이 크게 네 부분으로 나뉘어진다. ㅜ\n\n지구의 모형화와 데이텀\n좌표계\n지도 투영의 개념과 원리\n지도 투영의 종류",
+    "crumbs": [
+      "Map Projection"
+    ]
+  },
+  {
+    "objectID": "part_3.html",
+    "href": "part_3.html",
+    "title": "Thematic Mapping",
+    "section": "",
+    "text": "이 장에서는 주제도 제작의 전반을 다룬다. 이 장은 다음과 같이 크게 7개의 절로 나뉘어진다.\n\n공간적 현상의 유형화\n지도화 과정과 지도 디자인\n도형표현도의 제작\n점밀도도의 제작\n콜로플레스맵의 제작\n등치선도의 제작\n유선도의 제작",
+    "crumbs": [
+      "Thematic Mapping"
+    ]
+  },
+  {
+    "objectID": "part_4.html",
+    "href": "part_4.html",
+    "title": "Advanced Topics",
+    "section": "",
+    "text": "이 장은 지도학의 보다 고차원적인 주제를 다룬다. 이 장은 다음과 같이 크게 3개의 절로 나뉜다.\n\n웹매핑\n탐색적 공간데이터 분석\n지도학의 미래",
+    "crumbs": [
+      "Advanced Topics"
     ]
   }
 ]

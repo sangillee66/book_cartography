@@ -4,15 +4,42 @@ project:
 
 book:
   title: "Cartography"
-  author: "Norah Jones"
-  date: "2024. 1. 26."
+  author: "Sang-Il Lee"
+  date: last-modified
   chapters:
     - index.qmd
-    - intro.qmd
-    - summary.qmd
+    - part: part_1.qmd
+      chapters: 
+        - 01_history.qmd
+        - 02_map_cartography.qmd
+        - 03_map_types.qmd
+        - 04_cartographic_communication.qmd
+    - part: part_2.qmd
+      chapters: 
+        - 05_modeling_earth_datum.qmd
+        - 06_coordinate_system.qmd
+        - 07_concept_projection.qmd
+        - 08_types_projection.qmd
+    - part: part_3.qmd
+      chapters: 
+        - 09_spatial_phenomena.qmd
+        - 10_map_design.qmd
+        - 11_proportional.qmd
+        - 12_dot.qmd
+        - 13_chropleth.qmd
+        - 14_isoline.qmd
+        - 15_flow.qmd
+    - part: part_4.qmd
+      chapters: 
+        - 16_web_mapping.qmd
+        - 17_ESDA.qmd
+        - 18_Future.qmd
     - references.qmd
 
 bibliography: references.bib
+
+execute:
+  freeze: auto
 
 format:
   html:
