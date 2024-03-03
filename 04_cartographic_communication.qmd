@@ -1,3 +1,229 @@
 ---
-title: "Cartographic Communication and Mapping"
+title: "지도학적 의사소통과 지도화 과정"
+author: Sang-Il Lee
+date-modified: last-modified
+number-sections: true
+format: 
+  html: 
+    toc: true
+code-link: true
+code-copy: true
+execute: 
+  warning: false
+  error: false
+  freeze: auto
+editor: visual
 ---
+
+## 개념 규정
+
+## 지도학적 일반화
+
+## 기호화
+
+### 시각 변수
+
+#### 준비 작업
+
+-   필수적인 패키지 불러오기
+
+```{r}
+library(tidyverse)
+library(readxl)
+library(sf)
+library(tmap)
+library(rayshader)
+```
+
+-   지리공간데이터 불러오기
+
+```{r}
+#| output: false
+seoul_EMD <- st_read(
+  "D:/My R/Korean Administrative Areas/행정구역 셰이프 파일/2 Original Cleaning/2021_4Q/SEOUL_EMD_2021_4Q.shp", options = "ENCODING=CP949")
+seoul_EMD_2020 <- st_read(
+  "D:/My R/Korean Administrative Areas/행정구역 셰이프 파일/2 Original Cleaning/2020_2Q/SEOUL_EMD_2020_2Q.shp", options = "ENCODING=CP949")
+seoul_gu <- st_read(
+  "D:/My R/Korean Administrative Areas/행정구역 셰이프 파일/2 Original Cleaning/2021_4Q/SEOUL_GU_2021_4Q.shp", options = "ENCODING=CP949")
+seoul_sido <- st_read(
+  "D:/My R/Korean Administrative Areas/행정구역 셰이프 파일/2 Original Cleaning/2021_4Q/SEOUL_SIDO_2021_4Q.shp", options = "ENCODING=CP949")
+```
+
+-   지도 확인
+
+```{r}
+qtm(seoul_EMD)
+```
+
+-   1인가구 속성 데이터 불러오기
+
+```{r}
+house_SDGGEMD_2020 <- read_excel(
+  "D:/My R/Population Geography/3 Population Structure/Housing_Size_2020_Adj.xlsx", sheet = 1
+  )
+View(house_SDGGEMD_2020)
+```
+
+-   결합하기
+
+```{r}
+seoul_EMD_2020 <- seoul_EMD_2020 |> 
+  mutate(
+    EMD_ID = as.numeric(EMD_ID)
+  )
+my_df <-seoul_EMD_2020 |> 
+  left_join(
+    house_SDGGEMD_2020, join_by(EMD_ID == Code)
+  )
+```
+
+#### 조감고도 perspective heights
+
+-   ggplot2를 이용하여 지도 제작
+
+```{r}
+my_map <- my_df |> 
+  ggplot() +
+  geom_sf(
+    aes(fill = House1_p), 
+    color = NA, show.legend = FALSE
+    ) +
+  labs(fill = "% of Single \n Households") + 
+  scale_fill_viridis_c() +
+  theme(
+    axis.text = element_blank(),
+    axis.ticks = element_blank(),
+    panel.grid = element_blank(),
+    panel.background = element_blank()
+  )
+my_map
+```
+
+-   3D
+
+```{r}
+plot_gg(my_map, 
+        width = 5, height = 4, scale = 300, 
+        multicore = TRUE, windowsize = c(1726, 1174), 
+        zoom = 0.35, phi = 55, theta = 20, sunangle = 225, fov = 70)
+Sys.sleep(0.2)
+```
+
+-   포착
+
+```{r}
+render_snapshot(clear = TRUE, file = "seoul_3d.png")
+```
+
+#### 색상 hue
+
+-   지도 제작
+
+```{r}
+library(pals)
+my_map <- my_df |> 
+  tm_shape() + 
+  tm_polygons(
+    col = "SGG1_NM",
+    border.col = "gray30", lwd = 0.25, 
+    palette = alphabet2(),
+    legend.show = FALSE
+    )
+my_map
+```
+
+-   저장
+
+```{r}
+#| echo: false
+my_title <- "3_4_1"
+my.path.name <- "outputs/"
+my.file.name <- paste0(my.path.name, my_title, ".png")
+tmap_save(
+  my_map, 
+  filename = my.file.name, 
+  width = 5.75, 
+  dpi = 600)
+```
+
+#### 명도 value
+
+-   지도 제작
+
+```{r}
+my_map <- my_df |> 
+  tm_shape() + 
+  tm_polygons(
+    col = "House1_p",
+    border.col = "gray30", lwd = 0.25, 
+    palette = "Blues", n = 5,
+    legend.show = FALSE
+    )
+my_map
+```
+
+-   저장
+
+```{r}
+#| echo: false
+my_title <- "3_4_2"
+my.path.name <- "outputs/"
+my.file.name <- paste0(my.path.name, my_title, ".png")
+tmap_save(
+  my_map, 
+  filename = my.file.name, 
+  width = 5.75, 
+  dpi = 600)
+```
+
+#### 채도 saturation
+
+-   지도 제작
+
+```{r}
+saturation_5 <- c(
+  "#18C800", "#29B216", "#379F29", "#468B3D", "#557850"
+  )
+my_map <- my_df |> 
+  tm_shape() + 
+  tm_polygons(
+    col = "House1_p",
+    border.col = "gray30", lwd = 0.25, 
+    palette = saturation_5, n = 5,
+    legend.show = FALSE
+    )
+my_map
+```
+
+-   저장
+
+```{r}
+#| echo: false
+my_title <- "3_4_3"
+my.path.name <- "outputs/"
+my.file.name <- paste0(my.path.name, my_title, ".png")
+tmap_save(
+  my_map, 
+  filename = my.file.name, 
+  width = 5.75, 
+  dpi = 600)
+```
+
+#### 질감 texture
+
+```{r}
+my_df |> 
+  ggplot() +
+  geom_sf(
+    aes(fill = House1_p), 
+    color = NA, show.legend = FALSE
+    ) +
+  labs(fill = "% of Single \n Households") + 
+  scale_fill_viridis_c() +
+  theme(
+    axis.text = element_blank(),
+    axis.ticks = element_blank(),
+    panel.grid = element_blank(),
+    panel.background = element_blank()
+  )
+```
