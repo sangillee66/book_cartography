@@ -150,7 +150,7 @@ tmap_save(
   my_map, 
   filename = my.file.name, 
   width = 5.75, 
-  dpi = 600)
+  dpi = 1200)
 ```
 
 ### 일반도-주제도 연속체
@@ -162,7 +162,7 @@ tmap_save(
 ```{r}
 my_map <- my_df |> 
   tm_shape() +
-  tm_borders(col = "gray30", lwd = 0.25)
+  tm_borders(col = "gray20", lwd = 0.75)
 my_map
 ```
 
@@ -177,7 +177,7 @@ tmap_save(
   my_map, 
   filename = my.file.name, 
   width = 5.75, 
-  dpi = 600)
+  dpi = 1200)
 ```
 
 #### 사건 분포도
@@ -193,7 +193,7 @@ accident <- st_read("D:/My R/Vector Data Manipulation Korea/Public_Data_Portal/a
 ```{r}
 my_map <- my_df |> 
   tm_shape() + 
-  tm_borders(col = "gray30", lwd = 0.25) +
+  tm_borders(col = "gray20", lwd = 0.75) +
   tm_shape(accident) + tm_dots(size = 0.15)
 my_map
 ```
@@ -209,7 +209,7 @@ tmap_save(
   my_map, 
   filename = my.file.name, 
   width = 5.75, 
-  dpi = 600)
+  dpi = 1200)
 ```
 
 #### 정성적 주제도
@@ -221,7 +221,7 @@ my_map <- my_df |>
   tm_shape() + 
   tm_polygons(
     col = "SGG1_NM",
-    border.col = "gray30", lwd = 0.25, 
+    border.col = "gray20", lwd = 0.75, 
     palette = pals::alphabet2(),
     legend.show = FALSE
     )
@@ -239,7 +239,7 @@ tmap_save(
   my_map, 
   filename = my.file.name, 
   width = 5.75, 
-  dpi = 600)
+  dpi = 1200)
 ```
 
 #### 정량적 주제도
@@ -253,7 +253,7 @@ my_map <- my_df |>
     col = "House1_p",
     breaks = c(-Inf, 15, 25, 35, 45, 55, 65, Inf),
     palette = "Oranges",
-    border.col = "gray30", lwd = 0.25, 
+    border.col = "gray20", lwd = 0.75, 
     legend.show = FALSE
     )
 my_map
@@ -270,7 +270,7 @@ tmap_save(
   my_map, 
   filename = my.file.name, 
   width = 5.75, 
-  dpi = 600)
+  dpi = 1200)
 ```
 
 ## 정성적 주제도와 정량적 주제도
@@ -317,7 +317,7 @@ my_map <- tm_shape(my_df_2) +
   tm_shape(seoul_gu) + tm_borders(col = "gray10", lwd = 0.75) +
   tm_shape(my_df_2) + 
   tm_symbols(size = "pop_t", scale = 1.5, alpha = 0.75, 
-             col = "#a63603",
+             col = "#a63603",border.lwd = 0, 
              legend.size.show = FALSE) +
   tm_scale_bar(
     color.dark = "gray60",
@@ -342,7 +342,7 @@ tmap_save(
   my_map, 
   filename = my.file.name, 
   width = 5.75, 
-  dpi = 600)
+  dpi = 1200)
 ```
 
 #### 점밀도도
@@ -362,7 +362,7 @@ my_seoul_point <- my_df_2 |>
 my_map <- tm_shape(my_df_2) + 
   tm_borders(col = "gray10", lwd = 0.25) +
   tm_shape(my_seoul_point) + 
-  tm_dots(size = 0.02, alpha = 0.75, col = "#a63603") +
+  tm_dots(size = 0.005, alpha = 0.75, col = "#a63603") +
   tm_shape(seoul_gu) + tm_borders(col = "gray10", lwd = 0.75) +
   tm_scale_bar(
     color.dark = "gray60",
@@ -387,7 +387,7 @@ tmap_save(
   my_map, 
   filename = my.file.name, 
   width = 5.75, 
-  dpi = 600)
+  dpi = 1200)
 ```
 
 #### 단계구분도
@@ -425,7 +425,7 @@ tmap_save(
   my_map, 
   filename = my.file.name, 
   width = 5.75, 
-  dpi = 600)
+  dpi = 1200)
 ```
 
 #### 등치선도
@@ -464,7 +464,9 @@ cont.tps <- rasterToContour(tps)
 -   지도 제작
 
 ```{r}
-my_map <- tm_shape(tps) + 
+my_map <- tm_shape(seoul_gu) +
+  tm_borders() + 
+  tm_shape(tps) + 
   tm_raster(
     style = "fixed", 
     breaks = c(-Inf, 10000, 15000, 20000, 25000, 30000, 40000, Inf),     palette = "Oranges", legend.show = FALSE) +
@@ -497,7 +499,7 @@ tmap_save(
   my_map, 
   filename = my.file.name, 
   width = 5.75, 
-  dpi = 600)
+  dpi = 1200)
 ```
 
 ## 단변량 주제도와 다변량 주제도

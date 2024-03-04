@@ -120,3 +120,43 @@ tm_shape(my_df) +
   tm_scale_bar(color.dark = "gray60", breaks = seq(0, 10, 2), position = c(0.03, 0.01), text.size = 0.6) + 
   tm_credits("SANG-IL LEE, Geograhy Education at SNU, 2023", size = 0.7, position = c(0.8, 0.01))
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+  tm_shape(tps) + 
+  tm_raster(
+    style = "fixed", 
+    breaks = c(-Inf, 10000, 15000, 20000, 25000, 30000, 40000, Inf),     palette = "Oranges", legend.show = FALSE) +
+  tm_shape(subset(
+    cont.tps, 
+    level %in% c(10000, 15000, 20000, 25000, 30000, 40000))) +  
+  tm_iso(
+    text = "level", 
+    color = "black", 
+    lwd = 0.5, 
+    size = 0.5, 
+    alpha = 0.7) +
+  tm_shape(seoul_gu) + 
+  tm_polygons(alpha = 0, border.col = "gray20", lwd = 0.75) +
+  tm_credits(
+    "SANG-IL LEE, Geograhy Education at SNU, 2024", 
+    size = 0.3, position = c(0.78, 0.01)
+  )

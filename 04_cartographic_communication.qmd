@@ -112,7 +112,7 @@ Sys.sleep(0.2)
 -   포착
 
 ```{r}
-render_snapshot(clear = TRUE, file = "seoul_3d.png")
+render_snapshot(clear = TRUE, file = "outputs/seoul_3d.png")
 ```
 
 #### 색상 hue
@@ -143,7 +143,7 @@ tmap_save(
   my_map, 
   filename = my.file.name, 
   width = 5.75, 
-  dpi = 600)
+  dpi = 1200)
 ```
 
 #### 명도 value
@@ -155,6 +155,7 @@ my_map <- my_df |>
   tm_shape() + 
   tm_polygons(
     col = "House1_p",
+    n = 10,
     border.col = "gray30", lwd = 0.25, 
     palette = "Blues", n = 5,
     legend.show = FALSE
@@ -173,7 +174,7 @@ tmap_save(
   my_map, 
   filename = my.file.name, 
   width = 5.75, 
-  dpi = 600)
+  dpi = 1200)
 ```
 
 #### 채도 saturation
@@ -206,7 +207,7 @@ tmap_save(
   my_map, 
   filename = my.file.name, 
   width = 5.75, 
-  dpi = 600)
+  dpi = 1200)
 ```
 
 #### 질감 texture
