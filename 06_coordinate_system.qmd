@@ -128,6 +128,7 @@ my_map <- tm_shape(utm_grid_korea, bbox = utm_bound) + tm_fill(col = "gray80") +
     "SANG-IL LEE, Geograhy Education at SNU, 2024", 
     size = 0.45, position = c(0.65, 0.01), bg.color = "white"
     )
+my_map
 ```
 
 -   저장
