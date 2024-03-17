@@ -14,3 +14,158 @@ execute:
   freeze: auto
 editor: visual
 ---
+
+## 좌표계의 정의와 기본 좌표계
+
+### 좌표계의 정의
+
+### 기본 좌표계
+
+### 지도 투영을 위한 좌표계
+
+## 구체 혹은 타원체 좌표계
+
+### 지리좌표계
+
+{{< video https://www.youtube.com/watch?v=g52A2CPEi4A&t=1s >}}
+
+### 측지좌표계
+
+### 지심좌표계
+
+### 좌표변환
+
+## 평면 직각 좌표계
+
+### 개념 규정
+
+### 구성 요소
+
+### 종류
+
+### UTM 좌표계
+
+#### UTM 좌표계의 개요
+
+![https://en.wikipedia.org/wiki/Universal_Transverse_Mercator_coordinate_system](images/clipboard-1968212367.png)
+
+![](images/clipboard-3549641415.png)
+
+![](images/clipboard-3041164177.png){fig-align="center"}
+
+#### UTM 좌표계와 우리나라
+
+-   필수 패키지 불러오기
+
+```{r}
+library(tidyverse) 
+library(rnaturalearth)
+library(sf) 
+library(tmap) 
+library(tmaptools)
+```
+
+-   지리공간데이터 불러오기
+
+```{r}
+#| echo: true
+#| output: false
+#| eval: true
+countries <- ne_download(scale = 50, type = "countries", category = "cultural") |> 
+  st_as_sf()
+graticule_1 <- ne_download(scale = 50, type = "graticules_1", category = "physical") |> 
+  st_as_sf()
+graticule_30 <- ne_download(scale = 50, type = "graticules_30", category = "physical") |> 
+  st_as_sf()
+bound_box <- ne_download(scale = 50, type = "wgs84_bounding_box", category = "physical") |> 
+  st_as_sf()
+geograhic_lines <- ne_download(scale = 50, type = "geographic_lines", category = "physical") |> 
+  st_as_sf()
+topo_250 <- st_read(
+  "D:/My R/Vector Data Manipulation Korea/Korea_Topo_Index/TN_MAPINDX_250K-polygon.shp", options = "ENCODING=CP949"
+  )
+topo_50 <- st_read(
+  "D:/My R/Vector Data Manipulation Korea/Korea_Topo_Index/TN_MAPINDX_50K-polygon.shp", options = "ENCODING=CP949"
+  )
+utm_grid <- st_read(
+  "D:/My R/World Data Manupulation/World UTM Grid/World_UTM_Grid.shp", options = "ENCODING=CP949"
+  )
+
+# utm_grid의 재투영
+utm_grid <- utm_grid |> 
+  st_transform(crs = st_crs(countries))
+
+# UTM 이름 재정의
+utm_grid <- utm_grid |> 
+  mutate(
+    utm_name = str_c(ZONE, ROW_)
+  ) |> 
+  relocate(
+    utm_name
+  )
+```
+
+-   특정 영역 선택하기
+
+```{r}
+utm_grid_part <- utm_grid |> 
+  filter(
+    ROW_ %in% LETTERS[13:21] & ZONE %in% 45:58
+  )
+utm_bound <- st_bbox(utm_grid_part)
+
+utm_grid_korea <- utm_grid |> 
+  filter(
+    utm_name %in% c("51T", "52T", "51S", "52S")
+  )
+
+my_map <- tm_shape(utm_grid_korea, bbox = utm_bound) + tm_fill(col = "gray80") + 
+  tm_shape(countries, bbox = utm_bound) + tm_borders(col = "gray20", lwd = 0.75) +
+  tm_shape(utm_grid, bbox = utm_bound) + tm_borders(col = "gray50", lwd = 0.75) + 
+  tm_text(text = "utm_name", size = 0.7, col = "gray40") +
+  tm_graticules(x = seq(84, 168, 6), y = seq(0, 56, 8), lwd = 0.3, alpha = 0.5, labels.size = 0.5) + 
+  tm_credits(
+    "SANG-IL LEE, Geograhy Education at SNU, 2024", 
+    size = 0.45, position = c(0.65, 0.01), bg.color = "white"
+    )
+```
+
+-   저장
+
+```{r}
+#| echo: true
+my_title <- "6_2_1" 
+my.path.name <- "outputs/" 
+my.file.name <- paste0(my.path.name, my_title, ".png") 
+tmap_save(my_map, filename = my.file.name,  width = 5.75, dpi = 600)
+```
+
+### 
+
+### IMW 좌표계
+
+### 우리나라 TM 좌표계
+
+### 국가 그리드
+
+#### 미국의 SPCS83
+
+![](images/clipboard-1909351142.png)
+
+![https://gisgeography.com/state-plane-coordinate-system-spcs/](images/clipboard-673631514.png)
+
+#### 일본의 TM 좌표계
+
+![](images/clipboard-3470015781.png){fig-align="center"}
+
+#### 영국의 BNG(British National Grid)
+
+![](images/clipboard-2153214845.png){fig-align="center"}
+
+### CRS
+
+#### 정의
+
+#### 방식
+
+#### 주요 적용 사례

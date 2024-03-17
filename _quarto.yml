@@ -39,6 +39,8 @@ book:
 
 bibliography: references.bib
 
+lightbox: true
+
 execute:
   freeze: auto
 
