@@ -1,5 +1,18 @@
 ---
-title: "Map Projection"
+title: "지도 투영"
+author: Sang-Il Lee
+date-modified: last-modified
+number-sections: true
+format: 
+  html: 
+    toc: true
+code-link: true
+code-copy: true
+execute: 
+  warning: false
+  error: false
+  freeze: auto
+editor: visual
 ---
 
 이 장에서는 지도 투영과 관련된 궁극적인 테마를 다룬다. 이 장은 다음과 같이 크게 네 부분으로 나뉘어진다. ㅜ

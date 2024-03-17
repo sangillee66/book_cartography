@@ -1,5 +1,19 @@
 ---
-title: "History of Cartography"
+title: "지도의 역사"
+author: Sang-Il Lee
+date-modified: last-modified
+number-sections: true
+format: 
+  html: 
+    toc: true
+code-link: true
+code-copy: true
+lightbox: true
+execute: 
+  warning: false
+  error: false
+  freeze: auto
+editor: visual
 ---
 
 이상일의 번역서에 따르면, 그렇고 그렇다 [@harwood2014].

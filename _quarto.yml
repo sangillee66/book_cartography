@@ -6,6 +6,7 @@ book:
   title: "Cartography"
   author: "Sang-Il Lee"
   date: last-modified
+  bread-crumbs: false
   chapters:
     - index.qmd
     - part: part_1.qmd
