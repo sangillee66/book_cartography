@@ -55,6 +55,8 @@ editor: visual
 
 #### UTM 좌표계와 우리나라
 
+우선 우리나라가 포함된 UTM 그리드(51T, 52T, 51S, 52S)에 대한 개관도를 작성한다.
+
 -   필수 패키지 불러오기
 
 ```{r}
@@ -65,21 +67,13 @@ library(tmap)
 library(tmaptools)
 ```
 
--   지리공간데이터 불러오기
+-   지리공간데이터 불러와 정리하기
 
 ```{r}
 #| echo: true
 #| output: false
 #| eval: true
 countries <- ne_download(scale = 50, type = "countries", category = "cultural") |> 
-  st_as_sf()
-graticule_1 <- ne_download(scale = 50, type = "graticules_1", category = "physical") |> 
-  st_as_sf()
-graticule_30 <- ne_download(scale = 50, type = "graticules_30", category = "physical") |> 
-  st_as_sf()
-bound_box <- ne_download(scale = 50, type = "wgs84_bounding_box", category = "physical") |> 
-  st_as_sf()
-geograhic_lines <- ne_download(scale = 50, type = "geographic_lines", category = "physical") |> 
   st_as_sf()
 topo_250 <- st_read(
   "D:/My R/Vector Data Manipulation Korea/Korea_Topo_Index/TN_MAPINDX_250K-polygon.shp", options = "ENCODING=CP949"
@@ -108,40 +102,185 @@ utm_grid <- utm_grid |>
 -   특정 영역 선택하기
 
 ```{r}
-utm_grid_part <- utm_grid |> 
-  filter(
-    ROW_ %in% LETTERS[13:21] & ZONE %in% 45:58
-  )
-utm_bound <- st_bbox(utm_grid_part)
-
+utm_bound <- c(81, -4, 171, 60)
 utm_grid_korea <- utm_grid |> 
   filter(
     utm_name %in% c("51T", "52T", "51S", "52S")
   )
-
-my_map <- tm_shape(utm_grid_korea, bbox = utm_bound) + tm_fill(col = "gray80") + 
-  tm_shape(countries, bbox = utm_bound) + tm_borders(col = "gray20", lwd = 0.75) +
-  tm_shape(utm_grid, bbox = utm_bound) + tm_borders(col = "gray50", lwd = 0.75) + 
-  tm_text(text = "utm_name", size = 0.7, col = "gray40") +
-  tm_graticules(x = seq(84, 168, 6), y = seq(0, 56, 8), lwd = 0.3, alpha = 0.5, labels.size = 0.5) + 
-  tm_credits(
-    "SANG-IL LEE, Geograhy Education at SNU, 2024", 
-    size = 0.45, position = c(0.65, 0.01), bg.color = "white"
-    )
-my_map
 ```
 
--   저장
+-   지도 제작 및 저장
 
 ```{r}
-#| echo: true
-my_title <- "6_2_1" 
-my.path.name <- "outputs/" 
-my.file.name <- paste0(my.path.name, my_title, ".png") 
+my_map <- tm_shape(utm_grid_korea, bbox = utm_bound) + tm_fill(col = "gray80", lwd = 1, border.col = "black") + 
+  tm_shape(countries) + tm_borders(col = "gray50", lwd = 0.75) +
+  tm_shape(utm_grid) + tm_borders(col = "black", lwd = 1) + 
+  tm_text(text = "utm_name", size = 0.7, col = "gray20") +
+  tm_graticules(x = seq(84, 168, 6), y = seq(0, 56, 8), lwd = 0, labels.size = 0.5)
+my_map
+my.file.name <- paste0("outputs/6_2_1.png") 
 tmap_save(my_map, filename = my.file.name,  width = 5.75, dpi = 600)
 ```
 
-### 
+다음으로 서울이 포함된 북반구 52구역에 대한 투영을 실행한다. [epsg.io](https://epsg.io/)의 검색 결과 EPSG:32652임을 확인한다.
+
+```{r}
+# N52를 중심으로 한 대략적인 지역 선정
+bb_utm_52 <- tibble(x = c(81, 81, 171, 171), y = c(-4, 60, -4, 60)) |> 
+  st_as_sf(coords = c("x", "y"), crs = 4326) |> 
+  st_bbox() |> 
+  st_as_sfc()
+
+# 국가 셰이프 파일에서 해당 부분만 골라내기
+countries_bb <- st_intersection(countries, bb_utm_52) |> 
+  st_make_valid()
+
+# UTM N52의 투영법 적용(EPSG:32652)
+countries_bb_utm <- st_transform(countries_bb, crs = 32652)
+
+# UTM N52의 가상원점 지정
+origin_n52 <- st_as_sf(tibble(x = 0, y = 0), coords = c("x", "y"), crs = 32652) |> 
+  st_transform(crs = st_crs(countries))
+
+# 서울 지점 셰이프 만들기
+seoul_point <- st_as_sf(tibble(x = 126.9352778, y = 37.5700057), coords = c("x", "y"), crs = 4326)
+
+# 그리드 생성 영역을 지정하고 그리드 생성
+bb_n52 <- tibble(x = c(0, 1000000), y = c(-1000000, 7000000)) |> 
+  st_as_sf(coords = c("x", "y"), crs = 32652) |> 
+  st_bbox() |> 
+  st_as_sfc()
+
+bb_n52_grid <- st_make_grid(bb_n52, 100000)
+
+# 지도 표현 영역 지정
+bb <- c(-3000000, -500000, 3500000, 6000000)
+my_map <- tm_shape(countries_bb_utm, bbox = bb) + tm_fill() +
+  tm_graticules(x = seq(84, 172, 6), y = seq(0, 40, 10), lwd = 1.5) +
+  tm_shape(bb_n52_grid) + tm_borders(lwd = 0.5) +
+  tm_shape(origin_n52) + tm_symbols(col = "red", size = 0.5) +
+  tm_shape(seoul_point) + tm_symbols(col = "black", size = 0.2)
+my_map
+my.file.name <- paste0("outputs/6_2_2.png") 
+tmap_save(my_map, filename = my.file.name,  width = 5.75, dpi = 600)
+```
+
+우리나라의 TM 좌표계 지도를 제작한다.
+
+-   지리공간데이터 불러와 정리하기
+
+```{r}
+# 시도 행정구역 지도와 지형도 도엽 지도를 불러옴
+sido <- st_read(
+  "D:/My R/Korean Administrative Areas/행정구역 셰이프 파일/3 Generalization/2021_4Q/NOT_MOVE/SIDO_NM_2021_4Q_GEN_0040.shp", options = "ENCODING=CP949") 
+topo_50 <- st_read(
+  "D:/My R/Vector Data Manipulation Korea/Korea_Topo_Index/INDEX/TN_MAPINDX_50K.gpkg", options = "ENCODING=CP949")
+topo_250 <- st_read(
+  "D:/My R/Vector Data Manipulation Korea/Korea_Topo_Index/TN_MAPINDX_250K-polygon.shp", options = "ENCODING=CP949")
+
+# 투영 원점의 셰이프 파일 생성
+origins_df <- tibble(x = c(125, 127, 129, 131), y = c(38, 38, 38, 38))
+origins <- st_as_sf(origins_df, coords = c("x", "y"), crs = 4326) 
+origins <- st_transform(origins, crs = st_crs(sido))
+
+# 개별 투영대의 평면 직각 좌표계 원점 셰이프 파일 생성: 개별 투영법에 의거 
+origin_west <- st_as_sf(tibble(x = 0, y = 0), coords = c("x", "y"), crs = 5185) |> 
+  st_transform(origin_west, crs = st_crs(sido))
+origin_mid <- st_as_sf(tibble(x = 0, y = 0), coords = c("x", "y"), crs = 5186) |> 
+  st_transform(origin_mid, crs = st_crs(sido))
+origin_east <- st_as_sf(tibble(x = 0, y = 0), coords = c("x", "y"), crs = 5187) |> 
+  st_transform(origin_east, crs = st_crs(sido))
+origin_sea <- st_as_sf(tibble(x = 0, y = 0), coords = c("x", "y"), crs = 5188) |> 
+  st_transform(origin_sea, crs = st_crs(sido))
+```
+
+중부 투영대의 지도를 제작한다.
+
+```{r}
+bb_mid <- tibble(x = c(-100000, 720000), y = c(-40000, 720000)) |> 
+  st_as_sf(coords = c("x", "y"), crs = 5186) |> 
+  st_bbox() |> 
+  st_as_sfc()
+
+bb_mid_grid <- st_make_grid(bb_mid, 20000)
+
+my_map <- tm_shape(bb_mid_grid) + tm_borders(lty = "dotted", lwd = 0.5) +
+  tm_shape(sido) + tm_fill(col = "gray75") +
+  tm_graticules(x = c(123:132), lwd = 1.5) +
+  tm_shape(topo_50) + tm_borders(col = "black", lwd = 1.25) +
+  tm_shape(origins) + tm_symbols(col = "black", size = 0.5) +
+  tm_shape(origin_mid) + tm_symbols(col = "red", size = 0.5)
+my_map
+my.file.name <- paste0("outputs/6_2_3.png") 
+tmap_save(my_map, filename = my.file.name,  width = 5.75, dpi = 600)
+```
+
+동부 투영대의 지도를 제작한다.
+
+```{r}
+bb_east <- tibble(x = c(-300000, 520000), y = c(-40000, 720000)) |> 
+  st_as_sf(coords = c("x", "y"), crs = 5187) |> 
+  st_bbox() |> 
+  st_as_sfc()
+
+bb_east_grid <- st_make_grid(bb_east, 20000)
+
+gyeongju <- topo_50 |> 
+  filter(MAPID_NM == "경주")
+
+my_map <- tm_shape(bb_east_grid) + tm_borders(lty = "dotted", lwd = 0.5) +
+  tm_shape(sido) + tm_fill(col = "gray75") +
+  tm_graticules(x = c(123:132), lwd = 1.5) +
+  tm_shape(gyeongju) + tm_fill(col = "gray50") +
+  tm_shape(topo_50) + tm_borders(col = "black", lwd = 1.25) +
+  tm_shape(origins) + tm_symbols(col = "black", size = 0.5) +
+  tm_shape(origin_east) + tm_symbols(col = "red", size = 0.5)
+my_map
+my.file.name <- paste0("outputs/6_2_4.png") 
+tmap_save(my_map, filename = my.file.name,  width = 5.75, dpi = 600)
+```
+
+동해 투영대의 지도를 제작한다.
+
+```{r}
+bb_sea <- tibble(x = c(-500000, 320000), y = c(-40000, 720000)) |> 
+  st_as_sf(coords = c("x", "y"), crs = 5188) |> 
+  st_bbox() |> 
+  st_as_sfc()
+
+bb_sea_grid <- st_make_grid(bb_sea, 20000)
+
+my_map <- tm_shape(bb_sea_grid) + tm_borders(lty = "dotted", lwd = 0.5) +
+  tm_shape(sido) + tm_fill(col = "gray75") +
+  tm_graticules(x = c(123:132), lwd = 1.5) +
+  tm_shape(topo_50) + tm_borders(col = "black", lwd = 1.25) +
+  tm_shape(origins) + tm_symbols(col = "black", size = 0.5) +
+  tm_shape(origin_sea) + tm_symbols(col = "red", size = 0.5)
+my_map
+my.file.name <- paste0("outputs/6_2_5.png") 
+tmap_save(my_map, filename = my.file.name,  width = 5.75, dpi = 600)
+```
+
+서부 투영대의 지도를 제작한다.
+
+```{r}
+bb_west <- tibble(x = c(100000, 920000), y = c(-40000, 720000)) |> 
+  st_as_sf(coords = c("x", "y"), crs = 5185) |> 
+  st_bbox() |> 
+  st_as_sfc()
+
+bb_west_grid <- st_make_grid(bb_west, 20000)
+
+my_map <- tm_shape(bb_west_grid) + tm_borders(lty = "dotted", lwd = 0.5) +
+  tm_shape(sido) + tm_fill(col = "gray75") +
+  tm_graticules(x = c(123:132), lwd = 1.5) +
+  tm_shape(topo_50) + tm_borders(col = "black", lwd = 1.25) +
+  tm_shape(origins) + tm_symbols(col = "black", size = 0.5) +
+  tm_shape(origin_west) + tm_symbols(col = "red", size = 0.5)
+my_map
+my.file.name <- paste0("outputs/6_2_6.png") 
+tmap_save(my_map, filename = my.file.name,  width = 5.75, dpi = 600)
+```
 
 ### IMW 좌표계
 
