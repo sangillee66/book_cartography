@@ -306,3 +306,131 @@ tm_shape(countries_bb_utm, bbox = bb) + tm_fill() +
   tm_graticules(x = seq(90, 172, 6), y = seq(0, 40, 10), lwd = 1.5) +
   tm_shape(bb_n52_grid) + tm_borders() +
   tm_shape(origin_n52) + tm_symbols(col = "red")
+
+# 경위선망에서 일부를 골라 폴리곤 만들기: 꼭지점만 존재하기 때문에 투영을 하면 선이 오로지 직선으로만 표시되는 오류!!!
+
+poly_coord <- tibble(
+  id = c(rep("NI51", 5), rep("NI52", 5), rep("NJ51", 5), rep("NJ52", 5)), 
+  x = c(120, 120, 126, 126, 120, 126, 126, 132, 132, 126, 120, 120, 126, 126, 120, 126, 126, 132, 132, 126),
+  y = c(32, 36, 36, 32, 32, 32, 36, 36, 32, 32, 36, 40, 40, 36, 36, 36, 40, 40, 36, 36)
+)
+imw_kr <- poly_coord |> 
+  st_as_sf(coords = c("x", "y"), crs = 4326) |> 
+  group_by(id) |> 
+  summarize(geometry = st_combine(geometry)) |> 
+  st_cast("POLYGON")
+qtm(imw_kr)
+
+imw_kr
+
+### IMW 인덱스 셰이프 파일 만들기
+
+bb_world_1 <- tibble(x = c(-180, 180), y = c(-60, 60)) |> 
+  st_as_sf(coords = c("x", "y"), crs = 4326) |> 
+  st_bbox() |> 
+  st_as_sfc()
+bb_world_2 <- tibble(x = c(-180, 180), y = c(60, 76)) |> 
+  st_as_sf(coords = c("x", "y"), crs = 4326) |> 
+  st_bbox() |> 
+  st_as_sfc()
+bb_world_3 <- tibble(x = c(-180, 180), y = c(-60, -76)) |> 
+  st_as_sf(coords = c("x", "y"), crs = 4326) |> 
+  st_bbox() |> 
+  st_as_sfc()
+bb_world_4 <- tibble(x = c(-180, 180), y = c(76, 88)) |> 
+  st_as_sf(coords = c("x", "y"), crs = 4326) |> 
+  st_bbox() |> 
+  st_as_sfc()
+bb_world_5 <- tibble(x = c(-180, 180), y = c(-76, -88)) |> 
+  st_as_sf(coords = c("x", "y"), crs = 4326) |> 
+  st_bbox() |> 
+  st_as_sfc()
+bb_world_6 <- tibble(x = c(-180, 180), y = c(88, 90)) |> 
+  st_as_sf(coords = c("x", "y"), crs = 4326) |> 
+  st_bbox() |> 
+  st_as_sfc()
+bb_world_7 <- tibble(x = c(-180, 180), y = c(-88, -90)) |> 
+  st_as_sf(coords = c("x", "y"), crs = 4326) |> 
+  st_bbox() |> 
+  st_as_sfc()
+
+imw_grid_1 <- st_make_grid(bb_world_1, n = c(60, 30)) |> 
+  st_as_sf()
+imw_grid_2 <- st_make_grid(bb_world_2, n = c(30, 4)) |> 
+  st_as_sf()
+imw_grid_3 <- st_make_grid(bb_world_3, n = c(30, 4)) |> 
+  st_as_sf()
+imw_grid_4 <- st_make_grid(bb_world_4, n = c(15, 3)) |> 
+  st_as_sf()
+imw_grid_5 <- st_make_grid(bb_world_5, n = c(15, 3)) |> 
+  st_as_sf()
+imw_grid_6 <- st_make_grid(bb_world_6, n = c(1, 1)) |> 
+  st_as_sf()
+imw_grid_7 <- st_make_grid(bb_world_7, n = c(1, 1)) |> 
+  st_as_sf()
+
+qtm(imw_grid_7)
+
+imw_grid <- bind_rows(imw_grid_1, 
+                      imw_grid_2,
+                      imw_grid_3,
+                      imw_grid_4,
+                      imw_grid_5,
+                      imw_grid_6,
+                      imw_grid_7)
+
+gr_1 <- c(str_c("S", LETTERS[15:1]), str_c("N", LETTERS[1:15]))
+gr_2 <- c(str_c("N", LETTERS[16:19]), str_c("S", LETTERS[19:16]))
+gr_3 <- c(str_c("N", LETTERS[20:22]), str_c("S", LETTERS[22:20]))
+gr_4 <- c(str_c("N", LETTERS[26]), str_c("S", LETTERS[26]))
+
+imw_id_1 <- vector()
+for (i in 1:length(gr_1)){
+  imw_id_i <- str_c(gr_1[i], 1:60)
+  imw_id_1 <- c(imw_id_1, imw_id_i)
+}
+imw_id_2 <- vector()
+for (i in 1:length(gr_2)){
+  imw_id_i <- str_c(gr_2[i], 1:30)
+  imw_id_2 <- c(imw_id_2, imw_id_i)
+}
+imw_id_3 <- vector()
+for (i in 1:length(gr_3)){
+  imw_id_i <- str_c(gr_3[i], 1:15)
+  imw_id_3 <- c(imw_id_3, imw_id_i)
+}  
+imw_id_4 <- gr_4
+
+imw_id <- c(imw_id_1, imw_id_2, imw_id_3, imw_id_4)
+length(imw_id)  
+
+imw_grid <- imw_grid |> 
+  mutate(imw_id) |> 
+  relocate(imw_id)
+  
+st_write(imw_grid, "imw_grid.shp", driver = "ESRI Shapefile", layer_options = "ENCODING=CP949", delete_layer = TRUE)
+
+
+utm_bound <- c(80, 0, 160, 60)
+tm_shape(countries, bbox = utm_bound) + tm_fill() +
+  tm_graticules() 
+
+utm_bound <- c(81, -4, 171, 60)
+
+bb_utm <- tibble(x = c(81, 81, 171, 171), y = c(-4, -4, 60, 60)) |> 
+  st_as_sf(coords = c("x", "y"), crs = 4326) |> 
+  st_bbox() |> 
+  st_as_sfc()
+qtm(bb_utm)
+
+bb <- c(620000, 1440000, 1300000, 1900000)
+tm_shape(topo_50, bbox = bb) + tm_fill() + tm_borders() +
+  tm_shape(sido) + tm_borders(col = "gray10", lwd = 0.5) +
+  tm_shape(gyeongju) + tm_fill(col = "gray50") +
+  tm_shape(daebo) + tm_fill(col = "gray50") +
+  tm_shape(topo_250_south) + tm_borders(lwd = 1.5, col = "gray15") + 
+  tm_text("MAPID_NO", size = 1.25) +
+  tm_graticules()
+
+
+

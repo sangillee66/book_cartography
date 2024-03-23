@@ -75,12 +75,6 @@ library(tmaptools)
 #| eval: true
 countries <- ne_download(scale = 50, type = "countries", category = "cultural") |> 
   st_as_sf()
-topo_250 <- st_read(
-  "D:/My R/Vector Data Manipulation Korea/Korea_Topo_Index/TN_MAPINDX_250K-polygon.shp", options = "ENCODING=CP949"
-  )
-topo_50 <- st_read(
-  "D:/My R/Vector Data Manipulation Korea/Korea_Topo_Index/TN_MAPINDX_50K-polygon.shp", options = "ENCODING=CP949"
-  )
 utm_grid <- st_read(
   "D:/My R/World Data Manupulation/World UTM Grid/World_UTM_Grid.shp", options = "ENCODING=CP949"
   )
@@ -99,27 +93,25 @@ utm_grid <- utm_grid |>
   )
 ```
 
--   특정 영역 선택하기
-
-```{r}
-utm_bound <- c(81, -4, 171, 60)
-utm_grid_korea <- utm_grid |> 
-  filter(
-    utm_name %in% c("51T", "52T", "51S", "52S")
-  )
-```
-
 -   지도 제작 및 저장
 
 ```{r}
+utm_grid_korea <- utm_grid |> 
+  filter(
+    utm_name %in% c("51T", "52T", "51S", "52S")
+  ) |> 
+  st_transform(crs = st_crs(countries))
+
+utm_bound <- c(81, -4, 171, 60)
 my_map <- tm_shape(utm_grid_korea, bbox = utm_bound) + tm_fill(col = "gray80", lwd = 1, border.col = "black") + 
   tm_shape(countries) + tm_borders(col = "gray50", lwd = 0.75) +
   tm_shape(utm_grid) + tm_borders(col = "black", lwd = 1) + 
   tm_text(text = "utm_name", size = 0.7, col = "gray20") +
   tm_graticules(x = seq(84, 168, 6), y = seq(0, 56, 8), lwd = 0, labels.size = 0.5)
 my_map
+asp_r <- get_asp_ratio(my_map)
 my.file.name <- paste0("outputs/6_2_1.png") 
-tmap_save(my_map, filename = my.file.name,  width = 5.75, dpi = 600)
+tmap_save(my_map, filename = my.file.name, width = 5.75, dpi = 600)
 ```
 
 다음으로 서울이 포함된 북반구 52구역에 대한 투영을 실행한다. [epsg.io](https://epsg.io/)의 검색 결과 EPSG:32652임을 확인한다.
@@ -165,18 +157,134 @@ my.file.name <- paste0("outputs/6_2_2.png")
 tmap_save(my_map, filename = my.file.name,  width = 5.75, dpi = 600)
 ```
 
+### IMW 좌표계
+
+#### IMW 좌표계의 개요
+
+![](images/clipboard-1429117803.png)
+
+![](images/clipboard-2189884571.png)
+
+![](images/clipboard-2103062673.png)
+
+![](images/clipboard-911190881.png)
+
+#### IMW 좌표계와 우리나라
+
+우리나라와 그 주변에 대해 IWM 구역 체계를 보여주는 지도를 제작한다.
+
+```{r}
+# IMW 그리드 파일을 불러온다.
+imw_grid <- st_read(
+  "imw_grid.shp", options = "ENCODING=CP949") |> 
+  st_transform(crs = st_crs(countries))
+
+imw_bd <- c(88, 20, 164, 60)
+my_map <- tm_shape(countries, bbox = imw_bd) + tm_fill() +
+  tm_shape(imw_grid) + tm_borders() +
+  tm_text("imw_id", size = 0.5) +
+  tm_graticules(x = seq(90, 162, 6), y = seq(20, 60, 4))
+my_map
+my.file.name <- paste0("outputs/6_2_3.png") 
+tmap_save(my_map, filename = my.file.name,  width = 5.75, dpi = 600)
+```
+
+우리나라에 해당하는 IWM 구역과 1:250,000 지세도를 그린다.
+
+```{r}
+# IWM 중 NJ51, NJ52, NI51, NI52만 고르기
+imw_kr_south <- imw_grid |> 
+  filter(
+    imw_id %in% c("NJ51", "NJ52", "NI51", "NI52")
+  )
+
+tm_shape(imw_kr_south, projection = 5178) + tm_borders()
+
+# 시도 행정구역 지도를 불러옴
+sido <- st_read(
+  "D:/My R/Korean Administrative Areas/행정구역 셰이프 파일/3 Generalization/2021_4Q/NOT_MOVE/SIDO_NM_2021_4Q_GEN_0040.shp", options = "ENCODING=CP949") 
+
+# 지형도 인덱스: 국토지리정보원에서 다운받은 것: 누락된 것이 있음.
+topo_25 <- st_read(
+  "D:/My R/Vector Data Manipulation Korea/Korea_Topo_Index/INDEX/TN_MAPINDX_25K.gpkg", options = "ENCODING=CP949")
+topo_50 <- st_read(
+  "D:/My R/Vector Data Manipulation Korea/Korea_Topo_Index/INDEX/TN_MAPINDX_50K.gpkg", options = "ENCODING=CP949")
+topo_250 <- st_read(
+  "D:/My R/Vector Data Manipulation Korea/Korea_Topo_Index/INDEX/TN_MAPINDX_250K.gpkg", options = "ENCODING=CP949")
+
+# 지형도 인덱스: 대헌에게서 받은 것: 옛날 것임
+topo_25 <- st_read(
+  "D:/My R/Vector Data Manipulation Korea/Korea_Topo_Index_Daeheon/c25000.shp", options = "ENCODING=CP949")
+topo_50 <- st_read(
+  "D:/My R/Vector Data Manipulation Korea/Korea_Topo_Index_Daeheon/c50000.shp", options = "ENCODING=CP949")
+
+topo_25 <- topo_25 |> 
+  st_transform(crs = st_crs(sido))
+topo_50 <- topo_50 |> 
+  st_transform(crs = st_crs(sido))
+topo_250 <- topo_250 |> 
+  st_transform(crs = st_crs(sido))
+
+# 1:250,000 지세도 도엽 중 남한에 해당하는 것만 고르기
+topo_250_south <- topo_250 |> 
+  filter(
+    !MAPID_NM %in% c("회령", "나진", "만포진", "청진", "신의주", "장진", "성진", "평양", "함흥")
+  )
+
+# 지도 제작
+bb <- c(265000, 1300000, 1450000, 2275000)
+my_map <- tm_shape(topo_250_south, bbox = bb) + tm_borders() +
+  tm_shape(sido) + tm_fill(col = "gray75") +
+  tm_graticules(x = c(120, 126, 132), y = c(32, 36, 40)) +
+  tm_shape(topo_250_south) + tm_borders(lwd = 1.5, col = "gray15") + 
+  tm_text("MAPID_NO", size = 0.75) +
+  tm_credits("NJ51", size = 1, position = c(0.125, 0.85)) +
+  tm_credits("NI51", size = 1, position = c(0.075, 0.1)) +
+  tm_credits("NJ52", size = 1, position = c(0.81, 0.84)) +
+  tm_credits("NI52", size = 1, position = c(0.84, 0.08))
+my_map
+my.file.name <- paste0("outputs/6_2_4.png") 
+tmap_save(my_map, filename = my.file.name,  width = 5.75, dpi = 600)
+```
+
+1:250,000, 1:50,000, 1:25,000의 인덱싱 시스템을 보여주는 지도를 제작한다.
+
+```{r}
+# 경주와 대보만 추출함
+
+gyeongju <- topo_50 |> 
+  filter(
+    MAP_NAM == "경주"
+  )
+daebo <- topo_25 |> 
+  filter(
+    MAP_NAM == "대보"
+  )
+
+# 지도 제작
+bb <- c(620000, 1440000, 1300000, 1900000)
+my_map <- tm_shape(topo_50, bbox = bb) + tm_fill() + tm_borders() +
+  tm_shape(sido) + tm_borders(col = "gray10", lwd = 0.5) +
+  tm_shape(gyeongju) + tm_fill(col = "gray50") +
+  tm_shape(daebo) + tm_fill(col = "gray50") +
+  tm_graticules(lwd = 0.5) +
+  tm_shape(topo_250_south) + tm_borders(lwd = 1.5, col = "gray15") + 
+  tm_text("MAPID_NO", size = 1.25)
+my_map
+my.file.name <- paste0("outputs/6_2_5.png") 
+tmap_save(my_map, filename = my.file.name,  width = 5.75, dpi = 600)
+
+```
+
+### 우리나라 TM 좌표계
+
 우리나라의 TM 좌표계 지도를 제작한다.
 
 -   지리공간데이터 불러와 정리하기
 
 ```{r}
-# 시도 행정구역 지도와 지형도 도엽 지도를 불러옴
-sido <- st_read(
-  "D:/My R/Korean Administrative Areas/행정구역 셰이프 파일/3 Generalization/2021_4Q/NOT_MOVE/SIDO_NM_2021_4Q_GEN_0040.shp", options = "ENCODING=CP949") 
-topo_50 <- st_read(
-  "D:/My R/Vector Data Manipulation Korea/Korea_Topo_Index/INDEX/TN_MAPINDX_50K.gpkg", options = "ENCODING=CP949")
-topo_250 <- st_read(
-  "D:/My R/Vector Data Manipulation Korea/Korea_Topo_Index/TN_MAPINDX_250K-polygon.shp", options = "ENCODING=CP949")
+topo_250 |> 
+  st_transform(topo_250, crs = st_crs(sido))
 
 # 투영 원점의 셰이프 파일 생성
 origins_df <- tibble(x = c(125, 127, 129, 131), y = c(38, 38, 38, 38))
@@ -224,9 +332,6 @@ bb_east <- tibble(x = c(-300000, 520000), y = c(-40000, 720000)) |>
   st_as_sfc()
 
 bb_east_grid <- st_make_grid(bb_east, 20000)
-
-gyeongju <- topo_50 |> 
-  filter(MAPID_NM == "경주")
 
 my_map <- tm_shape(bb_east_grid) + tm_borders(lty = "dotted", lwd = 0.5) +
   tm_shape(sido) + tm_fill(col = "gray75") +
@@ -281,10 +386,6 @@ my_map
 my.file.name <- paste0("outputs/6_2_6.png") 
 tmap_save(my_map, filename = my.file.name,  width = 5.75, dpi = 600)
 ```
-
-### IMW 좌표계
-
-### 우리나라 TM 좌표계
 
 ### 국가 그리드
 
