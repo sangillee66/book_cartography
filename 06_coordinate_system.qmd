@@ -267,7 +267,7 @@ my_map <- tm_shape(topo_50, bbox = bb) + tm_fill() + tm_borders() +
   tm_shape(sido) + tm_borders(col = "gray10", lwd = 0.5) +
   tm_shape(gyeongju) + tm_fill(col = "gray50") +
   tm_shape(daebo) + tm_fill(col = "gray50") +
-  tm_graticules(lwd = 0.5) +
+  tm_graticules(lwd = 0.5, x = seq(124, 130, 1)) +
   tm_shape(topo_250_south) + tm_borders(lwd = 1.5, col = "gray15") + 
   tm_text("MAPID_NO", size = 1.25)
 my_map
@@ -315,11 +315,12 @@ bb_mid_grid <- st_make_grid(bb_mid, 20000)
 my_map <- tm_shape(bb_mid_grid) + tm_borders(lty = "dotted", lwd = 0.5) +
   tm_shape(sido) + tm_fill(col = "gray75") +
   tm_graticules(x = c(123:132), lwd = 1.5) +
+  tm_shape(bb_mid_grid) + tm_borders(lty = "dotted", lwd = 0.5) +
   tm_shape(topo_50) + tm_borders(col = "black", lwd = 1.25) +
   tm_shape(origins) + tm_symbols(col = "black", size = 0.5) +
   tm_shape(origin_mid) + tm_symbols(col = "red", size = 0.5)
 my_map
-my.file.name <- paste0("outputs/6_2_3.png") 
+my.file.name <- paste0("outputs/6_2_6.png") 
 tmap_save(my_map, filename = my.file.name,  width = 5.75, dpi = 600)
 ```
 
@@ -336,12 +337,13 @@ bb_east_grid <- st_make_grid(bb_east, 20000)
 my_map <- tm_shape(bb_east_grid) + tm_borders(lty = "dotted", lwd = 0.5) +
   tm_shape(sido) + tm_fill(col = "gray75") +
   tm_graticules(x = c(123:132), lwd = 1.5) +
+  tm_shape(bb_east_grid) + tm_borders(lty = "dotted", lwd = 0.5) +
   tm_shape(gyeongju) + tm_fill(col = "gray50") +
   tm_shape(topo_50) + tm_borders(col = "black", lwd = 1.25) +
   tm_shape(origins) + tm_symbols(col = "black", size = 0.5) +
   tm_shape(origin_east) + tm_symbols(col = "red", size = 0.5)
 my_map
-my.file.name <- paste0("outputs/6_2_4.png") 
+my.file.name <- paste0("outputs/6_2_7.png") 
 tmap_save(my_map, filename = my.file.name,  width = 5.75, dpi = 600)
 ```
 
@@ -362,7 +364,7 @@ my_map <- tm_shape(bb_sea_grid) + tm_borders(lty = "dotted", lwd = 0.5) +
   tm_shape(origins) + tm_symbols(col = "black", size = 0.5) +
   tm_shape(origin_sea) + tm_symbols(col = "red", size = 0.5)
 my_map
-my.file.name <- paste0("outputs/6_2_5.png") 
+my.file.name <- paste0("outputs/6_2_8.png") 
 tmap_save(my_map, filename = my.file.name,  width = 5.75, dpi = 600)
 ```
 
@@ -383,7 +385,46 @@ my_map <- tm_shape(bb_west_grid) + tm_borders(lty = "dotted", lwd = 0.5) +
   tm_shape(origins) + tm_symbols(col = "black", size = 0.5) +
   tm_shape(origin_west) + tm_symbols(col = "red", size = 0.5)
 my_map
-my.file.name <- paste0("outputs/6_2_6.png") 
+my.file.name <- paste0("outputs/6_2_9.png") 
+tmap_save(my_map, filename = my.file.name,  width = 5.75, dpi = 600)
+```
+
+중간 시험 문제(중부 투영대) 지도를 제작한다.
+
+```{r}
+# 춘천, 속초, 강릉만 추출함
+chuncheon <- topo_50 |> 
+  filter(
+    MAP_NAM == "춘천"
+  )
+sokcho <- topo_50 |> 
+  filter(
+    MAP_NAM == "속초"
+  )
+gangreung <- topo_25 |> 
+  filter(
+    MAP_NAM == "강릉"
+  )
+
+bb_mid <- tibble(x = c(-100000, 720000), y = c(-40000, 720000)) |> 
+  st_as_sf(coords = c("x", "y"), crs = 5186) |> 
+  st_bbox() |> 
+  st_as_sfc()
+
+bb_mid_grid <- st_make_grid(bb_mid, 20000)
+
+my_map <- tm_shape(bb_mid_grid) + tm_borders(lty = "dotted", lwd = 0.5) +
+  tm_shape(sido) + tm_fill(col = "gray75") +
+  tm_graticules(x = c(123:132), lwd = 1.5) +
+  tm_shape(bb_mid_grid) + tm_borders(lty = "dotted", lwd = 0.5) +
+  tm_shape(chuncheon) + tm_fill(col = "gray50") +
+  tm_shape(sokcho) + tm_fill(col = "gray50") +
+  tm_shape(gangreung) + tm_fill(col = "gray50") +
+  tm_shape(topo_50) + tm_borders(col = "black", lwd = 1.25) +
+  tm_shape(origins) + tm_symbols(col = "black", size = 0.5) +
+  tm_shape(origin_mid) + tm_symbols(col = "red", size = 0.5)
+my_map
+my.file.name <- paste0("outputs/6_2_10.png") 
 tmap_save(my_map, filename = my.file.name,  width = 5.75, dpi = 600)
 ```
 
