@@ -220,7 +220,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./09_spatial_phenomena.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Typology of Spatial Phenomena</span></span></a>
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">공간적 현상의 유형화</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -398,7 +398,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="utm-좌표계의-개요" class="level4" data-number="6.3.4.1"><h4 data-number="6.3.4.1" class="anchored" data-anchor-id="utm-좌표계의-개요">
 <span class="header-section-number">6.3.4.1</span> UTM 좌표계의 개요</h4>
 <div class="quarto-figure quarto-figure-center">
-<figure class="figure"><p><a href="images/clipboard-1968212367.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1" data-glightbox="description: .lightbox-desc-1" title="https://en.wikipedia.org/wiki/Universal_Transverse_Mercator_coordinate_system"><img src="images/clipboard-1968212367.png" class="img-fluid figure-img" alt="https://en.wikipedia.org/wiki/Universal_Transverse_Mercator_coordinate_system"></a></p>
+<figure class="figure"><p><a href="images/clipboard-1968212367.png" class="lightbox" data-glightbox="description: .lightbox-desc-1" data-gallery="quarto-lightbox-gallery-1" title="https://en.wikipedia.org/wiki/Universal_Transverse_Mercator_coordinate_system"><img src="images/clipboard-1968212367.png" class="img-fluid figure-img" alt="https://en.wikipedia.org/wiki/Universal_Transverse_Mercator_coordinate_system"></a></p>
 <figcaption>https://en.wikipedia.org/wiki/Universal_Transverse_Mercator_coordinate_system</figcaption></figure>
 </div>
 <p><a href="images/clipboard-3549641415.png" class="lightbox" data-gallery="quarto-lightbox-gallery-2"><img src="images/clipboard-3549641415.png" class="img-fluid"></a></p>
@@ -705,7 +705,7 @@ Projected CRS: KGD2002_Central_Belt</code></pre>
 <span>  <span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tm_shape.html">tm_shape</a></span><span class="op">(</span><span class="va">sido</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tm_polygons.html">tm_borders</a></span><span class="op">(</span>col <span class="op">=</span> <span class="st">"gray10"</span>, lwd <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tm_shape.html">tm_shape</a></span><span class="op">(</span><span class="va">gyeongju</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tm_polygons.html">tm_fill</a></span><span class="op">(</span>col <span class="op">=</span> <span class="st">"gray50"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tm_shape.html">tm_shape</a></span><span class="op">(</span><span class="va">daebo</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tm_polygons.html">tm_fill</a></span><span class="op">(</span>col <span class="op">=</span> <span class="st">"gray50"</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tm_grid.html">tm_graticules</a></span><span class="op">(</span>lwd <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tm_grid.html">tm_graticules</a></span><span class="op">(</span>lwd <span class="op">=</span> <span class="fl">0.5</span>, x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="fl">124</span>, <span class="fl">130</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tm_shape.html">tm_shape</a></span><span class="op">(</span><span class="va">topo_250_south</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tm_polygons.html">tm_borders</a></span><span class="op">(</span>lwd <span class="op">=</span> <span class="fl">1.5</span>, col <span class="op">=</span> <span class="st">"gray15"</span><span class="op">)</span> <span class="op">+</span> </span>
 <span>  <span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tm_text.html">tm_text</a></span><span class="op">(</span><span class="st">"MAPID_NO"</span>, size <span class="op">=</span> <span class="fl">1.25</span><span class="op">)</span></span>
 <span><span class="va">my_map</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -864,25 +864,68 @@ First 10 features:
 <div class="sourceCode" id="cb38"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">my.file.name</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span><span class="op">(</span><span class="st">"outputs/6_2_9.png"</span><span class="op">)</span> </span>
 <span><span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tmap_save.html">tmap_save</a></span><span class="op">(</span><span class="va">my_map</span>, filename <span class="op">=</span> <span class="va">my.file.name</span>,  width <span class="op">=</span> <span class="fl">5.75</span>, dpi <span class="op">=</span> <span class="fl">600</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
+<p>중간 시험 문제(중부 투영대) 지도를 제작한다.</p>
+<div class="cell">
+<div class="sourceCode" id="cb39"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># 춘천, 속초, 강릉만 추출함</span></span>
+<span><span class="va">chuncheon</span> <span class="op">&lt;-</span> <span class="va">topo_50</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span></span>
+<span>    <span class="va">MAP_NAM</span> <span class="op">==</span> <span class="st">"춘천"</span></span>
+<span>  <span class="op">)</span></span>
+<span><span class="va">sokcho</span> <span class="op">&lt;-</span> <span class="va">topo_50</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span></span>
+<span>    <span class="va">MAP_NAM</span> <span class="op">==</span> <span class="st">"속초"</span></span>
+<span>  <span class="op">)</span></span>
+<span><span class="va">gangreung</span> <span class="op">&lt;-</span> <span class="va">topo_25</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span></span>
+<span>    <span class="va">MAP_NAM</span> <span class="op">==</span> <span class="st">"강릉"</span></span>
+<span>  <span class="op">)</span></span>
+<span></span>
+<span><span class="va">bb_mid</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html">tibble</a></span><span class="op">(</span>x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">100000</span>, <span class="fl">720000</span><span class="op">)</span>, y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">40000</span>, <span class="fl">720000</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_as_sf.html">st_as_sf</a></span><span class="op">(</span>coords <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"x"</span>, <span class="st">"y"</span><span class="op">)</span>, crs <span class="op">=</span> <span class="fl">5186</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_bbox.html">st_bbox</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_as_sfc.html">st_as_sfc</a></span><span class="op">(</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">bb_mid_grid</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_make_grid.html">st_make_grid</a></span><span class="op">(</span><span class="va">bb_mid</span>, <span class="fl">20000</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">my_map</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tm_shape.html">tm_shape</a></span><span class="op">(</span><span class="va">bb_mid_grid</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tm_polygons.html">tm_borders</a></span><span class="op">(</span>lty <span class="op">=</span> <span class="st">"dotted"</span>, lwd <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tm_shape.html">tm_shape</a></span><span class="op">(</span><span class="va">sido</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tm_polygons.html">tm_fill</a></span><span class="op">(</span>col <span class="op">=</span> <span class="st">"gray75"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tm_grid.html">tm_graticules</a></span><span class="op">(</span>x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">123</span><span class="op">:</span><span class="fl">132</span><span class="op">)</span>, lwd <span class="op">=</span> <span class="fl">1.5</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tm_shape.html">tm_shape</a></span><span class="op">(</span><span class="va">bb_mid_grid</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tm_polygons.html">tm_borders</a></span><span class="op">(</span>lty <span class="op">=</span> <span class="st">"dotted"</span>, lwd <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tm_shape.html">tm_shape</a></span><span class="op">(</span><span class="va">chuncheon</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tm_polygons.html">tm_fill</a></span><span class="op">(</span>col <span class="op">=</span> <span class="st">"gray50"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tm_shape.html">tm_shape</a></span><span class="op">(</span><span class="va">sokcho</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tm_polygons.html">tm_fill</a></span><span class="op">(</span>col <span class="op">=</span> <span class="st">"gray50"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tm_shape.html">tm_shape</a></span><span class="op">(</span><span class="va">gangreung</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tm_polygons.html">tm_fill</a></span><span class="op">(</span>col <span class="op">=</span> <span class="st">"gray50"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tm_shape.html">tm_shape</a></span><span class="op">(</span><span class="va">topo_50</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tm_polygons.html">tm_borders</a></span><span class="op">(</span>col <span class="op">=</span> <span class="st">"black"</span>, lwd <span class="op">=</span> <span class="fl">1.25</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tm_shape.html">tm_shape</a></span><span class="op">(</span><span class="va">origins</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tm_symbols.html">tm_symbols</a></span><span class="op">(</span>col <span class="op">=</span> <span class="st">"black"</span>, size <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tm_shape.html">tm_shape</a></span><span class="op">(</span><span class="va">origin_mid</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tm_symbols.html">tm_symbols</a></span><span class="op">(</span>col <span class="op">=</span> <span class="st">"red"</span>, size <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span></span>
+<span><span class="va">my_map</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure"><p><a href="06_coordinate_system_files/figure-html/unnamed-chunk-13-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-18"><img src="06_coordinate_system_files/figure-html/unnamed-chunk-13-1.png" class="img-fluid figure-img" width="672"></a></p>
+</figure>
+</div>
+</div>
+<div class="sourceCode" id="cb40"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">my.file.name</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span><span class="op">(</span><span class="st">"outputs/6_2_10.png"</span><span class="op">)</span> </span>
+<span><span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tmap_save.html">tmap_save</a></span><span class="op">(</span><span class="va">my_map</span>, filename <span class="op">=</span> <span class="va">my.file.name</span>,  width <span class="op">=</span> <span class="fl">5.75</span>, dpi <span class="op">=</span> <span class="fl">600</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
 </section><section id="국가-그리드" class="level3" data-number="6.3.7"><h3 data-number="6.3.7" class="anchored" data-anchor-id="국가-그리드">
 <span class="header-section-number">6.3.7</span> 국가 그리드</h3>
 <section id="미국의-spcs83" class="level4" data-number="6.3.7.1"><h4 data-number="6.3.7.1" class="anchored" data-anchor-id="미국의-spcs83">
 <span class="header-section-number">6.3.7.1</span> 미국의 SPCS83</h4>
-<p><a href="images/clipboard-1909351142.png" class="lightbox" data-gallery="quarto-lightbox-gallery-18"><img src="images/clipboard-1909351142.png" class="img-fluid"></a></p>
+<p><a href="images/clipboard-1909351142.png" class="lightbox" data-gallery="quarto-lightbox-gallery-19"><img src="images/clipboard-1909351142.png" class="img-fluid"></a></p>
 <div class="quarto-figure quarto-figure-center">
-<figure class="figure"><p><a href="images/clipboard-673631514.png" class="lightbox" data-gallery="quarto-lightbox-gallery-19" data-glightbox="description: .lightbox-desc-19" title="https://gisgeography.com/state-plane-coordinate-system-spcs/"><img src="images/clipboard-673631514.png" class="img-fluid figure-img" alt="https://gisgeography.com/state-plane-coordinate-system-spcs/"></a></p>
+<figure class="figure"><p><a href="images/clipboard-673631514.png" class="lightbox" data-glightbox="description: .lightbox-desc-20" data-gallery="quarto-lightbox-gallery-20" title="https://gisgeography.com/state-plane-coordinate-system-spcs/"><img src="images/clipboard-673631514.png" class="img-fluid figure-img" alt="https://gisgeography.com/state-plane-coordinate-system-spcs/"></a></p>
 <figcaption>https://gisgeography.com/state-plane-coordinate-system-spcs/</figcaption></figure>
 </div>
 </section><section id="일본의-tm-좌표계" class="level4" data-number="6.3.7.2"><h4 data-number="6.3.7.2" class="anchored" data-anchor-id="일본의-tm-좌표계">
 <span class="header-section-number">6.3.7.2</span> 일본의 TM 좌표계</h4>
 <div class="quarto-figure quarto-figure-center">
-<figure class="figure"><p><a href="images/clipboard-3470015781.png" class="lightbox" data-gallery="quarto-lightbox-gallery-20"><img src="images/clipboard-3470015781.png" class="img-fluid quarto-figure quarto-figure-center figure-img"></a></p>
+<figure class="figure"><p><a href="images/clipboard-3470015781.png" class="lightbox" data-gallery="quarto-lightbox-gallery-21"><img src="images/clipboard-3470015781.png" class="img-fluid quarto-figure quarto-figure-center figure-img"></a></p>
 </figure>
 </div>
 </section><section id="영국의-bngbritish-national-grid" class="level4" data-number="6.3.7.3"><h4 data-number="6.3.7.3" class="anchored" data-anchor-id="영국의-bngbritish-national-grid">
 <span class="header-section-number">6.3.7.3</span> 영국의 BNG(British National Grid)</h4>
 <div class="quarto-figure quarto-figure-center">
-<figure class="figure"><p><a href="images/clipboard-2153214845.png" class="lightbox" data-gallery="quarto-lightbox-gallery-21"><img src="images/clipboard-2153214845.png" class="img-fluid quarto-figure quarto-figure-center figure-img"></a></p>
+<figure class="figure"><p><a href="images/clipboard-2153214845.png" class="lightbox" data-gallery="quarto-lightbox-gallery-22"><img src="images/clipboard-2153214845.png" class="img-fluid quarto-figure quarto-figure-center figure-img"></a></p>
 </figure>
 </div>
 </section></section><section id="crs" class="level3" data-number="6.3.8"><h3 data-number="6.3.8" class="anchored" data-anchor-id="crs">
@@ -897,7 +940,7 @@ First 10 features:
 
 <div class="hidden" aria-hidden="true">
 <span class="glightbox-desc lightbox-desc-1">https://en.wikipedia.org/wiki/Universal_Transverse_Mercator_coordinate_system</span>
-<span class="glightbox-desc lightbox-desc-19">https://gisgeography.com/state-plane-coordinate-system-spcs/</span>
+<span class="glightbox-desc lightbox-desc-20">https://gisgeography.com/state-plane-coordinate-system-spcs/</span>
 </div>
 </section></section></section></main><!-- /main --><script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
@@ -1297,7 +1340,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   </div>
 </nav>
 </div> <!-- /content -->
-<script>var lightboxQuarto = GLightbox({"openEffect":"zoom","loop":false,"closeEffect":"zoom","selector":".lightbox","descPosition":"bottom"});
+<script>var lightboxQuarto = GLightbox({"closeEffect":"zoom","openEffect":"zoom","selector":".lightbox","descPosition":"bottom","loop":false});
 window.onload = () => {
   lightboxQuarto.on('slide_before_load', (data) => {
     const { slideIndex, slideNode, slideConfig, player, trigger } = data;
