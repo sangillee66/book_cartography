@@ -282,7 +282,7 @@ my_map <- tm_graticules(col = "white", x = seq(126, 130, 1), y = seq(33, 39, 1))
             legend.title.size = 1.5, legend.text.size = 1.2) +
   tm_layout(bg.color = "gray90",
             title = "Population Distribution, 2020", title.size = 1.8, 
-            inner.margins = c(0.07, 0.035, 0.05, 0.05)) +
+            inner.margins = c(0.07, 0.1, 0.05, 0.07)) +
   tm_scale_bar(breaks = seq(0, 200, 50), text.size = 0.5, color.dark = "gray60", position = c(0.52, 0.01)) +
   tm_credits("SANG-IL LEE, Geography Education at SNU, 2024", size = 0.7, position = c(0.025, 0.01))
 
@@ -301,6 +301,54 @@ tmap_save(
   filename = my.file.name, 
   width = 0.728*1202/96, height = 1158/96,
   dpi = 600)
+```
+
+-   `ggplot2`: 지도 제작
+
+```{r}
+emd_adj_data_1 <- emd_adj_data |> 
+  mutate(
+    pop_den = cut(pop_den, 
+                  breaks = c(-Inf, 50, 250, 500, 1000, 5000, 10000, Inf),
+                  labels = c("0 to 50", "50 to 250", "250 to 500", "500 to 1,000", 
+                             "1,000 to 5,000", "5,000 to 10,000", "10,000 or more"))
+  )
+
+my_map <- ggplot() + 
+  geom_sf(data = bbox_ulleung_polygon, fill = "gray92", lwd = 0.1) +
+  geom_sf(
+    data = emd_adj_data_1, aes(fill = pop_den), color = NA) +
+  geom_sf(data = sigungu1, fill = NA) +
+  geom_sf(data = sido_polyline) +
+  geom_sf(data = bbox_seohae, lwd = 0.1) +
+  theme(
+    legend.position = "inside",
+    legend.position.inside = c(0.85, 0.15),
+    legend.background = element_rect(fill = "white")) +
+  scale_fill_brewer(palette = "YlGnBu", name = expression(paste("People / ", "km"^"2"))) +
+  labs(
+    title = "Population Density, 2020", 
+    x = "", y = "", caption = "SANG-IL LEE, Geography Education at SNU, 2024") +
+  annotate("text", x = -Inf, y = Inf, hjust = -0.05, vjust = 2, size = 7.5,   
+           label = "Population Distribution, 2020") +
+  annotate("text", x = -Inf, y = -Inf, hjust = -0.1, vjust = -1.5, size = 3.5,   
+           label = "SANG-IL LEE, Geography Education at SNU, 2024") +
+  annotation_scale(location = "br", bar_cols = c("gray40", "white"), width_hint = 0.4, pad_y = unit(0.5, "cm"))
+my_map
+```
+
+-   `ggplot2`: 저장
+
+```{r}
+#| echo: false
+my_title <- "10_3_01_1"
+my.path.name <- "outputs/"
+my.file.name <- paste0(my.path.name, my_title, ".png")
+ggsave(
+  my_map, 
+  filename = my.file.name, 
+  width = 0.728*1202/96, height = 1158/96,
+  dpi = 900)
 ```
 
 -   인구 데이터
