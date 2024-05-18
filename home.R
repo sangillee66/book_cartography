@@ -434,3 +434,18 @@ tm_shape(topo_50, bbox = bb) + tm_fill() + tm_borders() +
 
 
 
+pop_SDGG <- read_excel(path = "D:/My R/Population Geography/1 Population Growth/POP_1975_2021_SDGG.xlsx")
+pop_data <- pop_SDGG |> 
+  select(
+    Region
+  )
+
+
+my_df |> 
+  tm_shape() + 
+  tm_polygons(
+    col = "SGG1_NM",
+    border.col = "gray20", lwd = 0.75, 
+    palette = pals::alphabet2(),
+    legend.show = FALSE
+  )

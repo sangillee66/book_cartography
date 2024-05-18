@@ -13,4 +13,320 @@ execute:
   error: false
   freeze: auto
 editor: visual
+editor_options: 
+  chunk_output_type: console
 ---
+
+## 주제도 제작의 절차
+
+## 지도 디자인
+
+### 행정구역
+
+#### 데이터 준비
+
+-   필수적인 패키지 불러오기
+
+```{r}
+library(tidyverse) 
+library(readxl) 
+library(sf) 
+library(tmap)
+library(ggspatial)
+```
+
+-   형상 데이터 불러오기
+
+```{r}
+#| results: hide
+sido <- st_read("D:/My R/Korean Administrative Areas/행정구역 셰이프 파일/3 Generalization/2020_2Q/SIDO_2020_2Q_GEN_0050.shp", options = "ENCODING=CP949")
+sigun1 <- st_read("D:/My R/Korean Administrative Areas/행정구역 셰이프 파일/3 Generalization/2020_2Q/SIGUN1_2020_2Q_GEN_0050.shp", options = "ENCODING=CP949")
+sigungu1 <- st_read("D:/My R/Korean Administrative Areas/행정구역 셰이프 파일/3 Generalization/2020_2Q/SIGUNGU1_2020_2Q_GEN_0050.shp", options = "ENCODING=CP949")
+emd <- st_read("D:/My R/Korean Administrative Areas/행정구역 셰이프 파일/3 Generalization/2020_2Q/EMD_2020_2Q_GEN_0050.shp", options = "ENCODING=CP949")
+sido_polyline <- st_read("D:/My R/Korean Administrative Areas/행정구역 셰이프 파일/3 Generalization/2020_2Q/SIDO_Polyline_2020_2Q_GEN_0050.shp", options = "ENCODING=CP949")
+bbox_ulleung <- st_read("D:/My R/Korean Administrative Areas/행정구역 셰이프 파일/3 Generalization/2020_2Q/BBOX_Ulleung_2020_2Q_GEN_0050.shp", options = "ENCODING=CP949")
+bbox_seohae <- st_read("D:/My R/Korean Administrative Areas/행정구역 셰이프 파일/3 Generalization/2020_2Q/BBOX_Seohae3_2020_2Q_GEN_0050.shp", options = "ENCODING=CP949")
+```
+
+#### 시도 경계 지도
+
+-   지도 제작
+
+```{r}
+my_map <- tm_shape(sido) + tm_polygons() +
+  tm_shape(sido_polyline) + tm_lines(col = "black", lwd = 1.75) +
+  tm_shape(bbox_ulleung) + tm_lines() +
+  tm_shape(bbox_seohae) + tm_lines() +
+  tm_layout(inner.margins = c(0.02, 0.02, 0.02, 0.03))
+my_map 
+```
+
+-   저장
+
+```{r}
+#| echo: false
+my_title <- "10_2_01"
+my.path.name <- "outputs/"
+my.file.name <- paste0(my.path.name, my_title, ".png")
+tmap_save(
+  my_map, 
+  filename = my.file.name, 
+  width = 1202/96, height = 1158/96,
+  dpi = 600)
+```
+
+-   `ggplot2`: 지도 제작
+
+```{r}
+my_map <- ggplot() +
+  geom_sf(data = sido) +
+  geom_sf(data = sido_polyline) +
+  geom_sf(data = bbox_ulleung) +
+  geom_sf(data = bbox_seohae) +
+  annotation_scale(location = "br", bar_cols = c("gray40", "white"), width_hint = 0.4) +
+  theme_void() +
+  theme(
+    panel.background = element_rect(color = "gray20", fill = "white")
+  )
+my_map
+```
+
+-   `ggplot2`: 저장
+
+```{r}
+#| echo: false
+my_title <- "10_2_01_1"
+my.path.name <- "outputs/"
+my.file.name <- paste0(my.path.name, my_title, ".png")
+ggsave(
+  my_map, 
+  filename = my.file.name, 
+  width = 0.728*1202/96, height = 1158/96,
+  dpi = 900)
+```
+
+#### 시군구 경계 지도
+
+-   지도 제작
+
+```{r}
+my_map <- tm_shape(sigungu1) + tm_polygons() +
+  tm_shape(sido_polyline) + tm_lines(col = "black", lwd = 1.75) +
+  tm_shape(bbox_ulleung) + tm_lines() +
+  tm_shape(bbox_seohae) + tm_lines() +
+  tm_scale_bar(breaks = seq(0, 200, 50), text.size = 0.5, color.dark = "gray60", position = c(0.52, 0.01)) +
+  tm_layout(inner.margins = c(0.02, 0.02, 0.02, 0.03))
+my_map
+```
+
+-   저장
+
+```{r}
+#| echo: false
+my_title <- "10_2_02"
+my.path.name <- "outputs/"
+my.file.name <- paste0(my.path.name, my_title, ".png")
+tmap_save(
+  my_map, 
+  filename = my.file.name, 
+  width = 1202/96, height = 1158/96,
+  dpi = 600)
+```
+
+-   ggplot2: 지도 제작
+
+```{r}
+my_map <- ggplot() +
+  geom_sf(data = sigungu1) +
+  geom_sf(data = sido_polyline) + 
+  geom_sf(data = bbox_ulleung) +
+  geom_sf(data = bbox_seohae) +
+  annotation_scale(location = "br", bar_cols = c("gray40", "white"), width_hint = 0.4) +
+  theme_void() +
+  theme(
+    panel.background = element_rect(color = "gray20", fill = "white")
+  )
+my_map
+```
+
+-   ggplot2: 저장
+
+```{r}
+#| echo: false
+my_title <- "10_2_02_1"
+my.path.name <- "outputs/"
+my.file.name <- paste0(my.path.name, my_title, ".png")
+ggsave(
+  my_map, 
+  filename = my.file.name, 
+  width = 0.728*1202/96, height = 1158/96,
+  dpi = 900)
+```
+
+#### 읍면동 경계 지도
+
+-   지도 제작
+
+```{r}
+my_map <- tm_shape(emd) + tm_polygons() +
+  tm_shape(sido_polyline) + tm_lines(col = "black", lwd = 1.75) +
+  tm_shape(bbox_ulleung) + tm_lines() +
+  tm_shape(bbox_seohae) + tm_lines() +
+  tm_scale_bar(breaks = seq(0, 200, 50), text.size = 0.5, color.dark = "gray60", position = c(0.52, 0.01)) +
+  tm_layout(inner.margins = c(0.02, 0.02, 0.02, 0.03))
+my_map
+```
+
+-   저장
+
+```{r}
+#| echo: false
+my_title <- "10_2_03"
+my.path.name <- "outputs/"
+my.file.name <- paste0(my.path.name, my_title, ".png")
+tmap_save(
+  my_map, 
+  filename = my.file.name, 
+  width = 1202/96, height = 1158/96,
+  dpi = 600)
+```
+
+-   ggplot2: 지도 제작
+
+```{r}
+my_map <- ggplot() +
+  geom_sf(data = emd) +
+  geom_sf(data = sido_polyline) +
+  geom_sf(data = bbox_ulleung) +
+  geom_sf(data = bbox_seohae) +
+  annotation_scale(location = "br", bar_cols = c("gray40", "white"), width_hint = 0.4) +
+  theme_void() +
+  theme(
+    panel.background = element_rect(color = "gray20", fill = "white")
+  )
+my_map
+```
+
+-   ggplot2: 저장
+
+```{r}
+#| echo: false
+my_title <- "10_2_03_1"
+my.path.name <- "outputs/"
+my.file.name <- paste0(my.path.name, my_title, ".png")
+ggsave(
+  my_map, 
+  filename = my.file.name, 
+  width = 0.728*1202/96, height = 1158/96,
+  dpi = 900)
+```
+
+### 지도 디자인: 예시
+
+#### 데이터 준비
+
+읍면동 단위 인구밀도도
+
+-   형상 데이터 불러오기: 읍면동 변동을 반영한 데이터
+
+```{r}
+#| results: hide
+emd_adj <- st_read("D:/My R/Korean Administrative Areas/행정구역 셰이프 파일/3 Generalization/2020_Census_Adj/EMD_2020_Census_GEN_0020.shp", options = "ENCODING=CP949")
+```
+
+-   속성 데이터 불러오기: 읍면동 변동을 반영한 데이터
+
+```{r}
+pop_adj <- read_excel("D:/My R/Korea Census Data Manipulation/1 Population Basic/DM_ADJ_Census_2020.xlsx", sheet = 1)
+```
+
+-   결합
+
+```{r}
+emd_adj <- emd_adj |> 
+  mutate(EMD_ID = as.numeric(EMD_ID))
+emd_adj_data <- emd_adj |> 
+  left_join(pop_adj, join_by(EMD_ID == Code)) |> 
+  mutate(
+    pop_t = ifelse(is.na(pop_t), 0, pop_t)
+  )
+```
+
+-   인구밀도 계산
+
+```{r}
+emd_adj_data <- emd_adj_data |>
+  mutate(
+     area = geometry |> st_area() |> as.numeric()/1000000,
+     pop_den = pop_t / area
+  )
+```
+
+-   지도 제작
+
+```{r}
+bbox_ulleung_polygon <- bbox_ulleung |> 
+  st_cast("POLYGON")
+
+my_map <- tm_graticules(col = "white", x = seq(126, 130, 1), y = seq(33, 39, 1)) +
+  tm_shape(bbox_ulleung_polygon) + tm_borders() + tm_fill("gray90") +
+  tm_shape(emd_adj_data, is.master = TRUE) +
+  tm_polygons(col = "pop_den", breaks = c(0, 50, 250, 500, 1000, 5000, 10000, Inf),
+              palette = "YlGnBu", title = "People per square km",
+              # title = expression(paste("People / ", "km"^"2")),
+              border.col = NULL) +
+  tm_shape(sigungu1) + tm_borders() +
+  tm_shape(sido_polyline) + tm_lines(col = "black", lwd = 1.75) +
+  tm_shape(bbox_seohae) + tm_lines() +
+  tm_legend(legend.position = c(0.65, 0.06), legend.bg.color = "white",
+            legend.title.size = 1.5, legend.text.size = 1.2) +
+  tm_layout(bg.color = "gray90",
+            title = "Population Distribution, 2020", title.size = 1.8, 
+            inner.margins = c(0.07, 0.035, 0.05, 0.05)) +
+  tm_scale_bar(breaks = seq(0, 200, 50), text.size = 0.5, color.dark = "gray60", position = c(0.52, 0.01)) +
+  tm_credits("SANG-IL LEE, Geography Education at SNU, 2024", size = 0.7, position = c(0.025, 0.01))
+
+my_map
+```
+
+-   저장
+
+```{r}
+#| echo: false
+my_title <- "10_3_01"
+my.path.name <- "outputs/"
+my.file.name <- paste0(my.path.name, my_title, ".png")
+tmap_save(
+  my_map, 
+  filename = my.file.name, 
+  width = 0.728*1202/96, height = 1158/96,
+  dpi = 600)
+```
+
+-   인구 데이터
+
+```{r}
+pop_SDGG <- read_excel(path = "D:/My R/Population Geography/1 Population Growth/POP_1975_2021_SDGG.xlsx")
+pop_data <- pop_SDGG |> 
+  select(Code, Region, pop_2015 = `2015`, pop_2020 = `2020`) |> 
+  mutate(
+    pgr = 0.2*log(pop_2020/pop_2015) * 100
+  )
+```
+
+-   면적 데이터
+
+```{r}
+area_data <- read_excel(path = "D:/My R/Korea Census Data Manipulation/11 Etc/DM_AREA_2020_SDGG.xlsx")
+```
+
+```{r}
+my_data <- sigungu1 |> 
+  left_join(pop_data, join_by(SGG1_CD == Code)) |> 
+  left_join(
+    select(area_data, SDGG_CD, Area), join_by(SGG1_CD == SDGG_CD)
+  ) |> 
+  mutate(
+    pop_den = pop_2020/(Area/1000000)
+  )
+```

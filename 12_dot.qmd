@@ -12,5 +12,5 @@ execute:
   warning: false
   error: false
   freeze: auto
-editor: visual---
+editor: visual
 ---

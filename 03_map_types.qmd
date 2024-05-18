@@ -13,6 +13,8 @@ execute:
   error: false
   freeze: auto
 editor: visual
+editor_options: 
+  chunk_output_type: console
 ---
 
 ## 심상지도와 물리적 지도
@@ -407,6 +409,11 @@ my_map <- tm_shape(my_df_2) +
     legend.show = FALSE) +
   tm_shape(seoul_gu) + 
   tm_polygons(alpha = 0, border.col = "gray20", lwd = 0.75) +
+  tm_scale_bar(
+    color.dark = "gray60",
+    text.size = 0.25,
+    breaks = seq(0, 10, 2),
+    position = c(0.03, 0.01)) + 
   tm_credits(
     "SANG-IL LEE, Geograhy Education at SNU, 2024", 
     size = 0.3, position = c(0.78, 0.01)
@@ -481,6 +488,11 @@ my_map <- tm_shape(seoul_gu) +
       alpha = 0.7) +
   tm_shape(seoul_gu) + 
   tm_polygons(alpha = 0, border.col = "gray20", lwd = 0.75) +
+  tm_scale_bar(
+    color.dark = "gray60",
+    text.size = 0.25,
+    breaks = seq(0, 10, 2),
+    position = c(0.03, 0.01)) + 
   tm_credits(
     "SANG-IL LEE, Geograhy Education at SNU, 2024", 
     size = 0.3, position = c(0.78, 0.01)
