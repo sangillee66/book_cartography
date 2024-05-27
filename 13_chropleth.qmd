@@ -13,4 +13,920 @@ execute:
   error: false
   freeze: auto
 editor: visual
+editor_options: 
+  chunk_output_type: console
 ---
+
+## 기본 개념
+
+## 계급구분 방법
+
+### 지도 제작 데이터
+
+#### 필수적인 패키지
+
+```{r}
+library(tidyverse) 
+library(readxl) 
+library(sf) 
+library(tmap) 
+library(rnaturalearth)
+```
+
+#### 우리나라 데이터
+
+-   도형 데이터
+
+```{r}
+#| results: hide
+seoul_EMD_2020 <- st_read(
+  "D:/My R/Korean Administrative Areas/행정구역 셰이프 파일/2 Original Cleaning/2020_2Q/SEOUL_EMD_2020_2Q.shp", options = "ENCODING=CP949"
+  ) 
+seoul_gu <- st_read(
+  "D:/My R/Korean Administrative Areas/행정구역 셰이프 파일/2 Original Cleaning/2021_4Q/SEOUL_GU_2021_4Q.shp", options = "ENCODING=CP949"
+  ) 
+seoul_sido <- st_read(
+  "D:/My R/Korean Administrative Areas/행정구역 셰이프 파일/2 Original Cleaning/2021_4Q/SEOUL_SIDO_2021_4Q.shp", options = "ENCODING=CP949"
+  )
+```
+
+-   속성 데이터: 1인가구 비중
+
+```{r}
+house_SDGGEMD_2020 <- read_excel(
+  "D:/My R/Population Geography/3 Population Structure/Housing_Size_2020_Adj.xlsx", sheet = 1
+  )
+```
+
+-   결합하기
+
+```{r}
+seoul_EMD_2020 <- seoul_EMD_2020 |> 
+  mutate(
+    EMD_ID = as.numeric(EMD_ID)
+  )
+seoul_df <-seoul_EMD_2020 |> 
+  left_join(
+    house_SDGGEMD_2020, join_by(EMD_ID == Code)
+  )
+```
+
+#### 세계 데이터
+
+-   도형 데이터
+
+```{r}
+countries_m <- st_read("D:/My R/World Data Manupulation/NaturalEarth/new_2_ne_50m_admin_0_countries.shp") 
+tiny_m <- ne_download(scale = "medium", type = "tiny_countries", category = "cultural", returnclass = "sf")
+grat_bb_m <- ne_download(scale = "medium", type = "wgs84_bounding_box", category = "physical", returnclass = "sf")
+grat_10_m <- ne_download(scale = "medium", type = "graticules_10", category = "physical", returnclass = "sf")
+grat_30_m <- ne_download(scale = "medium", type = "graticules_30", category = "physical", returnclass = "sf")
+
+tiny_m <- tiny_m |> 
+  mutate(
+    ISO_N3_CD = as.numeric(ISO_N3)
+  )
+```
+
+-   속성 데이터: TFR(1955, 2024, 2050, 2100)
+
+```{r}
+wpp_2022 <- read_rds("wpp_2022.rds")
+wpp_TFR <- wpp_2022 |> 
+  select(region_name, location_code, type, year, TFR) |> 
+  filter(type == "Country/Area", year %in% c(1950, 1990, 2024, 2100)) |> 
+  pivot_wider(
+    id_cols = c(region_name, location_code, type), 
+    names_from = year,
+    values_from = TFR
+  ) |> 
+  rename(
+    y1950 = `1950`,
+    y1990 = `1990`,
+    y2024 = `2024`,
+    y2100 = `2100`
+  )
+```
+
+-   결합하기
+
+```{r}
+new_world <- countries_m |> 
+  left_join(wpp_TFR, join_by(ISO_N3_CD == location_code))
+new_tiny <- tiny_m |> 
+  left_join(wpp_TFR, join_by(ISO_N3_CD == location_code))
+```
+
+### 4가지 계급구분 방법: 서울
+
+#### 평범한 지도
+
+-   최대값과 최소값의 계산
+
+```{r}
+min_val <- seoul_df |> pull(House1_p) |> min() |> format(digits = 1, nsmall = 1)
+max_val <- seoul_df |> pull(House1_p) |> max() |> format(digits = 1, nsmall = 1)
+```
+
+-   지도 제작
+
+```{r}
+my_map <- tm_shape(seoul_df) + 
+  tm_polygons(
+    col = "House1_p", palette = "BuPu", 
+    breaks = c(-Inf, 15, 25, 35, 45, 55, 65, Inf),
+    labels = c(paste0("< 15", " (Min. ", min_val, ")"), "15 ~ 25", "25 ~ 35", "35 ~ 45", "45 ~ 55", "55 ~ 65", 
+               paste0(">= 65", " (Max. ", max_val, ")")),
+    title = "One-Person (%)", 
+    legend.hist = TRUE
+  ) +
+  tm_shape(seoul_gu) + tm_borders(lwd = 1.5, col = "black") +
+  tm_legend(legend.title.size = 1.2, legend.text.size = 1, legend.position = c(0.1, 0.43), 
+            legend.frame = FALSE, legend.hist.size = 1, legend.hist.width = 0.7, legend.hist.height = 0.25) +
+  tm_layout(title = "One-Person (2020)", title.size = 1.5, title.position = c("center", "top"),
+            legend.outside = TRUE, inner.margins = c(0.05, 0.05, 0.05, 0.05)) +
+  tm_scale_bar(
+    color.dark = "gray60", text.size = 0.4, breaks = seq(0, 10, 2), position = c(0.03, 0.01)) + 
+  tm_credits("SANG-IL LEE, Geograhy Education at SNU, 2024", size = 0.5, position = c(0.79, 0.01))
+my_map
+```
+
+-   저장
+
+```{r}
+#| echo: false
+my_title <- "13_1_01"
+my.path.name <- "outputs/"
+my.file.name <- paste0(my.path.name, my_title, ".png")
+tmap_save(
+  my_map, 
+  filename = my.file.name, 
+  width = 15, height = 8.5, 
+  dpi = 600)
+```
+
+#### 자연단절 분류법
+
+-   지도 제작
+
+```{r}
+my_map <- tm_shape(seoul_df) + 
+  tm_polygons(
+    col = "House1_p", palette = "BuPu", 
+    style = "jenks", n = 7, 
+    title = "One-Person (%)", 
+    legend.hist = TRUE
+  ) +
+  tm_shape(seoul_gu) + tm_borders(lwd = 1.5, col = "black") +
+  tm_legend(legend.format = list(digits = 1), 
+            legend.title.size = 1.2, legend.text.size = 1, legend.position = c(0.1, 0.43), 
+            legend.frame = FALSE, legend.hist.size = 1, legend.hist.width = 0.7, legend.hist.height = 0.25) +
+  tm_layout(title = "One-Person (2020)", title.size = 1.5, title.position = c("center", "top"),
+            legend.outside = TRUE, inner.margins = c(0.05, 0.05, 0.05, 0.05)) +
+  tm_scale_bar(
+    color.dark = "gray60", text.size = 0.4, breaks = seq(0, 10, 2), position = c(0.03, 0.01)) + 
+  tm_credits(text = "Natural Breaks (Jenks)", size = 2, position = c(0.05, 0.9)) +
+  tm_credits("SANG-IL LEE, Geograhy Education at SNU, 2024", size = 0.5, position = c(0.79, 0.01))
+my_map
+```
+
+-   저장
+
+```{r}
+#| echo: false
+my_title <- "13_1_02"
+my.path.name <- "outputs/"
+my.file.name <- paste0(my.path.name, my_title, ".png")
+tmap_save(
+  my_map, 
+  filename = my.file.name, 
+  width = 15, height = 8.5, 
+  dpi = 600)
+```
+
+#### 등개수 분류법
+
+-   지도 제작
+
+```{r}
+my_map <- tm_shape(seoul_df) + 
+  tm_polygons(
+    col = "House1_p", palette = "BuPu", 
+    style = "quantile", n = 7, 
+    title = "One-Person (%)", 
+    legend.hist = TRUE
+  ) +
+  tm_shape(seoul_gu) + tm_borders(lwd = 1.5, col = "black") +
+  tm_legend(legend.format = list(digits = 1),
+            legend.title.size = 1.2, legend.text.size = 1, legend.position = c(0.1, 0.43), 
+            legend.frame = FALSE, legend.hist.size = 1, legend.hist.width = 0.7, legend.hist.height = 0.25) +
+  tm_layout(title = "One-Person (2020)", title.size = 1.5, title.position = c("center", "top"),
+            legend.outside = TRUE, inner.margins = c(0.05, 0.05, 0.05, 0.05)) +
+  tm_scale_bar(
+    color.dark = "gray60", text.size = 0.4, breaks = seq(0, 10, 2), position = c(0.03, 0.01)) + 
+  tm_credits(text = "Quantile", size = 2, position = c(0.05, 0.9)) +
+  tm_credits("SANG-IL LEE, Geograhy Education at SNU, 2024", size = 0.5, position = c(0.79, 0.01))
+my_map
+```
+
+-   저장
+
+```{r}
+#| echo: false
+my_title <- "13_1_03"
+my.path.name <- "outputs/"
+my.file.name <- paste0(my.path.name, my_title, ".png")
+tmap_save(
+  my_map, 
+  filename = my.file.name, 
+  width = 15, height = 8.5, 
+  dpi = 600)
+```
+
+#### 등간격 분류법
+
+-   지도 제작
+
+```{r}
+my_map <- tm_shape(seoul_df) + 
+  tm_polygons(
+    col = "House1_p", palette = "BuPu", 
+    style = "equal", n = 7, 
+    title = "One-Person (%)", 
+    legend.hist = TRUE
+  ) +
+  tm_shape(seoul_gu) + tm_borders(lwd = 1.5, col = "black") +
+  tm_legend(legend.format = list(digits = 1), 
+            legend.title.size = 1.2, legend.text.size = 1, legend.position = c(0.1, 0.43), 
+            legend.frame = FALSE, legend.hist.size = 1, legend.hist.width = 0.7, legend.hist.height = 0.25) +
+  tm_layout(title = "One-Person (2020)", title.size = 1.5, title.position = c("center", "top"),
+            legend.outside = TRUE, inner.margins = c(0.05, 0.05, 0.05, 0.05)) +
+  tm_scale_bar(
+    color.dark = "gray60", text.size = 0.4, breaks = seq(0, 10, 2), position = c(0.03, 0.01)) + 
+  tm_credits(text = "Equal Interval", size = 2, position = c(0.05, 0.9)) +
+  tm_credits("SANG-IL LEE, Geograhy Education at SNU, 2024", size = 0.5, position = c(0.79, 0.01))
+my_map
+```
+
+-   저장
+
+```{r}
+#| echo: false
+my_title <- "13_1_04"
+my.path.name <- "outputs/"
+my.file.name <- paste0(my.path.name, my_title, ".png")
+tmap_save(
+  my_map, 
+  filename = my.file.name, 
+  width = 15, height = 8.5, 
+  dpi = 600)
+```
+
+#### 표준편차 분류법
+
+```{r}
+my_map <- tm_shape(seoul_df) + 
+  tm_polygons(
+    col = "House1_p", palette = "BuPu", 
+    style = "sd", n = 7, 
+    title = "One-Person (%)", 
+    legend.hist = TRUE 
+  ) +
+  tm_shape(seoul_gu) + tm_borders(lwd = 1.5, col = "black") +
+  tm_legend(legend.format = list(digits = 1), 
+            legend.title.size = 1.2, legend.text.size = 1, legend.position = c(0.1, 0.43), 
+            legend.frame = FALSE, legend.hist.size = 1, legend.hist.width = 0.7, legend.hist.height = 0.25) +
+  tm_layout(title = "One-Person (2020)", title.size = 1.5, title.position = c("center", "top"),
+            legend.outside = TRUE, inner.margins = c(0.05, 0.05, 0.05, 0.05)) +
+  tm_scale_bar(
+    color.dark = "gray60", text.size = 0.4, breaks = seq(0, 10, 2), position = c(0.03, 0.01)) + 
+  tm_credits(text = "Standard Deviation", size = 2, position = c(0.05, 0.9)) +
+  tm_credits("SANG-IL LEE, Geograhy Education at SNU, 2024", size = 0.5, position = c(0.79, 0.01))
+my_map
+```
+
+```{r}
+#| echo: false
+my_title <- "13_1_05"
+my.path.name <- "outputs/"
+my.file.name <- paste0(my.path.name, my_title, ".png")
+tmap_save(
+  my_map, 
+  filename = my.file.name, 
+  width = 15, height = 8.5, 
+  dpi = 600)
+```
+
+#### 무분류
+
+-   지도 제작
+
+```{r}
+my_map <- tm_shape(seoul_df) + 
+  tm_polygons(
+    col = "House1_p", palette = "BuPu", 
+    style = "cont", 
+    breaks = seq(0, 80, 10),
+    title = "One-Person (%)", 
+    legend.hist = FALSE, legend.hist.width = 1
+  ) +
+  tm_shape(seoul_gu) + tm_borders(lwd = 1.5, col = "black") +
+  tm_legend(legend.title.size = 1.2, legend.text.size = 1, legend.position = c(0.1, 0.43),  
+            legend.frame = FALSE, legend.hist.size = 1, legend.hist.width = 0.7, legend.hist.height = 0.25) +
+  tm_layout(title = "One-Person (2020)", title.size = 1.5, title.position = c("center", "top"),
+            legend.outside = TRUE, inner.margins = c(0.05, 0.05, 0.05, 0.05)) +
+  tm_scale_bar(
+    color.dark = "gray60", text.size = 0.4, breaks = seq(0, 10, 2), position = c(0.03, 0.01)) + 
+  tm_credits(text = "Unclassed", size = 2, position = c(0.05, 0.9)) +
+  tm_credits("SANG-IL LEE, Geograhy Education at SNU, 2024", size = 0.5, position = c(0.79, 0.01))
+my_map
+```
+
+-   저장
+
+```{r}
+#| echo: false
+my_title <- "13_1_06"
+my.path.name <- "outputs/"
+my.file.name <- paste0(my.path.name, my_title, ".png")
+tmap_save(
+  my_map, 
+  filename = my.file.name, 
+  width = 15, height = 8.5, 
+  dpi = 600)
+```
+
+### 등개수 분류법과 등간격 분류법의 비교: 세계 TFR
+
+#### 등개수 분류법: 1955년
+
+-   지도 제작
+
+```{r}
+my_map <- tm_shape(grat_bb_m, projection = "+proj=robin") + tm_borders(lwd = 1) + 
+  tm_shape(grat_30_m) + tm_lines(lwd = 0.2) +
+  tm_shape(new_world) +
+  tm_polygons(
+    col = "y1950", style = "quantile", n = 5, palette = "Reds", 
+    title = "TFR, 1950", 
+    legend.hist = TRUE) +
+  tm_shape(tiny_m) + tm_dots(size = 0.01) +
+  tm_legend(legend.format = list(digits = 3), legend.title.size = 1.4, legend.text.size = 1.1, 
+            legend.position = c("left", "bottom"), 
+            legend.frame = TRUE, legend.hist.width = 0.15, legend.hist.height = 0.2, legend.hist.size = 0.8, 
+            legend.bg.color = "gray95", legend.stack = "vertical", legend.width = 0.35) +
+  tm_layout(frame = FALSE, bg.color = "White", inner.margins = c(0.01, 0.01, 0.02, 0.01)) +
+  tm_credits("SANG-IL LEE, Geograhy Education at SNU, 2024", size = 0.5, position = c(0.55, 0.02))
+my_map
+```
+
+-   저장
+
+```{r}
+#| echo: false
+my_title <- "13_2_01"
+my.path.name <- "outputs/"
+my.file.name <- paste0(my.path.name, my_title, ".png")
+tmap_save(
+  my_map, 
+  filename = my.file.name, 
+  width = 15,  
+  dpi = 600)
+```
+
+#### 등개수 분류법: 1990년
+
+-   지도 제작
+
+```{r}
+my_map <- tm_shape(grat_bb_m, projection = "+proj=robin") + tm_borders(lwd = 1) + 
+  tm_shape(grat_30_m) + tm_lines(lwd = 0.2) +
+  tm_shape(new_world) +
+  tm_polygons(
+    col = "y1990", style = "quantile", n = 5, palette = "Reds", 
+    title = "TFR, 1990", 
+    legend.hist = TRUE) +
+  tm_shape(tiny_m) + tm_dots(size = 0.01) +
+  tm_legend(legend.format = list(digits = 3), legend.title.size = 1.4, legend.text.size = 1.1, 
+            legend.position = c("left", "bottom"), 
+            legend.frame = TRUE, legend.hist.width = 0.15, legend.hist.height = 0.2, legend.hist.size = 0.8, 
+            legend.bg.color = "gray95", legend.stack = "vertical", legend.width = 0.35) +
+  tm_layout(frame = FALSE, bg.color = "White", inner.margins = c(0.01, 0.01, 0.02, 0.01)) +
+  tm_credits("SANG-IL LEE, Geograhy Education at SNU, 2024", size = 0.5, position = c(0.55, 0.02))
+my_map
+```
+
+-   저장
+
+```{r}
+#| echo: false
+my_title <- "13_2_02"
+my.path.name <- "outputs/"
+my.file.name <- paste0(my.path.name, my_title, ".png")
+tmap_save(
+  my_map, 
+  filename = my.file.name, 
+  width = 15,  
+  dpi = 600)
+```
+
+#### 등개수 분류법: 2024년
+
+-   지도 제작
+
+```{r}
+my_map <- tm_shape(grat_bb_m, projection = "+proj=robin") + tm_borders(lwd = 1) + 
+  tm_shape(grat_30_m) + tm_lines(lwd = 0.2) +
+  tm_shape(new_world) +
+  tm_polygons(
+    col = "y2024", style = "quantile", n = 5, palette = "Reds", 
+    title = "TFR, 2024", 
+    legend.hist = TRUE) +
+  tm_shape(tiny_m) + tm_dots(size = 0.01) +
+  tm_legend(legend.format = list(digits = 3), legend.title.size = 1.4, legend.text.size = 1.1, 
+            legend.position = c("left", "bottom"), 
+            legend.frame = TRUE, legend.hist.width = 0.15, legend.hist.height = 0.2, legend.hist.size = 0.8, 
+            legend.bg.color = "gray95", legend.stack = "vertical", legend.width = 0.35) +
+  tm_layout(frame = FALSE, bg.color = "White", inner.margins = c(0.01, 0.01, 0.02, 0.01)) +
+  tm_credits("SANG-IL LEE, Geograhy Education at SNU, 2024", size = 0.5, position = c(0.55, 0.02))
+my_map
+```
+
+-   저장
+
+```{r}
+#| echo: false
+my_title <- "13_2_03"
+my.path.name <- "outputs/"
+my.file.name <- paste0(my.path.name, my_title, ".png")
+tmap_save(
+  my_map, 
+  filename = my.file.name, 
+  width = 15,  
+  dpi = 600)
+```
+
+#### 등개수 분류법: 2100년
+
+-   지도 제작
+
+```{r}
+my_map <- tm_shape(grat_bb_m, projection = "+proj=robin") + tm_borders(lwd = 1) + 
+  tm_shape(grat_30_m) + tm_lines(lwd = 0.2) +
+  tm_shape(new_world) +
+  tm_polygons(
+    col = "y2100", style = "quantile", n = 5, palette = "Reds", 
+    title = "TFR, 2100", 
+    legend.hist = TRUE) +
+  tm_shape(tiny_m) + tm_dots(size = 0.01) +
+  tm_legend(legend.format = list(digits = 3), legend.title.size = 1.4, legend.text.size = 1.1, 
+            legend.position = c("left", "bottom"), 
+            legend.frame = TRUE, legend.hist.width = 0.15, legend.hist.height = 0.2, legend.hist.size = 0.8, 
+            legend.bg.color = "gray95", legend.stack = "vertical", legend.width = 0.35) +
+  tm_layout(frame = FALSE, bg.color = "White", inner.margins = c(0.01, 0.01, 0.02, 0.01)) +
+  tm_credits("SANG-IL LEE, Geograhy Education at SNU, 2024", size = 0.5, position = c(0.55, 0.02))
+my_map
+```
+
+-   저장
+
+```{r}
+#| echo: false
+my_title <- "13_2_04"
+my.path.name <- "outputs/"
+my.file.name <- paste0(my.path.name, my_title, ".png")
+tmap_save(
+  my_map, 
+  filename = my.file.name, 
+  width = 15,  
+  dpi = 600)
+```
+
+#### 등간격 분류법: 1950년
+
+-   지도 제작
+
+```{r}
+my_map <- tm_shape(grat_bb_m, projection = "+proj=robin") + tm_borders(lwd = 1) + 
+  tm_shape(grat_30_m) + tm_lines(lwd = 0.2) +
+  tm_shape(new_world) +
+  tm_polygons(
+    col = "y1950", style = "fixed", n = 5, palette = "Reds", 
+    breaks = c(-Inf, 2.347, 3.912, 5.477, 7.042, Inf), 
+    labels = c("0.782 ~ 2.347", "2.347 ~ 3.912", "3.912 ~ 5.477", "5.477 ~ 7.042", "7.042 ~ 8.606"), 
+    title = "TFR, 1950", 
+    legend.hist = TRUE) +
+  tm_shape(tiny_m) + tm_dots(size = 0.01) +
+  tm_legend(legend.format = list(digits = 3), legend.title.size = 1.4, legend.text.size = 1.1, 
+            legend.position = c("left", "bottom"), 
+            legend.frame = TRUE, legend.hist.width = 0.15, legend.hist.height = 0.2, legend.hist.size = 0.8, 
+            legend.bg.color = "gray95", legend.stack = "vertical", legend.width = 0.35) +
+  tm_layout(frame = FALSE, bg.color = "White", inner.margins = c(0.01, 0.01, 0.02, 0.01)) +
+  tm_credits("SANG-IL LEE, Geograhy Education at SNU, 2024", size = 0.5, position = c(0.55, 0.02))
+my_map
+```
+
+-   저장
+
+```{r}
+#| echo: false
+my_title <- "13_3_01"
+my.path.name <- "outputs/"
+my.file.name <- paste0(my.path.name, my_title, ".png")
+tmap_save(
+  my_map, 
+  filename = my.file.name, 
+  width = 15,  
+  dpi = 600)
+```
+
+#### 등간격 분류법: 1990년
+
+-   지도 제작
+
+```{r}
+my_map <- tm_shape(grat_bb_m, projection = "+proj=robin") + tm_borders(lwd = 1) + 
+  tm_shape(grat_30_m) + tm_lines(lwd = 0.2) +
+  tm_shape(new_world) +
+  tm_polygons(
+    col = "y1990", style = "fixed", n = 5, palette = "Reds", 
+    breaks = c(-Inf, 2.347, 3.912, 5.477, 7.042, Inf), 
+    labels = c("0.782 ~ 2.347", "2.347 ~ 3.912", "3.912 ~ 5.477", "5.477 ~ 7.042", "7.042 ~ 8.606"), 
+    title = "TFR, 1990", 
+    legend.hist = TRUE) +
+  tm_shape(tiny_m) + tm_dots(size = 0.01) +
+  tm_legend(legend.format = list(digits = 3), legend.title.size = 1.4, legend.text.size = 1.1, 
+            legend.position = c("left", "bottom"), 
+            legend.frame = TRUE, legend.hist.width = 0.15, legend.hist.height = 0.2, legend.hist.size = 0.8, 
+            legend.bg.color = "gray95", legend.stack = "vertical", legend.width = 0.35) +
+  tm_layout(frame = FALSE, bg.color = "White", inner.margins = c(0.01, 0.01, 0.02, 0.01)) +
+  tm_credits("SANG-IL LEE, Geograhy Education at SNU, 2024", size = 0.5, position = c(0.55, 0.02))
+my_map
+```
+
+-   저장
+
+```{r}
+#| echo: false
+my_title <- "13_3_02"
+my.path.name <- "outputs/"
+my.file.name <- paste0(my.path.name, my_title, ".png")
+tmap_save(
+  my_map, 
+  filename = my.file.name, 
+  width = 15,  
+  dpi = 600)
+```
+
+#### 등간격 분류법: 2024년
+
+-   지도 제작
+
+```{r}
+my_map <- tm_shape(grat_bb_m, projection = "+proj=robin") + tm_borders(lwd = 1) + 
+  tm_shape(grat_30_m) + tm_lines(lwd = 0.2) +
+  tm_shape(new_world) +
+  tm_polygons(
+    col = "y2024", style = "fixed", n = 5, palette = "Reds", 
+    breaks = c(-Inf, 2.347, 3.912, 5.477, 7.042, Inf), 
+    labels = c("0.782 ~ 2.347", "2.347 ~ 3.912", "3.912 ~ 5.477", "5.477 ~ 7.042", "7.042 ~ 8.606"), 
+    title = "TFR, 2024", 
+    legend.hist = TRUE) +
+  tm_shape(tiny_m) + tm_dots(size = 0.01) +
+  tm_legend(legend.format = list(digits = 3), legend.title.size = 1.4, legend.text.size = 1.1, 
+            legend.position = c("left", "bottom"), 
+            legend.frame = TRUE, legend.hist.width = 0.15, legend.hist.height = 0.2, legend.hist.size = 0.8, 
+            legend.bg.color = "gray95", legend.stack = "vertical", legend.width = 0.35) +
+  tm_layout(frame = FALSE, bg.color = "White", inner.margins = c(0.01, 0.01, 0.02, 0.01)) +
+  tm_credits("SANG-IL LEE, Geograhy Education at SNU, 2024", size = 0.5, position = c(0.55, 0.02))
+my_map
+```
+
+-   저장
+
+```{r}
+#| echo: false
+my_title <- "13_3_03"
+my.path.name <- "outputs/"
+my.file.name <- paste0(my.path.name, my_title, ".png")
+tmap_save(
+  my_map, 
+  filename = my.file.name, 
+  width = 15,  
+  dpi = 600)
+```
+
+#### 등간격 분류법: 2100년
+
+-   지도 제작
+
+```{r}
+my_map <- tm_shape(grat_bb_m, projection = "+proj=robin") + tm_borders(lwd = 1) + 
+  tm_shape(grat_30_m) + tm_lines(lwd = 0.2) +
+  tm_shape(new_world) +
+  tm_polygons(
+    col = "y2100", style = "fixed", n = 5, palette = "Reds", 
+    breaks = c(-Inf, 2.347, 3.912, 5.477, 7.042, Inf), 
+    labels = c("0.782 ~ 2.347", "2.347 ~ 3.912", "3.912 ~ 5.477", "5.477 ~ 7.042", "7.042 ~ 8.606"), 
+    title = "TFR, 2100", 
+    legend.hist = TRUE) +
+  tm_shape(tiny_m) + tm_dots(size = 0.01) +
+  tm_legend(legend.format = list(digits = 3), legend.title.size = 1.4, legend.text.size = 1.1, 
+            legend.position = c("left", "bottom"), 
+            legend.frame = TRUE, legend.hist.width = 0.15, legend.hist.height = 0.2, legend.hist.size = 0.8, 
+            legend.bg.color = "gray95", legend.stack = "vertical", legend.width = 0.35) +
+  tm_layout(frame = FALSE, bg.color = "White", inner.margins = c(0.01, 0.01, 0.02, 0.01)) +
+  tm_credits("SANG-IL LEE, Geograhy Education at SNU, 2024", size = 0.5, position = c(0.55, 0.02))
+my_map
+```
+
+-   저장
+
+```{r}
+#| echo: false
+my_title <- "13_3_04"
+my.path.name <- "outputs/"
+my.file.name <- paste0(my.path.name, my_title, ".png")
+tmap_save(
+  my_map, 
+  filename = my.file.name, 
+  width = 15,  
+  dpi = 600)
+```
+
+#### 비분류: 2024년
+
+-   지도 제작
+
+```{r}
+my_map <- tm_shape(grat_bb_m, projection = "+proj=robin") + tm_borders(lwd = 1) + 
+  tm_shape(grat_30_m) + tm_lines(lwd = 0.2) +
+  tm_shape(new_world) +
+  tm_polygons(
+    col = "y2024", style = "cont", palette = "Reds", 
+    breaks = seq(0, 7, 1), 
+    title = "TFR, 2024", 
+    legend.hist = FALSE) +
+  tm_shape(tiny_m) + tm_dots(size = 0.01) +
+  tm_legend(legend.format = list(digits = 0), legend.title.size = 1.4, legend.text.size = 1.1, 
+            legend.position = c("left", "bottom"), 
+            legend.frame = TRUE, legend.hist.width = 0.15, legend.hist.height = 0.2, legend.hist.size = 0.8, 
+            legend.bg.color = "gray95", legend.stack = "vertical", legend.width = 0.35) +
+  tm_layout(frame = FALSE, bg.color = "White", inner.margins = c(0.01, 0.01, 0.02, 0.01)) +
+  tm_credits("SANG-IL LEE, Geograhy Education at SNU, 2024", size = 0.5, position = c(0.55, 0.02))
+my_map
+```
+
+-   저장
+
+```{r}
+#| echo: false
+my_title <- "13_4_01"
+my.path.name <- "outputs/"
+my.file.name <- paste0(my.path.name, my_title, ".png")
+tmap_save(
+  my_map, 
+  filename = my.file.name, 
+  width = 15,  
+  dpi = 600)
+```
+
+## 색 배열(color scheme)
+
+### 함수
+
+```{r}
+snu.color.scheme.generator <- function(sel, type){
+  if (type == "seq"){
+    col.schemes <- c("YlGn", "YlGnBu", "GnBu", "BuGn", "PuBuGn", "PuBu", "BuPu", "RdPu", "PuRd", 
+                     "OrRd", "YlOrRd", "YlOrBr", "Purples", "Blues", "Greens", "Oranges", "Reds", "Greys")
+  }
+  else if(type == "div"){
+    col.schemes <- c("PuOr", "BrBG", "PRGn", "PiYG", "RdBu", "RdGy", "RdYlBu", "Spectral", "RdYlGn")
+  }
+  else {col.schemes = c("Set3", "Pastel1", "Set1", "Pastel2", "Set2", "Dark2", "Paired", "Accent")}
+  col.sel <- col.schemes[sel]
+  n <- length(sel)
+  map.name.list <- list()
+  i <- 1
+  for (i in 1:n){
+    my.pal <- col.sel[i]
+    var.sel <- "House1_p"
+    map.name <- paste0(my.pal, ".map")
+    map.name <- tm_shape(seoul_df) + 
+      tm_polygons(
+        col = var.sel, palette = my.pal, 
+        breaks = c(-Inf, 15, 25, 35, 45, 55, 65, Inf),
+        legend.show = FALSE
+      ) +
+      tm_shape(seoul_gu) + tm_borders(lwd = 1.5, col = "black") +
+      tm_legend(legend.title.size = 1.2, legend.text.size = 1, legend.position = c(0.1, 0.43), 
+                legend.frame = FALSE, legend.hist.size = 1, legend.hist.width = 0.7, legend.hist.height = 0.25) +
+      tm_layout(legend.outside = TRUE, inner.margins = c(0.05, 0.05, 0.05, 0.05)) +
+      # tm_scale_bar(color.dark = "gray60", text.size = 0.4, breaks = seq(0, 10, 2), position = c(0.03, 0.01)) + 
+      # tm_credits("SANG-IL LEE, Geograhy Education at SNU, 2024", size = 0.5, position = c(0.79, 0.01)) +
+      tm_credits(text = my.pal, size = 1, position = c(0.05, 0.75))
+      map.name.list[[i]] <- map.name
+  }
+  map.name.list
+}
+```
+
+```{r}
+snu.color.scheme.generator <- function(sel, type){
+  if (type == "seq"){
+    col.schemes <- c("YlGn", "YlGnBu", "GnBu", "BuGn", "PuBuGn", "PuBu", "BuPu", "RdPu", "PuRd", 
+                     "OrRd", "YlOrRd", "YlOrBr", "Purples", "Blues", "Greens", "Oranges", "Reds", "Greys")
+  }
+  else if(type == "div"){
+    col.schemes <- c("PuOr", "BrBG", "PRGn", "PiYG", "RdBu", "RdGy", "RdYlBu", "Spectral", "RdYlGn")
+  }
+  else {col.schemes = c("Set3", "Pastel1", "Set1", "Pastel2", "Set2", "Dark2", "Paired", "Accent")}
+  col.sel <- col.schemes[sel]
+  n <- length(sel)
+  map.name.list <- list()
+  for (i in 1:n){
+    my.pal <- col.sel[i]
+    var.sel <- "House1_p"
+    map.name <- paste0(my.pal, ".map")
+    if (type == "seq" | type == "div"){
+       map.name <- tm_shape(seoul_df) + 
+         tm_polygons(
+           col = var.sel, palette = my.pal, 
+           breaks = c(-Inf, 15, 25, 35, 45, 55, 65, Inf),
+           legend.show = FALSE
+           ) +
+         tm_shape(seoul_gu) + tm_borders(lwd = 1.5, col = "black") +
+         tm_legend(legend.title.size = 1.2, legend.text.size = 1, legend.position = c(0.1, 0.43), 
+                   legend.frame = FALSE, legend.hist.size = 1, legend.hist.width = 0.7, legend.hist.height = 0.25) +
+         tm_layout(legend.outside = TRUE, inner.margins = c(0.05, 0.05, 0.05, 0.05)) +
+         tm_credits(text = my.pal, size = 1, position = c(0.05, 0.85))
+       map.name.list[[i]] <- map.name
+    }
+    else{
+      map.name <- tm_shape(seoul_df) +
+        tm_polygons(col = "MAP_COLORS", palette = my.pal) +
+        tm_shape(seoul_gu) + tm_borders(lwd = 1.5, col = "black") +
+        tm_layout(legend.outside = TRUE, inner.margins = c(0.05, 0.05, 0.05, 0.05)) +
+        tm_credits(text = my.pal, size = 1, position = c(0.05, 0.85))
+      map.name.list[[i]] <- map.name
+    }
+  }
+  map.name.list
+}
+```
+
+### 순차 배열
+
+-   지도 제작과 저장 1
+
+```{r}
+seq.1 <- snu.color.scheme.generator(1:9, type = "seq")
+col.seq.1 <- tmap_arrange(seq.1[[1]], seq.1[[2]], seq.1[[3]], seq.1[[4]], seq.1[[5]], seq.1[[6]], 
+                          seq.1[[7]], seq.1[[8]], seq.1[[9]], ncol = 3)
+my_title <- "13_5_01"
+my.path.name <- "outputs/"
+my.file.name <- paste0(my.path.name, my_title, ".png")
+tmap_save(
+  col.seq.1, 
+  filename = my.file.name, 
+  width = 15, height = 12, 
+  dpi = 600)
+```
+
+-   지도 제작과 저장 2
+
+```{r}
+seq.2 <- snu.color.scheme.generator(10:18, type = "seq")
+col.seq.2 <- tmap_arrange(seq.2[[1]], seq.2[[2]], seq.2[[3]], seq.2[[4]], seq.2[[5]], seq.2[[6]], 
+                          seq.2[[7]], seq.2[[8]], seq.2[[9]], ncol = 3)
+my_title <- "13_5_02"
+my.path.name <- "outputs/"
+my.file.name <- paste0(my.path.name, my_title, ".png")
+tmap_save(
+  col.seq.2, 
+  filename = my.file.name, 
+  width = 15, height = 12, 
+  dpi = 600)
+```
+
+### 분기 배열
+
+-   지도 제작 및 저장
+
+```{r}
+div <- snu.color.scheme.generator(1:9, type = "div")
+col.div <- tmap_arrange(div[[1]], div[[2]], div[[3]], div[[4]], div[[5]], div[[6]], 
+                        div[[7]], div[[8]], div[[9]], ncol = 3)
+my_title <- "13_5_03"
+my.path.name <- "outputs/"
+my.file.name <- paste0(my.path.name, my_title, ".png")
+tmap_save(
+  col.div, 
+  filename = my.file.name, 
+  width = 15, height = 12, 
+  dpi = 600)
+```
+
+### 정성적 배열
+
+```{r}
+qual <- snu.color.scheme.generator(1:8, type = "qual")
+col.qual <- tmap_arrange(qual[[1]], qual[[2]], qual[[3]], qual[[4]], qual[[5]], qual[[6]], 
+                         qual[[7]], qual[[8]], ncol = 3)
+my_title <- "13_5_04"
+my.path.name <- "outputs/"
+my.file.name <- paste0(my.path.name, my_title, ".png")
+tmap_save(
+  col.qual, 
+  filename = my.file.name, 
+  width = 15, height = 12, 
+  dpi = 600)
+```
+
+## 공간단위의 차이
+
+### 서울시의 경우: 1인가구 비중
+
+#### 읍면동 수준
+
+-   지도 제작
+
+```{r}
+my_map <- tm_shape(seoul_df) + 
+  tm_polygons(
+    col = "House1_p", palette = "BuPu", 
+    breaks = c(-Inf, 15, 25, 35, 45, 55, 65, Inf),
+    labels = c("< 15", "15 ~ 25", "25 ~ 35", "35 ~ 45", "45 ~ 55", "55 ~ 65", ">= 65"),
+    title = "Proportion (%)", 
+  ) +
+  tm_shape(seoul_gu) + tm_borders(lwd = 1.5, col = "black") +
+  tm_legend(legend.title.size = 1.4, legend.text.size = 1.2, legend.position = c(0.87, 0.05), 
+            legend.frame = FALSE) +
+  tm_layout(title = "One-Person Households, 2020", title.size = 2, title.position = c("left", "top"),
+            legend.outside = FALSE, inner.margins = c(0.05, 0.05, 0.05, 0.1)) +
+  tm_scale_bar(
+    color.dark = "gray60", text.size = 0.4, breaks = seq(0, 10, 2), position = c(0.03, 0.01)) + 
+  tm_credits("SANG-IL LEE, Geograhy Education at SNU, 2024", size = 0.7, position = c(0.79, 0.01))
+my_map
+```
+
+-   저장
+
+```{r}
+#| echo: false
+my_title <- "13_6_01"
+my.path.name <- "outputs/"
+my.file.name <- paste0(my.path.name, my_title, ".png")
+tmap_save(
+  my_map, 
+  filename = my.file.name, 
+  width = 15,  
+  dpi = 600)
+```
+
+#### 시군구 수준
+
+-   데이터
+
+```{r}
+seoul_gu_df <-seoul_gu |> 
+  left_join(
+    house_SDGGEMD_2020, join_by(SGG1_CD == Code)
+  )
+```
+
+-   지도 제작
+
+```{r}
+my_map <- tm_shape(seoul_gu_df) + 
+  tm_polygons(
+    col = "House1_p", palette = "BuPu", 
+    breaks = c(-Inf, 15, 25, 35, 45, 55, 65, Inf),
+    labels = c("< 15", "15 ~ 25", "25 ~ 35", "35 ~ 45", "45 ~ 55", "55 ~ 65", ">= 65"),
+    title = "Proportion (%)", 
+  ) +
+  tm_shape(seoul_gu) + tm_borders(lwd = 1.5, col = "black") +
+  tm_legend(legend.title.size = 1.4, legend.text.size = 1.2, legend.position = c(0.87, 0.05), 
+            legend.frame = FALSE) +
+  tm_layout(title = "One-Person Households, 2020", title.size = 2, title.position = c("left", "top"),
+            legend.outside = FALSE, inner.margins = c(0.05, 0.05, 0.05, 0.1)) +
+  tm_scale_bar(
+    color.dark = "gray60", text.size = 0.4, breaks = seq(0, 10, 2), position = c(0.03, 0.01)) + 
+  tm_credits("SANG-IL LEE, Geograhy Education at SNU, 2024", size = 0.7, position = c(0.79, 0.01))
+my_map
+```
+
+-   저장
+
+```{r}
+#| echo: false
+my_title <- "13_6_02"
+my.path.name <- "outputs/"
+my.file.name <- paste0(my.path.name, my_title, ".png")
+tmap_save(
+  my_map, 
+  filename = my.file.name, 
+  width = 15,  
+  dpi = 600)
+```
