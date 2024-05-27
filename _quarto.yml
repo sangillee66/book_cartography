@@ -30,11 +30,13 @@ book:
         - 13_chropleth.qmd
         - 14_isoline.qmd
         - 15_flow.qmd
+        - 16_cartogram.qmd
+        - 17_dasymetric.qmd
     - part: part_4.qmd
       chapters: 
-        - 16_web_mapping.qmd
-        - 17_ESDA.qmd
-        - 18_Future.qmd
+        - 18_web_mapping.qmd
+        - 19_ESDA.qmd
+        - 20_Future.qmd
     - references.qmd
 
 bibliography: references.bib

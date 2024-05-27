@@ -1,5 +1,5 @@
 ---
-title: "Flow Maps"
+title: "Cartograms"
 author: Sang-Il Lee
 date-modified: last-modified
 number-sections: true

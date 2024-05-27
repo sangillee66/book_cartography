@@ -118,7 +118,7 @@ my_map
 
 ```{r}
 #| echo: false
-my_title <- "10_5_01"
+my_title <- "12_1_01"
 my.path.name <- "outputs/"
 my.file.name <- paste0(my.path.name, my_title, ".png")
 tmap_save(
@@ -145,7 +145,7 @@ my_map
 
 ```{r}
 #| echo: false
-my_title <- "10_5_02"
+my_title <- "12_1_02"
 my.path.name <- "outputs/"
 my.file.name <- paste0(my.path.name, my_title, ".png")
 tmap_save(
@@ -172,7 +172,7 @@ my_map
 
 ```{r}
 #| echo: false
-my_title <- "10_5_03"
+my_title <- "12_1_03"
 my.path.name <- "outputs/"
 my.file.name <- paste0(my.path.name, my_title, ".png")
 tmap_save(
@@ -199,7 +199,7 @@ my_map
 
 ```{r}
 #| echo: false
-my_title <- "10_5_04"
+my_title <- "12_1_04"
 my.path.name <- "outputs/"
 my.file.name <- paste0(my.path.name, my_title, ".png")
 tmap_save(

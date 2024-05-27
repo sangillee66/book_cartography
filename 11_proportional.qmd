@@ -106,7 +106,7 @@ my_map
 
 ```{r}
 #| echo: false
-my_title <- "10_4_01"
+my_title <- "11_1_01"
 my.path.name <- "outputs/"
 my.file.name <- paste0(my.path.name, my_title, ".png")
 tmap_save(
@@ -138,7 +138,7 @@ my_map
 
 ```{r}
 #| echo: false
-my_title <- "10_4_02"
+my_title <- "11_1_02"
 my.path.name <- "outputs/"
 my.file.name <- paste0(my.path.name, my_title, ".png")
 tmap_save(
@@ -161,7 +161,7 @@ my_map
 
 ```{r}
 #| echo: false
-my_title <- "10_4_03"
+my_title <- "11_1_03"
 my.path.name <- "outputs/"
 my.file.name <- paste0(my.path.name, my_title, ".png")
 tmap_save(
@@ -190,7 +190,7 @@ my_map
 
 ```{r}
 #| echo: false
-my_title <- "10_4_04"
+my_title <- "11_1_04"
 my.path.name <- "outputs/"
 my.file.name <- paste0(my.path.name, my_title, ".png")
 tmap_save(
@@ -231,7 +231,7 @@ my_map
 
 ```{r}
 #| echo: false
-my_title <- "10_4_05"
+my_title <- "11_2_01"
 my.path.name <- "outputs/"
 my.file.name <- paste0(my.path.name, my_title, ".png")
 tmap_save(
@@ -261,7 +261,7 @@ my_map
 
 ```{r}
 #| echo: false
-my_title <- "10_4_06"
+my_title <- "11_2_02"
 my.path.name <- "outputs/"
 my.file.name <- paste0(my.path.name, my_title, ".png")
 tmap_save(
@@ -297,7 +297,7 @@ my_map
 
 ```{r}
 #| echo: false
-my_title <- "10_4_07"
+my_title <- "11_2_03"
 my.path.name <- "outputs/"
 my.file.name <- paste0(my.path.name, my_title, ".png")
 tmap_save(
@@ -331,7 +331,7 @@ my_map
 
 ```{r}
 #| echo: false
-my_title <- "10_4_08"
+my_title <- "11_2_04"
 my.path.name <- "outputs/"
 my.file.name <- paste0(my.path.name, my_title, ".png")
 tmap_save(
@@ -380,7 +380,7 @@ my_map
 
 ```{r}
 #| echo: false
-my_title <- "10_4_01"
+my_title <- "11_3_01"
 my.path.name <- "outputs/"
 my.file.name <- paste0(my.path.name, my_title, ".png")
 tmap_save(
@@ -442,7 +442,7 @@ my_map
 
 ```{r}
 #| echo: false
-my_title <- "10_4_02"
+my_title <- "11_3_02"
 my.path.name <- "outputs/"
 my.file.name <- paste0(my.path.name, my_title, ".png")
 tmap_save(
@@ -504,7 +504,7 @@ my_map
 
 ```{r}
 #| echo: false
-my_title <- "10_4_07"
+my_title <- "11_3_03"
 my.path.name <- "outputs/"
 my.file.name <- paste0(my.path.name, my_title, ".png")
 tmap_save(
