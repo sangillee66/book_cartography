@@ -449,3 +449,16 @@ my_df |>
     palette = pals::alphabet2(),
     legend.show = FALSE
   )
+
+library(palmerpenguins)
+plt <- penguins %>%
+  ggplot(aes(bill_length_mm, bill_depth_mm, color = species)) +
+  geom_point()+
+  geom_text(x = 45, y = 20, label = "Example of font problem", size = 15/.pt, inherit.aes = FALSE) +
+  labs(title = "Bill length and depth relation by species") +
+  theme(plot.title = element_text(size = 15))
+
+
+ragg::agg_png("ragg_10x10.png", width = 10, height = 10, units = "in", res = 300)
+plt
+dev.off()

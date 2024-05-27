@@ -13,4 +13,197 @@ execute:
   error: false
   freeze: auto
 editor: visual
+editor_options: 
+  chunk_output_type: console
 ---
+
+## 기본 개념
+
+### 지도 제작 데이터
+
+-   필수적인 패키지
+
+```{r}
+library(tidyverse) 
+library(readxl) 
+library(sf) 
+library(tmap)
+library(ggspatial)
+```
+
+-   형상 데이터 불러오기
+
+```{r}
+#| results: hide
+sido <- st_read("D:/My R/Korean Administrative Areas/행정구역 셰이프 파일/3 Generalization/2020_2Q/SIDO_2020_2Q_GEN_0050.shp", options = "ENCODING=CP949")
+sigun1 <- st_read("D:/My R/Korean Administrative Areas/행정구역 셰이프 파일/3 Generalization/2020_2Q/SIGUN1_2020_2Q_GEN_0050.shp", options = "ENCODING=CP949")
+sigungu1 <- st_read("D:/My R/Korean Administrative Areas/행정구역 셰이프 파일/3 Generalization/2020_2Q/SIGUNGU1_2020_2Q_GEN_0050.shp", options = "ENCODING=CP949")
+emd <- st_read("D:/My R/Korean Administrative Areas/행정구역 셰이프 파일/3 Generalization/2020_2Q/EMD_2020_2Q_GEN_0050.shp", options = "ENCODING=CP949")
+sido_polyline <- st_read("D:/My R/Korean Administrative Areas/행정구역 셰이프 파일/3 Generalization/2020_2Q/SIDO_Polyline_2020_2Q_GEN_0050.shp", options = "ENCODING=CP949")
+bbox_ulleung <- st_read("D:/My R/Korean Administrative Areas/행정구역 셰이프 파일/3 Generalization/2020_2Q/BBOX_Ulleung_2020_2Q_GEN_0050.shp", options = "ENCODING=CP949")
+bbox_seohae <- st_read("D:/My R/Korean Administrative Areas/행정구역 셰이프 파일/3 Generalization/2020_2Q/BBOX_Seohae3_2020_2Q_GEN_0050.shp", options = "ENCODING=CP949")
+seoul_gu <- st_read(
+  "D:/My R/Korean Administrative Areas/행정구역 셰이프 파일/2 Original Cleaning/2021_4Q/SEOUL_GU_2021_4Q.shp", options = "ENCODING=CP949"
+  ) 
+seoul_sido <- st_read(
+  "D:/My R/Korean Administrative Areas/행정구역 셰이프 파일/2 Original Cleaning/2021_4Q/SEOUL_SIDO_2021_4Q.shp", options = "ENCODING=CP949"
+  )
+```
+
+### 점밀도도의 기본 원리
+
+#### 단위점의 수치와 크기: 강원도의 사례
+
+-   강원도 형상 데이터
+
+```{r}
+gangwon_emd <- emd |> 
+  filter(SD_CD == 32)
+gangwon_sgg <- sigungu1 |> 
+  filter(SD_CD == 32)
+```
+
+-   인구수 속성 데이터 불러오기
+
+```{r}
+pop_SDGGEMD_2020 <- read_excel(
+  "D:/My R/Korea Census Data Manipulation/1 Population Basic/DM_ADJ_Census_2020.xlsx", sheet = 1
+  )
+```
+
+-   결합하기
+
+```{r}
+gangwon_emd_data <- gangwon_emd |> 
+  mutate(EMD_ID = as.numeric(EMD_ID)) |> 
+  left_join(pop_SDGGEMD_2020, join_by(EMD_ID == Code))
+gangwon_emd_data <- gangwon_emd_data |> 
+  mutate(
+    across(where(is.numeric), ~ replace_na(.x, 0))
+  )
+```
+
+-   포인트 생성
+
+```{r}
+gangwon_point_50 <- gangwon_emd_data |> 
+  st_sample(size = round(gangwon_emd_data$pop_t/50), 
+            type = "random", exact = TRUE) |> 
+  st_sf()
+gangwon_point_250 <- gangwon_emd_data |> 
+  st_sample(size = round(gangwon_emd_data$pop_t/250), 
+            type = "random", exact = TRUE) |> 
+  st_sf()
+gangwon_point_500 <- gangwon_emd_data |> 
+  st_sample(size = round(gangwon_emd_data$pop_t/500), 
+            type = "random", exact = TRUE) |> 
+  st_sf()
+```
+
+-   케이스 1(250, 0.1): 지도 제작
+
+```{r}
+my_map <- tm_shape(gangwon_sgg) + tm_borders() +
+  tm_shape(gangwon_point_250) + 
+  tm_dots(size = 0.1, alpha = 0.75, col = "black") +
+  tm_layout(
+    title = "Dot Value: 250\n Dot Size: 0.10", title.size = 1.8
+  ) +
+  tm_scale_bar(breaks = seq(0, 50, 10), text.size = 0.4, color.dark = "gray60", position = c(0.025, 0.05)) +
+  tm_credits("SANG-IL LEE, Geography Education at SNU, 2024", size = 0.8, position = c(0.025, 0.01))
+my_map
+```
+
+-   케이스 1(250, 0.1): 저장
+
+```{r}
+#| echo: false
+my_title <- "10_5_01"
+my.path.name <- "outputs/"
+my.file.name <- paste0(my.path.name, my_title, ".png")
+tmap_save(
+  my_map, 
+  filename = my.file.name,  
+  width = 12, dpi = 600)
+```
+
+-   케이스 2(50, 0.05): 지도 제작
+
+```{r}
+my_map <- tm_shape(gangwon_sgg) + tm_borders() +
+  tm_shape(gangwon_point_50) + 
+  tm_dots(size = 0.05, alpha = 0.75, col = "black") +
+  tm_layout(
+    title = "Dot Value: 50\n Dot Size: 0.05", title.size = 1.8
+  ) +
+  tm_scale_bar(breaks = seq(0, 50, 10), text.size = 0.4, color.dark = "gray60", position = c(0.025, 0.05)) +
+  tm_credits("SANG-IL LEE, Geography Education at SNU, 2024", size = 0.8, position = c(0.025, 0.01))
+my_map
+```
+
+-   케이스 2(50, 0.05): 저장
+
+```{r}
+#| echo: false
+my_title <- "10_5_02"
+my.path.name <- "outputs/"
+my.file.name <- paste0(my.path.name, my_title, ".png")
+tmap_save(
+  my_map, 
+  filename = my.file.name,  
+  width = 12, dpi = 600)
+```
+
+-   케이스 3(500, 0.05): 지도 제작
+
+```{r}
+my_map <- tm_shape(gangwon_sgg) + tm_borders() +
+  tm_shape(gangwon_point_500) + 
+  tm_dots(size = 0.05, alpha = 0.75, col = "black") +
+  tm_layout(
+    title = "Dot Value: 500\n Dot Size: 0.05", title.size = 1.8
+  ) +
+  tm_scale_bar(breaks = seq(0, 50, 10), text.size = 0.4, color.dark = "gray60", position = c(0.025, 0.05)) +
+  tm_credits("SANG-IL LEE, Geography Education at SNU, 2024", size = 0.8, position = c(0.025, 0.01))
+my_map
+```
+
+-   케이스 3(500, 0.05): 저장
+
+```{r}
+#| echo: false
+my_title <- "10_5_03"
+my.path.name <- "outputs/"
+my.file.name <- paste0(my.path.name, my_title, ".png")
+tmap_save(
+  my_map, 
+  filename = my.file.name,  
+  width = 12, dpi = 600)
+```
+
+-   케이스 4(250, 0.05): 지도 제작
+
+```{r}
+my_map <- tm_shape(gangwon_sgg) + tm_borders() +
+  tm_shape(gangwon_point_250) + 
+  tm_dots(size = 0.05, alpha = 0.75, col = "black") +
+  tm_layout(
+    title = "Dot Value: 250\n Dot Size: 0.05", title.size = 1.8
+  ) +
+  tm_scale_bar(breaks = seq(0, 50, 10), text.size = 0.4, color.dark = "gray60", position = c(0.025, 0.05)) +
+  tm_credits("SANG-IL LEE, Geography Education at SNU, 2024", size = 0.8, position = c(0.025, 0.01))
+my_map
+```
+
+-   케이스 4(250, 0.05): 저장
+
+```{r}
+#| echo: false
+my_title <- "10_5_04"
+my.path.name <- "outputs/"
+my.file.name <- paste0(my.path.name, my_title, ".png")
+tmap_save(
+  my_map, 
+  filename = my.file.name,  
+  width = 12, dpi = 600)
+```

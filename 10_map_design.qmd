@@ -46,6 +46,12 @@ emd <- st_read("D:/My R/Korean Administrative Areas/행정구역 셰이프 파�
 sido_polyline <- st_read("D:/My R/Korean Administrative Areas/행정구역 셰이프 파일/3 Generalization/2020_2Q/SIDO_Polyline_2020_2Q_GEN_0050.shp", options = "ENCODING=CP949")
 bbox_ulleung <- st_read("D:/My R/Korean Administrative Areas/행정구역 셰이프 파일/3 Generalization/2020_2Q/BBOX_Ulleung_2020_2Q_GEN_0050.shp", options = "ENCODING=CP949")
 bbox_seohae <- st_read("D:/My R/Korean Administrative Areas/행정구역 셰이프 파일/3 Generalization/2020_2Q/BBOX_Seohae3_2020_2Q_GEN_0050.shp", options = "ENCODING=CP949")
+seoul_gu <- st_read(
+  "D:/My R/Korean Administrative Areas/행정구역 셰이프 파일/2 Original Cleaning/2021_4Q/SEOUL_GU_2021_4Q.shp", options = "ENCODING=CP949"
+  ) 
+seoul_sido <- st_read(
+  "D:/My R/Korean Administrative Areas/행정구역 셰이프 파일/2 Original Cleaning/2021_4Q/SEOUL_SIDO_2021_4Q.shp", options = "ENCODING=CP949"
+  )
 ```
 
 #### 시도 경계 지도
@@ -265,6 +271,10 @@ emd_adj_data <- emd_adj_data |>
 -   지도 제작
 
 ```{r}
+#| fig-height: 8
+#| out-width: 70%
+#| fig-align: center
+
 bbox_ulleung_polygon <- bbox_ulleung |> 
   st_cast("POLYGON")
 
@@ -281,7 +291,39 @@ my_map <- tm_graticules(col = "white", x = seq(126, 130, 1), y = seq(33, 39, 1))
   tm_legend(legend.position = c(0.65, 0.06), legend.bg.color = "white",
             legend.title.size = 1.5, legend.text.size = 1.2) +
   tm_layout(bg.color = "gray90",
-            title = "Population Distribution, 2020", title.size = 1.8, 
+            title = "Population Distribution, 2020", title.size = 1.8,
+            inner.margins = c(0.07, 0.1, 0.05, 0.07)) +
+  tm_scale_bar(breaks = seq(0, 200, 50), text.size = 0.5, color.dark = "gray60", position = c(0.52, 0.01)) +
+  tm_credits("SANG-IL LEE, Geography Education at SNU, 2024", size = 0.7, position = c(0.025, 0.01))
+
+my_map
+```
+
+```{r}
+#| fig-height: 8
+#| out-width: 70%
+#| fig-align: center
+
+# 위와 같이 설정한다고 해도 Plots 창의 것과 렌더링 이후의 것이 같지 않음(ggplot2와 다른 점). 
+# 렌더링 결과도 동일함(ggplot2와 다른 점.
+
+bbox_ulleung_polygon <- bbox_ulleung |> 
+  st_cast("POLYGON")
+
+my_map <- tm_graticules(col = "white", x = seq(126, 130, 1), y = seq(33, 39, 1)) +
+  tm_shape(bbox_ulleung_polygon) + tm_borders() + tm_fill("gray90") +
+  tm_shape(emd_adj_data, is.master = TRUE) +
+  tm_polygons(col = "pop_den", breaks = c(0, 50, 250, 500, 1000, 5000, 10000, Inf),
+              palette = "YlGnBu", title = "People per square km",
+              # title = expression(paste("People / ", "km"^"2")),
+              border.col = NULL) +
+  tm_shape(sigungu1) + tm_borders() +
+  tm_shape(sido_polyline) + tm_lines(col = "black", lwd = 1.75) +
+  tm_shape(bbox_seohae) + tm_lines() +
+  tm_legend(legend.position = c(0.65, 0.06), legend.bg.color = "white",
+            legend.title.size = 1.5, legend.text.size = 1.2) +
+  tm_layout(bg.color = "gray90",
+            title = "Population Distribution, 2020", title.size = 1.8,
             inner.margins = c(0.07, 0.1, 0.05, 0.07)) +
   tm_scale_bar(breaks = seq(0, 200, 50), text.size = 0.5, color.dark = "gray60", position = c(0.52, 0.01)) +
   tm_credits("SANG-IL LEE, Geography Education at SNU, 2024", size = 0.7, position = c(0.025, 0.01))
@@ -298,9 +340,8 @@ my.path.name <- "outputs/"
 my.file.name <- paste0(my.path.name, my_title, ".png")
 tmap_save(
   my_map, 
-  filename = my.file.name, 
-  width = 0.728*1202/96, height = 1158/96,
-  dpi = 600)
+  filename = my.file.name,  
+  height = 12, dpi = 600)
 ```
 
 -   `ggplot2`: 지도 제작
@@ -337,6 +378,54 @@ my_map <- ggplot() +
 my_map
 ```
 
+```{r}
+#| fig-height: 8 
+#| out-width: 70%
+#| fig-align: center
+
+# 위와 같이 세 가지를 지정하면 Plots 창에 그려진 것과 거의 동일한 것이 Quarto 렌더링에 나타남(tmap은 다 다름). 
+# 렌더링 결과는 이게 더 좋아 보임.
+ 
+emd_adj_data_1 <- emd_adj_data |> 
+  mutate(
+    pop_den = cut(pop_den, 
+                  breaks = c(-Inf, 50, 250, 500, 1000, 5000, 10000, Inf),
+                  labels = c("0 to 50", "50 to 250", "250 to 500", "500 to 1,000", 
+                             "1,000 to 5,000", "5,000 to 10,000", "10,000 or more"))
+  )
+
+my_map <- ggplot() + 
+  geom_sf(data = bbox_ulleung_polygon, fill = "gray92", lwd = 0.1) +
+  geom_sf(
+    data = emd_adj_data_1, aes(fill = pop_den), color = NA) +
+  geom_sf(data = sigungu1, fill = NA) +
+  geom_sf(data = sido_polyline) +
+  geom_sf(data = bbox_seohae, lwd = 0.1) +
+  theme(
+    legend.position = "inside",
+    legend.position.inside = c(0.85, 0.18),
+    legend.background = element_rect(fill = "white")) +
+  scale_fill_brewer(palette = "YlGnBu", name = expression(paste("People / ", "km"^"2"))) +
+  labs(x = "", y = "") +
+  annotate("text", x = -Inf, y = Inf, hjust = -0.05, vjust = 2, size = 5,   
+           label = "Population Distribution, 2020") +
+  annotate("text", x = -Inf, y = -Inf, hjust = -0.1, vjust = -1.5, size = 2,   
+           label = "SANG-IL LEE, Geography Education at SNU, 2024") +
+  annotation_scale(location = "br", bar_cols = c("gray40", "white"), width_hint = 0.4, pad_y = unit(0.2, "cm"))
+my_map
+```
+
+```{r}
+#| echo: false
+my_title <- "10_3_01_2"
+my.path.name <- "outputs/"
+my.file.name <- paste0(my.path.name, my_title, ".png")
+ggsave(
+  my_map, 
+  filename = my.file.name, width = 8*0.79*2, height = 8*2, scale = 1,
+  dpi = 600)
+```
+
 -   `ggplot2`: 저장
 
 ```{r}
@@ -348,33 +437,5 @@ ggsave(
   my_map, 
   filename = my.file.name, 
   width = 0.728*1202/96, height = 1158/96,
-  dpi = 900)
-```
-
--   인구 데이터
-
-```{r}
-pop_SDGG <- read_excel(path = "D:/My R/Population Geography/1 Population Growth/POP_1975_2021_SDGG.xlsx")
-pop_data <- pop_SDGG |> 
-  select(Code, Region, pop_2015 = `2015`, pop_2020 = `2020`) |> 
-  mutate(
-    pgr = 0.2*log(pop_2020/pop_2015) * 100
-  )
-```
-
--   면적 데이터
-
-```{r}
-area_data <- read_excel(path = "D:/My R/Korea Census Data Manipulation/11 Etc/DM_AREA_2020_SDGG.xlsx")
-```
-
-```{r}
-my_data <- sigungu1 |> 
-  left_join(pop_data, join_by(SGG1_CD == Code)) |> 
-  left_join(
-    select(area_data, SDGG_CD, Area), join_by(SGG1_CD == SDGG_CD)
-  ) |> 
-  mutate(
-    pop_den = pop_2020/(Area/1000000)
-  )
+  dpi = 600)
 ```
