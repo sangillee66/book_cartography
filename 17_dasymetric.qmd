@@ -77,7 +77,6 @@ my_df <- my_df |>
 
 ```{r}
 #| results: hide
-seoul_landcover <- st_read("D:/My R/Vector Data Manipulation Korea/seoul_landcover_2023.shp", 
-                      options = "ENCODING=CP949")
+seoul_landcover <- st_read("D:/My R/Vector Data Manipulation Korea/seoul_landcover_2023.shp", options = "ENCODING=CP949")
 # qtm(seoul_landcover)
 ```
