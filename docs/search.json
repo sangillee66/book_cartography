@@ -375,5 +375,27 @@
       "주제도 제작",
       "<span class='chapter-number'>13</span>  <span class='chapter-title'>코로플레스맵</span>"
     ]
+  },
+  {
+    "objectID": "17_dasymetric.html",
+    "href": "17_dasymetric.html",
+    "title": "\n17  Dasymetric Maps\n",
+    "section": "",
+    "text": "17.1 대시메트릭 매핑의 원리",
+    "crumbs": [
+      "주제도 제작",
+      "<span class='chapter-number'>17</span>  <span class='chapter-title'>Dasymetric Maps</span>"
+    ]
+  },
+  {
+    "objectID": "17_dasymetric.html#대시메트릭-맵의-작성",
+    "href": "17_dasymetric.html#대시메트릭-맵의-작성",
+    "title": "\n17  Dasymetric Maps\n",
+    "section": "\n17.2 대시메트릭 맵의 작성",
+    "text": "17.2 대시메트릭 맵의 작성\n\n17.2.1 서울시 인구분포\n\n필수 패키지\n\n\nlibrary(tidyverse) \nlibrary(readxl) \nlibrary(sf) \nlibrary(tmap) \n\n\n도형 데이터: 서울 행정구역\n\n\nseoul_EMD_2020 &lt;- st_read(\n  \"D:/My R/Korean Administrative Areas/행정구역 셰이프 파일/2 Original Cleaning/2020_2Q/SEOUL_EMD_2020_2Q.shp\", options = \"ENCODING=CP949\"\n  ) \nseoul_gu &lt;- st_read(\n  \"D:/My R/Korean Administrative Areas/행정구역 셰이프 파일/2 Original Cleaning/2021_4Q/SEOUL_GU_2021_4Q.shp\", options = \"ENCODING=CP949\"\n  ) \nseoul_sido &lt;- st_read(\n  \"D:/My R/Korean Administrative Areas/행정구역 셰이프 파일/2 Original Cleaning/2021_4Q/SEOUL_SIDO_2021_4Q.shp\", options = \"ENCODING=CP949\"\n  )\n\n\n속성 데이터\n\n\npop_SDGGEMD_2020 &lt;- read_excel(\n  \"D:/My R/Korea Census Data Manipulation/1 Population Basic/DM_ADJ_Census_2020.xlsx\", sheet = 1\n  )\n\n\n결합 및 인구밀도 계산\n\n\nseoul_EMD_2020 &lt;- seoul_EMD_2020 |&gt; \n  mutate(\n    EMD_ID = as.numeric(EMD_ID)\n  )\nmy_df &lt;-seoul_EMD_2020 |&gt; \n  left_join(\n    pop_SDGGEMD_2020, join_by(EMD_ID == Code)\n  )\nmy_df$area &lt;- st_area(my_df) / 1000000\nmy_df &lt;- my_df |&gt; \n  mutate(\n    pop_den_t = pop_t / area\n  )\n\n\n토지피복지도\n\n\nseoul_landcover &lt;- st_read(\"D:/My R/Vector Data Manipulation Korea/seoul_landcover_2023.shp\", \n                      options = \"ENCODING=CP949\")\n# qtm(seoul_landcover)",
+    "crumbs": [
+      "주제도 제작",
+      "<span class='chapter-number'>17</span>  <span class='chapter-title'>Dasymetric Maps</span>"
+    ]
   }
 ]

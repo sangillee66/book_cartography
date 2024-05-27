@@ -16,3 +16,68 @@ editor: visual
 editor_options: 
   chunk_output_type: console
 ---
+
+## 대시메트릭 매핑의 원리
+
+## 대시메트릭 맵의 작성
+
+### 서울시 인구분포
+
+-   필수 패키지
+
+```{r}
+library(tidyverse) 
+library(readxl) 
+library(sf) 
+library(tmap) 
+```
+
+-   도형 데이터: 서울 행정구역
+
+```{r}
+#| results: hide
+seoul_EMD_2020 <- st_read(
+  "D:/My R/Korean Administrative Areas/행정구역 셰이프 파일/2 Original Cleaning/2020_2Q/SEOUL_EMD_2020_2Q.shp", options = "ENCODING=CP949"
+  ) 
+seoul_gu <- st_read(
+  "D:/My R/Korean Administrative Areas/행정구역 셰이프 파일/2 Original Cleaning/2021_4Q/SEOUL_GU_2021_4Q.shp", options = "ENCODING=CP949"
+  ) 
+seoul_sido <- st_read(
+  "D:/My R/Korean Administrative Areas/행정구역 셰이프 파일/2 Original Cleaning/2021_4Q/SEOUL_SIDO_2021_4Q.shp", options = "ENCODING=CP949"
+  )
+```
+
+-   속성 데이터
+
+```{r}
+pop_SDGGEMD_2020 <- read_excel(
+  "D:/My R/Korea Census Data Manipulation/1 Population Basic/DM_ADJ_Census_2020.xlsx", sheet = 1
+  )
+```
+
+-   결합 및 인구밀도 계산
+
+```{r}
+seoul_EMD_2020 <- seoul_EMD_2020 |> 
+  mutate(
+    EMD_ID = as.numeric(EMD_ID)
+  )
+my_df <-seoul_EMD_2020 |> 
+  left_join(
+    pop_SDGGEMD_2020, join_by(EMD_ID == Code)
+  )
+my_df$area <- st_area(my_df) / 1000000
+my_df <- my_df |> 
+  mutate(
+    pop_den_t = pop_t / area
+  )
+```
+
+-   토지피복지도
+
+```{r}
+#| results: hide
+seoul_landcover <- st_read("D:/My R/Vector Data Manipulation Korea/seoul_landcover_2023.shp", 
+                      options = "ENCODING=CP949")
+# qtm(seoul_landcover)
+```
