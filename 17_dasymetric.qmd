@@ -1,5 +1,5 @@
 ---
-title: "Dasymetric Maps"
+title: "대시메트릭맵"
 author: Sang-Il Lee
 date-modified: last-modified
 number-sections: true
@@ -77,6 +77,6 @@ my_df <- my_df |>
 
 ```{r}
 #| results: hide
-seoul_landcover <- st_read("D:/My R/Vector Data Manipulation Korea/seoul_landcover_2023.shp", options = "ENCODING=CP949")
+seoul_landcover <- st_read("D:/My R/Vector Data Manipulation Korea/Korea_Landcover/seoul_landcover_M_2023.shp", options = "ENCODING=CP949")
 # qtm(seoul_landcover)
 ```

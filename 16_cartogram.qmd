@@ -1,5 +1,5 @@
 ---
-title: "Cartograms"
+title: "카토그램"
 author: Sang-Il Lee
 date-modified: last-modified
 number-sections: true
