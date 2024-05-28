@@ -134,7 +134,7 @@ my_map <- tm_shape(my_df) +
     breaks = seq(0, 10, 2),
     position = c(0.03, 0.01)) + 
   tm_credits(
-    "SANG-IL LEE, Geograhy Education at SNU, 2024", 
+    "SANG-IL LEE, Geography Education at SNU, 2024", 
     size = 0.3, position = c(0.78, 0.01)
     )
 
@@ -327,7 +327,7 @@ my_map <- tm_shape(my_df_2) +
     breaks = seq(0, 10, 2),
     position = c(0.03, 0.01)) + 
   tm_credits(
-    "SANG-IL LEE, Geograhy Education at SNU, 2024", 
+    "SANG-IL LEE, Geography Education at SNU, 2024", 
     size = 0.3, position = c(0.78, 0.01)
     )
 my_map
@@ -372,7 +372,7 @@ my_map <- tm_shape(my_df_2) +
     breaks = seq(0, 10, 2),
     position = c(0.03, 0.01)) + 
   tm_credits(
-    "SANG-IL LEE, Geograhy Education at SNU, 2024", 
+    "SANG-IL LEE, Geography Education at SNU, 2024", 
     size = 0.3, position = c(0.78, 0.01)
     )
 my_map
@@ -415,7 +415,7 @@ my_map <- tm_shape(my_df_2) +
     breaks = seq(0, 10, 2),
     position = c(0.03, 0.01)) + 
   tm_credits(
-    "SANG-IL LEE, Geograhy Education at SNU, 2024", 
+    "SANG-IL LEE, Geography Education at SNU, 2024", 
     size = 0.3, position = c(0.78, 0.01)
     )
 my_map
@@ -494,7 +494,7 @@ my_map <- tm_shape(seoul_gu) +
     breaks = seq(0, 10, 2),
     position = c(0.03, 0.01)) + 
   tm_credits(
-    "SANG-IL LEE, Geograhy Education at SNU, 2024", 
+    "SANG-IL LEE, Geography Education at SNU, 2024", 
     size = 0.3, position = c(0.78, 0.01)
     )
 my_map

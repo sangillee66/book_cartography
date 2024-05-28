@@ -147,7 +147,7 @@ my_map <- tm_shape(seoul_df) +
             legend.outside = TRUE, inner.margins = c(0.05, 0.05, 0.05, 0.05)) +
   tm_scale_bar(
     color.dark = "gray60", text.size = 0.4, breaks = seq(0, 10, 2), position = c(0.03, 0.01)) + 
-  tm_credits("SANG-IL LEE, Geograhy Education at SNU, 2024", size = 0.5, position = c(0.79, 0.01))
+  tm_credits("SANG-IL LEE, Geography Education at SNU, 2024", size = 0.5, position = c(0.79, 0.01))
 my_map
 ```
 
@@ -186,7 +186,7 @@ my_map <- tm_shape(seoul_df) +
   tm_scale_bar(
     color.dark = "gray60", text.size = 0.4, breaks = seq(0, 10, 2), position = c(0.03, 0.01)) + 
   tm_credits(text = "Natural Breaks (Jenks)", size = 2, position = c(0.05, 0.9)) +
-  tm_credits("SANG-IL LEE, Geograhy Education at SNU, 2024", size = 0.5, position = c(0.79, 0.01))
+  tm_credits("SANG-IL LEE, Geography Education at SNU, 2024", size = 0.5, position = c(0.79, 0.01))
 my_map
 ```
 
@@ -225,7 +225,7 @@ my_map <- tm_shape(seoul_df) +
   tm_scale_bar(
     color.dark = "gray60", text.size = 0.4, breaks = seq(0, 10, 2), position = c(0.03, 0.01)) + 
   tm_credits(text = "Quantile", size = 2, position = c(0.05, 0.9)) +
-  tm_credits("SANG-IL LEE, Geograhy Education at SNU, 2024", size = 0.5, position = c(0.79, 0.01))
+  tm_credits("SANG-IL LEE, Geography Education at SNU, 2024", size = 0.5, position = c(0.79, 0.01))
 my_map
 ```
 
@@ -264,7 +264,7 @@ my_map <- tm_shape(seoul_df) +
   tm_scale_bar(
     color.dark = "gray60", text.size = 0.4, breaks = seq(0, 10, 2), position = c(0.03, 0.01)) + 
   tm_credits(text = "Equal Interval", size = 2, position = c(0.05, 0.9)) +
-  tm_credits("SANG-IL LEE, Geograhy Education at SNU, 2024", size = 0.5, position = c(0.79, 0.01))
+  tm_credits("SANG-IL LEE, Geography Education at SNU, 2024", size = 0.5, position = c(0.79, 0.01))
 my_map
 ```
 
@@ -301,7 +301,7 @@ my_map <- tm_shape(seoul_df) +
   tm_scale_bar(
     color.dark = "gray60", text.size = 0.4, breaks = seq(0, 10, 2), position = c(0.03, 0.01)) + 
   tm_credits(text = "Standard Deviation", size = 2, position = c(0.05, 0.9)) +
-  tm_credits("SANG-IL LEE, Geograhy Education at SNU, 2024", size = 0.5, position = c(0.79, 0.01))
+  tm_credits("SANG-IL LEE, Geography Education at SNU, 2024", size = 0.5, position = c(0.79, 0.01))
 my_map
 ```
 
@@ -338,7 +338,7 @@ my_map <- tm_shape(seoul_df) +
   tm_scale_bar(
     color.dark = "gray60", text.size = 0.4, breaks = seq(0, 10, 2), position = c(0.03, 0.01)) + 
   tm_credits(text = "Unclassed", size = 2, position = c(0.05, 0.9)) +
-  tm_credits("SANG-IL LEE, Geograhy Education at SNU, 2024", size = 0.5, position = c(0.79, 0.01))
+  tm_credits("SANG-IL LEE, Geography Education at SNU, 2024", size = 0.5, position = c(0.79, 0.01))
 my_map
 ```
 
@@ -376,7 +376,7 @@ my_map <- tm_shape(grat_bb_m, projection = "+proj=robin") + tm_borders(lwd = 1) 
             legend.frame = TRUE, legend.hist.width = 0.15, legend.hist.height = 0.2, legend.hist.size = 0.8, 
             legend.bg.color = "gray95", legend.stack = "vertical", legend.width = 0.35) +
   tm_layout(frame = FALSE, bg.color = "White", inner.margins = c(0.01, 0.01, 0.02, 0.01)) +
-  tm_credits("SANG-IL LEE, Geograhy Education at SNU, 2024", size = 0.5, position = c(0.55, 0.02))
+  tm_credits("SANG-IL LEE, Geography Education at SNU, 2024", size = 0.5, position = c(0.55, 0.02))
 my_map
 ```
 
@@ -412,7 +412,7 @@ my_map <- tm_shape(grat_bb_m, projection = "+proj=robin") + tm_borders(lwd = 1) 
             legend.frame = TRUE, legend.hist.width = 0.15, legend.hist.height = 0.2, legend.hist.size = 0.8, 
             legend.bg.color = "gray95", legend.stack = "vertical", legend.width = 0.35) +
   tm_layout(frame = FALSE, bg.color = "White", inner.margins = c(0.01, 0.01, 0.02, 0.01)) +
-  tm_credits("SANG-IL LEE, Geograhy Education at SNU, 2024", size = 0.5, position = c(0.55, 0.02))
+  tm_credits("SANG-IL LEE, Geography Education at SNU, 2024", size = 0.5, position = c(0.55, 0.02))
 my_map
 ```
 
@@ -448,7 +448,7 @@ my_map <- tm_shape(grat_bb_m, projection = "+proj=robin") + tm_borders(lwd = 1) 
             legend.frame = TRUE, legend.hist.width = 0.15, legend.hist.height = 0.2, legend.hist.size = 0.8, 
             legend.bg.color = "gray95", legend.stack = "vertical", legend.width = 0.35) +
   tm_layout(frame = FALSE, bg.color = "White", inner.margins = c(0.01, 0.01, 0.02, 0.01)) +
-  tm_credits("SANG-IL LEE, Geograhy Education at SNU, 2024", size = 0.5, position = c(0.55, 0.02))
+  tm_credits("SANG-IL LEE, Geography Education at SNU, 2024", size = 0.5, position = c(0.55, 0.02))
 my_map
 ```
 
@@ -484,7 +484,7 @@ my_map <- tm_shape(grat_bb_m, projection = "+proj=robin") + tm_borders(lwd = 1) 
             legend.frame = TRUE, legend.hist.width = 0.15, legend.hist.height = 0.2, legend.hist.size = 0.8, 
             legend.bg.color = "gray95", legend.stack = "vertical", legend.width = 0.35) +
   tm_layout(frame = FALSE, bg.color = "White", inner.margins = c(0.01, 0.01, 0.02, 0.01)) +
-  tm_credits("SANG-IL LEE, Geograhy Education at SNU, 2024", size = 0.5, position = c(0.55, 0.02))
+  tm_credits("SANG-IL LEE, Geography Education at SNU, 2024", size = 0.5, position = c(0.55, 0.02))
 my_map
 ```
 
@@ -522,7 +522,7 @@ my_map <- tm_shape(grat_bb_m, projection = "+proj=robin") + tm_borders(lwd = 1) 
             legend.frame = TRUE, legend.hist.width = 0.15, legend.hist.height = 0.2, legend.hist.size = 0.8, 
             legend.bg.color = "gray95", legend.stack = "vertical", legend.width = 0.35) +
   tm_layout(frame = FALSE, bg.color = "White", inner.margins = c(0.01, 0.01, 0.02, 0.01)) +
-  tm_credits("SANG-IL LEE, Geograhy Education at SNU, 2024", size = 0.5, position = c(0.55, 0.02))
+  tm_credits("SANG-IL LEE, Geography Education at SNU, 2024", size = 0.5, position = c(0.55, 0.02))
 my_map
 ```
 
@@ -560,7 +560,7 @@ my_map <- tm_shape(grat_bb_m, projection = "+proj=robin") + tm_borders(lwd = 1) 
             legend.frame = TRUE, legend.hist.width = 0.15, legend.hist.height = 0.2, legend.hist.size = 0.8, 
             legend.bg.color = "gray95", legend.stack = "vertical", legend.width = 0.35) +
   tm_layout(frame = FALSE, bg.color = "White", inner.margins = c(0.01, 0.01, 0.02, 0.01)) +
-  tm_credits("SANG-IL LEE, Geograhy Education at SNU, 2024", size = 0.5, position = c(0.55, 0.02))
+  tm_credits("SANG-IL LEE, Geography Education at SNU, 2024", size = 0.5, position = c(0.55, 0.02))
 my_map
 ```
 
@@ -598,7 +598,7 @@ my_map <- tm_shape(grat_bb_m, projection = "+proj=robin") + tm_borders(lwd = 1) 
             legend.frame = TRUE, legend.hist.width = 0.15, legend.hist.height = 0.2, legend.hist.size = 0.8, 
             legend.bg.color = "gray95", legend.stack = "vertical", legend.width = 0.35) +
   tm_layout(frame = FALSE, bg.color = "White", inner.margins = c(0.01, 0.01, 0.02, 0.01)) +
-  tm_credits("SANG-IL LEE, Geograhy Education at SNU, 2024", size = 0.5, position = c(0.55, 0.02))
+  tm_credits("SANG-IL LEE, Geography Education at SNU, 2024", size = 0.5, position = c(0.55, 0.02))
 my_map
 ```
 
@@ -636,7 +636,7 @@ my_map <- tm_shape(grat_bb_m, projection = "+proj=robin") + tm_borders(lwd = 1) 
             legend.frame = TRUE, legend.hist.width = 0.15, legend.hist.height = 0.2, legend.hist.size = 0.8, 
             legend.bg.color = "gray95", legend.stack = "vertical", legend.width = 0.35) +
   tm_layout(frame = FALSE, bg.color = "White", inner.margins = c(0.01, 0.01, 0.02, 0.01)) +
-  tm_credits("SANG-IL LEE, Geograhy Education at SNU, 2024", size = 0.5, position = c(0.55, 0.02))
+  tm_credits("SANG-IL LEE, Geography Education at SNU, 2024", size = 0.5, position = c(0.55, 0.02))
 my_map
 ```
 
@@ -673,7 +673,7 @@ my_map <- tm_shape(grat_bb_m, projection = "+proj=robin") + tm_borders(lwd = 1) 
             legend.frame = TRUE, legend.hist.width = 0.15, legend.hist.height = 0.2, legend.hist.size = 0.8, 
             legend.bg.color = "gray95", legend.stack = "vertical", legend.width = 0.35) +
   tm_layout(frame = FALSE, bg.color = "White", inner.margins = c(0.01, 0.01, 0.02, 0.01)) +
-  tm_credits("SANG-IL LEE, Geograhy Education at SNU, 2024", size = 0.5, position = c(0.55, 0.02))
+  tm_credits("SANG-IL LEE, Geography Education at SNU, 2024", size = 0.5, position = c(0.55, 0.02))
 my_map
 ```
 
@@ -867,7 +867,7 @@ my_map <- tm_shape(seoul_df) +
             legend.outside = FALSE, inner.margins = c(0.05, 0.05, 0.05, 0.1)) +
   tm_scale_bar(
     color.dark = "gray60", text.size = 0.4, breaks = seq(0, 10, 2), position = c(0.03, 0.01)) + 
-  tm_credits("SANG-IL LEE, Geograhy Education at SNU, 2024", size = 0.7, position = c(0.79, 0.01))
+  tm_credits("SANG-IL LEE, Geography Education at SNU, 2024", size = 0.7, position = c(0.79, 0.01))
 my_map
 ```
 
@@ -913,7 +913,7 @@ my_map <- tm_shape(seoul_gu_df) +
             legend.outside = FALSE, inner.margins = c(0.05, 0.05, 0.05, 0.1)) +
   tm_scale_bar(
     color.dark = "gray60", text.size = 0.4, breaks = seq(0, 10, 2), position = c(0.03, 0.01)) + 
-  tm_credits("SANG-IL LEE, Geograhy Education at SNU, 2024", size = 0.7, position = c(0.79, 0.01))
+  tm_credits("SANG-IL LEE, Geography Education at SNU, 2024", size = 0.7, position = c(0.79, 0.01))
 my_map
 ```
 
