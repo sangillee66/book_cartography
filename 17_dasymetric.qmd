@@ -23,6 +23,8 @@ editor_options:
 
 ### 서울시 인구분포
 
+#### 일반 데이터
+
 -   필수 패키지
 
 ```{r}
@@ -73,10 +75,185 @@ my_df <- my_df |>
   )
 ```
 
--   토지피복지도
+#### 토지피복지도 생성
+
+-   데이터: 2023년 중분류(1:25,000) 정리된 것 불러오기
 
 ```{r}
 #| results: hide
 seoul_landcover <- st_read("D:/My R/Vector Data Manipulation Korea/Korea_Landcover/seoul_landcover_M_2023.shp", options = "ENCODING=CP949")
-# qtm(seoul_landcover)
+qtm(seoul_landcover)
+```
+
+-   색상의 지정: <https://egis.me.go.kr/intro/land.do>
+
+```{r}
+landcover_color <- c("주거지역" = "#fee6c2",
+                     "공업지역" = "#c08484",
+                     "상업지역" = "#ed83b8", 
+                     "문화·체육·휴양지" = "#f67189",
+                     "교통지역" = "#f7422a",
+                     "공공시설지역" = "#f6b212",
+                     "논" = "#ffffbf", 
+                     "밭" = "#f7f966",
+                     "시설재배지" = "#dfdb73",
+                     "과수원" = "#b8b12c",
+                     "기타재배지" = "#b89112",
+                     "활엽수림" = "#34a02c",
+                     "침엽수림" = "#0a4f40",
+                     "혼효림" = "#336633",
+                     "자연초지" = "#a1d594",
+                     "인공초지" = "#607e33",
+                     "내륙습지" = "#b4a7d0",
+                     "연안습지" = "#997499",
+                     "자연나지" = "#c1dbec",
+                     "인공나지" = "#9ff2ff",
+                     "내륙수" = "#3ea8ff", 
+                     "해양수" = "#1739ff"
+)
+```
+
+-   지도 제작
+
+```{r}
+my_map <- tm_shape(seoul_landcover) + 
+  tm_polygons(col = "L2_NAME", style = "cat", palette = landcover_color, border.alpha = 0, legend.show = FALSE) +
+  tm_shape(seoul_gu) + tm_borders() +
+  tm_scale_bar(
+    color.dark = "gray60",
+    text.size = 0.25,
+    breaks = seq(0, 10, 2),
+    position = c(0.03, 0.01)) + 
+  tm_credits(
+    "SANG-IL LEE, Geography Education at SNU, 2024", 
+    size = 0.3, position = c(0.78, 0.01)
+  )
+my_map
+```
+
+-   저장
+
+```{r}
+my_title <- "17_1_02"
+my.path.name <- "D:/R_Books/Cartography/outputs/"
+my.file.name <- paste0(my.path.name, my_title, ".png")
+tmap_save(
+  my_map, 
+  filename = my.file.name, 
+  width = 5.75, 
+  dpi = 1200)
+```
+
+#### 대시메트릭 매핑
+
+-   가공
+
+```{r}
+# 데이터 추출: 주거지역과 상업지역만 추출
+seoul_landcover_1 <- seoul_landcover |> 
+  filter(
+    L2_NAME %in% c("주거지역", "상업지역")
+  )
+# qtm(seoul_landcover_1)
+
+# 데이터 유니언
+seoul_landcover_2 <- st_union(seoul_landcover_1) |> 
+  st_as_sf()
+# qtm(seoul_landcover_2)
+
+# 데이터 인터섹션: 토지피복도(주거와 상업만)를 동으로 분할하고, 속성을 전이함
+seoul_landcover_3 <- st_intersection(seoul_landcover_2, my_df) |> 
+  st_as_sf()
+# qtm(seoul_landcover_3)
+```
+
+-   인구밀도 재계산
+
+```{r}
+# 면적 계산: 동별 주거와 상업의 면적 계산
+seoul_landcover_3$area <- st_area(seoul_landcover_3) / 1000000
+
+# 인구밀도 계산
+seoul_landcover_3 <- seoul_landcover_3 |> 
+  mutate(
+    pop_den_t = pop_t / area
+  )
+```
+
+-   지도 제작
+
+```{r}
+my_map <- tm_shape(seoul_gu) + tm_borders() +
+  tm_shape(seoul_landcover_3) + 
+  tm_polygons(col = "pop_den_t", style = "fixed", palette = "Oranges", 
+              border.alpha = 0,
+              breaks = c(-Inf, 10000, 15000, 20000, 25000, 30000, 40000, Inf), legend.show = FALSE
+              ) +
+  tm_scale_bar(
+    color.dark = "gray60",
+    text.size = 0.25,
+    breaks = seq(0, 10, 2),
+    position = c(0.03, 0.01)) + 
+  tm_credits(
+    "SANG-IL LEE, Geography Education at SNU, 2024", 
+    size = 0.3, position = c(0.78, 0.01)
+  )
+my_map
+```
+
+-   저장
+
+```{r}
+my_title <- "17_1_01"
+my.path.name <- "D:/R_Books/Cartography/outputs/"
+my.file.name <- paste0(my.path.name, my_title, ".png")
+tmap_save(
+  my_map, 
+  filename = my.file.name, 
+  width = 5.75, 
+  dpi = 1200)  
+```
+
+#### 점밀도도 대시매트릭 매핑
+
+-   포인트 생성
+
+```{r}
+my_seoul_point <- seoul_landcover_3 |> 
+  st_sample(size = round(seoul_landcover_3$pop_t/500), 
+            type = "random", exact = TRUE) |> 
+  st_sf()
+```
+
+-   지도 제작
+
+```{r}
+my_map <- tm_shape(my_df) + 
+  tm_borders(col = "gray10", lwd = 0.25) +
+  tm_shape(my_seoul_point) + 
+  tm_dots(size = 0.005, alpha = 0.75, col = "#a63603") +
+  tm_shape(seoul_gu) + tm_borders(col = "gray10", lwd = 0.75) +
+  tm_scale_bar(
+    color.dark = "gray60",
+    text.size = 0.25,
+    breaks = seq(0, 10, 2),
+    position = c(0.03, 0.01)) + 
+  tm_credits(
+    "SANG-IL LEE, Geography Education at SNU, 2024", 
+    size = 0.3, position = c(0.78, 0.01)
+  )
+my_map
+```
+
+-   저장
+
+```{r}
+my_title <- "17_1_03"
+my.path.name <- "D:/R_Books/Cartography/outputs/"
+my.file.name <- paste0(my.path.name, my_title, ".png")
+tmap_save(
+  my_map, 
+  filename = my.file.name, 
+  width = 5.75, 
+  dpi = 1200)
 ```

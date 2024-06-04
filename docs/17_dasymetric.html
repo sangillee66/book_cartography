@@ -71,7 +71,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light"><script id="quarto-search-options" type="application/json">{
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script src="site_libs/quarto-contrib/glightbox/glightbox.min.js"></script>
+<link href="site_libs/quarto-contrib/glightbox/glightbox.min.css" rel="stylesheet">
+<link href="site_libs/quarto-contrib/glightbox/lightbox.css" rel="stylesheet"><script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
   "collapse-after": 3,
@@ -344,7 +347,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <div>
     <div class="quarto-title-meta-heading">Modified</div>
     <div class="quarto-title-meta-contents">
-      <p class="date-modified">May 28, 2024</p>
+      <p class="date-modified">June 4, 2024</p>
     </div>
   </div>
     
@@ -358,6 +361,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span class="header-section-number">17.2</span> 대시메트릭 맵의 작성</h2>
 <section id="서울시-인구분포" class="level3" data-number="17.2.1"><h3 data-number="17.2.1" class="anchored" data-anchor-id="서울시-인구분포">
 <span class="header-section-number">17.2.1</span> 서울시 인구분포</h3>
+<section id="일반-데이터" class="level4" data-number="17.2.1.1"><h4 data-number="17.2.1.1" class="anchored" data-anchor-id="일반-데이터">
+<span class="header-section-number">17.2.1.1</span> 일반 데이터</h4>
 <ul>
 <li>필수 패키지</li>
 </ul>
@@ -407,16 +412,216 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span>    pop_den_t <span class="op">=</span> <span class="va">pop_t</span> <span class="op">/</span> <span class="va">area</span></span>
 <span>  <span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
+</section><section id="토지피복지도-생성" class="level4" data-number="17.2.1.2"><h4 data-number="17.2.1.2" class="anchored" data-anchor-id="토지피복지도-생성">
+<span class="header-section-number">17.2.1.2</span> 토지피복지도 생성</h4>
 <ul>
-<li>토지피복지도</li>
+<li>데이터: 2023년 중분류(1:25,000) 정리된 것 불러오기</li>
 </ul>
 <div class="cell">
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">seoul_landcover</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_read.html">st_read</a></span><span class="op">(</span><span class="st">"D:/My R/Vector Data Manipulation Korea/Korea_Landcover/seoul_landcover_M_2023.shp"</span>, options <span class="op">=</span> <span class="st">"ENCODING=CP949"</span><span class="op">)</span></span>
-<span><span class="co"># qtm(seoul_landcover)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="fu"><a href="https://r-tmap.github.io/tmap/reference/qtm.html">qtm</a></span><span class="op">(</span><span class="va">seoul_landcover</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure"><p><a href="17_dasymetric_files/figure-html/unnamed-chunk-5-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1"><img src="17_dasymetric_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid figure-img" width="672"></a></p>
+</figure>
+</div>
+</div>
+</div>
+<ul>
+<li>색상의 지정: <a href="https://egis.me.go.kr/intro/land.do" class="uri">https://egis.me.go.kr/intro/land.do</a>
+</li>
+</ul>
+<div class="cell">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">landcover_color</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"주거지역"</span> <span class="op">=</span> <span class="st">"#fee6c2"</span>,</span>
+<span>                     <span class="st">"공업지역"</span> <span class="op">=</span> <span class="st">"#c08484"</span>,</span>
+<span>                     <span class="st">"상업지역"</span> <span class="op">=</span> <span class="st">"#ed83b8"</span>, </span>
+<span>                     <span class="st">"문화·체육·휴양지"</span> <span class="op">=</span> <span class="st">"#f67189"</span>,</span>
+<span>                     <span class="st">"교통지역"</span> <span class="op">=</span> <span class="st">"#f7422a"</span>,</span>
+<span>                     <span class="st">"공공시설지역"</span> <span class="op">=</span> <span class="st">"#f6b212"</span>,</span>
+<span>                     <span class="st">"논"</span> <span class="op">=</span> <span class="st">"#ffffbf"</span>, </span>
+<span>                     <span class="st">"밭"</span> <span class="op">=</span> <span class="st">"#f7f966"</span>,</span>
+<span>                     <span class="st">"시설재배지"</span> <span class="op">=</span> <span class="st">"#dfdb73"</span>,</span>
+<span>                     <span class="st">"과수원"</span> <span class="op">=</span> <span class="st">"#b8b12c"</span>,</span>
+<span>                     <span class="st">"기타재배지"</span> <span class="op">=</span> <span class="st">"#b89112"</span>,</span>
+<span>                     <span class="st">"활엽수림"</span> <span class="op">=</span> <span class="st">"#34a02c"</span>,</span>
+<span>                     <span class="st">"침엽수림"</span> <span class="op">=</span> <span class="st">"#0a4f40"</span>,</span>
+<span>                     <span class="st">"혼효림"</span> <span class="op">=</span> <span class="st">"#336633"</span>,</span>
+<span>                     <span class="st">"자연초지"</span> <span class="op">=</span> <span class="st">"#a1d594"</span>,</span>
+<span>                     <span class="st">"인공초지"</span> <span class="op">=</span> <span class="st">"#607e33"</span>,</span>
+<span>                     <span class="st">"내륙습지"</span> <span class="op">=</span> <span class="st">"#b4a7d0"</span>,</span>
+<span>                     <span class="st">"연안습지"</span> <span class="op">=</span> <span class="st">"#997499"</span>,</span>
+<span>                     <span class="st">"자연나지"</span> <span class="op">=</span> <span class="st">"#c1dbec"</span>,</span>
+<span>                     <span class="st">"인공나지"</span> <span class="op">=</span> <span class="st">"#9ff2ff"</span>,</span>
+<span>                     <span class="st">"내륙수"</span> <span class="op">=</span> <span class="st">"#3ea8ff"</span>, </span>
+<span>                     <span class="st">"해양수"</span> <span class="op">=</span> <span class="st">"#1739ff"</span></span>
+<span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<ul>
+<li>지도 제작</li>
+</ul>
+<div class="cell">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">my_map</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tm_shape.html">tm_shape</a></span><span class="op">(</span><span class="va">seoul_landcover</span><span class="op">)</span> <span class="op">+</span> </span>
+<span>  <span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tm_polygons.html">tm_polygons</a></span><span class="op">(</span>col <span class="op">=</span> <span class="st">"L2_NAME"</span>, style <span class="op">=</span> <span class="st">"cat"</span>, palette <span class="op">=</span> <span class="va">landcover_color</span>, border.alpha <span class="op">=</span> <span class="fl">0</span>, legend.show <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tm_shape.html">tm_shape</a></span><span class="op">(</span><span class="va">seoul_gu</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tm_polygons.html">tm_borders</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tm_scale_bar.html">tm_scale_bar</a></span><span class="op">(</span></span>
+<span>    color.dark <span class="op">=</span> <span class="st">"gray60"</span>,</span>
+<span>    text.size <span class="op">=</span> <span class="fl">0.25</span>,</span>
+<span>    breaks <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">10</span>, <span class="fl">2</span><span class="op">)</span>,</span>
+<span>    position <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0.03</span>, <span class="fl">0.01</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> </span>
+<span>  <span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tm_credits.html">tm_credits</a></span><span class="op">(</span></span>
+<span>    <span class="st">"SANG-IL LEE, Geography Education at SNU, 2024"</span>, </span>
+<span>    size <span class="op">=</span> <span class="fl">0.3</span>, position <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0.78</span>, <span class="fl">0.01</span><span class="op">)</span></span>
+<span>  <span class="op">)</span></span>
+<span><span class="va">my_map</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure"><p><a href="17_dasymetric_files/figure-html/unnamed-chunk-7-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-2"><img src="17_dasymetric_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid figure-img" width="672"></a></p>
+</figure>
+</div>
+</div>
+</div>
+<ul>
+<li>저장</li>
+</ul>
+<div class="cell">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">my_title</span> <span class="op">&lt;-</span> <span class="st">"17_1_02"</span></span>
+<span><span class="va">my.path.name</span> <span class="op">&lt;-</span> <span class="st">"D:/R_Books/Cartography/outputs/"</span></span>
+<span><span class="va">my.file.name</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span><span class="op">(</span><span class="va">my.path.name</span>, <span class="va">my_title</span>, <span class="st">".png"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tmap_save.html">tmap_save</a></span><span class="op">(</span></span>
+<span>  <span class="va">my_map</span>, </span>
+<span>  filename <span class="op">=</span> <span class="va">my.file.name</span>, </span>
+<span>  width <span class="op">=</span> <span class="fl">5.75</span>, </span>
+<span>  dpi <span class="op">=</span> <span class="fl">1200</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section><section id="대시메트릭-매핑" class="level4" data-number="17.2.1.3"><h4 data-number="17.2.1.3" class="anchored" data-anchor-id="대시메트릭-매핑">
+<span class="header-section-number">17.2.1.3</span> 대시메트릭 매핑</h4>
+<ul>
+<li>가공</li>
+</ul>
+<div class="cell">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># 데이터 추출: 주거지역과 상업지역만 추출</span></span>
+<span><span class="va">seoul_landcover_1</span> <span class="op">&lt;-</span> <span class="va">seoul_landcover</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span></span>
+<span>    <span class="va">L2_NAME</span> <span class="op"><a href="https://rdrr.io/r/base/match.html">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"주거지역"</span>, <span class="st">"상업지역"</span><span class="op">)</span></span>
+<span>  <span class="op">)</span></span>
+<span><span class="co"># qtm(seoul_landcover_1)</span></span>
+<span></span>
+<span><span class="co"># 데이터 유니언</span></span>
+<span><span class="va">seoul_landcover_2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/geos_combine.html">st_union</a></span><span class="op">(</span><span class="va">seoul_landcover_1</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_as_sf.html">st_as_sf</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="co"># qtm(seoul_landcover_2)</span></span>
+<span></span>
+<span><span class="co"># 데이터 인터섹션: 토지피복도(주거와 상업만)를 동으로 분할하고, 속성을 전이함</span></span>
+<span><span class="va">seoul_landcover_3</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/geos_binary_ops.html">st_intersection</a></span><span class="op">(</span><span class="va">seoul_landcover_2</span>, <span class="va">my_df</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_as_sf.html">st_as_sf</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="co"># qtm(seoul_landcover_3)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<ul>
+<li>인구밀도 재계산</li>
+</ul>
+<div class="cell">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># 면적 계산: 동별 주거와 상업의 면적 계산</span></span>
+<span><span class="va">seoul_landcover_3</span><span class="op">$</span><span class="va">area</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/geos_measures.html">st_area</a></span><span class="op">(</span><span class="va">seoul_landcover_3</span><span class="op">)</span> <span class="op">/</span> <span class="fl">1000000</span></span>
+<span></span>
+<span><span class="co"># 인구밀도 계산</span></span>
+<span><span class="va">seoul_landcover_3</span> <span class="op">&lt;-</span> <span class="va">seoul_landcover_3</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span></span>
+<span>    pop_den_t <span class="op">=</span> <span class="va">pop_t</span> <span class="op">/</span> <span class="va">area</span></span>
+<span>  <span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<ul>
+<li>지도 제작</li>
+</ul>
+<div class="cell">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">my_map</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tm_shape.html">tm_shape</a></span><span class="op">(</span><span class="va">seoul_gu</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tm_polygons.html">tm_borders</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tm_shape.html">tm_shape</a></span><span class="op">(</span><span class="va">seoul_landcover_3</span><span class="op">)</span> <span class="op">+</span> </span>
+<span>  <span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tm_polygons.html">tm_polygons</a></span><span class="op">(</span>col <span class="op">=</span> <span class="st">"pop_den_t"</span>, style <span class="op">=</span> <span class="st">"fixed"</span>, palette <span class="op">=</span> <span class="st">"Oranges"</span>, </span>
+<span>              border.alpha <span class="op">=</span> <span class="fl">0</span>,</span>
+<span>              breaks <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="op">-</span><span class="cn">Inf</span>, <span class="fl">10000</span>, <span class="fl">15000</span>, <span class="fl">20000</span>, <span class="fl">25000</span>, <span class="fl">30000</span>, <span class="fl">40000</span>, <span class="cn">Inf</span><span class="op">)</span>, legend.show <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span>              <span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tm_scale_bar.html">tm_scale_bar</a></span><span class="op">(</span></span>
+<span>    color.dark <span class="op">=</span> <span class="st">"gray60"</span>,</span>
+<span>    text.size <span class="op">=</span> <span class="fl">0.25</span>,</span>
+<span>    breaks <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">10</span>, <span class="fl">2</span><span class="op">)</span>,</span>
+<span>    position <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0.03</span>, <span class="fl">0.01</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> </span>
+<span>  <span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tm_credits.html">tm_credits</a></span><span class="op">(</span></span>
+<span>    <span class="st">"SANG-IL LEE, Geography Education at SNU, 2024"</span>, </span>
+<span>    size <span class="op">=</span> <span class="fl">0.3</span>, position <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0.78</span>, <span class="fl">0.01</span><span class="op">)</span></span>
+<span>  <span class="op">)</span></span>
+<span><span class="va">my_map</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure"><p><a href="17_dasymetric_files/figure-html/unnamed-chunk-11-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-3"><img src="17_dasymetric_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid figure-img" width="672"></a></p>
+</figure>
+</div>
+</div>
+</div>
+<ul>
+<li>저장</li>
+</ul>
+<div class="cell">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">my_title</span> <span class="op">&lt;-</span> <span class="st">"17_1_01"</span></span>
+<span><span class="va">my.path.name</span> <span class="op">&lt;-</span> <span class="st">"D:/R_Books/Cartography/outputs/"</span></span>
+<span><span class="va">my.file.name</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span><span class="op">(</span><span class="va">my.path.name</span>, <span class="va">my_title</span>, <span class="st">".png"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tmap_save.html">tmap_save</a></span><span class="op">(</span></span>
+<span>  <span class="va">my_map</span>, </span>
+<span>  filename <span class="op">=</span> <span class="va">my.file.name</span>, </span>
+<span>  width <span class="op">=</span> <span class="fl">5.75</span>, </span>
+<span>  dpi <span class="op">=</span> <span class="fl">1200</span><span class="op">)</span>  </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section><section id="점밀도도-대시매트릭-매핑" class="level4" data-number="17.2.1.4"><h4 data-number="17.2.1.4" class="anchored" data-anchor-id="점밀도도-대시매트릭-매핑">
+<span class="header-section-number">17.2.1.4</span> 점밀도도 대시매트릭 매핑</h4>
+<ul>
+<li>포인트 생성</li>
+</ul>
+<div class="cell">
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">my_seoul_point</span> <span class="op">&lt;-</span> <span class="va">seoul_landcover_3</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_sample.html">st_sample</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html">round</a></span><span class="op">(</span><span class="va">seoul_landcover_3</span><span class="op">$</span><span class="va">pop_t</span><span class="op">/</span><span class="fl">500</span><span class="op">)</span>, </span>
+<span>            type <span class="op">=</span> <span class="st">"random"</span>, exact <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://r-spatial.github.io/sf/reference/sf.html">st_sf</a></span><span class="op">(</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<ul>
+<li>지도 제작</li>
+</ul>
+<div class="cell">
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">my_map</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tm_shape.html">tm_shape</a></span><span class="op">(</span><span class="va">my_df</span><span class="op">)</span> <span class="op">+</span> </span>
+<span>  <span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tm_polygons.html">tm_borders</a></span><span class="op">(</span>col <span class="op">=</span> <span class="st">"gray10"</span>, lwd <span class="op">=</span> <span class="fl">0.25</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tm_shape.html">tm_shape</a></span><span class="op">(</span><span class="va">my_seoul_point</span><span class="op">)</span> <span class="op">+</span> </span>
+<span>  <span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tm_symbols.html">tm_dots</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">0.005</span>, alpha <span class="op">=</span> <span class="fl">0.75</span>, col <span class="op">=</span> <span class="st">"#a63603"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tm_shape.html">tm_shape</a></span><span class="op">(</span><span class="va">seoul_gu</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tm_polygons.html">tm_borders</a></span><span class="op">(</span>col <span class="op">=</span> <span class="st">"gray10"</span>, lwd <span class="op">=</span> <span class="fl">0.75</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tm_scale_bar.html">tm_scale_bar</a></span><span class="op">(</span></span>
+<span>    color.dark <span class="op">=</span> <span class="st">"gray60"</span>,</span>
+<span>    text.size <span class="op">=</span> <span class="fl">0.25</span>,</span>
+<span>    breaks <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">10</span>, <span class="fl">2</span><span class="op">)</span>,</span>
+<span>    position <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0.03</span>, <span class="fl">0.01</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> </span>
+<span>  <span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tm_credits.html">tm_credits</a></span><span class="op">(</span></span>
+<span>    <span class="st">"SANG-IL LEE, Geography Education at SNU, 2024"</span>, </span>
+<span>    size <span class="op">=</span> <span class="fl">0.3</span>, position <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0.78</span>, <span class="fl">0.01</span><span class="op">)</span></span>
+<span>  <span class="op">)</span></span>
+<span><span class="va">my_map</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure"><p><a href="17_dasymetric_files/figure-html/unnamed-chunk-14-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-4"><img src="17_dasymetric_files/figure-html/unnamed-chunk-14-1.png" class="img-fluid figure-img" width="672"></a></p>
+</figure>
+</div>
+</div>
+</div>
+<ul>
+<li>저장</li>
+</ul>
+<div class="cell">
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">my_title</span> <span class="op">&lt;-</span> <span class="st">"17_1_03"</span></span>
+<span><span class="va">my.path.name</span> <span class="op">&lt;-</span> <span class="st">"D:/R_Books/Cartography/outputs/"</span></span>
+<span><span class="va">my.file.name</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span><span class="op">(</span><span class="va">my.path.name</span>, <span class="va">my_title</span>, <span class="st">".png"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tmap_save.html">tmap_save</a></span><span class="op">(</span></span>
+<span>  <span class="va">my_map</span>, </span>
+<span>  filename <span class="op">=</span> <span class="va">my.file.name</span>, </span>
+<span>  width <span class="op">=</span> <span class="fl">5.75</span>, </span>
+<span>  dpi <span class="op">=</span> <span class="fl">1200</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 
 
-</section></section></main><!-- /main --><script id="quarto-html-after-body" type="application/javascript">
+</section></section></section></main><!-- /main --><script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {
     const mode = bsSheetEl.getAttribute("data-mode");
@@ -814,7 +1019,31 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   </div>
 </nav>
 </div> <!-- /content -->
+<script>var lightboxQuarto = GLightbox({"openEffect":"zoom","selector":".lightbox","closeEffect":"zoom","descPosition":"bottom","loop":false});
+window.onload = () => {
+  lightboxQuarto.on('slide_before_load', (data) => {
+    const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+    const href = trigger.getAttribute('href');
+    if (href !== null) {
+      const imgEl = window.document.querySelector(`a[href="${href}"] img`);
+      if (imgEl !== null) {
+        const srcAttr = imgEl.getAttribute("src");
+        if (srcAttr && srcAttr.startsWith("data:")) {
+          slideConfig.href = srcAttr;
+        }
+      }
+    } 
+  });
 
+  lightboxQuarto.on('slide_after_load', (data) => {
+    const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+    if (window.Quarto?.typesetMath) {
+      window.Quarto.typesetMath(slideNode);
+    }
+  });
+
+};
+          </script>
 
 
 </body></html>
