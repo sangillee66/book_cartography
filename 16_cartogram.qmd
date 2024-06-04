@@ -16,3 +16,318 @@ editor: visual
 editor_options: 
   chunk_output_type: console
 ---
+
+## 기본 개념
+
+-   필수적인 패키지
+
+```{r}
+library(tidyverse)
+library(readxl)
+library(writexl)
+library(tmap)
+library(sf)
+library(ggplot2)
+library(cartogram)
+library(cartogramR)
+library(rmapshaper)
+library(rnaturalearth)
+library(RColorBrewer)
+
+options(scipen = 999)
+```
+
+## 다양한 카토그램
+
+### 우리나라 시군 단위 데이터
+
+#### 기본 데이터 불러오기
+
+-   기하 데이터 불러오기
+
+```{r}
+#| results: hide
+sido <- st_read("D:/My R/Korean Administrative Areas/행정구역 셰이프 파일/3 Generalization/2020_2Q/SIDO_2020_2Q_GEN_0050.shp", options = "ENCODING=CP949")
+sigun1 <- st_read("D:/My R/Korean Administrative Areas/행정구역 셰이프 파일/3 Generalization/2020_2Q/SIGUN1_2020_2Q_GEN_0050.shp", options = "ENCODING=CP949")
+sigungu1 <- st_read("D:/My R/Korean Administrative Areas/행정구역 셰이프 파일/3 Generalization/2020_2Q/SIGUNGU1_2020_2Q_GEN_0050.shp", options = "ENCODING=CP949")
+emd <- st_read("D:/My R/Korean Administrative Areas/행정구역 셰이프 파일/3 Generalization/2020_2Q/EMD_2020_2Q_GEN_0050.shp", options = "ENCODING=CP949")
+sido_polyline <- st_read("D:/My R/Korean Administrative Areas/행정구역 셰이프 파일/3 Generalization/2020_2Q/SIDO_Polyline_2020_2Q_GEN_0050.shp", options = "ENCODING=CP949")
+bbox_ulleung <- st_read("D:/My R/Korean Administrative Areas/행정구역 셰이프 파일/3 Generalization/2020_2Q/BBOX_Ulleung_2020_2Q_GEN_0050.shp", options = "ENCODING=CP949")
+bbox_seohae <- st_read("D:/My R/Korean Administrative Areas/행정구역 셰이프 파일/3 Generalization/2020_2Q/BBOX_Seohae3_2020_2Q_GEN_0050.shp", options = "ENCODING=CP949")
+seoul_gu <- st_read(
+  "D:/My R/Korean Administrative Areas/행정구역 셰이프 파일/2 Original Cleaning/2021_4Q/SEOUL_GU_2021_4Q.shp", options = "ENCODING=CP949"
+  ) 
+seoul_sido <- st_read(
+  "D:/My R/Korean Administrative Areas/행정구역 셰이프 파일/2 Original Cleaning/2021_4Q/SEOUL_SIDO_2021_4Q.shp", options = "ENCODING=CP949"
+  )
+```
+
+-   인구 데이터
+
+```{r}
+pop_SDGG <- read_excel(path = "D:/My R/Population Geography/1 Population Growth/POP_1975_2021_SDGG.xlsx")
+pop_data <- pop_SDGG |> 
+  select(Code, Region, pop_2015 = `2015`, pop_2020 = `2020`) |> 
+  mutate(
+    pgr = 0.2*log(pop_2020/pop_2015) * 100
+  )
+```
+
+-   면적 데이터
+
+```{r}
+area_data <- read_excel(path = "D:/My R/Korea Census Data Manipulation/11 Etc/DM_AREA_2020_SDGG.xlsx")
+```
+
+-   시군구1과 연결
+
+```{r}
+my_sgg_data <- sigungu1 |> 
+  left_join(pop_data, join_by(SGG1_CD == Code)) |> 
+  left_join(
+    select(area_data, SDGG_CD, Area), join_by(SGG1_CD == SDGG_CD)
+  ) |> 
+  mutate(
+    pop_den = pop_2020/(Area/1000000)
+  )
+```
+
+-   시군1과 연결
+
+```{r}
+my_sg_data <- sigun1 |> 
+  left_join(pop_data, join_by(SG1_CD == Code)) |> 
+  left_join(
+    select(area_data, SDGG_CD, Area), join_by(SG1_CD == SDGG_CD)
+  ) |> 
+  mutate(
+    pop_den = pop_2020/(Area/1000000)
+  )
+```
+
+#### 카토그램 만들기
+
+-   카토그램 생성
+
+```{r}
+carto_sg <- cartogramR(my_sg_data, count = "pop_2020") |> 
+  as.sf() |> 
+  st_make_valid()
+```
+
+-   시도 내부 라인 생성
+
+```{r}
+carto_sg_sd <- carto_sg |> 
+  summarize(
+    geometry = st_union(geometry),
+    SD_NM = first(SD_NM), 
+    Eng_NM = first(Eng_NM),
+    Chn_NM = first(Chn_NM),
+    pop_2015 = sum(pop_2015),
+    pop_2020 = sum(pop_2020), 
+    Area = sum(Area),
+    .by = SD_CD
+  )
+carto_sg_sd_polyline <- ms_innerlines(carto_sg_sd)
+```
+
+-   지도 제작
+
+```{r}
+my_map <- tm_shape(carto_sg) +
+  tm_polygons(col = "SD_CD", style = "cat", 
+              palette = "Set2", legend.show = FALSE) +
+  tm_shape(carto_sg_sd_polyline) + 
+  tm_lines(col = "black", lwd = 1.5) +
+  tm_scale_bar(breaks = seq(0, 200, 50), text.size = 0.4, color.dark = "gray60", position = c(0.53, 0.01)) +
+  tm_credits("SANG-IL LEE, Geography Education at SNU, 2024", size = 0.8, position = c(0.025, 0.01))
+my_map
+```
+
+-   저장
+
+```{r}
+#| echo: false
+my_title <- "16_2_01"
+my.path.name <- "outputs/"
+my.file.name <- paste0(my.path.name, my_title, ".png")
+tmap_save(
+  my_map, 
+  filename = my.file.name,  
+  height = 12, dpi = 600)
+```
+
+#### 이변량 카토그램 만들기
+
+-   지도 제작
+
+```{r}
+my_map <- tm_shape(carto_sg) +
+  tm_polygons(col = "pgr", style = "fixed", 
+              palette = "-RdBu", midpoint = 0, 
+              breaks = c(-Inf, -2, -1, 0, 1, 2, Inf),
+              labels = c("< -2", "-2 ~ -1", "-1 ~ 0", "0 ~ 1", "1 ~ 2", ">= 2"),
+              title = "PGR (2015~2020, %)") +
+  tm_shape(carto_sg_sd_polyline) + 
+  tm_lines(col = "black", lwd = 1.5) +
+  tm_legend(
+    legend.title.size = 1.5,
+    legend.text.size = 1,
+    legend.position = c(0.7, 0.1)
+  ) +
+  tm_scale_bar(breaks = seq(0, 200, 50), text.size = 0.4, color.dark = "gray60", position = c(0.53, 0.01)) +
+  tm_credits("SANG-IL LEE, Geography Education at SNU, 2024", size = 0.8, position = c(0.025, 0.01))
+my_map
+```
+
+-   저장
+
+```{r}
+#| echo: false
+my_title <- "16_2_02"
+my.path.name <- "outputs/"
+my.file.name <- paste0(my.path.name, my_title, ".png")
+tmap_save(
+  my_map, 
+  filename = my.file.name,  
+  height = 12, dpi = 600)
+```
+
+### 전 세계 국가 데이터
+
+#### 기본 데이터 불러오기
+
+-   기하 데이터
+
+```{r}
+#| results: hide
+countries_m <- st_read("D:/My R/World Data Manupulation/NaturalEarth/new_2_ne_50m_admin_0_countries.shp") 
+```
+
+```{r}
+tiny_m <- ne_download(scale = "medium", type = "tiny_countries", category = "cultural", returnclass = "sf")
+grat_bb_m <- ne_download(scale = "medium", type = "wgs84_bounding_box", category = "physical", returnclass = "sf")
+grat_10_m <- ne_download(scale = "medium", type = "graticules_10", category = "physical", returnclass = "sf")
+grat_30_m <- ne_download(scale = "medium", type = "graticules_30", category = "physical", returnclass = "sf")
+
+tiny_m <- tiny_m |> 
+  mutate(
+    ISO_N3_CD = as.numeric(ISO_N3)
+  )
+```
+
+-   속성 데이터
+
+```{r}
+wpp_2022 <- read_rds("wpp_2022.rds")
+wpp_pop <- wpp_2022 |> 
+  select(region_name, location_code, type, year, pop_jul_total) |> 
+  filter(type == "Country/Area", year %in% c(1950, 1990, 2000, 2024, 2050, 2075, 2100)) |> 
+  pivot_wider(
+    id_cols = c(region_name, location_code, type), 
+    names_from = year,
+    values_from = pop_jul_total
+  ) |> 
+  rename(
+    y1950 = `1950`,
+    y1990 = `1990`,
+    y2000 = `2000`,
+    y2024 = `2024`,
+    y2050 = `2050`,
+    y2075 = `2075`,
+    y2100 = `2100`
+  )
+```
+
+#### 데이터 정리하기
+
+-   세계지역 정보 불러오기
+
+```{r}
+world_region_code <- read_excel("D:/My R/Population Geography/0 Population Data/World_Region_Code.xlsx", sheet = 1, col_names = TRUE)
+```
+
+-   기하 데이터에 결합하기
+
+```{r}
+countries_m_new <- countries_m |> 
+  left_join(world_region_code |> select(c(3:12, 16)), join_by(ISO_N3_CD == `M49 Code`))
+```
+
+-   속성 데이터 결합하기
+
+```{r}
+new_world <- countries_m_new |> 
+  left_join(wpp_pop, join_by(ISO_N3_CD == location_code))
+new_tiny <- tiny_m |> 
+  left_join(wpp_pop, join_by(ISO_N3_CD == location_code))
+```
+
+#### 카토그램 제작하기
+
+-   투영법 지정하기
+
+```{r}
+crs_robin <- st_crs("+proj=robin +lon_0=0 +x_0=0 +y_0=0 +ellps=WGS84 +datum=WGS84 +units=m +no_defs +towgs84=0,0,0")
+new_world_robin <- st_transform(new_world, crs = crs_robin)
+new_tiny_robin <- st_transform(new_tiny, crs = crs_robin)
+```
+
+-   NA 없애기
+
+```{r}
+new_world_robin <- new_world_robin |> 
+  drop_na(y2024)
+```
+
+-   카토그램 생성
+
+```{r}
+carto_world <- cartogramR(new_world_robin, count = "y2024") |> 
+  as.sf() |> 
+  st_make_valid()
+qtm(carto_world)
+```
+
+-   SDG Region Code
+
+```{r}
+SDG.region.name <- carto_world |> 
+  pull(New_SDG_NM) |> 
+  unique() |> 
+  _[c(5, 3, 1, 8, 6, 7, 4, 2)]
+  
+carto_world <- carto_world |> 
+  mutate(
+    New_SDG_NM = fct(New_SDG_NM, levels = SDG.region.name)
+  )
+```
+
+-   지도 그리기
+
+```{r}
+my_map <- tm_shape(carto_world) + 
+  tm_polygons(col = "New_SDG_NM", palette = "Set3", legend.show = TRUE, lwd = 1.5, title = "SDG Regions") +
+  tm_legend(
+    legend.title.size = 1.6, 
+    legend.text.size = 1.2, 
+    legend.position = c("left", "bottom"), legend.frame = FALSE) +
+  tm_layout(main.title = "World Population Distribution, 2024", main.title.size = 2.5) +
+  tm_credits("SANG-IL LEE, Geography Education at SNU, 2024", size = 1, position = c(0.84, 0.01))
+
+my_map
+```
+
+-   저장
+
+```{r}
+#| echo: false
+my_title <- "16_2_03"
+my.path.name <- "outputs/"
+my.file.name <- paste0(my.path.name, my_title, ".png")
+tmap_save(
+  my_map, 
+  filename = my.file.name,  
+  height = 12, dpi = 600)
+```
