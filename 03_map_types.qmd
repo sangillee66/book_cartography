@@ -37,6 +37,8 @@ library(tmap)
 library(tmaptools)
 library(rayshader)
 library(pals) 
+library(cartogramR)
+library(rmapshaper)
 ```
 
 -   지리공간데이터 불러오기
@@ -488,6 +490,52 @@ my_map <- tm_shape(seoul_gu) +
       alpha = 0.7) +
   tm_shape(seoul_gu) + 
   tm_polygons(alpha = 0, border.col = "gray20", lwd = 0.75) +
+  tm_scale_bar(
+    color.dark = "gray60",
+    text.size = 0.25,
+    breaks = seq(0, 10, 2),
+    position = c(0.03, 0.01)) + 
+  tm_credits(
+    "SANG-IL LEE, Geography Education at SNU, 2024", 
+    size = 0.3, position = c(0.78, 0.01)
+    )
+my_map
+```
+
+-   저장
+
+```{r}
+#| echo: false
+my_title <- "3_3_3_04"
+my.path.name <- "outputs/"
+my.file.name <- paste0(my.path.name, my_title, ".png")
+tmap_save(
+  my_map, 
+  filename = my.file.name, 
+  width = 5.75, 
+  dpi = 1200)
+```
+
+#### 카토그램
+
+-   카토그램 제작
+
+```{r}
+
+carto.shp <- cartogramR(my_df_2, count = "pop_t")
+carto.shp <- as.sf(carto.shp)
+carto.shp <- st_make_valid(carto.shp)
+
+agg.carto.shp <- aggregate(x = carto.shp[, "pop_t"], by = list(carto.shp$SGG1_CD), FUN = function(x) x[1]) 
+agg.carto.polyline.shp <- ms_innerlines(agg.carto.shp) 
+```
+
+-   지도 제작
+
+```{r}
+
+my_map <- tm_shape(carto.shp) +   tm_borders(col = "gray10", lwd = 0.25) +
+  tm_shape(agg.carto.shp) + tm_polygons(alpha = 0, border.col = "gray20", lwd = 0.75) +
   tm_scale_bar(
     color.dark = "gray60",
     text.size = 0.25,
