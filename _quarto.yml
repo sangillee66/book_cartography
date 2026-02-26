@@ -45,6 +45,8 @@ lightbox: true
 
 execute:
   freeze: auto
+  fig-dpi: 600
+  dev: ragg_png
 
 format:
   html:

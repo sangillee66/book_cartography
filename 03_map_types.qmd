@@ -34,8 +34,8 @@ library(tidyverse)
 library(readxl) 
 library(sf) 
 library(tmap) 
+library(scales)
 library(tmaptools)
-library(rayshader)
 library(pals) 
 library(cartogramR)
 library(rmapshaper)
@@ -44,16 +44,16 @@ library(rmapshaper)
 -   지리공간데이터 불러오기
 
 ```{r}
-seoul_EMD <- st_read(
+seoul_EMD <- read_sf(
   "D:/My R/Korean Administrative Areas/행정구역 셰이프 파일/2 Original Cleaning/2021_4Q/SEOUL_EMD_2021_4Q.shp", options = "ENCODING=CP949"
   ) 
-seoul_EMD_2020 <- st_read(
+seoul_EMD_2020 <- read_sf(
   "D:/My R/Korean Administrative Areas/행정구역 셰이프 파일/2 Original Cleaning/2020_2Q/SEOUL_EMD_2020_2Q.shp", options = "ENCODING=CP949"
   ) 
-seoul_gu <- st_read(
+seoul_gu <- read_sf(
   "D:/My R/Korean Administrative Areas/행정구역 셰이프 파일/2 Original Cleaning/2021_4Q/SEOUL_GU_2021_4Q.shp", options = "ENCODING=CP949"
   ) 
-seoul_sido <- st_read(
+seoul_sido <- read_sf(
   "D:/My R/Korean Administrative Areas/행정구역 셰이프 파일/2 Original Cleaning/2021_4Q/SEOUL_SIDO_2021_4Q.shp", options = "ENCODING=CP949"
   )
 ```
@@ -70,7 +70,6 @@ qtm(seoul_EMD_2020)
 house_SDGGEMD_2020 <- read_excel(
   "D:/My R/Population Geography/3 Population Structure/Housing_Size_2020_Adj.xlsx", sheet = 1
   )
-glimpse(house_SDGGEMD_2020)
 ```
 
 -   결합하기
@@ -89,57 +88,48 @@ my_df <-seoul_EMD_2020 |>
 -   전형적인 주제도 제작
 
 ```{r}
+#| fig-height: 12.914
+#| fig-width: 16.3304
+#| fig-dpi: 600
 
 min_max <- my_df |> 
   st_drop_geometry() |> 
   summarize(
-    min_value = format(round(min(House1_p, na.rm = TRUE), 
-                             digits = 1), nsmall = 1),
-    max_value = format(round(max(House1_p, na.rm = TRUE), 
-                             digits = 1), nsmall = 1)
-  )
+    min_value = min(House1_p, na.rm = TRUE), 
+    max_value = max(House1_p, na.rm = TRUE)
+  ) |> 
+  mutate(across(everything(), label_number(accuracy = 0.1)))
+
 min.val <- min_max[[1]]
 max.val <- min_max[[2]]
 
 my_map <- tm_shape(my_df) +
   tm_polygons(
-    "House1_p",
-    style = "fixed", 
-    palette = "BuPu", 
-    border.col = "gray40", 
-    lwd = 0.25, 
-    border.alpha = 1, 
-    breaks = c(-Inf, 15, 25, 35, 45, 55, 65, Inf),
-    labels = c(paste0("< 15", " (Min. ", min.val, ")"), 
-               "15 ~ 25", "25 ~ 35", "35 ~ 45", "45 ~ 55", 
-               "55 ~ 65", paste0(">= 65", " (Max. ", max.val, ")")), 
-    title = "One-Person (%)", 
-    legend.hist = FALSE, 
-    legend.show = TRUE) +
-  tm_shape(seoul_gu) + 
-  tm_polygons(alpha = 0, border.col = "gray20", lwd = 0.75) +
-  tm_legend(
-    legend.format = list(digits = 1), 
-    legend.title.size = 0.6, 
-    legend.text.size = 0.45,
-    legend.position = c(0.85, 0.05)) +
-  tm_layout(
-    frame = TRUE, 
-    title = "One-Person Households in Seoul, 2020", 
-    title.position = c("center", "top"), 
-    title.size = 0.9,
-    bg.color = "white",
-    inner.margins = c(0.05, 0.05, 0.08, 0.12)) +
-  tm_scale_bar(
-    color.dark = "gray60",
-    text.size = 0.25,
-    breaks = seq(0, 10, 2),
-    position = c(0.03, 0.01)) + 
-  tm_credits(
-    "SANG-IL LEE, Geography Education at SNU, 2024", 
-    size = 0.3, position = c(0.78, 0.01)
+    fill = "House1_p", lwd = 0.75, 
+    fill.scale = tm_scale_intervals(
+      breaks = c(-Inf, 15, 25, 35, 45, 55, 65, Inf),
+      labels = c(paste0("< 15", " (Min: ", min.val, ")"),
+               "15 ~ 25", "25 ~ 35", "35 ~ 45", "45 ~ 55",
+               "55 ~ 65", paste0(">= 65", " (Max: ", max.val, ")")),
+      values = "brewer.bu_pu"
+    ),
+    fill.legend = tm_legend(
+      title = "One Person", frame = FALSE, position = c(0.86, 0.22), 
+      title.size = 1.2, text.size = 1, item.space = 0
     )
-
+  ) +
+  tm_shape(seoul_gu) + tm_borders(col = "gray20", lwd = 1.75) +
+  tm_title(
+    text = "One-Person Households in Seoul, 2020", size = 2, 
+    position = c("center", "top")
+  ) +
+  tm_layout(inner.margins = c(0.05, 0.05, 0.08, 0.12)) + 
+  tm_scalebar(color.dark = "gray60", position = c(0.025, 0.025), 
+              breaks = seq(0, 20, 5), allow_clipping = TRUE
+  ) + 
+  tm_credits("SANG-IL LEE, Geography Education at SNU", 
+             size = 0.7, position = c(0.82, 0.025)
+  )
 my_map
 ```
 
@@ -147,14 +137,13 @@ my_map
 
 ```{r}
 #| echo: false
-my_title <- "3_3_1"
-my.path.name <- "outputs/"
-my.file.name <- paste0(my.path.name, my_title, ".png")
-tmap_save(
-  my_map, 
-  filename = my.file.name, 
-  width = 5.75, 
-  dpi = 1200)
+
+my.ratio <- get_asp_ratio(my_map)
+
+my.title <- "3-1 전형적인 주제도"
+my.path.name <- "D:/My Cartography/지도제작/"
+my.file.name <- paste0(my.path.name, my.title, ".png")
+tmap_save(my_map, filename = my.file.name, height = 11.74*1.1, width = my.ratio*11.74*1.1, dpi = 600)
 ```
 
 ### 일반도-주제도 연속체
@@ -164,9 +153,13 @@ tmap_save(
 -   지도 제작
 
 ```{r}
+#| fig-height: 12.914
+#| fig-width: 15.7721
+#| fig-dpi: 600
+
 my_map <- my_df |> 
-  tm_shape() +
-  tm_borders(col = "gray20", lwd = 0.75)
+  tm_shape() + tm_borders(col = "gray20", lwd = 0.75) +
+  tm_layout(inner.margins = c(0.05, 0.05, 0.05, 0.05))
 my_map
 ```
 
@@ -174,14 +167,13 @@ my_map
 
 ```{r}
 #| echo: false
-my_title <- "3_3_2_01"
-my.path.name <- "outputs/"
-my.file.name <- paste0(my.path.name, my_title, ".png")
-tmap_save(
-  my_map, 
-  filename = my.file.name, 
-  width = 5.75, 
-  dpi = 1200)
+
+my.ratio <- get_asp_ratio(my_map)
+
+my.title <- "3-2 피처맵"
+my.path.name <- "D:/My Cartography/지도제작/"
+my.file.name <- paste0(my.path.name, my.title, ".png")
+tmap_save(my_map, filename = my.file.name, height = 11.74*1.1, width = my.ratio*11.74*1.1, dpi = 600)
 ```
 
 #### 사건 분포도
@@ -195,10 +187,13 @@ accident <- st_read("D:/My R/Vector Data Manipulation Korea/Public_Data_Portal/a
 -   지도 제작
 
 ```{r}
+#| fig-height: 12.914
+#| fig-width: 15.7721
+#| fig-dpi: 600
 my_map <- my_df |> 
-  tm_shape() + 
-  tm_borders(col = "gray20", lwd = 0.75) +
-  tm_shape(accident) + tm_dots(size = 0.15)
+  tm_shape() + tm_borders(col = "gray20", lwd = 0.75) +
+  tm_shape(accident) + tm_dots(size = 0.75) +
+  tm_layout(inner.margins = c(0.05, 0.05, 0.05, 0.05))
 my_map
 ```
 
@@ -206,14 +201,13 @@ my_map
 
 ```{r}
 #| echo: false
-my_title <- "3_3_2_02"
-my.path.name <- "outputs/"
-my.file.name <- paste0(my.path.name, my_title, ".png")
-tmap_save(
-  my_map, 
-  filename = my.file.name, 
-  width = 5.75, 
-  dpi = 1200)
+
+my.ratio <- get_asp_ratio(my_map)
+
+my.title <- "3-3 사건분포도"
+my.path.name <- "D:/My Cartography/지도제작/"
+my.file.name <- paste0(my.path.name, my.title, ".png")
+tmap_save(my_map, filename = my.file.name, height = 11.74*1.1, width = my.ratio*11.74*1.1, dpi = 600)
 ```
 
 #### 정성적 주제도
@@ -221,14 +215,21 @@ tmap_save(
 -   지도 제작
 
 ```{r}
+#| fig-height: 12.914
+#| fig-width: 15.7721
+#| fig-dpi: 600
 my_map <- my_df |> 
   tm_shape() + 
   tm_polygons(
-    col = "SGG1_NM",
-    border.col = "gray20", lwd = 0.75, 
-    palette = pals::alphabet2(),
-    legend.show = FALSE
-    )
+    fill = "SGG1_NM", col = "gray20", lwd = 0.75, 
+    fill.scale = tm_scale_categorical(
+      # values = palette.colors(24, "Polychrome 36")
+      values = "poly.wright25"
+    ),
+    fill.legend = tm_legend_hide()
+  ) + 
+  tm_layout(inner.margins = c(0.05, 0.05, 0.05, 0.05))
+
 my_map
 ```
 
@@ -236,14 +237,13 @@ my_map
 
 ```{r}
 #| echo: false
-my_title <- "3_3_2_03"
-my.path.name <- "outputs/"
-my.file.name <- paste0(my.path.name, my_title, ".png")
-tmap_save(
-  my_map, 
-  filename = my.file.name, 
-  width = 5.75, 
-  dpi = 1200)
+
+my.ratio <- get_asp_ratio(my_map)
+
+my.title <- "3-4 정성적 주제도"
+my.path.name <- "D:/My Cartography/지도제작/"
+my.file.name <- paste0(my.path.name, my.title, ".png")
+tmap_save(my_map, filename = my.file.name, height = 11.74*1.1, width = my.ratio*11.74*1.1, dpi = 600)
 ```
 
 #### 정량적 주제도
@@ -251,15 +251,21 @@ tmap_save(
 -   지도 제작
 
 ```{r}
+#| fig-height: 12.914
+#| fig-width: 15.7721
+#| fig-dpi: 600
 my_map <- my_df |> 
   tm_shape() + 
   tm_polygons(
-    col = "House1_p",
-    breaks = c(-Inf, 15, 25, 35, 45, 55, 65, Inf),
-    palette = "Oranges",
-    border.col = "gray20", lwd = 0.75, 
-    legend.show = FALSE
-    )
+    fill = "House1_p", col = "gray20", lwd = 0.75, 
+    fill.scale = tm_scale_intervals(
+      breaks = c(-Inf, 15, 25, 35, 45, 55, 65, Inf),
+      values = "brewer.oranges"
+    ), 
+    fill.legend = tm_legend_hide()
+  ) +
+  tm_layout(inner.margins = c(0.05, 0.05, 0.05, 0.05))
+
 my_map
 ```
 
@@ -267,14 +273,13 @@ my_map
 
 ```{r}
 #| echo: false
-my_title <- "3_3_2_04"
-my.path.name <- "outputs/"
-my.file.name <- paste0(my.path.name, my_title, ".png")
-tmap_save(
-  my_map, 
-  filename = my.file.name, 
-  width = 5.75, 
-  dpi = 1200)
+
+my.ratio <- get_asp_ratio(my_map)
+
+my.title <- "3-5 정량적 주제도"
+my.path.name <- "D:/My Cartography/지도제작/"
+my.file.name <- paste0(my.path.name, my.title, ".png")
+tmap_save(my_map, filename = my.file.name, height = 11.74*1.1, width = my.ratio*11.74*1.1, dpi = 600)
 ```
 
 ## 정성적 주제도와 정량적 주제도
@@ -316,22 +321,24 @@ my_df_2 <- my_df_2 |>
 -   지도 제작
 
 ```{r}
-my_map <- tm_shape(my_df_2) + 
-  tm_borders(col = "gray10", lwd = 0.25) +
-  tm_shape(seoul_gu) + tm_borders(col = "gray10", lwd = 0.75) +
+#| fig-height: 12.914
+#| fig-width: 15.7721
+#| fig-dpi: 600
+my_map <- tm_shape(my_df_2) + tm_borders(col = "gray10", lwd = 0.75) +
+  tm_shape(seoul_gu) + tm_borders(col = "gray10", lwd = 1.75) +
   tm_shape(my_df_2) + 
-  tm_symbols(size = "pop_t", scale = 1.5, alpha = 0.75, 
-             col = "#a63603",border.lwd = 0, 
-             legend.size.show = FALSE) +
-  tm_scale_bar(
-    color.dark = "gray60",
-    text.size = 0.25,
-    breaks = seq(0, 10, 2),
-    position = c(0.03, 0.01)) + 
-  tm_credits(
-    "SANG-IL LEE, Geography Education at SNU, 2024", 
-    size = 0.3, position = c(0.78, 0.01)
-    )
+  tm_symbols(
+    size = "pop_t", fill_alpha = 0.75, fill = "#a63603", lwd = 0, 
+    size.scale = tm_scale_continuous(values.scale = 3), 
+    size.legend = tm_legend_hide(),
+  ) +
+  tm_layout(inner.margins = c(0.05, 0.05, 0.05, 0.05)) +
+  tm_scalebar(color.dark = "gray60", position = c(0.025, 0.025), 
+              breaks = seq(0, 20, 5), allow_clipping = TRUE
+  ) + 
+  tm_credits("SANG-IL LEE, Geography Education at SNU", 
+             size = 0.7, position = c(0.82, 0.025)
+  )
 my_map
 ```
 
@@ -339,44 +346,48 @@ my_map
 
 ```{r}
 #| echo: false
-my_title <- "3_3_3_01"
-my.path.name <- "outputs/"
-my.file.name <- paste0(my.path.name, my_title, ".png")
-tmap_save(
-  my_map, 
-  filename = my.file.name, 
-  width = 5.75, 
-  dpi = 1200)
+
+my.ratio <- get_asp_ratio(my_map)
+
+my.title <- "3-6 도형표현도"
+my.path.name <- "D:/My Cartography/지도제작/"
+my.file.name <- paste0(my.path.name, my.title, ".png")
+tmap_save(my_map, filename = my.file.name, height = 11.74*1.1, width = my.ratio*11.74*1.1, dpi = 600)
 ```
 
 #### 점밀도도
 
--   포인트 생성: 시간이 조금 걸리므로 따로 실행
+-   포인트 생성: 시간이 조금 걸리므로 따로 실행해서 저장
 
 ```{r}
+#| eval: false
 my_seoul_point <- my_df_2 |> 
-  st_sample(size = round(my_df_2$pop_t/500), 
-            type = "random", exact = TRUE) |> 
-  st_sf()
+  st_sample(size = round(my_df_2$pop_t/500), type = "random", exact = TRUE) |> st_sf()
+write_sf(my_seoul_point, "my_seoul_point.shp")
+```
+
+```{r}
+#| echo: false
+my_seoul_point <- read_sf("my_seoul_point.shp")
 ```
 
 -   지도 제작
 
 ```{r}
-my_map <- tm_shape(my_df_2) + 
-  tm_borders(col = "gray10", lwd = 0.25) +
-  tm_shape(my_seoul_point) + 
-  tm_dots(size = 0.005, alpha = 0.75, col = "#a63603") +
-  tm_shape(seoul_gu) + tm_borders(col = "gray10", lwd = 0.75) +
-  tm_scale_bar(
-    color.dark = "gray60",
-    text.size = 0.25,
-    breaks = seq(0, 10, 2),
-    position = c(0.03, 0.01)) + 
-  tm_credits(
-    "SANG-IL LEE, Geography Education at SNU, 2024", 
-    size = 0.3, position = c(0.78, 0.01)
-    )
+#| fig-height: 12.914
+#| fig-width: 15.7721
+#| fig-dpi: 600
+my_map <- tm_shape(my_df_2) + tm_borders(col = "gray10", lwd = 0.75) +
+  tm_shape(my_seoul_point) + tm_dots(size = 0.15, fill_alpha = 0.75, fill = "#a63603") +
+  tm_shape(seoul_gu) + tm_borders(col = "gray10", lwd = 1.75) +
+  tm_layout(inner.margins = c(0.05, 0.05, 0.05, 0.05)) +
+  tm_scalebar(color.dark = "gray60", position = c(0.025, 0.025), 
+              breaks = seq(0, 20, 5), allow_clipping = TRUE
+  ) + 
+  tm_layout(inner.margins = c(0.05, 0.05, 0.05, 0.05)) +
+  tm_credits("SANG-IL LEE, Geography Education at SNU", 
+             size = 0.7, position = c(0.82, 0.025)
+  )
 my_map
 ```
 
@@ -384,14 +395,13 @@ my_map
 
 ```{r}
 #| echo: false
-my_title <- "3_3_3_02"
-my.path.name <- "outputs/"
-my.file.name <- paste0(my.path.name, my_title, ".png")
-tmap_save(
-  my_map, 
-  filename = my.file.name, 
-  width = 5.75, 
-  dpi = 1200)
+
+my.ratio <- get_asp_ratio(my_map)
+
+my.title <- "3-7 점밀도도"
+my.path.name <- "D:/My Cartography/지도제작/"
+my.file.name <- paste0(my.path.name, my.title, ".png")
+tmap_save(my_map, filename = my.file.name, height = 11.74*1.1, width = my.ratio*11.74*1.1, dpi = 600)
 ```
 
 #### 단계구분도
@@ -399,42 +409,40 @@ tmap_save(
 -   지도 제작
 
 ```{r}
+#| fig-height: 12.914
+#| fig-width: 15.7721
+#| fig-dpi: 600
 my_map <- tm_shape(my_df_2) +
   tm_polygons(
-    "pop_den_t",
-    style = "fixed", 
-    palette = "Oranges", 
-    border.col = "gray40", 
-    lwd = 0.25, 
-    border.alpha = 1, 
-    breaks = c(-Inf, 10000, 15000, 20000, 25000, 30000, 40000, Inf),
-    legend.show = FALSE) +
-  tm_shape(seoul_gu) + 
-  tm_polygons(alpha = 0, border.col = "gray20", lwd = 0.75) +
-  tm_scale_bar(
-    color.dark = "gray60",
-    text.size = 0.25,
-    breaks = seq(0, 10, 2),
-    position = c(0.03, 0.01)) + 
-  tm_credits(
-    "SANG-IL LEE, Geography Education at SNU, 2024", 
-    size = 0.3, position = c(0.78, 0.01)
-    )
-my_map
+    fill = "pop_den_t", fill_alpha = 1, col = "gray40", lwd = 0.75,  
+    fill.scale = tm_scale_intervals(
+      breaks = c(-Inf, 10000, 15000, 20000, 25000, 30000, 40000, Inf), 
+      values = "brewer.oranges"
+    ),
+    fill.legend = tm_legend_hide()
+  ) +
+  tm_layout(inner.margins = c(0.05, 0.05, 0.05, 0.05)) +
+  tm_shape(seoul_gu) + tm_borders(col = "gray20", lwd = 1.75) +
+  tm_scalebar(color.dark = "gray60", position = c(0.025, 0.025), 
+              breaks = seq(0, 20, 5), allow_clipping = TRUE
+  ) + 
+  tm_credits("SANG-IL LEE, Geography Education at SNU", 
+             size = 0.7, position = c(0.82, 0.025)
+  )
+my_map 
 ```
 
 -   저장
 
 ```{r}
 #| echo: false
-my_title <- "3_3_3_03"
-my.path.name <- "outputs/"
-my.file.name <- paste0(my.path.name, my_title, ".png")
-tmap_save(
-  my_map, 
-  filename = my.file.name, 
-  width = 5.75, 
-  dpi = 1200)
+
+my.ratio <- get_asp_ratio(my_map)
+
+my.title <- "3-8 단계구분도"
+my.path.name <- "D:/My Cartography/지도제작/"
+my.file.name <- paste0(my.path.name, my.title, ".png")
+tmap_save(my_map, filename = my.file.name, height = 11.74*1.1, width = my.ratio*11.74*1.1, dpi = 600)
 ```
 
 #### 등치선도
@@ -442,7 +450,7 @@ tmap_save(
 -   준비 과정
 
 ```{r}
-
+#| eval: false
 # sp로 만들기
 library(sp)
 my_centroid <- st_centroid(my_df_2)
@@ -467,53 +475,57 @@ m <- Tps(coordinates(my_centroid_sp), my_centroid_sp$pop_den_t)
 tps <- interpolate(raster(grd), m)
 tps <- mask(tps, my_seoul_sp)
 crs(tps) <- CRS('+init=EPSG:5179') # 힘들었음. st_crs()는 먹지 않음.
-cont.tps <- rasterToContour(tps)
+cont.tps <- rasterToContour(tps) |> st_as_sf() # tmap4에서는 필수, 반드시 sf 객체로
+
+# 저장해 두기
+writeRaster(tps, "tps.grd")
+st_write(cont.tps, "cont_tps.shp")
+```
+
+```{r}
+#| echo: false
+library(raster)
+tps <- raster("tps.grd")
+cont.tps <- read_sf("cont_tps.shp")
 ```
 
 -   지도 제작
 
 ```{r}
-my_map <- tm_shape(seoul_gu) +
-  tm_borders() + 
+#| fig-height: 12.914
+#| fig-width: 15.7721
+#| fig-dpi: 600
+my_map <- tm_shape(seoul_gu) + tm_borders(lwd = 0.75) + 
   tm_shape(tps) + 
   tm_raster(
-    style = "fixed", 
-    breaks = c(-Inf, 10000, 15000, 20000, 25000, 30000, 40000, Inf),     palette = "Oranges", legend.show = FALSE) +
-  tm_shape(subset(
-    cont.tps, 
-    level %in% c(10000, 15000, 20000, 25000, 30000, 40000))) +  
-  tm_iso(
-      text = "level", 
-      color = "black", 
-      lwd = 0.5, 
-      size = 0.5, 
-      alpha = 0.7) +
-  tm_shape(seoul_gu) + 
-  tm_polygons(alpha = 0, border.col = "gray20", lwd = 0.75) +
-  tm_scale_bar(
-    color.dark = "gray60",
-    text.size = 0.25,
-    breaks = seq(0, 10, 2),
-    position = c(0.03, 0.01)) + 
-  tm_credits(
-    "SANG-IL LEE, Geography Education at SNU, 2024", 
-    size = 0.3, position = c(0.78, 0.01)
-    )
-my_map
+    col.scale = tm_scale_intervals(
+      breaks = c(-Inf, 10000, 15000, 20000, 25000, 30000, 40000, Inf),     
+      values = "brewer.oranges",
+    ),
+    col.legend = tm_legend_hide()
+  ) +
+  tm_shape(cont.tps |> filter(level %in% c(10000, 15000, 20000, 25000, 30000, 40000))) +  
+  tm_iso(text = "level", color = "black", lwd = 0.5, size = 0.75, alpha = 0.7) + 
+  tm_shape(seoul_gu) + tm_borders(col = "gray20", lwd = 1.75) +
+  tm_layout(inner.margins = c(0.05, 0.05, 0.05, 0.05)) +
+  tm_scalebar(color.dark = "gray60", position = c(0.025, 0.025), 
+              breaks = seq(0, 20, 5), allow_clipping = TRUE
+  ) + 
+  tm_credits("SANG-IL LEE, Geography Education at SNU", size = 0.7, position = c(0.82, 0.025))
+my_map   
 ```
 
 -   저장
 
 ```{r}
 #| echo: false
-my_title <- "3_3_3_04"
-my.path.name <- "outputs/"
-my.file.name <- paste0(my.path.name, my_title, ".png")
-tmap_save(
-  my_map, 
-  filename = my.file.name, 
-  width = 5.75, 
-  dpi = 1200)
+
+my.ratio <- get_asp_ratio(my_map)
+
+my.title <- "3-9 등치선도"
+my.path.name <- "D:/My Cartography/지도제작/"
+my.file.name <- paste0(my.path.name, my.title, ".png")
+tmap_save(my_map, filename = my.file.name, height = 11.74*1.1, width = my.ratio*11.74*1.1, dpi = 600)
 ```
 
 #### 카토그램
@@ -521,30 +533,41 @@ tmap_save(
 -   카토그램 제작
 
 ```{r}
+#| eval: false
+library(cartogramR)
+library(rmapshaper)
+carto.shp <- cartogramR(my_df_2, count = "pop_t") |> as.sf() |> st_make_valid()
+agg.carto.shp <- carto.shp |> 
+  summarize(
+    geometry = st_union(geometry),
+    .by = SGG1_CD
+  )
+agg.carto.polyline.shp <- agg.carto.shp |> ms_innerlines()
+st_write(carto.shp, "carto.shp")
+st_write(agg.carto.shp, "agg_carto.shp")
+st_write(agg.carto.polyline.shp, "agg_carto_polyline.shp")
+```
 
-carto.shp <- cartogramR(my_df_2, count = "pop_t")
-carto.shp <- as.sf(carto.shp)
-carto.shp <- st_make_valid(carto.shp)
-
-agg.carto.shp <- aggregate(x = carto.shp[, "pop_t"], by = list(carto.shp$SGG1_CD), FUN = function(x) x[1]) 
-agg.carto.polyline.shp <- ms_innerlines(agg.carto.shp) 
+```{r}
+#| echo: true
+carto.shp <- read_sf("carto.shp")
+agg.carto.shp <- read_sf("agg_carto.shp")
+agg.carto.polyline.shp <- read_sf("agg_carto_polyline.shp")
 ```
 
 -   지도 제작
 
 ```{r}
-
-my_map <- tm_shape(carto.shp) +   tm_borders(col = "gray10", lwd = 0.25) +
-  tm_shape(agg.carto.shp) + tm_polygons(alpha = 0, border.col = "gray20", lwd = 0.75) +
-  tm_scale_bar(
-    color.dark = "gray60",
-    text.size = 0.25,
-    breaks = seq(0, 10, 2),
-    position = c(0.03, 0.01)) + 
-  tm_credits(
-    "SANG-IL LEE, Geography Education at SNU, 2024", 
-    size = 0.3, position = c(0.78, 0.01)
-    )
+#| fig-height: 12.914
+#| fig-width: 15.7721
+#| fig-dpi: 600
+my_map <- tm_shape(carto.shp) + tm_borders(col = "gray10", lwd = 0.75) +
+  tm_shape(agg.carto.shp) + tm_borders(col = "gray20", lwd = 1.75) +
+  tm_layout(inner.margins = c(0.05, 0.05, 0.05, 0.05)) +
+  tm_scalebar(color.dark = "gray60", position = c(0.025, 0.025), 
+              breaks = seq(0, 20, 5), allow_clipping = TRUE
+  ) + 
+  tm_credits("SANG-IL LEE, Geography Education at SNU", size = 0.7, position = c(0.82, 0.025))
 my_map
 ```
 
@@ -552,14 +575,13 @@ my_map
 
 ```{r}
 #| echo: false
-my_title <- "3_3_3_04"
-my.path.name <- "outputs/"
-my.file.name <- paste0(my.path.name, my_title, ".png")
-tmap_save(
-  my_map, 
-  filename = my.file.name, 
-  width = 5.75, 
-  dpi = 1200)
+
+my.ratio <- get_asp_ratio(my_map)
+
+my.title <- "3-8 카토그램"
+my.path.name <- "D:/My Cartography/지도제작/"
+my.file.name <- paste0(my.path.name, my.title, ".png")
+tmap_save(my_map, filename = my.file.name, height = 11.74*1.1, width = my.ratio*11.74*1.1, dpi = 600)
 ```
 
 ## 단변량 주제도와 다변량 주제도
