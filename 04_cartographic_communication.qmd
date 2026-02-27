@@ -13,11 +13,15 @@ execute:
   error: false
   freeze: auto
 editor: visual
+editor_options: 
+  chunk_output_type: console
 ---
 
 ## 개념 규정
 
 ## 지도학적 일반화
+
+<https://sangillee.snu.ac.kr/book_gis/vector_generalization.html>
 
 ## 기호화
 
@@ -32,6 +36,7 @@ library(tidyverse)
 library(readxl)
 library(sf)
 library(tmap)
+library(tmaptools)
 library(rayshader)
 ```
 
@@ -39,13 +44,13 @@ library(rayshader)
 
 ```{r}
 #| output: false
-seoul_EMD <- st_read(
+seoul_EMD <- read_sf(
   "D:/My R/Korean Administrative Areas/행정구역 셰이프 파일/2 Original Cleaning/2021_4Q/SEOUL_EMD_2021_4Q.shp", options = "ENCODING=CP949")
-seoul_EMD_2020 <- st_read(
+seoul_EMD_2020 <- read_sf(
   "D:/My R/Korean Administrative Areas/행정구역 셰이프 파일/2 Original Cleaning/2020_2Q/SEOUL_EMD_2020_2Q.shp", options = "ENCODING=CP949")
-seoul_gu <- st_read(
+seoul_gu <- read_sf(
   "D:/My R/Korean Administrative Areas/행정구역 셰이프 파일/2 Original Cleaning/2021_4Q/SEOUL_GU_2021_4Q.shp", options = "ENCODING=CP949")
-seoul_sido <- st_read(
+seoul_sido <- read_sf(
   "D:/My R/Korean Administrative Areas/행정구역 셰이프 파일/2 Original Cleaning/2021_4Q/SEOUL_SIDO_2021_4Q.shp", options = "ENCODING=CP949")
 ```
 
@@ -61,7 +66,6 @@ qtm(seoul_EMD)
 house_SDGGEMD_2020 <- read_excel(
   "D:/My R/Population Geography/3 Population Structure/Housing_Size_2020_Adj.xlsx", sheet = 1
   )
-View(house_SDGGEMD_2020)
 ```
 
 -   결합하기
@@ -112,7 +116,7 @@ Sys.sleep(0.2)
 -   포착
 
 ```{r}
-render_snapshot(clear = TRUE, file = "outputs/seoul_3d.png")
+render_snapshot(clear = TRUE, file = "D:/My Cartography/지도제작/4-1 조감고도.png")
 ```
 
 #### 색상 hue
@@ -120,15 +124,21 @@ render_snapshot(clear = TRUE, file = "outputs/seoul_3d.png")
 -   지도 제작
 
 ```{r}
-library(pals)
+#| fig-height: 12.914
+#| fig-width: 15.7721
+#| fig-dpi: 600
 my_map <- my_df |> 
   tm_shape() + 
   tm_polygons(
-    col = "SGG1_NM",
-    border.col = "gray30", lwd = 0.25, 
-    palette = alphabet2(),
-    legend.show = FALSE
-    )
+    fill = "SGG1_NM", col = "gray20", lwd = 0.75, 
+    fill.scale = tm_scale_categorical(
+      # values = palette.colors(24, "Polychrome 36")
+      values = "alphabet2"
+    ),
+    fill.legend = tm_legend_hide()
+  ) + 
+  tm_layout(inner.margins = c(0.05, 0.05, 0.05, 0.05))
+
 my_map
 ```
 
@@ -136,14 +146,14 @@ my_map
 
 ```{r}
 #| echo: false
-my_title <- "3_4_1"
-my.path.name <- "outputs/"
-my.file.name <- paste0(my.path.name, my_title, ".png")
-tmap_save(
-  my_map, 
-  filename = my.file.name, 
-  width = 5.75, 
-  dpi = 1200)
+#| eval: false
+
+my.ratio <- get_asp_ratio(my_map)
+
+my.title <- "4-2 색상"
+my.path.name <- "D:/My Cartography/지도제작/"
+my.file.name <- paste0(my.path.name, my.title, ".png")
+tmap_save(my_map, filename = my.file.name, height = 11.74*1.1, width = my.ratio*11.74*1.1, dpi = 600)
 ```
 
 #### 명도 value
@@ -151,15 +161,32 @@ tmap_save(
 -   지도 제작
 
 ```{r}
+#| fig-height: 12.914
+#| fig-width: 15.7721
+#| fig-dpi: 600
+
+# 완전히 명도만의 컬러스킴 생성
+library(colorspace)
+cols <- sequential_hcl(
+  n = 7,
+  h = 250,           # 청색 계열 (240~260 사이에서 조정)
+  c = c(8, 55),      # 양끝은 채도를 낮게(특히 밝은쪽/어두운쪽), 가운데만 채도 확보
+  l = c(96, 28),     # 너무 어둡게(예: 15 이하) 가면 회색/보라로 꺾이기 쉬움
+  power = 1.1
+) 
+
 my_map <- my_df |> 
   tm_shape() + 
   tm_polygons(
-    col = "House1_p",
-    n = 10,
-    border.col = "gray30", lwd = 0.25, 
-    palette = "Blues", n = 5,
-    legend.show = FALSE
-    )
+    fill = "House1_p", col = "gray20", lwd = 0.75, 
+    fill.scale = tm_scale_intervals(
+      breaks = c(-Inf, 15, 25, 35, 45, 55, 65, Inf),
+      values = cols
+    ), 
+    fill.legend = tm_legend_hide()
+  ) +
+  tm_layout(inner.margins = c(0.05, 0.05, 0.05, 0.05))
+
 my_map
 ```
 
@@ -167,14 +194,50 @@ my_map
 
 ```{r}
 #| echo: false
-my_title <- "3_4_2"
-my.path.name <- "outputs/"
-my.file.name <- paste0(my.path.name, my_title, ".png")
-tmap_save(
-  my_map, 
-  filename = my.file.name, 
-  width = 5.75, 
-  dpi = 1200)
+#| eval: false
+
+my.ratio <- get_asp_ratio(my_map)
+
+my.title <- "4-3 명도 1"
+my.path.name <- "D:/My Cartography/지도제작/"
+my.file.name <- paste0(my.path.name, my.title, ".png")
+tmap_save(my_map, filename = my.file.name, height = 11.74*1.1, width = my.ratio*11.74*1.1, dpi = 600)
+```
+
+-   지도 제작
+
+```{r}
+#| fig-height: 12.914
+#| fig-width: 15.7721
+#| fig-dpi: 600
+
+my_map <- my_df |> 
+  tm_shape() + 
+  tm_polygons(
+    fill = "House1_p", col = "gray20", lwd = 0.75, 
+    fill.scale = tm_scale_intervals(
+      breaks = c(-Inf, 15, 25, 35, 45, 55, 65, Inf),
+      values = "brewer.blues"
+    ), 
+    fill.legend = tm_legend_hide()
+  ) +
+  tm_layout(inner.margins = c(0.05, 0.05, 0.05, 0.05))
+
+my_map
+```
+
+-   저장
+
+```{r}
+#| echo: false
+#| eval: false
+
+my.ratio <- get_asp_ratio(my_map)
+
+my.title <- "4-3 명도 2"
+my.path.name <- "D:/My Cartography/지도제작/"
+my.file.name <- paste0(my.path.name, my.title, ".png")
+tmap_save(my_map, filename = my.file.name, height = 11.74*1.1, width = my.ratio*11.74*1.1, dpi = 600)
 ```
 
 #### 채도 saturation
@@ -182,17 +245,25 @@ tmap_save(
 -   지도 제작
 
 ```{r}
-saturation_5 <- c(
-  "#18C800", "#29B216", "#379F29", "#468B3D", "#557850"
-  )
+#| fig-height: 12.914
+#| fig-width: 15.7721
+#| fig-dpi: 600
+
+saturation_7 <- c("#18C800", "#24BB0E", "#2FA81F", "#3A9531", 
+  "#46833F", "#516F4C", "#5C5C5C")
+
 my_map <- my_df |> 
   tm_shape() + 
   tm_polygons(
-    col = "House1_p",
-    border.col = "gray30", lwd = 0.25, 
-    palette = saturation_5, n = 5,
-    legend.show = FALSE
-    )
+    fill = "House1_p", col = "gray20", lwd = 0.75, 
+    fill.scale = tm_scale_intervals(
+      breaks = c(-Inf, 15, 25, 35, 45, 55, 65, Inf),
+      values = saturation_7
+    ), 
+    fill.legend = tm_legend_hide()
+  ) +
+  tm_layout(inner.margins = c(0.05, 0.05, 0.05, 0.05))
+
 my_map
 ```
 
@@ -200,31 +271,53 @@ my_map
 
 ```{r}
 #| echo: false
-my_title <- "3_4_3"
-my.path.name <- "outputs/"
-my.file.name <- paste0(my.path.name, my_title, ".png")
-tmap_save(
-  my_map, 
-  filename = my.file.name, 
-  width = 5.75, 
-  dpi = 1200)
+#| eval: false
+
+my.ratio <- get_asp_ratio(my_map)
+
+my.title <- "4-4 채도"
+my.path.name <- "D:/My Cartography/지도제작/"
+my.file.name <- paste0(my.path.name, my.title, ".png")
+tmap_save(my_map, filename = my.file.name, height = 11.74*1.1, width = my.ratio*11.74*1.1, dpi = 600)
 ```
 
 #### 질감 texture
 
 ```{r}
-my_df |> 
-  ggplot() +
-  geom_sf(
-    aes(fill = House1_p), 
-    color = NA, show.legend = FALSE
-    ) +
-  labs(fill = "% of Single \n Households") + 
-  scale_fill_viridis_c() +
-  theme(
-    axis.text = element_blank(),
-    axis.ticks = element_blank(),
-    panel.grid = element_blank(),
-    panel.background = element_blank()
-  )
+library(ggpattern)
+library(gridpattern)
+library(magick)
+
+# 1) 구 이름을 map_id처럼 사용할 범주 변수로 확보
+seoul_gu2 <- seoul_gu |>
+  mutate(gu = as.character(SGG1_FNM))
+
+# 2) gu 레벨 수만큼 magick 패턴을 뽑아(무작위) 매핑 벡터를 만든다
+set.seed(20260227)
+lev <- sort(unique(seoul_gu2$gu))
+
+# gridpattern::names_magick 에서 구 개수만큼 "중복 없이" 뽑기
+# (names_magick 길이가 구 개수보다 짧으면 replace=TRUE로 바꾸면 됩니다)
+picked <- sample(gridpattern::names_magick, size = length(lev), replace = FALSE)
+
+# named vector: (이름=gu) -> (값=pattern name)
+pat_map <- setNames(picked, lev)
+
+# 3) sf + geom_sf_pattern
+my_graph <- ggplot(seoul_gu2) +
+  geom_sf_pattern(
+    aes(pattern_type = gu),
+    pattern              = "magick",
+    pattern_fill         = "black",
+    pattern_aspect_ratio = 1.75,
+    fill                 = "white",
+    colour               = "black"
+  ) +
+  coord_sf() +
+  theme_bw() +
+  # 핵심: choices에 “구이름 -> magick패턴” 매핑을 넣는다
+  scale_pattern_type_discrete(choices = pat_map) +
+  theme(legend.position = "none")
+my_graph
 ```
+

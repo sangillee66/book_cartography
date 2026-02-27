@@ -181,7 +181,6 @@ my.file.name <- paste0(my.path.name, my.title, ".png")
 tmap_save(my_map, filename = my.file.name, height = 11.74*1.1, width = my.ratio*11.74*1.1, dpi = 600)
 ```
 
-
 #### 피처맵: 동 행정구역도
 
 -   지도 제작
@@ -667,6 +666,5 @@ my.path.name <- "D:/My Cartography/지도제작/"
 my.file.name <- paste0(my.path.name, my.title, ".png")
 tmap_save(my_map, filename = my.file.name, height = 11.74*1.1, width = my.ratio*11.74*1.1, dpi = 600)
 ```
-
 
 ## 대축척 주제도와 소축척 주제도
