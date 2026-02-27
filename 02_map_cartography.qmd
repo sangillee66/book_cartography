@@ -13,4 +13,87 @@ execute:
   error: false
   freeze: auto
 editor: visual
+editor_options: 
+  chunk_output_type: console
 ---
+
+## 지도의 정의
+
+### 321개 지도의 정의에 대한 정의
+
+존 하우드 앤드루스(John Harwood Andrews)는 1996년 논문에서 당시 까지의 321개 지도에 대한 정의에 대한 논문을 발표한바 있다(@andrews1996). 워드 클라우드 분석을 시행한다.
+
+```{r}
+library(tidyverse)
+library(tidytext)
+library(ggwordcloud)
+library(stringr)
+
+# --------------------------
+# 1. 사용자 정의 불용어
+# --------------------------
+
+custom_stopwords <- tibble(
+  word = c(
+    "london","dictionary","ed","thereof","nd","definition",
+    "oxford","quoted","john","st","york","encyclopaedia",
+    "encyclopedia","pp","edition","introduction","journal",
+    "defined","eg","edinburgh","glasgow","intended","np", "english",
+    "map", "maps"
+  )
+)
+
+# --------------------------
+# 2. 텍스트 읽기 및 정제
+# --------------------------
+
+text <- readLines("definitions_of_cartography.txt", encoding = "UTF-8") |> 
+  tibble(text = _) |> 
+  mutate(
+    text = str_to_lower(text),
+    text = str_replace_all(text, "’s\\b|\'s\\b", ""),  # earth's → earth
+    text = str_remove_all(text, "[0-9]+"),            # 숫자 제거
+    text = str_replace_all(text, "e\\.g\\.|n\\.d\\.|n\\.p\\.", "")
+  )
+
+# --------------------------
+# 3. 토큰화 + 정규화
+# --------------------------
+
+words <- text |>
+  unnest_tokens(word, text) |>
+  filter(str_detect(word, "[a-z]")) |>
+  anti_join(stop_words, by = "word") |>
+  anti_join(custom_stopwords, by = "word") |>
+  count(word, sort = TRUE)
+
+# --------------------------
+# 4. 워드 클라우드
+# --------------------------
+
+my_graph <- ggplot(
+  words[1:75, ], aes(label = word, size = n, color = n)) +
+  geom_text_wordcloud() +
+  scale_size_area(max_size = 20) +
+  coord_fixed(ratio = 0.618) +
+  theme_minimal() +
+  theme(
+    plot.background  = element_rect(fill = "grey95", colour = NA),
+  )
+my_graph
+```
+
+-   저장
+
+```{r}
+#| eval: false
+#| echo: false
+my_graph <- my_graph + scale_size_area(max_size = 60)
+my.path.name <- "D:/My Cartography/지도제작/"
+my.file.name <- paste0("1-1 지도의 정의", ".png")
+ggsave(my.file.name, plot = my_graph, path = my.path.name, width = 19.4, height = 19.4 * 0.618, dpi = 600)
+```
+
+## 지도의 역할
+
+## 지도학의 정의와 범위

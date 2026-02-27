@@ -1,0 +1,17 @@
+{
+  "hash": "2c34e8feeccf24da194a0a37f489ad6a",
+  "result": {
+    "engine": "knitr",
+    "markdown": "---\ntitle: \"지도와 지도학\"\nauthor: Sang-Il Lee\ndate-modified: last-modified\nnumber-sections: true\nformat: \n  html: \n    toc: true\ncode-link: true\ncode-copy: true\nexecute: \n  warning: false\n  error: false\n  freeze: auto\neditor: visual\neditor_options: \n  chunk_output_type: console\n---\n\n## 지도의 정의\n\n### 321개 지도의 정의에 대한 정의\n\n존 하우드 앤드루스(John Harwood Andrews)는 1996년 논문에서 당시 까지의 321개 지도에 대한 정의에 대한 논문을 발표한바 있다(@andrews1996). 워드 클라우드 분석을 시행한다.\n\n\n::: {.cell}\n\n```{.r .cell-code}\nlibrary(tidyverse)\nlibrary(tidytext)\nlibrary(ggwordcloud)\nlibrary(stringr)\n\n# --------------------------\n# 1. 사용자 정의 불용어\n# --------------------------\n\ncustom_stopwords <- tibble(\n  word = c(\n    \"london\",\"dictionary\",\"ed\",\"thereof\",\"nd\",\"definition\",\n    \"oxford\",\"quoted\",\"john\",\"st\",\"york\",\"encyclopaedia\",\n    \"encyclopedia\",\"pp\",\"edition\",\"introduction\",\"journal\",\n    \"defined\",\"eg\",\"edinburgh\",\"glasgow\",\"intended\",\"np\", \"english\",\n    \"map\", \"maps\"\n  )\n)\n\n# --------------------------\n# 2. 텍스트 읽기 및 정제\n# --------------------------\n\ntext <- readLines(\"definitions_of_cartography.txt\", encoding = \"UTF-8\") |> \n  tibble(text = _) |> \n  mutate(\n    text = str_to_lower(text),\n    text = str_replace_all(text, \"’s\\\\b|\\'s\\\\b\", \"\"),  # earth's → earth\n    text = str_remove_all(text, \"[0-9]+\"),            # 숫자 제거\n    text = str_replace_all(text, \"e\\\\.g\\\\.|n\\\\.d\\\\.|n\\\\.p\\\\.\", \"\")\n  )\n\n# --------------------------\n# 3. 토큰화 + 정규화\n# --------------------------\n\nwords <- text |>\n  unnest_tokens(word, text) |>\n  filter(str_detect(word, \"[a-z]\")) |>\n  anti_join(stop_words, by = \"word\") |>\n  anti_join(custom_stopwords, by = \"word\") |>\n  count(word, sort = TRUE)\n\n# --------------------------\n# 4. 워드 클라우드\n# --------------------------\n\nmy_graph <- ggplot(\n  words[1:75, ], aes(label = word, size = n, color = n)) +\n  geom_text_wordcloud() +\n  scale_size_area(max_size = 20) +\n  coord_fixed(ratio = 0.618) +\n  theme_minimal() +\n  theme(\n    plot.background  = element_rect(fill = \"grey95\", colour = NA),\n  )\nmy_graph\n```\n\n::: {.cell-output-display}\n![](02_map_cartography_files/figure-html/unnamed-chunk-1-1.png){width=4200}\n:::\n:::\n\n\n-   저장\n\n\n::: {.cell}\n\n:::\n\n\n## 지도의 역할\n\n## 지도학의 정의와 범위\n",
+    "supporting": [
+      "02_map_cartography_files"
+    ],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {},
+    "engineDependencies": {},
+    "preserve": {},
+    "postProcess": true
+  }
+}

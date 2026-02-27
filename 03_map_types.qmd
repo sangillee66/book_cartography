@@ -148,7 +148,41 @@ tmap_save(my_map, filename = my.file.name, height = 11.74*1.1, width = my.ratio*
 
 ### 일반도-주제도 연속체
 
-#### 피처맵
+#### 피처맵: 소방서
+
+-   데이터 불러오기
+
+```{r}
+sobang_seoul <- read_sf("D:/My R/Vector Data Manipulation Korea/Seoul_Data_Plaza/sobang_station_seoul.shp", options = "ENCODING=CP949")
+```
+
+-   지도 제작
+
+```{r}
+#| fig-height: 12.914
+#| fig-width: 15.7721
+#| fig-dpi: 600
+my_map <- tm_shape(seoul_sido) + tm_borders(col = "gray20", lwd = 1) +
+  tm_shape(sobang_seoul) + tm_dots(size = 0.75) +
+  tm_layout(inner.margins = c(0.05, 0.05, 0.05, 0.05))
+my_map
+```
+
+-   저장
+
+```{r}
+#| echo: false
+
+my.ratio <- get_asp_ratio(my_map)
+
+my.title <- "3-2 피처맵 소방서"
+my.path.name <- "D:/My Cartography/지도제작/"
+my.file.name <- paste0(my.path.name, my.title, ".png")
+tmap_save(my_map, filename = my.file.name, height = 11.74*1.1, width = my.ratio*11.74*1.1, dpi = 600)
+```
+
+
+#### 피처맵: 동 행정구역도
 
 -   지도 제작
 
@@ -167,6 +201,7 @@ my_map
 
 ```{r}
 #| echo: false
+#| eval: false
 
 my.ratio <- get_asp_ratio(my_map)
 
@@ -190,8 +225,7 @@ accident <- st_read("D:/My R/Vector Data Manipulation Korea/Public_Data_Portal/a
 #| fig-height: 12.914
 #| fig-width: 15.7721
 #| fig-dpi: 600
-my_map <- my_df |> 
-  tm_shape() + tm_borders(col = "gray20", lwd = 0.75) +
+my_map <- tm_shape(seoul_sido) + tm_borders(col = "gray20", lwd = 1) +
   tm_shape(accident) + tm_dots(size = 0.75) +
   tm_layout(inner.margins = c(0.05, 0.05, 0.05, 0.05))
 my_map
@@ -201,6 +235,7 @@ my_map
 
 ```{r}
 #| echo: false
+#| eval: false
 
 my.ratio <- get_asp_ratio(my_map)
 
@@ -237,6 +272,7 @@ my_map
 
 ```{r}
 #| echo: false
+#| eval: false
 
 my.ratio <- get_asp_ratio(my_map)
 
@@ -273,6 +309,7 @@ my_map
 
 ```{r}
 #| echo: false
+#| eval: false
 
 my.ratio <- get_asp_ratio(my_map)
 
@@ -346,6 +383,7 @@ my_map
 
 ```{r}
 #| echo: false
+#| eval: false
 
 my.ratio <- get_asp_ratio(my_map)
 
@@ -395,6 +433,7 @@ my_map
 
 ```{r}
 #| echo: false
+#| eval: false
 
 my.ratio <- get_asp_ratio(my_map)
 
@@ -436,6 +475,7 @@ my_map
 
 ```{r}
 #| echo: false
+#| eval: false
 
 my.ratio <- get_asp_ratio(my_map)
 
@@ -519,6 +559,7 @@ my_map
 
 ```{r}
 #| echo: false
+#| eval: false
 
 my.ratio <- get_asp_ratio(my_map)
 
@@ -575,15 +616,57 @@ my_map
 
 ```{r}
 #| echo: false
+#| eval: false
 
 my.ratio <- get_asp_ratio(my_map)
 
-my.title <- "3-8 카토그램"
+my.title <- "3-10 카토그램"
 my.path.name <- "D:/My Cartography/지도제작/"
 my.file.name <- paste0(my.path.name, my.title, ".png")
 tmap_save(my_map, filename = my.file.name, height = 11.74*1.1, width = my.ratio*11.74*1.1, dpi = 600)
 ```
 
 ## 단변량 주제도와 다변량 주제도
+
+-   지도 제작
+
+```{r}
+#| fig-height: 12.914
+#| fig-width: 15.7721
+#| fig-dpi: 600
+my_map <- tm_shape(my_df_2) +
+  tm_polygons(
+    fill = tm_vars(c("pop_den_t", "pop_t"), multivariate = TRUE),
+    fill.scale = tm_scale_bivariate(values = "pinkblue"),
+    fill.legend = tm_legend_bivariate(
+      xlab = "Population", ylab = "Pop Density", position = c(0.03, 0.95), 
+      text.size = 1, xlab.size = 1.2, ylab.size = 1.2
+    ), lwd = 0.75
+  ) +
+  tm_shape(seoul_gu) + tm_borders(col = "gray20", lwd = 1.75) +
+  tm_layout(inner.margins = c(0.05, 0.05, 0.05, 0.05), legend.item.r = 0) + 
+  tm_scalebar(color.dark = "gray60", position = c(0.025, 0.025), 
+              breaks = seq(0, 20, 5), allow_clipping = TRUE
+  ) + 
+  tm_credits("SANG-IL LEE, Geography Education at SNU", 
+             size = 0.7, position = c(0.82, 0.025)
+  )
+my_map
+```
+
+-   저장
+
+```{r}
+#| echo: false
+#| eval: false
+
+my.ratio <- get_asp_ratio(my_map)
+
+my.title <- "3-11 이변량 주제도"
+my.path.name <- "D:/My Cartography/지도제작/"
+my.file.name <- paste0(my.path.name, my.title, ".png")
+tmap_save(my_map, filename = my.file.name, height = 11.74*1.1, width = my.ratio*11.74*1.1, dpi = 600)
+```
+
 
 ## 대축척 주제도와 소축척 주제도
