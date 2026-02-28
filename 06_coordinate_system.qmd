@@ -524,6 +524,10 @@ tmap_save(my_map, filename = my.file.name, height = 11.74*1.1, width = my.ratio*
 중간 시험 문제(중부 투영대) 지도를 제작한다.
 
 ```{r}
+#| eval: false
+#| fig-height: 12.914
+#| fig-width: 13.93353
+#| fig-dpi: 600
 # 춘천, 속초, 강릉만 추출함
 chuncheon <- topo_50 |> 
   filter(
