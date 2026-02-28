@@ -497,72 +497,69 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_transform</span>(<span class="at">crs =</span> <span class="fu">st_crs</span>(countries))</span>
 <span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>utm_bound <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">81</span>, <span class="sc">-</span><span class="dv">4</span>, <span class="dv">171</span>, <span class="dv">60</span>)</span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>my_map <span class="ot">&lt;-</span> <span class="fu">tm_shape</span>(utm_grid_korea, <span class="at">bbox =</span> utm_bound) <span class="sc">+</span> <span class="fu">tm_fill</span>(<span class="at">col =</span> <span class="st">"gray80"</span>, <span class="at">lwd =</span> <span class="dv">1</span>, <span class="at">border.col =</span> <span class="st">"black"</span>) <span class="sc">+</span> </span>
-<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_shape</span>(countries) <span class="sc">+</span> <span class="fu">tm_borders</span>(<span class="at">col =</span> <span class="st">"gray50"</span>, <span class="at">lwd =</span> <span class="fl">0.75</span>) <span class="sc">+</span></span>
-<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_shape</span>(utm_grid) <span class="sc">+</span> <span class="fu">tm_borders</span>(<span class="at">col =</span> <span class="st">"black"</span>, <span class="at">lwd =</span> <span class="dv">1</span>) <span class="sc">+</span> </span>
-<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_text</span>(<span class="at">text =</span> <span class="st">"utm_name"</span>, <span class="at">size =</span> <span class="fl">0.7</span>, <span class="at">col =</span> <span class="st">"gray20"</span>) <span class="sc">+</span></span>
-<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_graticules</span>(<span class="at">x =</span> <span class="fu">seq</span>(<span class="dv">84</span>, <span class="dv">168</span>, <span class="dv">6</span>), <span class="at">y =</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">56</span>, <span class="dv">8</span>), <span class="at">lwd =</span> <span class="dv">0</span>, <span class="at">labels.size =</span> <span class="fl">0.5</span>)</span>
-<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>my_map</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>my_map <span class="ot">&lt;-</span> <span class="fu">tm_shape</span>(utm_grid_korea, <span class="at">bbox =</span> utm_bound) <span class="sc">+</span> </span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_polygons</span>(<span class="at">fill =</span> <span class="st">"gray80"</span>, <span class="at">lwd =</span> <span class="fl">0.75</span>, <span class="at">col =</span> <span class="st">"black"</span>) <span class="sc">+</span> </span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_shape</span>(countries) <span class="sc">+</span> <span class="fu">tm_borders</span>(<span class="at">col =</span> <span class="st">"gray20"</span>, <span class="at">lwd =</span> <span class="fl">0.75</span>) <span class="sc">+</span></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_shape</span>(utm_grid) <span class="sc">+</span> <span class="fu">tm_borders</span>(<span class="at">col =</span> <span class="st">"black"</span>, <span class="at">lwd =</span> <span class="dv">1</span>) <span class="sc">+</span> </span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_text</span>(<span class="at">text =</span> <span class="st">"utm_name"</span>, <span class="at">size =</span> <span class="fl">1.5</span>, <span class="at">col =</span> <span class="st">"gray20"</span>) <span class="sc">+</span></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_graticules</span>(<span class="at">x =</span> <span class="fu">seq</span>(<span class="dv">84</span>, <span class="dv">168</span>, <span class="dv">6</span>), <span class="at">y =</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">56</span>, <span class="dv">8</span>), <span class="at">lwd =</span> <span class="dv">0</span>, <span class="at">labels.size =</span> <span class="dv">1</span>)</span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>my_map</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><a href="06_coordinate_system_files/figure-html/unnamed-chunk-3-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-4"><img src="06_coordinate_system_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid figure-img" width="4200"></a></p>
+<p><a href="06_coordinate_system_files/figure-html/unnamed-chunk-3-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-4"><img src="06_coordinate_system_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid figure-img" width="8360"></a></p>
 </figure>
 </div>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>asp_r <span class="ot">&lt;-</span> <span class="fu">get_asp_ratio</span>(my_map)</span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>my.file.name <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="st">"outputs/6_2_1.png"</span>) </span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="fu">tmap_save</span>(my_map, <span class="at">filename =</span> my.file.name, <span class="at">width =</span> <span class="fl">5.75</span>, <span class="at">dpi =</span> <span class="dv">600</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>다음으로 서울이 포함된 북반구 52구역에 대한 투영을 실행한다. <a href="https://epsg.io/">epsg.io</a>의 검색 결과 EPSG:32652임을 확인한다.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># N52를 중심으로 한 대략적인 지역 선정</span></span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>bb_utm_52 <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">x =</span> <span class="fu">c</span>(<span class="dv">81</span>, <span class="dv">81</span>, <span class="dv">171</span>, <span class="dv">171</span>), <span class="at">y =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">4</span>, <span class="dv">60</span>, <span class="sc">-</span><span class="dv">4</span>, <span class="dv">60</span>)) <span class="sc">|&gt;</span> </span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_as_sf</span>(<span class="at">coords =</span> <span class="fu">c</span>(<span class="st">"x"</span>, <span class="st">"y"</span>), <span class="at">crs =</span> <span class="dv">4326</span>) <span class="sc">|&gt;</span> </span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_bbox</span>() <span class="sc">|&gt;</span> </span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_as_sfc</span>()</span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="co"># 국가 셰이프 파일에서 해당 부분만 골라내기</span></span>
-<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>countries_bb <span class="ot">&lt;-</span> <span class="fu">st_intersection</span>(countries, bb_utm_52) <span class="sc">|&gt;</span> </span>
-<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_make_valid</span>()</span>
-<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a><span class="co"># UTM N52의 투영법 적용(EPSG:32652)</span></span>
-<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>countries_bb_utm <span class="ot">&lt;-</span> <span class="fu">st_transform</span>(countries_bb, <span class="at">crs =</span> <span class="dv">32652</span>)</span>
-<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a><span class="co"># UTM N52의 가상원점 지정</span></span>
-<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>origin_n52 <span class="ot">&lt;-</span> <span class="fu">st_as_sf</span>(<span class="fu">tibble</span>(<span class="at">x =</span> <span class="dv">0</span>, <span class="at">y =</span> <span class="dv">0</span>), <span class="at">coords =</span> <span class="fu">c</span>(<span class="st">"x"</span>, <span class="st">"y"</span>), <span class="at">crs =</span> <span class="dv">32652</span>) <span class="sc">|&gt;</span> </span>
-<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_transform</span>(<span class="at">crs =</span> <span class="fu">st_crs</span>(countries))</span>
-<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a><span class="co"># 서울 지점 셰이프 만들기</span></span>
-<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a>seoul_point <span class="ot">&lt;-</span> <span class="fu">st_as_sf</span>(<span class="fu">tibble</span>(<span class="at">x =</span> <span class="fl">126.9352778</span>, <span class="at">y =</span> <span class="fl">37.5700057</span>), <span class="at">coords =</span> <span class="fu">c</span>(<span class="st">"x"</span>, <span class="st">"y"</span>), <span class="at">crs =</span> <span class="dv">4326</span>)</span>
-<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a><span class="co"># 그리드 생성 영역을 지정하고 그리드 생성</span></span>
-<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a>bb_n52 <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">x =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1000000</span>), <span class="at">y =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">1000000</span>, <span class="dv">7000000</span>)) <span class="sc">|&gt;</span> </span>
-<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_as_sf</span>(<span class="at">coords =</span> <span class="fu">c</span>(<span class="st">"x"</span>, <span class="st">"y"</span>), <span class="at">crs =</span> <span class="dv">32652</span>) <span class="sc">|&gt;</span> </span>
-<span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_bbox</span>() <span class="sc">|&gt;</span> </span>
-<span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_as_sfc</span>()</span>
-<span id="cb5-26"><a href="#cb5-26" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-27"><a href="#cb5-27" aria-hidden="true" tabindex="-1"></a>bb_n52_grid <span class="ot">&lt;-</span> <span class="fu">st_make_grid</span>(bb_n52, <span class="dv">100000</span>)</span>
-<span id="cb5-28"><a href="#cb5-28" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-29"><a href="#cb5-29" aria-hidden="true" tabindex="-1"></a><span class="co"># 지도 표현 영역 지정</span></span>
-<span id="cb5-30"><a href="#cb5-30" aria-hidden="true" tabindex="-1"></a>bb <span class="ot">&lt;-</span> <span class="fu">st_bbox</span>(<span class="fu">c</span>(<span class="at">xmin =</span> <span class="sc">-</span><span class="dv">3000000</span>, <span class="at">xmax =</span> <span class="dv">3500000</span>, <span class="at">ymin =</span> <span class="sc">-</span><span class="dv">500000</span>, <span class="at">ymax =</span> <span class="dv">6000000</span>), </span>
-<span id="cb5-31"><a href="#cb5-31" aria-hidden="true" tabindex="-1"></a>        <span class="at">crs =</span> <span class="fu">st_crs</span>(<span class="dv">32652</span>))</span>
-<span id="cb5-32"><a href="#cb5-32" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-33"><a href="#cb5-33" aria-hidden="true" tabindex="-1"></a>my_map <span class="ot">&lt;-</span> <span class="fu">tm_shape</span>(countries_bb_utm, <span class="at">bbox =</span> bb) <span class="sc">+</span> <span class="fu">tm_fill</span>() <span class="sc">+</span></span>
-<span id="cb5-34"><a href="#cb5-34" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_graticules</span>(<span class="at">x =</span> <span class="fu">seq</span>(<span class="dv">84</span>, <span class="dv">172</span>, <span class="dv">6</span>), <span class="at">y =</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">40</span>, <span class="dv">10</span>), <span class="at">lwd =</span> <span class="fl">1.5</span>) <span class="sc">+</span></span>
-<span id="cb5-35"><a href="#cb5-35" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_shape</span>(bb_n52_grid) <span class="sc">+</span> <span class="fu">tm_borders</span>(<span class="at">lwd =</span> <span class="fl">0.5</span>) <span class="sc">+</span></span>
-<span id="cb5-36"><a href="#cb5-36" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_shape</span>(origin_n52) <span class="sc">+</span> <span class="fu">tm_symbols</span>(<span class="at">col =</span> <span class="st">"red"</span>, <span class="at">size =</span> <span class="fl">0.5</span>) <span class="sc">+</span></span>
-<span id="cb5-37"><a href="#cb5-37" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_shape</span>(seoul_point) <span class="sc">+</span> <span class="fu">tm_symbols</span>(<span class="at">col =</span> <span class="st">"black"</span>, <span class="at">size =</span> <span class="fl">0.2</span>)</span>
-<span id="cb5-38"><a href="#cb5-38" aria-hidden="true" tabindex="-1"></a>my_map</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># N52를 중심으로 한 대략적인 지역 선정</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>bb_utm_52 <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">x =</span> <span class="fu">c</span>(<span class="dv">81</span>, <span class="dv">81</span>, <span class="dv">171</span>, <span class="dv">171</span>), <span class="at">y =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">4</span>, <span class="dv">60</span>, <span class="sc">-</span><span class="dv">4</span>, <span class="dv">60</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_as_sf</span>(<span class="at">coords =</span> <span class="fu">c</span>(<span class="st">"x"</span>, <span class="st">"y"</span>), <span class="at">crs =</span> <span class="dv">4326</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_bbox</span>() <span class="sc">|&gt;</span> </span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_as_sfc</span>()</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="co"># 국가 셰이프 파일에서 해당 부분만 골라내기</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>countries_bb <span class="ot">&lt;-</span> <span class="fu">st_intersection</span>(countries, bb_utm_52) <span class="sc">|&gt;</span> </span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_make_valid</span>()</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a><span class="co"># UTM N52의 투영법 적용(EPSG:32652)</span></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>countries_bb_utm <span class="ot">&lt;-</span> <span class="fu">st_transform</span>(countries_bb, <span class="at">crs =</span> <span class="dv">32652</span>)</span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a><span class="co"># UTM N52의 가상원점 지정</span></span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>origin_n52 <span class="ot">&lt;-</span> <span class="fu">st_as_sf</span>(<span class="fu">tibble</span>(<span class="at">x =</span> <span class="dv">0</span>, <span class="at">y =</span> <span class="dv">0</span>), <span class="at">coords =</span> <span class="fu">c</span>(<span class="st">"x"</span>, <span class="st">"y"</span>), <span class="at">crs =</span> <span class="dv">32652</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_transform</span>(<span class="at">crs =</span> <span class="fu">st_crs</span>(countries))</span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a><span class="co"># 서울 지점 셰이프 만들기</span></span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a>seoul_point <span class="ot">&lt;-</span> <span class="fu">st_as_sf</span>(<span class="fu">tibble</span>(<span class="at">x =</span> <span class="fl">126.9352778</span>, <span class="at">y =</span> <span class="fl">37.5700057</span>), <span class="at">coords =</span> <span class="fu">c</span>(<span class="st">"x"</span>, <span class="st">"y"</span>), <span class="at">crs =</span> <span class="dv">4326</span>)</span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a><span class="co"># 그리드 생성 영역을 지정하고 그리드 생성</span></span>
+<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a>bb_n52 <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">x =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1000000</span>), <span class="at">y =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">1000000</span>, <span class="dv">7000000</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_as_sf</span>(<span class="at">coords =</span> <span class="fu">c</span>(<span class="st">"x"</span>, <span class="st">"y"</span>), <span class="at">crs =</span> <span class="dv">32652</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_bbox</span>() <span class="sc">|&gt;</span> </span>
+<span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_as_sfc</span>()</span>
+<span id="cb4-26"><a href="#cb4-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-27"><a href="#cb4-27" aria-hidden="true" tabindex="-1"></a>bb_n52_grid <span class="ot">&lt;-</span> <span class="fu">st_make_grid</span>(bb_n52, <span class="dv">100000</span>)</span>
+<span id="cb4-28"><a href="#cb4-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-29"><a href="#cb4-29" aria-hidden="true" tabindex="-1"></a><span class="co"># 지도 표현 영역 지정</span></span>
+<span id="cb4-30"><a href="#cb4-30" aria-hidden="true" tabindex="-1"></a>bb <span class="ot">&lt;-</span> <span class="fu">st_bbox</span>(<span class="fu">c</span>(<span class="at">xmin =</span> <span class="sc">-</span><span class="dv">3000000</span>, <span class="at">xmax =</span> <span class="dv">3500000</span>, <span class="at">ymin =</span> <span class="sc">-</span><span class="dv">500000</span>, <span class="at">ymax =</span> <span class="dv">6000000</span>), </span>
+<span id="cb4-31"><a href="#cb4-31" aria-hidden="true" tabindex="-1"></a>        <span class="at">crs =</span> <span class="fu">st_crs</span>(<span class="dv">32652</span>))</span>
+<span id="cb4-32"><a href="#cb4-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-33"><a href="#cb4-33" aria-hidden="true" tabindex="-1"></a>my_map <span class="ot">&lt;-</span> <span class="fu">tm_shape</span>(countries_bb_utm, <span class="at">bbox =</span> bb) <span class="sc">+</span> <span class="fu">tm_fill</span>() <span class="sc">+</span></span>
+<span id="cb4-34"><a href="#cb4-34" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_graticules</span>(<span class="at">x =</span> <span class="fu">seq</span>(<span class="dv">84</span>, <span class="dv">172</span>, <span class="dv">6</span>), <span class="at">y =</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">40</span>, <span class="dv">10</span>), <span class="at">lwd =</span> <span class="dv">2</span>, <span class="at">labels.size =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb4-35"><a href="#cb4-35" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_shape</span>(bb_n52_grid) <span class="sc">+</span> <span class="fu">tm_borders</span>(<span class="at">lwd =</span> <span class="fl">0.5</span>) <span class="sc">+</span></span>
+<span id="cb4-36"><a href="#cb4-36" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_shape</span>(origin_n52) <span class="sc">+</span> <span class="fu">tm_symbols</span>(<span class="at">fill =</span> <span class="st">"red"</span>, <span class="at">size =</span> <span class="fl">1.2</span>) <span class="sc">+</span></span>
+<span id="cb4-37"><a href="#cb4-37" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_shape</span>(seoul_point) <span class="sc">+</span> <span class="fu">tm_symbols</span>(<span class="at">fill =</span> <span class="st">"black"</span>, <span class="at">size =</span> <span class="dv">1</span>)</span>
+<span id="cb4-38"><a href="#cb4-38" aria-hidden="true" tabindex="-1"></a>my_map</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><a href="06_coordinate_system_files/figure-html/unnamed-chunk-4-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-5"><img src="06_coordinate_system_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid figure-img" width="4200"></a></p>
+<p><a href="06_coordinate_system_files/figure-html/unnamed-chunk-5-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-5"><img src="06_coordinate_system_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid figure-img" width="7748"></a></p>
 </figure>
 </div>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>my.file.name <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="st">"outputs/6_2_2.png"</span>) </span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="fu">tmap_save</span>(my_map, <span class="at">filename =</span> my.file.name,  <span class="at">width =</span> <span class="fl">5.75</span>, <span class="at">dpi =</span> <span class="dv">600</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
 </section>
@@ -579,207 +576,124 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h4 data-number="6.3.5.2" class="anchored" data-anchor-id="imw-좌표계와-우리나라"><span class="header-section-number">6.3.5.2</span> IMW 좌표계와 우리나라</h4>
 <p>우리나라와 그 주변에 대해 IWM 구역 체계를 보여주는 지도를 제작한다.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># IMW 그리드 파일을 불러온다.</span></span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>imw_grid <span class="ot">&lt;-</span> <span class="fu">st_read</span>(</span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="st">"imw_grid.shp"</span>, <span class="at">options =</span> <span class="st">"ENCODING=CP949"</span>) <span class="sc">|&gt;</span> </span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_transform</span>(<span class="at">crs =</span> <span class="fu">st_crs</span>(countries))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>options:        ENCODING=CP949 
-Reading layer `imw_grid' from data source `D:\R_Books\Cartography\imw_grid.shp' using driver `ESRI Shapefile'
-Simple feature collection with 2132 features and 1 field
-Geometry type: POLYGON
-Dimension:     XY
-Bounding box:  xmin: -180 ymin: -90 xmax: 180 ymax: 90
-Geodetic CRS:  WGS 84</code></pre>
-</div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>imw_bd <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">88</span>, <span class="dv">20</span>, <span class="dv">164</span>, <span class="dv">60</span>)</span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>my_map <span class="ot">&lt;-</span> <span class="fu">tm_shape</span>(countries, <span class="at">bbox =</span> imw_bd) <span class="sc">+</span> <span class="fu">tm_fill</span>() <span class="sc">+</span></span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_shape</span>(imw_grid) <span class="sc">+</span> <span class="fu">tm_borders</span>() <span class="sc">+</span></span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_text</span>(<span class="st">"imw_id"</span>, <span class="at">size =</span> <span class="fl">0.5</span>) <span class="sc">+</span></span>
-<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_graticules</span>(<span class="at">x =</span> <span class="fu">seq</span>(<span class="dv">90</span>, <span class="dv">162</span>, <span class="dv">6</span>), <span class="at">y =</span> <span class="fu">seq</span>(<span class="dv">20</span>, <span class="dv">60</span>, <span class="dv">4</span>))</span>
-<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>my_map</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># IMW 그리드 파일을 불러온다.</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>imw_grid <span class="ot">&lt;-</span> <span class="fu">read_sf</span>(</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="st">"imw_grid.shp"</span>, <span class="at">options =</span> <span class="st">"ENCODING=CP949"</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_transform</span>(<span class="at">crs =</span> <span class="fu">st_crs</span>(countries))</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>imw_bd <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">88</span>, <span class="dv">20</span>, <span class="dv">164</span>, <span class="dv">60</span>)</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>my_map <span class="ot">&lt;-</span> <span class="fu">tm_shape</span>(countries, <span class="at">bbox =</span> imw_bd) <span class="sc">+</span> <span class="fu">tm_fill</span>() <span class="sc">+</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_shape</span>(imw_grid) <span class="sc">+</span> <span class="fu">tm_borders</span>(<span class="at">col =</span> <span class="st">"gray20"</span>, <span class="at">lwd =</span> <span class="fl">0.75</span>) <span class="sc">+</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_text</span>(<span class="st">"imw_id"</span>, <span class="at">size =</span> <span class="fl">1.5</span>, <span class="at">col =</span> <span class="st">"gray20"</span>) <span class="sc">+</span></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_graticules</span>(<span class="at">x =</span> <span class="fu">seq</span>(<span class="dv">90</span>, <span class="dv">162</span>, <span class="dv">6</span>), <span class="at">y =</span> <span class="fu">seq</span>(<span class="dv">20</span>, <span class="dv">60</span>, <span class="dv">4</span>), <span class="at">labels.size =</span> <span class="dv">1</span>)</span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>my_map</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><a href="06_coordinate_system_files/figure-html/unnamed-chunk-5-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-10"><img src="06_coordinate_system_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid figure-img" width="4200"></a></p>
+<p><a href="06_coordinate_system_files/figure-html/unnamed-chunk-7-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-10"><img src="06_coordinate_system_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid figure-img" width="11277"></a></p>
 </figure>
 </div>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>my.file.name <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="st">"outputs/6_2_3.png"</span>) </span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="fu">tmap_save</span>(my_map, <span class="at">filename =</span> my.file.name,  <span class="at">width =</span> <span class="fl">5.75</span>, <span class="at">dpi =</span> <span class="dv">600</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>우리나라에 해당하는 IWM 구역과 1:250,000 지세도를 그린다.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># IWM 중 NJ51, NJ52, NI51, NI52만 고르기</span></span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>imw_kr_south <span class="ot">&lt;-</span> imw_grid <span class="sc">|&gt;</span> </span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(</span>
-<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>    imw_id <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"NJ51"</span>, <span class="st">"NJ52"</span>, <span class="st">"NI51"</span>, <span class="st">"NI52"</span>)</span>
-<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a><span class="fu">tm_shape</span>(imw_kr_south, <span class="at">projection =</span> <span class="dv">5178</span>) <span class="sc">+</span> <span class="fu">tm_borders</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># IWM 중 NJ51, NJ52, NI51, NI52만 고르기</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>imw_kr_south <span class="ot">&lt;-</span> imw_grid <span class="sc">|&gt;</span> </span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>    imw_id <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"NJ51"</span>, <span class="st">"NJ52"</span>, <span class="st">"NI51"</span>, <span class="st">"NI52"</span>)</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="fu">tm_shape</span>(imw_kr_south, <span class="at">projection =</span> <span class="dv">5178</span>) <span class="sc">+</span> <span class="fu">tm_borders</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><a href="06_coordinate_system_files/figure-html/unnamed-chunk-6-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-11"><img src="06_coordinate_system_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid figure-img" width="4200"></a></p>
+<p><a href="06_coordinate_system_files/figure-html/unnamed-chunk-9-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-11"><img src="06_coordinate_system_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid figure-img" width="9417"></a></p>
 </figure>
 </div>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 시도 행정구역 지도를 불러옴</span></span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>sido <span class="ot">&lt;-</span> <span class="fu">st_read</span>(</span>
-<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>  <span class="st">"D:/My R/Korean Administrative Areas/행정구역 셰이프 파일/3 Generalization/2021_4Q/NOT_MOVE/SIDO_NM_2021_4Q_GEN_0040.shp"</span>, <span class="at">options =</span> <span class="st">"ENCODING=CP949"</span>) </span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>options:        ENCODING=CP949 
-Reading layer `SIDO_NM_2021_4Q_GEN_0040' from data source 
-  `D:\My R\Korean Administrative Areas\행정구역 셰이프 파일\3 Generalization\2021_4Q\NOT_MOVE\SIDO_NM_2021_4Q_GEN_0040.shp' 
-  using driver `ESRI Shapefile'
-Simple feature collection with 17 features and 4 fields
-Geometry type: MULTIPOLYGON
-Dimension:     XY
-Bounding box:  xmin: 746255.1 ymin: 1464095 xmax: 1387941 ymax: 2068161
-Projected CRS: KGD2002 / Unified CS</code></pre>
-</div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 지형도 인덱스: 국토지리정보원에서 다운받은 것: 누락된 것이 있음.</span></span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>topo_25 <span class="ot">&lt;-</span> <span class="fu">st_read</span>(</span>
-<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>  <span class="st">"D:/My R/Vector Data Manipulation Korea/Korea_Topo_Index/INDEX/TN_MAPINDX_25K.gpkg"</span>, <span class="at">options =</span> <span class="st">"ENCODING=CP949"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>options:        ENCODING=CP949 </code></pre>
-</div>
-<div class="cell-output cell-output-stdout">
-<pre><code>Reading layer `TN_MAPINDX_25K' from data source 
-  `D:\My R\Vector Data Manipulation Korea\Korea_Topo_Index\INDEX\TN_MAPINDX_25K.gpkg' 
-  using driver `GPKG'
-Simple feature collection with 924 features and 3 fields
-Geometry type: POLYGON
-Dimension:     XY
-Bounding box:  xmin: 769102.8 ymin: 1448883 xmax: 1388735 ymax: 2056078
-Projected CRS: KGD2002 / Unified CS</code></pre>
-</div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>topo_50 <span class="ot">&lt;-</span> <span class="fu">st_read</span>(</span>
-<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>  <span class="st">"D:/My R/Vector Data Manipulation Korea/Korea_Topo_Index/INDEX/TN_MAPINDX_50K.gpkg"</span>, <span class="at">options =</span> <span class="st">"ENCODING=CP949"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>options:        ENCODING=CP949 </code></pre>
-</div>
-<div class="cell-output cell-output-stdout">
-<pre><code>Reading layer `TN_MAPINDX_50K' from data source 
-  `D:\My R\Vector Data Manipulation Korea\Korea_Topo_Index\INDEX\TN_MAPINDX_50K.gpkg' 
-  using driver `GPKG'
-Simple feature collection with 263 features and 3 fields
-Geometry type: POLYGON
-Dimension:     XY
-Bounding box:  xmin: 769102.8 ymin: 1434898 xmax: 1400507 ymax: 2056219
-Projected CRS: KGD2002 / Unified CS</code></pre>
-</div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>topo_250 <span class="ot">&lt;-</span> <span class="fu">st_read</span>(</span>
-<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>  <span class="st">"D:/My R/Vector Data Manipulation Korea/Korea_Topo_Index/INDEX/TN_MAPINDX_250K.gpkg"</span>, <span class="at">options =</span> <span class="st">"ENCODING=CP949"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>options:        ENCODING=CP949 </code></pre>
-</div>
-<div class="cell-output cell-output-stdout">
-<pre><code>Reading layer `TN_MAPINDX_250K' from data source 
-  `D:\My R\Vector Data Manipulation Korea\Korea_Topo_Index\INDEX\TN_MAPINDX_250K.gpkg' 
-  using driver `GPKG'
-Simple feature collection with 26 features and 2 fields
-Geometry type: POLYGON
-Dimension:     XY
-Bounding box:  xmin: 676706.7 ymin: 1445472 xmax: 1400507 ymax: 2564834
-Projected CRS: KGD2002 / Unified CS</code></pre>
-</div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 지형도 인덱스: 대헌에게서 받은 것: 옛날 것임</span></span>
-<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>topo_25 <span class="ot">&lt;-</span> <span class="fu">st_read</span>(</span>
-<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>  <span class="st">"D:/My R/Vector Data Manipulation Korea/Korea_Topo_Index_Daeheon/c25000.shp"</span>, <span class="at">options =</span> <span class="st">"ENCODING=CP949"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>options:        ENCODING=CP949 
-Reading layer `c25000' from data source 
-  `D:\My R\Vector Data Manipulation Korea\Korea_Topo_Index_Daeheon\c25000.shp' 
-  using driver `ESRI Shapefile'
-Simple feature collection with 833 features and 6 fields
-Geometry type: POLYGON
-Dimension:     XY
-Bounding box:  xmin: -9583.397 ymin: -40809.11 xmax: 632434.7 ymax: 570432.3
-Projected CRS: KGD2002 / Central Belt</code></pre>
-</div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>topo_50 <span class="ot">&lt;-</span> <span class="fu">st_read</span>(</span>
-<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>  <span class="st">"D:/My R/Vector Data Manipulation Korea/Korea_Topo_Index_Daeheon/c50000.shp"</span>, <span class="at">options =</span> <span class="st">"ENCODING=CP949"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>options:        ENCODING=CP949 
-Reading layer `c50000' from data source 
-  `D:\My R\Vector Data Manipulation Korea\Korea_Topo_Index_Daeheon\c50000.shp' 
-  using driver `ESRI Shapefile'
-Simple feature collection with 245 features and 6 fields
-Geometry type: POLYGON
-Dimension:     XY
-Bounding box:  xmin: -20570.52 ymin: -38053.73 xmax: 633222.6 ymax: 584308.1
-Projected CRS: KGD2002 / Central Belt</code></pre>
-</div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>topo_25 <span class="ot">&lt;-</span> topo_25 <span class="sc">|&gt;</span> </span>
-<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_transform</span>(<span class="at">crs =</span> <span class="fu">st_crs</span>(sido))</span>
-<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>topo_50 <span class="ot">&lt;-</span> topo_50 <span class="sc">|&gt;</span> </span>
-<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_transform</span>(<span class="at">crs =</span> <span class="fu">st_crs</span>(sido))</span>
-<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>topo_250 <span class="ot">&lt;-</span> topo_250 <span class="sc">|&gt;</span> </span>
-<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_transform</span>(<span class="at">crs =</span> <span class="fu">st_crs</span>(sido))</span>
-<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a><span class="co"># 1:250,000 지세도 도엽 중 남한에 해당하는 것만 고르기</span></span>
-<span id="cb27-9"><a href="#cb27-9" aria-hidden="true" tabindex="-1"></a>topo_250_south <span class="ot">&lt;-</span> topo_250 <span class="sc">|&gt;</span> </span>
-<span id="cb27-10"><a href="#cb27-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(</span>
-<span id="cb27-11"><a href="#cb27-11" aria-hidden="true" tabindex="-1"></a>    <span class="sc">!</span>MAPID_NM <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"회령"</span>, <span class="st">"나진"</span>, <span class="st">"만포진"</span>, <span class="st">"청진"</span>, <span class="st">"신의주"</span>, <span class="st">"장진"</span>, <span class="st">"성진"</span>, <span class="st">"평양"</span>, <span class="st">"함흥"</span>)</span>
-<span id="cb27-12"><a href="#cb27-12" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb27-13"><a href="#cb27-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-14"><a href="#cb27-14" aria-hidden="true" tabindex="-1"></a><span class="co"># 지도 제작</span></span>
-<span id="cb27-15"><a href="#cb27-15" aria-hidden="true" tabindex="-1"></a>bb <span class="ot">&lt;-</span> <span class="fu">st_bbox</span>(<span class="fu">c</span>(<span class="at">xmin =</span> <span class="dv">265000</span>, <span class="at">xmax =</span> <span class="dv">1450000</span>, <span class="at">ymin =</span> <span class="dv">1300000</span>, <span class="at">ymax =</span> <span class="dv">2275000</span>), </span>
-<span id="cb27-16"><a href="#cb27-16" aria-hidden="true" tabindex="-1"></a>        <span class="at">crs =</span> <span class="fu">st_crs</span>(sido))</span>
-<span id="cb27-17"><a href="#cb27-17" aria-hidden="true" tabindex="-1"></a>my_map <span class="ot">&lt;-</span> <span class="fu">tm_shape</span>(topo_250_south, <span class="at">bbox =</span> bb) <span class="sc">+</span> <span class="fu">tm_borders</span>() <span class="sc">+</span></span>
-<span id="cb27-18"><a href="#cb27-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_shape</span>(sido) <span class="sc">+</span> <span class="fu">tm_fill</span>(<span class="at">col =</span> <span class="st">"gray75"</span>) <span class="sc">+</span></span>
-<span id="cb27-19"><a href="#cb27-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_graticules</span>(<span class="at">x =</span> <span class="fu">c</span>(<span class="dv">120</span>, <span class="dv">126</span>, <span class="dv">132</span>), <span class="at">y =</span> <span class="fu">c</span>(<span class="dv">32</span>, <span class="dv">36</span>, <span class="dv">40</span>)) <span class="sc">+</span></span>
-<span id="cb27-20"><a href="#cb27-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_shape</span>(topo_250_south) <span class="sc">+</span> <span class="fu">tm_borders</span>(<span class="at">lwd =</span> <span class="fl">1.5</span>, <span class="at">col =</span> <span class="st">"gray15"</span>) <span class="sc">+</span> </span>
-<span id="cb27-21"><a href="#cb27-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_text</span>(<span class="st">"MAPID_NO"</span>, <span class="at">size =</span> <span class="fl">0.75</span>) <span class="sc">+</span></span>
-<span id="cb27-22"><a href="#cb27-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_credits</span>(<span class="st">"NJ51"</span>, <span class="at">size =</span> <span class="dv">1</span>, <span class="at">position =</span> <span class="fu">c</span>(<span class="fl">0.125</span>, <span class="fl">0.85</span>)) <span class="sc">+</span></span>
-<span id="cb27-23"><a href="#cb27-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_credits</span>(<span class="st">"NI51"</span>, <span class="at">size =</span> <span class="dv">1</span>, <span class="at">position =</span> <span class="fu">c</span>(<span class="fl">0.075</span>, <span class="fl">0.1</span>)) <span class="sc">+</span></span>
-<span id="cb27-24"><a href="#cb27-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_credits</span>(<span class="st">"NJ52"</span>, <span class="at">size =</span> <span class="dv">1</span>, <span class="at">position =</span> <span class="fu">c</span>(<span class="fl">0.81</span>, <span class="fl">0.84</span>)) <span class="sc">+</span></span>
-<span id="cb27-25"><a href="#cb27-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_credits</span>(<span class="st">"NI52"</span>, <span class="at">size =</span> <span class="dv">1</span>, <span class="at">position =</span> <span class="fu">c</span>(<span class="fl">0.84</span>, <span class="fl">0.08</span>))</span>
-<span id="cb27-26"><a href="#cb27-26" aria-hidden="true" tabindex="-1"></a>my_map</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 시도 행정구역 지도를 불러옴</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>sido <span class="ot">&lt;-</span> <span class="fu">read_sf</span>(</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="st">"D:/My R/Korean Administrative Areas/행정구역 셰이프 파일/3 Generalization/2021_4Q/NOT_MOVE/SIDO_NM_2021_4Q_GEN_0040.shp"</span>, <span class="at">options =</span> <span class="st">"ENCODING=CP949"</span>) </span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="co"># 지형도 인덱스: 국토지리정보원에서 다운받은 것: 누락된 것이 있음.</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>topo_25 <span class="ot">&lt;-</span> <span class="fu">read_sf</span>(</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>  <span class="st">"D:/My R/Vector Data Manipulation Korea/Korea_Topo_Index/INDEX/TN_MAPINDX_25K.gpkg"</span>, <span class="at">options =</span> <span class="st">"ENCODING=CP949"</span>)</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>topo_50 <span class="ot">&lt;-</span> <span class="fu">read_sf</span>(</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>  <span class="st">"D:/My R/Vector Data Manipulation Korea/Korea_Topo_Index/INDEX/TN_MAPINDX_50K.gpkg"</span>, <span class="at">options =</span> <span class="st">"ENCODING=CP949"</span>)</span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>topo_250 <span class="ot">&lt;-</span> <span class="fu">read_sf</span>(</span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>  <span class="st">"D:/My R/Vector Data Manipulation Korea/Korea_Topo_Index/INDEX/TN_MAPINDX_250K.gpkg"</span>, <span class="at">options =</span> <span class="st">"ENCODING=CP949"</span>)</span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a><span class="co"># 지형도 인덱스: 대헌에게서 받은 것: 옛날 것임</span></span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>topo_25 <span class="ot">&lt;-</span> <span class="fu">read_sf</span>(</span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>  <span class="st">"D:/My R/Vector Data Manipulation Korea/Korea_Topo_Index_Daeheon/c25000.shp"</span>, <span class="at">options =</span> <span class="st">"ENCODING=CP949"</span>)</span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>topo_50 <span class="ot">&lt;-</span> <span class="fu">read_sf</span>(</span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>  <span class="st">"D:/My R/Vector Data Manipulation Korea/Korea_Topo_Index_Daeheon/c50000.shp"</span>, <span class="at">options =</span> <span class="st">"ENCODING=CP949"</span>)</span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a>topo_25 <span class="ot">&lt;-</span> topo_25 <span class="sc">|&gt;</span> </span>
+<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_transform</span>(<span class="at">crs =</span> <span class="fu">st_crs</span>(sido))</span>
+<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a>topo_50 <span class="ot">&lt;-</span> topo_50 <span class="sc">|&gt;</span> </span>
+<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_transform</span>(<span class="at">crs =</span> <span class="fu">st_crs</span>(sido))</span>
+<span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a>topo_250 <span class="ot">&lt;-</span> topo_250 <span class="sc">|&gt;</span> </span>
+<span id="cb7-24"><a href="#cb7-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_transform</span>(<span class="at">crs =</span> <span class="fu">st_crs</span>(sido))</span>
+<span id="cb7-25"><a href="#cb7-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-26"><a href="#cb7-26" aria-hidden="true" tabindex="-1"></a><span class="co"># 1:250,000 지세도 도엽 중 남한에 해당하는 것만 고르기</span></span>
+<span id="cb7-27"><a href="#cb7-27" aria-hidden="true" tabindex="-1"></a>topo_250_south <span class="ot">&lt;-</span> topo_250 <span class="sc">|&gt;</span> </span>
+<span id="cb7-28"><a href="#cb7-28" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(</span>
+<span id="cb7-29"><a href="#cb7-29" aria-hidden="true" tabindex="-1"></a>    <span class="sc">!</span>MAPID_NM <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"회령"</span>, <span class="st">"나진"</span>, <span class="st">"만포진"</span>, <span class="st">"청진"</span>, <span class="st">"신의주"</span>, <span class="st">"장진"</span>, <span class="st">"성진"</span>, <span class="st">"평양"</span>, <span class="st">"함흥"</span>)</span>
+<span id="cb7-30"><a href="#cb7-30" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb7-31"><a href="#cb7-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-32"><a href="#cb7-32" aria-hidden="true" tabindex="-1"></a><span class="co"># 지도 제작</span></span>
+<span id="cb7-33"><a href="#cb7-33" aria-hidden="true" tabindex="-1"></a>bb <span class="ot">&lt;-</span> <span class="fu">st_bbox</span>(<span class="fu">c</span>(<span class="at">xmin =</span> <span class="dv">265000</span>, <span class="at">xmax =</span> <span class="dv">1450000</span>, <span class="at">ymin =</span> <span class="dv">1300000</span>, <span class="at">ymax =</span> <span class="dv">2275000</span>), </span>
+<span id="cb7-34"><a href="#cb7-34" aria-hidden="true" tabindex="-1"></a>        <span class="at">crs =</span> <span class="fu">st_crs</span>(sido))</span>
+<span id="cb7-35"><a href="#cb7-35" aria-hidden="true" tabindex="-1"></a>my_map <span class="ot">&lt;-</span> <span class="fu">tm_shape</span>(topo_250_south, <span class="at">bbox =</span> bb) <span class="sc">+</span> <span class="fu">tm_borders</span>() <span class="sc">+</span></span>
+<span id="cb7-36"><a href="#cb7-36" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_shape</span>(sido) <span class="sc">+</span> <span class="fu">tm_fill</span>(<span class="at">fill =</span> <span class="st">"gray75"</span>) <span class="sc">+</span></span>
+<span id="cb7-37"><a href="#cb7-37" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_graticules</span>(<span class="at">x =</span> <span class="fu">c</span>(<span class="dv">120</span>, <span class="dv">126</span>, <span class="dv">132</span>), <span class="at">y =</span> <span class="fu">c</span>(<span class="dv">32</span>, <span class="dv">36</span>, <span class="dv">40</span>), <span class="at">labels.size =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb7-38"><a href="#cb7-38" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_shape</span>(topo_250_south) <span class="sc">+</span> <span class="fu">tm_borders</span>(<span class="at">lwd =</span> <span class="fl">1.5</span>, <span class="at">col =</span> <span class="st">"gray20"</span>) <span class="sc">+</span> </span>
+<span id="cb7-39"><a href="#cb7-39" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_text</span>(<span class="st">"MAPID_NO"</span>, <span class="at">size =</span> <span class="fl">1.5</span>, <span class="at">col =</span> <span class="st">"gray20"</span>) <span class="sc">+</span></span>
+<span id="cb7-40"><a href="#cb7-40" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_credits</span>(<span class="st">"NJ51"</span>, <span class="at">size =</span> <span class="dv">2</span>, <span class="at">position =</span> <span class="fu">c</span>(<span class="fl">0.125</span>, <span class="fl">0.90</span>)) <span class="sc">+</span></span>
+<span id="cb7-41"><a href="#cb7-41" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_credits</span>(<span class="st">"NI51"</span>, <span class="at">size =</span> <span class="dv">2</span>, <span class="at">position =</span> <span class="fu">c</span>(<span class="fl">0.08</span>, <span class="fl">0.15</span>)) <span class="sc">+</span></span>
+<span id="cb7-42"><a href="#cb7-42" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_credits</span>(<span class="st">"NJ52"</span>, <span class="at">size =</span> <span class="dv">2</span>, <span class="at">position =</span> <span class="fu">c</span>(<span class="fl">0.81</span>, <span class="fl">0.89</span>)) <span class="sc">+</span></span>
+<span id="cb7-43"><a href="#cb7-43" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_credits</span>(<span class="st">"NI52"</span>, <span class="at">size =</span> <span class="dv">2</span>, <span class="at">position =</span> <span class="fu">c</span>(<span class="fl">0.84</span>, <span class="fl">0.13</span>))</span>
+<span id="cb7-44"><a href="#cb7-44" aria-hidden="true" tabindex="-1"></a>my_map</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><a href="06_coordinate_system_files/figure-html/unnamed-chunk-6-2.png" class="lightbox" data-gallery="quarto-lightbox-gallery-12"><img src="06_coordinate_system_files/figure-html/unnamed-chunk-6-2.png" class="img-fluid figure-img" width="4200"></a></p>
+<p><a href="06_coordinate_system_files/figure-html/unnamed-chunk-9-2.png" class="lightbox" data-gallery="quarto-lightbox-gallery-12"><img src="06_coordinate_system_files/figure-html/unnamed-chunk-9-2.png" class="img-fluid figure-img" width="9417"></a></p>
 </figure>
 </div>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>my.file.name <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="st">"outputs/6_2_4.png"</span>) </span>
-<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a><span class="fu">tmap_save</span>(my_map, <span class="at">filename =</span> my.file.name,  <span class="at">width =</span> <span class="fl">5.75</span>, <span class="at">dpi =</span> <span class="dv">600</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>1:250,000, 1:50,000, 1:25,000의 인덱싱 시스템을 보여주는 지도를 제작한다.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 경주와 대보만 추출함</span></span>
-<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>gyeongju <span class="ot">&lt;-</span> topo_50 <span class="sc">|&gt;</span> </span>
-<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(</span>
-<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a>    MAP_NAM <span class="sc">==</span> <span class="st">"경주"</span></span>
-<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a>daebo <span class="ot">&lt;-</span> topo_25 <span class="sc">|&gt;</span> </span>
-<span id="cb29-8"><a href="#cb29-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(</span>
-<span id="cb29-9"><a href="#cb29-9" aria-hidden="true" tabindex="-1"></a>    MAP_NAM <span class="sc">==</span> <span class="st">"대보"</span></span>
-<span id="cb29-10"><a href="#cb29-10" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb29-11"><a href="#cb29-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-12"><a href="#cb29-12" aria-hidden="true" tabindex="-1"></a><span class="co"># 지도 제작</span></span>
-<span id="cb29-13"><a href="#cb29-13" aria-hidden="true" tabindex="-1"></a>bb <span class="ot">&lt;-</span> <span class="fu">st_bbox</span>(<span class="fu">c</span>(<span class="at">xmin =</span> <span class="dv">620000</span>, <span class="at">xmax =</span> <span class="dv">1300000</span>, <span class="at">ymin =</span> <span class="dv">1440000</span>, <span class="at">ymax =</span> <span class="dv">1900000</span>), </span>
-<span id="cb29-14"><a href="#cb29-14" aria-hidden="true" tabindex="-1"></a>        <span class="at">crs =</span> <span class="fu">st_crs</span>(sido))</span>
-<span id="cb29-15"><a href="#cb29-15" aria-hidden="true" tabindex="-1"></a>my_map <span class="ot">&lt;-</span> <span class="fu">tm_shape</span>(topo_50, <span class="at">bbox =</span> bb) <span class="sc">+</span> <span class="fu">tm_fill</span>() <span class="sc">+</span> <span class="fu">tm_borders</span>() <span class="sc">+</span></span>
-<span id="cb29-16"><a href="#cb29-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_shape</span>(sido) <span class="sc">+</span> <span class="fu">tm_borders</span>(<span class="at">col =</span> <span class="st">"gray10"</span>, <span class="at">lwd =</span> <span class="fl">0.5</span>) <span class="sc">+</span></span>
-<span id="cb29-17"><a href="#cb29-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_shape</span>(gyeongju) <span class="sc">+</span> <span class="fu">tm_fill</span>(<span class="at">col =</span> <span class="st">"gray50"</span>) <span class="sc">+</span></span>
-<span id="cb29-18"><a href="#cb29-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_shape</span>(daebo) <span class="sc">+</span> <span class="fu">tm_fill</span>(<span class="at">col =</span> <span class="st">"gray50"</span>) <span class="sc">+</span></span>
-<span id="cb29-19"><a href="#cb29-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_graticules</span>(<span class="at">lwd =</span> <span class="fl">0.5</span>, <span class="at">x =</span> <span class="fu">seq</span>(<span class="dv">124</span>, <span class="dv">130</span>, <span class="dv">1</span>)) <span class="sc">+</span></span>
-<span id="cb29-20"><a href="#cb29-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_shape</span>(topo_250_south) <span class="sc">+</span> <span class="fu">tm_borders</span>(<span class="at">lwd =</span> <span class="fl">1.5</span>, <span class="at">col =</span> <span class="st">"gray15"</span>) <span class="sc">+</span> </span>
-<span id="cb29-21"><a href="#cb29-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_text</span>(<span class="st">"MAPID_NO"</span>, <span class="at">size =</span> <span class="fl">1.25</span>)</span>
-<span id="cb29-22"><a href="#cb29-22" aria-hidden="true" tabindex="-1"></a>my_map</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 경주와 대보만 추출함</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>gyeongju <span class="ot">&lt;-</span> topo_50 <span class="sc">|&gt;</span> </span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>    MAP_NAM <span class="sc">==</span> <span class="st">"경주"</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>daebo <span class="ot">&lt;-</span> topo_25 <span class="sc">|&gt;</span> </span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(</span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>    MAP_NAM <span class="sc">==</span> <span class="st">"대보"</span></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a><span class="co"># 지도 제작</span></span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>bb <span class="ot">&lt;-</span> <span class="fu">st_bbox</span>(<span class="fu">c</span>(<span class="at">xmin =</span> <span class="dv">620000</span>, <span class="at">xmax =</span> <span class="dv">1300000</span>, <span class="at">ymin =</span> <span class="dv">1440000</span>, <span class="at">ymax =</span> <span class="dv">1900000</span>), </span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>        <span class="at">crs =</span> <span class="fu">st_crs</span>(sido))</span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>my_map <span class="ot">&lt;-</span> <span class="fu">tm_shape</span>(topo_50, <span class="at">bbox =</span> bb) <span class="sc">+</span> <span class="fu">tm_polygons</span>() <span class="sc">+</span></span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_shape</span>(sido) <span class="sc">+</span> <span class="fu">tm_borders</span>(<span class="at">col =</span> <span class="st">"gray10"</span>, <span class="at">lwd =</span> <span class="fl">0.75</span>) <span class="sc">+</span></span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_shape</span>(gyeongju) <span class="sc">+</span> <span class="fu">tm_fill</span>(<span class="at">fill =</span> <span class="st">"gray50"</span>) <span class="sc">+</span></span>
+<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_shape</span>(daebo) <span class="sc">+</span> <span class="fu">tm_fill</span>(<span class="at">fill =</span> <span class="st">"gray50"</span>) <span class="sc">+</span></span>
+<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_graticules</span>(<span class="at">lwd =</span> <span class="fl">0.5</span>, <span class="at">x =</span> <span class="fu">seq</span>(<span class="dv">124</span>, <span class="dv">130</span>, <span class="dv">1</span>), <span class="at">labels.size =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_shape</span>(topo_250_south) <span class="sc">+</span> <span class="fu">tm_borders</span>(<span class="at">lwd =</span> <span class="dv">2</span>, <span class="at">col =</span> <span class="st">"gray15"</span>) <span class="sc">+</span> </span>
+<span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_text</span>(<span class="st">"MAPID_NO"</span>, <span class="at">size =</span> <span class="dv">2</span>)</span>
+<span id="cb8-22"><a href="#cb8-22" aria-hidden="true" tabindex="-1"></a>my_map</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><a href="06_coordinate_system_files/figure-html/unnamed-chunk-7-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-13"><img src="06_coordinate_system_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid figure-img" width="4200"></a></p>
+<p><a href="06_coordinate_system_files/figure-html/unnamed-chunk-11-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-13"><img src="06_coordinate_system_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid figure-img" width="11454"></a></p>
 </figure>
 </div>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>my.file.name <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="st">"outputs/6_2_5.png"</span>) </span>
-<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a><span class="fu">tmap_save</span>(my_map, <span class="at">filename =</span> my.file.name,  <span class="at">width =</span> <span class="fl">5.75</span>, <span class="at">dpi =</span> <span class="dv">600</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
 </section>
@@ -790,192 +704,185 @@ Projected CRS: KGD2002 / Central Belt</code></pre>
 <li>지리공간데이터 불러와 정리하기</li>
 </ul>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>topo_250 <span class="sc">|&gt;</span> </span>
-<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_transform</span>(topo_250, <span class="at">crs =</span> <span class="fu">st_crs</span>(sido))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>topo_250 <span class="sc">|&gt;</span> </span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_transform</span>(topo_250, <span class="at">crs =</span> <span class="fu">st_crs</span>(sido))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Simple feature collection with 26 features and 2 fields
 Geometry type: POLYGON
 Dimension:     XY
 Bounding box:  xmin: 676706.7 ymin: 1445472 xmax: 1400507 ymax: 2564834
 Projected CRS: KGD2002 / Unified CS
-First 10 features:
-     MAPID_NM MAPID_NO                           geom
-1        평양   NJ51-3 POLYGON ((700120.1 2200056,...
-2      진남포   NJ51-6 POLYGON ((695823.9 2089039,...
-3      대연평   NJ51-9 POLYGON ((691620.7 1978033,...
-4  격렬비열도  NJ51-12 POLYGON ((687511.5 1867041,...
-5        부남   NI51-3 POLYGON ((683497.8 1756060,...
-6      흑산도   NI51-6 POLYGON ((679580.5 1645087,...
-7        회령   NK52-5 POLYGON ((1040919 2527360, ...
-8        청진   NK52-8 POLYGON ((1041571 2416325, ...
-9        성진  NK52-11 POLYGON ((1042209 2305311, ...
-10       속초   NJ52-5 POLYGON ((1043448 2083338, ...</code></pre>
+# A tibble: 26 × 3
+   MAPID_NM   MAPID_NO                                                      geom
+ * &lt;chr&gt;      &lt;chr&gt;                                                &lt;POLYGON [m]&gt;
+ 1 평양       NJ51-3   ((700120.1 2200056, 701208.4 2227814, 722554.9 2227003, …
+ 2 진남포     NJ51-6   ((695823.9 2089039, 696889.3 2116792, 718545.1 2115988, …
+ 3 대연평     NJ51-9   ((691620.7 1978033, 692662.7 2005783, 714621.3 2004986, …
+ 4 격렬비열도 NJ51-12  ((687511.5 1867041, 688529.9 1894787, 710784.7 1893998, …
+ 5 부남       NI51-3   ((683497.8 1756060, 684492.2 1783804, 707036.3 1783022, …
+ 6 흑산도     NI51-6   ((679580.5 1645087, 680550.7 1672829, 703377.3 1672056, …
+ 7 회령       NK52-5   ((1040919 2527360, 1040754 2555121, 1061131 2555273, 108…
+ 8 청진       NK52-8   ((1041571 2416325, 1041409 2444082, 1062113 2444233, 108…
+ 9 성진       NK52-11  ((1042209 2305311, 1042051 2333062, 1063076 2333213, 108…
+10 속초       NJ52-5   ((1043448 2083338, 1043296 2111080, 1064944 2111229, 108…
+# ℹ 16 more rows</code></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 투영 원점의 셰이프 파일 생성</span></span>
-<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>origins_df <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">x =</span> <span class="fu">c</span>(<span class="dv">125</span>, <span class="dv">127</span>, <span class="dv">129</span>, <span class="dv">131</span>), <span class="at">y =</span> <span class="fu">c</span>(<span class="dv">38</span>, <span class="dv">38</span>, <span class="dv">38</span>, <span class="dv">38</span>))</span>
-<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>origins <span class="ot">&lt;-</span> <span class="fu">st_as_sf</span>(origins_df, <span class="at">coords =</span> <span class="fu">c</span>(<span class="st">"x"</span>, <span class="st">"y"</span>), <span class="at">crs =</span> <span class="dv">4326</span>) </span>
-<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a>origins <span class="ot">&lt;-</span> <span class="fu">st_transform</span>(origins, <span class="at">crs =</span> <span class="fu">st_crs</span>(sido))</span>
-<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb33-6"><a href="#cb33-6" aria-hidden="true" tabindex="-1"></a><span class="co"># 개별 투영대의 평면 직각 좌표계 원점 셰이프 파일 생성: 개별 투영법에 의거 </span></span>
-<span id="cb33-7"><a href="#cb33-7" aria-hidden="true" tabindex="-1"></a>origin_west <span class="ot">&lt;-</span> <span class="fu">st_as_sf</span>(<span class="fu">tibble</span>(<span class="at">x =</span> <span class="dv">0</span>, <span class="at">y =</span> <span class="dv">0</span>), <span class="at">coords =</span> <span class="fu">c</span>(<span class="st">"x"</span>, <span class="st">"y"</span>), <span class="at">crs =</span> <span class="dv">5185</span>) <span class="sc">|&gt;</span> </span>
-<span id="cb33-8"><a href="#cb33-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_transform</span>(origin_west, <span class="at">crs =</span> <span class="fu">st_crs</span>(sido))</span>
-<span id="cb33-9"><a href="#cb33-9" aria-hidden="true" tabindex="-1"></a>origin_mid <span class="ot">&lt;-</span> <span class="fu">st_as_sf</span>(<span class="fu">tibble</span>(<span class="at">x =</span> <span class="dv">0</span>, <span class="at">y =</span> <span class="dv">0</span>), <span class="at">coords =</span> <span class="fu">c</span>(<span class="st">"x"</span>, <span class="st">"y"</span>), <span class="at">crs =</span> <span class="dv">5186</span>) <span class="sc">|&gt;</span> </span>
-<span id="cb33-10"><a href="#cb33-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_transform</span>(origin_mid, <span class="at">crs =</span> <span class="fu">st_crs</span>(sido))</span>
-<span id="cb33-11"><a href="#cb33-11" aria-hidden="true" tabindex="-1"></a>origin_east <span class="ot">&lt;-</span> <span class="fu">st_as_sf</span>(<span class="fu">tibble</span>(<span class="at">x =</span> <span class="dv">0</span>, <span class="at">y =</span> <span class="dv">0</span>), <span class="at">coords =</span> <span class="fu">c</span>(<span class="st">"x"</span>, <span class="st">"y"</span>), <span class="at">crs =</span> <span class="dv">5187</span>) <span class="sc">|&gt;</span> </span>
-<span id="cb33-12"><a href="#cb33-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_transform</span>(origin_east, <span class="at">crs =</span> <span class="fu">st_crs</span>(sido))</span>
-<span id="cb33-13"><a href="#cb33-13" aria-hidden="true" tabindex="-1"></a>origin_sea <span class="ot">&lt;-</span> <span class="fu">st_as_sf</span>(<span class="fu">tibble</span>(<span class="at">x =</span> <span class="dv">0</span>, <span class="at">y =</span> <span class="dv">0</span>), <span class="at">coords =</span> <span class="fu">c</span>(<span class="st">"x"</span>, <span class="st">"y"</span>), <span class="at">crs =</span> <span class="dv">5188</span>) <span class="sc">|&gt;</span> </span>
-<span id="cb33-14"><a href="#cb33-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_transform</span>(origin_sea, <span class="at">crs =</span> <span class="fu">st_crs</span>(sido))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 투영 원점의 셰이프 파일 생성</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>origins_df <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">x =</span> <span class="fu">c</span>(<span class="dv">125</span>, <span class="dv">127</span>, <span class="dv">129</span>, <span class="dv">131</span>), <span class="at">y =</span> <span class="fu">c</span>(<span class="dv">38</span>, <span class="dv">38</span>, <span class="dv">38</span>, <span class="dv">38</span>))</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>origins <span class="ot">&lt;-</span> <span class="fu">st_as_sf</span>(origins_df, <span class="at">coords =</span> <span class="fu">c</span>(<span class="st">"x"</span>, <span class="st">"y"</span>), <span class="at">crs =</span> <span class="dv">4326</span>) </span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>origins <span class="ot">&lt;-</span> <span class="fu">st_transform</span>(origins, <span class="at">crs =</span> <span class="fu">st_crs</span>(sido))</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a><span class="co"># 개별 투영대의 평면 직각 좌표계 원점 셰이프 파일 생성: 개별 투영법에 의거 </span></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>origin_west <span class="ot">&lt;-</span> <span class="fu">st_as_sf</span>(<span class="fu">tibble</span>(<span class="at">x =</span> <span class="dv">0</span>, <span class="at">y =</span> <span class="dv">0</span>), <span class="at">coords =</span> <span class="fu">c</span>(<span class="st">"x"</span>, <span class="st">"y"</span>), <span class="at">crs =</span> <span class="dv">5185</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_transform</span>(origin_west, <span class="at">crs =</span> <span class="fu">st_crs</span>(sido))</span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>origin_mid <span class="ot">&lt;-</span> <span class="fu">st_as_sf</span>(<span class="fu">tibble</span>(<span class="at">x =</span> <span class="dv">0</span>, <span class="at">y =</span> <span class="dv">0</span>), <span class="at">coords =</span> <span class="fu">c</span>(<span class="st">"x"</span>, <span class="st">"y"</span>), <span class="at">crs =</span> <span class="dv">5186</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_transform</span>(origin_mid, <span class="at">crs =</span> <span class="fu">st_crs</span>(sido))</span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>origin_east <span class="ot">&lt;-</span> <span class="fu">st_as_sf</span>(<span class="fu">tibble</span>(<span class="at">x =</span> <span class="dv">0</span>, <span class="at">y =</span> <span class="dv">0</span>), <span class="at">coords =</span> <span class="fu">c</span>(<span class="st">"x"</span>, <span class="st">"y"</span>), <span class="at">crs =</span> <span class="dv">5187</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_transform</span>(origin_east, <span class="at">crs =</span> <span class="fu">st_crs</span>(sido))</span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a>origin_sea <span class="ot">&lt;-</span> <span class="fu">st_as_sf</span>(<span class="fu">tibble</span>(<span class="at">x =</span> <span class="dv">0</span>, <span class="at">y =</span> <span class="dv">0</span>), <span class="at">coords =</span> <span class="fu">c</span>(<span class="st">"x"</span>, <span class="st">"y"</span>), <span class="at">crs =</span> <span class="dv">5188</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_transform</span>(origin_sea, <span class="at">crs =</span> <span class="fu">st_crs</span>(sido))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>중부 투영대의 지도를 제작한다.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>bb_mid <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">x =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">100000</span>, <span class="dv">720000</span>), <span class="at">y =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">40000</span>, <span class="dv">720000</span>)) <span class="sc">|&gt;</span> </span>
-<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_as_sf</span>(<span class="at">coords =</span> <span class="fu">c</span>(<span class="st">"x"</span>, <span class="st">"y"</span>), <span class="at">crs =</span> <span class="dv">5186</span>) <span class="sc">|&gt;</span> </span>
-<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_bbox</span>() <span class="sc">|&gt;</span> </span>
-<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_as_sfc</span>()</span>
-<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-6"><a href="#cb34-6" aria-hidden="true" tabindex="-1"></a>bb_mid_grid <span class="ot">&lt;-</span> <span class="fu">st_make_grid</span>(bb_mid, <span class="dv">20000</span>)</span>
-<span id="cb34-7"><a href="#cb34-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-8"><a href="#cb34-8" aria-hidden="true" tabindex="-1"></a>my_map <span class="ot">&lt;-</span> <span class="fu">tm_shape</span>(bb_mid_grid) <span class="sc">+</span> <span class="fu">tm_borders</span>(<span class="at">lty =</span> <span class="st">"dotted"</span>, <span class="at">lwd =</span> <span class="fl">0.5</span>) <span class="sc">+</span></span>
-<span id="cb34-9"><a href="#cb34-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_shape</span>(sido) <span class="sc">+</span> <span class="fu">tm_fill</span>(<span class="at">col =</span> <span class="st">"gray75"</span>) <span class="sc">+</span></span>
-<span id="cb34-10"><a href="#cb34-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_graticules</span>(<span class="at">x =</span> <span class="fu">c</span>(<span class="dv">123</span><span class="sc">:</span><span class="dv">132</span>), <span class="at">lwd =</span> <span class="fl">1.5</span>) <span class="sc">+</span></span>
-<span id="cb34-11"><a href="#cb34-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_shape</span>(bb_mid_grid) <span class="sc">+</span> <span class="fu">tm_borders</span>(<span class="at">lty =</span> <span class="st">"dotted"</span>, <span class="at">lwd =</span> <span class="fl">0.5</span>) <span class="sc">+</span></span>
-<span id="cb34-12"><a href="#cb34-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_shape</span>(topo_50) <span class="sc">+</span> <span class="fu">tm_borders</span>(<span class="at">col =</span> <span class="st">"black"</span>, <span class="at">lwd =</span> <span class="fl">1.25</span>) <span class="sc">+</span></span>
-<span id="cb34-13"><a href="#cb34-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_shape</span>(origins) <span class="sc">+</span> <span class="fu">tm_symbols</span>(<span class="at">col =</span> <span class="st">"black"</span>, <span class="at">size =</span> <span class="fl">0.5</span>) <span class="sc">+</span></span>
-<span id="cb34-14"><a href="#cb34-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_shape</span>(origin_mid) <span class="sc">+</span> <span class="fu">tm_symbols</span>(<span class="at">col =</span> <span class="st">"red"</span>, <span class="at">size =</span> <span class="fl">0.5</span>)</span>
-<span id="cb34-15"><a href="#cb34-15" aria-hidden="true" tabindex="-1"></a>my_map</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>bb_mid <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">x =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">100000</span>, <span class="dv">720000</span>), <span class="at">y =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">40000</span>, <span class="dv">720000</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_as_sf</span>(<span class="at">coords =</span> <span class="fu">c</span>(<span class="st">"x"</span>, <span class="st">"y"</span>), <span class="at">crs =</span> <span class="dv">5186</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_bbox</span>() <span class="sc">|&gt;</span> </span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_as_sfc</span>()</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>bb_mid_grid <span class="ot">&lt;-</span> <span class="fu">st_make_grid</span>(bb_mid, <span class="dv">20000</span>)</span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>my_map <span class="ot">&lt;-</span> <span class="fu">tm_shape</span>(bb_mid_grid) <span class="sc">+</span> <span class="fu">tm_borders</span>(<span class="at">lty =</span> <span class="st">"dotted"</span>, <span class="at">lwd =</span> <span class="fl">0.75</span>) <span class="sc">+</span></span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_shape</span>(sido) <span class="sc">+</span> <span class="fu">tm_fill</span>(<span class="at">fill =</span> <span class="st">"gray75"</span>) <span class="sc">+</span></span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_graticules</span>(<span class="at">x =</span> <span class="fu">c</span>(<span class="dv">123</span><span class="sc">:</span><span class="dv">132</span>), <span class="at">lwd =</span> <span class="dv">2</span>, <span class="at">labels.size =</span> <span class="dv">1</span>, <span class="at">col =</span> <span class="st">"gray20"</span>) <span class="sc">+</span></span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_shape</span>(bb_mid_grid) <span class="sc">+</span> <span class="fu">tm_borders</span>(<span class="at">lty =</span> <span class="st">"dotted"</span>, <span class="at">lwd =</span> <span class="dv">1</span>, <span class="at">col =</span> <span class="st">"gray20"</span>) <span class="sc">+</span></span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_shape</span>(topo_50) <span class="sc">+</span> <span class="fu">tm_borders</span>(<span class="at">col =</span> <span class="st">"black"</span>, <span class="at">lwd =</span> <span class="fl">1.5</span>) <span class="sc">+</span></span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_shape</span>(origins) <span class="sc">+</span> <span class="fu">tm_symbols</span>(<span class="at">fill =</span> <span class="st">"black"</span>, <span class="at">size =</span> <span class="fl">1.5</span>) <span class="sc">+</span></span>
+<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_shape</span>(origin_mid) <span class="sc">+</span> <span class="fu">tm_symbols</span>(<span class="at">fill =</span> <span class="st">"red"</span>, <span class="at">size =</span> <span class="fl">1.5</span>)</span>
+<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a>my_map</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><a href="06_coordinate_system_files/figure-html/unnamed-chunk-9-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-14"><img src="06_coordinate_system_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid figure-img" width="4200"></a></p>
+<p><a href="06_coordinate_system_files/figure-html/unnamed-chunk-14-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-14"><img src="06_coordinate_system_files/figure-html/unnamed-chunk-14-1.png" class="img-fluid figure-img" width="8360"></a></p>
 </figure>
 </div>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>my.file.name <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="st">"outputs/6_2_6.png"</span>) </span>
-<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a><span class="fu">tmap_save</span>(my_map, <span class="at">filename =</span> my.file.name,  <span class="at">width =</span> <span class="fl">5.75</span>, <span class="at">dpi =</span> <span class="dv">600</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>동부 투영대의 지도를 제작한다.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>bb_east <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">x =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">300000</span>, <span class="dv">520000</span>), <span class="at">y =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">40000</span>, <span class="dv">720000</span>)) <span class="sc">|&gt;</span> </span>
-<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_as_sf</span>(<span class="at">coords =</span> <span class="fu">c</span>(<span class="st">"x"</span>, <span class="st">"y"</span>), <span class="at">crs =</span> <span class="dv">5187</span>) <span class="sc">|&gt;</span> </span>
-<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_bbox</span>() <span class="sc">|&gt;</span> </span>
-<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_as_sfc</span>()</span>
-<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-6"><a href="#cb36-6" aria-hidden="true" tabindex="-1"></a>bb_east_grid <span class="ot">&lt;-</span> <span class="fu">st_make_grid</span>(bb_east, <span class="dv">20000</span>)</span>
-<span id="cb36-7"><a href="#cb36-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-8"><a href="#cb36-8" aria-hidden="true" tabindex="-1"></a>my_map <span class="ot">&lt;-</span> <span class="fu">tm_shape</span>(bb_east_grid) <span class="sc">+</span> <span class="fu">tm_borders</span>(<span class="at">lty =</span> <span class="st">"dotted"</span>, <span class="at">lwd =</span> <span class="fl">0.5</span>) <span class="sc">+</span></span>
-<span id="cb36-9"><a href="#cb36-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_shape</span>(sido) <span class="sc">+</span> <span class="fu">tm_fill</span>(<span class="at">col =</span> <span class="st">"gray75"</span>) <span class="sc">+</span></span>
-<span id="cb36-10"><a href="#cb36-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_graticules</span>(<span class="at">x =</span> <span class="fu">c</span>(<span class="dv">123</span><span class="sc">:</span><span class="dv">132</span>), <span class="at">lwd =</span> <span class="fl">1.5</span>) <span class="sc">+</span></span>
-<span id="cb36-11"><a href="#cb36-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_shape</span>(bb_east_grid) <span class="sc">+</span> <span class="fu">tm_borders</span>(<span class="at">lty =</span> <span class="st">"dotted"</span>, <span class="at">lwd =</span> <span class="fl">0.5</span>) <span class="sc">+</span></span>
-<span id="cb36-12"><a href="#cb36-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_shape</span>(gyeongju) <span class="sc">+</span> <span class="fu">tm_fill</span>(<span class="at">col =</span> <span class="st">"gray50"</span>) <span class="sc">+</span></span>
-<span id="cb36-13"><a href="#cb36-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_shape</span>(topo_50) <span class="sc">+</span> <span class="fu">tm_borders</span>(<span class="at">col =</span> <span class="st">"black"</span>, <span class="at">lwd =</span> <span class="fl">1.25</span>) <span class="sc">+</span></span>
-<span id="cb36-14"><a href="#cb36-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_shape</span>(origins) <span class="sc">+</span> <span class="fu">tm_symbols</span>(<span class="at">col =</span> <span class="st">"black"</span>, <span class="at">size =</span> <span class="fl">0.5</span>) <span class="sc">+</span></span>
-<span id="cb36-15"><a href="#cb36-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_shape</span>(origin_east) <span class="sc">+</span> <span class="fu">tm_symbols</span>(<span class="at">col =</span> <span class="st">"red"</span>, <span class="at">size =</span> <span class="fl">0.5</span>)</span>
-<span id="cb36-16"><a href="#cb36-16" aria-hidden="true" tabindex="-1"></a>my_map</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>bb_east <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">x =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">300000</span>, <span class="dv">520000</span>), <span class="at">y =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">40000</span>, <span class="dv">720000</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_as_sf</span>(<span class="at">coords =</span> <span class="fu">c</span>(<span class="st">"x"</span>, <span class="st">"y"</span>), <span class="at">crs =</span> <span class="dv">5187</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_bbox</span>() <span class="sc">|&gt;</span> </span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_as_sfc</span>()</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>bb_east_grid <span class="ot">&lt;-</span> <span class="fu">st_make_grid</span>(bb_east, <span class="dv">20000</span>)</span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>my_map <span class="ot">&lt;-</span> <span class="fu">tm_shape</span>(bb_east_grid) <span class="sc">+</span> <span class="fu">tm_borders</span>(<span class="at">lty =</span> <span class="st">"dotted"</span>, <span class="at">lwd =</span> <span class="fl">0.75</span>) <span class="sc">+</span></span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_shape</span>(sido) <span class="sc">+</span> <span class="fu">tm_fill</span>(<span class="at">fill =</span> <span class="st">"gray75"</span>) <span class="sc">+</span></span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_graticules</span>(<span class="at">x =</span> <span class="fu">c</span>(<span class="dv">123</span><span class="sc">:</span><span class="dv">132</span>), <span class="at">lwd =</span> <span class="dv">2</span>, <span class="at">labels.size =</span> <span class="dv">1</span>, <span class="at">col =</span> <span class="st">"gray20"</span>) <span class="sc">+</span></span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_shape</span>(bb_east_grid) <span class="sc">+</span> <span class="fu">tm_borders</span>(<span class="at">lty =</span> <span class="st">"dotted"</span>, <span class="at">lwd =</span> <span class="dv">1</span>, <span class="at">col =</span> <span class="st">"gray20"</span>) <span class="sc">+</span></span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_shape</span>(topo_50) <span class="sc">+</span> <span class="fu">tm_borders</span>(<span class="at">col =</span> <span class="st">"black"</span>, <span class="at">lwd =</span> <span class="fl">1.5</span>) <span class="sc">+</span></span>
+<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_shape</span>(origins) <span class="sc">+</span> <span class="fu">tm_symbols</span>(<span class="at">fill =</span> <span class="st">"black"</span>, <span class="at">size =</span> <span class="fl">1.5</span>) <span class="sc">+</span></span>
+<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_shape</span>(origin_east) <span class="sc">+</span> <span class="fu">tm_symbols</span>(<span class="at">fill =</span> <span class="st">"red"</span>, <span class="at">size =</span> <span class="fl">1.5</span>)</span>
+<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a>my_map</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><a href="06_coordinate_system_files/figure-html/unnamed-chunk-10-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-15"><img src="06_coordinate_system_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid figure-img" width="4200"></a></p>
+<p><a href="06_coordinate_system_files/figure-html/unnamed-chunk-16-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-15"><img src="06_coordinate_system_files/figure-html/unnamed-chunk-16-1.png" class="img-fluid figure-img" width="8360"></a></p>
 </figure>
 </div>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>my.file.name <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="st">"outputs/6_2_7.png"</span>) </span>
-<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a><span class="fu">tmap_save</span>(my_map, <span class="at">filename =</span> my.file.name,  <span class="at">width =</span> <span class="fl">5.75</span>, <span class="at">dpi =</span> <span class="dv">600</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>동해 투영대의 지도를 제작한다.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a>bb_sea <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">x =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">500000</span>, <span class="dv">320000</span>), <span class="at">y =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">40000</span>, <span class="dv">720000</span>)) <span class="sc">|&gt;</span> </span>
-<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_as_sf</span>(<span class="at">coords =</span> <span class="fu">c</span>(<span class="st">"x"</span>, <span class="st">"y"</span>), <span class="at">crs =</span> <span class="dv">5188</span>) <span class="sc">|&gt;</span> </span>
-<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_bbox</span>() <span class="sc">|&gt;</span> </span>
-<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_as_sfc</span>()</span>
-<span id="cb38-5"><a href="#cb38-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb38-6"><a href="#cb38-6" aria-hidden="true" tabindex="-1"></a>bb_sea_grid <span class="ot">&lt;-</span> <span class="fu">st_make_grid</span>(bb_sea, <span class="dv">20000</span>)</span>
-<span id="cb38-7"><a href="#cb38-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb38-8"><a href="#cb38-8" aria-hidden="true" tabindex="-1"></a>my_map <span class="ot">&lt;-</span> <span class="fu">tm_shape</span>(bb_sea_grid) <span class="sc">+</span> <span class="fu">tm_borders</span>(<span class="at">lty =</span> <span class="st">"dotted"</span>, <span class="at">lwd =</span> <span class="fl">0.5</span>) <span class="sc">+</span></span>
-<span id="cb38-9"><a href="#cb38-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_shape</span>(sido) <span class="sc">+</span> <span class="fu">tm_fill</span>(<span class="at">col =</span> <span class="st">"gray75"</span>) <span class="sc">+</span></span>
-<span id="cb38-10"><a href="#cb38-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_graticules</span>(<span class="at">x =</span> <span class="fu">c</span>(<span class="dv">123</span><span class="sc">:</span><span class="dv">132</span>), <span class="at">lwd =</span> <span class="fl">1.5</span>) <span class="sc">+</span></span>
-<span id="cb38-11"><a href="#cb38-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_shape</span>(topo_50) <span class="sc">+</span> <span class="fu">tm_borders</span>(<span class="at">col =</span> <span class="st">"black"</span>, <span class="at">lwd =</span> <span class="fl">1.25</span>) <span class="sc">+</span></span>
-<span id="cb38-12"><a href="#cb38-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_shape</span>(origins) <span class="sc">+</span> <span class="fu">tm_symbols</span>(<span class="at">col =</span> <span class="st">"black"</span>, <span class="at">size =</span> <span class="fl">0.5</span>) <span class="sc">+</span></span>
-<span id="cb38-13"><a href="#cb38-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_shape</span>(origin_sea) <span class="sc">+</span> <span class="fu">tm_symbols</span>(<span class="at">col =</span> <span class="st">"red"</span>, <span class="at">size =</span> <span class="fl">0.5</span>)</span>
-<span id="cb38-14"><a href="#cb38-14" aria-hidden="true" tabindex="-1"></a>my_map</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>bb_sea <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">x =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">500000</span>, <span class="dv">320000</span>), <span class="at">y =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">40000</span>, <span class="dv">720000</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_as_sf</span>(<span class="at">coords =</span> <span class="fu">c</span>(<span class="st">"x"</span>, <span class="st">"y"</span>), <span class="at">crs =</span> <span class="dv">5188</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_bbox</span>() <span class="sc">|&gt;</span> </span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_as_sfc</span>()</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>bb_sea_grid <span class="ot">&lt;-</span> <span class="fu">st_make_grid</span>(bb_sea, <span class="dv">20000</span>)</span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>my_map <span class="ot">&lt;-</span> <span class="fu">tm_shape</span>(bb_sea_grid) <span class="sc">+</span> <span class="fu">tm_borders</span>(<span class="at">lty =</span> <span class="st">"dotted"</span>, <span class="at">lwd =</span> <span class="fl">0.75</span>) <span class="sc">+</span></span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_shape</span>(sido) <span class="sc">+</span> <span class="fu">tm_fill</span>(<span class="at">fill =</span> <span class="st">"gray75"</span>) <span class="sc">+</span></span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_graticules</span>(<span class="at">x =</span> <span class="fu">c</span>(<span class="dv">123</span><span class="sc">:</span><span class="dv">132</span>), <span class="at">lwd =</span> <span class="dv">2</span>, <span class="at">labels.size =</span> <span class="dv">1</span>, <span class="at">col =</span> <span class="st">"gray20"</span>) <span class="sc">+</span></span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_shape</span>(bb_sea_grid) <span class="sc">+</span> <span class="fu">tm_borders</span>(<span class="at">lty =</span> <span class="st">"dotted"</span>, <span class="at">lwd =</span> <span class="dv">1</span>, <span class="at">col =</span> <span class="st">"gray20"</span>) <span class="sc">+</span></span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_shape</span>(topo_50) <span class="sc">+</span> <span class="fu">tm_borders</span>(<span class="at">col =</span> <span class="st">"black"</span>, <span class="at">lwd =</span> <span class="fl">1.5</span>) <span class="sc">+</span></span>
+<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_shape</span>(origins) <span class="sc">+</span> <span class="fu">tm_symbols</span>(<span class="at">fill =</span> <span class="st">"black"</span>, <span class="at">size =</span> <span class="fl">1.5</span>) <span class="sc">+</span></span>
+<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_shape</span>(origin_sea) <span class="sc">+</span> <span class="fu">tm_symbols</span>(<span class="at">fill =</span> <span class="st">"red"</span>, <span class="at">size =</span> <span class="fl">1.5</span>)</span>
+<span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a>my_map</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><a href="06_coordinate_system_files/figure-html/unnamed-chunk-11-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-16"><img src="06_coordinate_system_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid figure-img" width="4200"></a></p>
+<p><a href="06_coordinate_system_files/figure-html/unnamed-chunk-18-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-16"><img src="06_coordinate_system_files/figure-html/unnamed-chunk-18-1.png" class="img-fluid figure-img" width="8360"></a></p>
 </figure>
 </div>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>my.file.name <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="st">"outputs/6_2_8.png"</span>) </span>
-<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a><span class="fu">tmap_save</span>(my_map, <span class="at">filename =</span> my.file.name,  <span class="at">width =</span> <span class="fl">5.75</span>, <span class="at">dpi =</span> <span class="dv">600</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>서부 투영대의 지도를 제작한다.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a>bb_west <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">x =</span> <span class="fu">c</span>(<span class="dv">100000</span>, <span class="dv">920000</span>), <span class="at">y =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">40000</span>, <span class="dv">720000</span>)) <span class="sc">|&gt;</span> </span>
-<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_as_sf</span>(<span class="at">coords =</span> <span class="fu">c</span>(<span class="st">"x"</span>, <span class="st">"y"</span>), <span class="at">crs =</span> <span class="dv">5185</span>) <span class="sc">|&gt;</span> </span>
-<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_bbox</span>() <span class="sc">|&gt;</span> </span>
-<span id="cb40-4"><a href="#cb40-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_as_sfc</span>()</span>
-<span id="cb40-5"><a href="#cb40-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb40-6"><a href="#cb40-6" aria-hidden="true" tabindex="-1"></a>bb_west_grid <span class="ot">&lt;-</span> <span class="fu">st_make_grid</span>(bb_west, <span class="dv">20000</span>)</span>
-<span id="cb40-7"><a href="#cb40-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb40-8"><a href="#cb40-8" aria-hidden="true" tabindex="-1"></a>my_map <span class="ot">&lt;-</span> <span class="fu">tm_shape</span>(bb_west_grid) <span class="sc">+</span> <span class="fu">tm_borders</span>(<span class="at">lty =</span> <span class="st">"dotted"</span>, <span class="at">lwd =</span> <span class="fl">0.5</span>) <span class="sc">+</span></span>
-<span id="cb40-9"><a href="#cb40-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_shape</span>(sido) <span class="sc">+</span> <span class="fu">tm_fill</span>(<span class="at">col =</span> <span class="st">"gray75"</span>) <span class="sc">+</span></span>
-<span id="cb40-10"><a href="#cb40-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_graticules</span>(<span class="at">x =</span> <span class="fu">c</span>(<span class="dv">123</span><span class="sc">:</span><span class="dv">132</span>), <span class="at">lwd =</span> <span class="fl">1.5</span>) <span class="sc">+</span></span>
-<span id="cb40-11"><a href="#cb40-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_shape</span>(topo_50) <span class="sc">+</span> <span class="fu">tm_borders</span>(<span class="at">col =</span> <span class="st">"black"</span>, <span class="at">lwd =</span> <span class="fl">1.25</span>) <span class="sc">+</span></span>
-<span id="cb40-12"><a href="#cb40-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_shape</span>(origins) <span class="sc">+</span> <span class="fu">tm_symbols</span>(<span class="at">col =</span> <span class="st">"black"</span>, <span class="at">size =</span> <span class="fl">0.5</span>) <span class="sc">+</span></span>
-<span id="cb40-13"><a href="#cb40-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_shape</span>(origin_west) <span class="sc">+</span> <span class="fu">tm_symbols</span>(<span class="at">col =</span> <span class="st">"red"</span>, <span class="at">size =</span> <span class="fl">0.5</span>)</span>
-<span id="cb40-14"><a href="#cb40-14" aria-hidden="true" tabindex="-1"></a>my_map</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>bb_west <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">x =</span> <span class="fu">c</span>(<span class="dv">100000</span>, <span class="dv">920000</span>), <span class="at">y =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">40000</span>, <span class="dv">720000</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_as_sf</span>(<span class="at">coords =</span> <span class="fu">c</span>(<span class="st">"x"</span>, <span class="st">"y"</span>), <span class="at">crs =</span> <span class="dv">5185</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_bbox</span>() <span class="sc">|&gt;</span> </span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_as_sfc</span>()</span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>bb_west_grid <span class="ot">&lt;-</span> <span class="fu">st_make_grid</span>(bb_west, <span class="dv">20000</span>)</span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>my_map <span class="ot">&lt;-</span> <span class="fu">tm_shape</span>(bb_west_grid) <span class="sc">+</span> <span class="fu">tm_borders</span>(<span class="at">lty =</span> <span class="st">"dotted"</span>, <span class="at">lwd =</span> <span class="fl">0.75</span>) <span class="sc">+</span></span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_shape</span>(sido) <span class="sc">+</span> <span class="fu">tm_fill</span>(<span class="at">fill =</span> <span class="st">"gray75"</span>) <span class="sc">+</span></span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_graticules</span>(<span class="at">x =</span> <span class="fu">c</span>(<span class="dv">123</span><span class="sc">:</span><span class="dv">132</span>), <span class="at">lwd =</span> <span class="dv">2</span>, <span class="at">labels.size =</span> <span class="dv">1</span>, <span class="at">col =</span> <span class="st">"gray20"</span>) <span class="sc">+</span></span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_shape</span>(bb_west_grid) <span class="sc">+</span> <span class="fu">tm_borders</span>(<span class="at">lty =</span> <span class="st">"dotted"</span>, <span class="at">lwd =</span> <span class="dv">1</span>, <span class="at">col =</span> <span class="st">"gray20"</span>) <span class="sc">+</span></span>
+<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_shape</span>(topo_50) <span class="sc">+</span> <span class="fu">tm_borders</span>(<span class="at">col =</span> <span class="st">"black"</span>, <span class="at">lwd =</span> <span class="fl">1.5</span>) <span class="sc">+</span></span>
+<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_shape</span>(origins) <span class="sc">+</span> <span class="fu">tm_symbols</span>(<span class="at">fill =</span> <span class="st">"black"</span>, <span class="at">size =</span> <span class="fl">1.5</span>) <span class="sc">+</span></span>
+<span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_shape</span>(origin_west) <span class="sc">+</span> <span class="fu">tm_symbols</span>(<span class="at">fill =</span> <span class="st">"red"</span>, <span class="at">size =</span> <span class="fl">1.5</span>)</span>
+<span id="cb15-15"><a href="#cb15-15" aria-hidden="true" tabindex="-1"></a>my_map</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><a href="06_coordinate_system_files/figure-html/unnamed-chunk-12-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-17"><img src="06_coordinate_system_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid figure-img" width="4200"></a></p>
+<p><a href="06_coordinate_system_files/figure-html/unnamed-chunk-20-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-17"><img src="06_coordinate_system_files/figure-html/unnamed-chunk-20-1.png" class="img-fluid figure-img" width="8360"></a></p>
 </figure>
 </div>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a>my.file.name <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="st">"outputs/6_2_9.png"</span>) </span>
-<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a><span class="fu">tmap_save</span>(my_map, <span class="at">filename =</span> my.file.name,  <span class="at">width =</span> <span class="fl">5.75</span>, <span class="at">dpi =</span> <span class="dv">600</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>중간 시험 문제(중부 투영대) 지도를 제작한다.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 춘천, 속초, 강릉만 추출함</span></span>
-<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a>chuncheon <span class="ot">&lt;-</span> topo_50 <span class="sc">|&gt;</span> </span>
-<span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(</span>
-<span id="cb42-4"><a href="#cb42-4" aria-hidden="true" tabindex="-1"></a>    MAP_NAM <span class="sc">==</span> <span class="st">"춘천"</span></span>
-<span id="cb42-5"><a href="#cb42-5" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb42-6"><a href="#cb42-6" aria-hidden="true" tabindex="-1"></a>sokcho <span class="ot">&lt;-</span> topo_50 <span class="sc">|&gt;</span> </span>
-<span id="cb42-7"><a href="#cb42-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(</span>
-<span id="cb42-8"><a href="#cb42-8" aria-hidden="true" tabindex="-1"></a>    MAP_NAM <span class="sc">==</span> <span class="st">"속초"</span></span>
-<span id="cb42-9"><a href="#cb42-9" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb42-10"><a href="#cb42-10" aria-hidden="true" tabindex="-1"></a>gangreung <span class="ot">&lt;-</span> topo_25 <span class="sc">|&gt;</span> </span>
-<span id="cb42-11"><a href="#cb42-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(</span>
-<span id="cb42-12"><a href="#cb42-12" aria-hidden="true" tabindex="-1"></a>    MAP_NAM <span class="sc">==</span> <span class="st">"강릉"</span></span>
-<span id="cb42-13"><a href="#cb42-13" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb42-14"><a href="#cb42-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb42-15"><a href="#cb42-15" aria-hidden="true" tabindex="-1"></a>bb_mid <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">x =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">100000</span>, <span class="dv">720000</span>), <span class="at">y =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">40000</span>, <span class="dv">720000</span>)) <span class="sc">|&gt;</span> </span>
-<span id="cb42-16"><a href="#cb42-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_as_sf</span>(<span class="at">coords =</span> <span class="fu">c</span>(<span class="st">"x"</span>, <span class="st">"y"</span>), <span class="at">crs =</span> <span class="dv">5186</span>) <span class="sc">|&gt;</span> </span>
-<span id="cb42-17"><a href="#cb42-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_bbox</span>() <span class="sc">|&gt;</span> </span>
-<span id="cb42-18"><a href="#cb42-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_as_sfc</span>()</span>
-<span id="cb42-19"><a href="#cb42-19" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb42-20"><a href="#cb42-20" aria-hidden="true" tabindex="-1"></a>bb_mid_grid <span class="ot">&lt;-</span> <span class="fu">st_make_grid</span>(bb_mid, <span class="dv">20000</span>)</span>
-<span id="cb42-21"><a href="#cb42-21" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb42-22"><a href="#cb42-22" aria-hidden="true" tabindex="-1"></a>my_map <span class="ot">&lt;-</span> <span class="fu">tm_shape</span>(bb_mid_grid) <span class="sc">+</span> <span class="fu">tm_borders</span>(<span class="at">lty =</span> <span class="st">"dotted"</span>, <span class="at">lwd =</span> <span class="fl">0.5</span>) <span class="sc">+</span></span>
-<span id="cb42-23"><a href="#cb42-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_shape</span>(sido) <span class="sc">+</span> <span class="fu">tm_fill</span>(<span class="at">col =</span> <span class="st">"gray75"</span>) <span class="sc">+</span></span>
-<span id="cb42-24"><a href="#cb42-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_graticules</span>(<span class="at">x =</span> <span class="fu">c</span>(<span class="dv">123</span><span class="sc">:</span><span class="dv">132</span>), <span class="at">lwd =</span> <span class="fl">1.5</span>) <span class="sc">+</span></span>
-<span id="cb42-25"><a href="#cb42-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_shape</span>(bb_mid_grid) <span class="sc">+</span> <span class="fu">tm_borders</span>(<span class="at">lty =</span> <span class="st">"dotted"</span>, <span class="at">lwd =</span> <span class="fl">0.5</span>) <span class="sc">+</span></span>
-<span id="cb42-26"><a href="#cb42-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_shape</span>(chuncheon) <span class="sc">+</span> <span class="fu">tm_fill</span>(<span class="at">col =</span> <span class="st">"gray50"</span>) <span class="sc">+</span></span>
-<span id="cb42-27"><a href="#cb42-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_shape</span>(sokcho) <span class="sc">+</span> <span class="fu">tm_fill</span>(<span class="at">col =</span> <span class="st">"gray50"</span>) <span class="sc">+</span></span>
-<span id="cb42-28"><a href="#cb42-28" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_shape</span>(gangreung) <span class="sc">+</span> <span class="fu">tm_fill</span>(<span class="at">col =</span> <span class="st">"gray50"</span>) <span class="sc">+</span></span>
-<span id="cb42-29"><a href="#cb42-29" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_shape</span>(topo_50) <span class="sc">+</span> <span class="fu">tm_borders</span>(<span class="at">col =</span> <span class="st">"black"</span>, <span class="at">lwd =</span> <span class="fl">1.25</span>) <span class="sc">+</span></span>
-<span id="cb42-30"><a href="#cb42-30" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_shape</span>(origins) <span class="sc">+</span> <span class="fu">tm_symbols</span>(<span class="at">col =</span> <span class="st">"black"</span>, <span class="at">size =</span> <span class="fl">0.5</span>) <span class="sc">+</span></span>
-<span id="cb42-31"><a href="#cb42-31" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_shape</span>(origin_mid) <span class="sc">+</span> <span class="fu">tm_symbols</span>(<span class="at">col =</span> <span class="st">"red"</span>, <span class="at">size =</span> <span class="fl">0.5</span>)</span>
-<span id="cb42-32"><a href="#cb42-32" aria-hidden="true" tabindex="-1"></a>my_map</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 춘천, 속초, 강릉만 추출함</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>chuncheon <span class="ot">&lt;-</span> topo_50 <span class="sc">|&gt;</span> </span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>    MAP_NAM <span class="sc">==</span> <span class="st">"춘천"</span></span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>sokcho <span class="ot">&lt;-</span> topo_50 <span class="sc">|&gt;</span> </span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(</span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>    MAP_NAM <span class="sc">==</span> <span class="st">"속초"</span></span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a>gangreung <span class="ot">&lt;-</span> topo_25 <span class="sc">|&gt;</span> </span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(</span>
+<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a>    MAP_NAM <span class="sc">==</span> <span class="st">"강릉"</span></span>
+<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-15"><a href="#cb16-15" aria-hidden="true" tabindex="-1"></a>bb_mid <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">x =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">100000</span>, <span class="dv">720000</span>), <span class="at">y =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">40000</span>, <span class="dv">720000</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb16-16"><a href="#cb16-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_as_sf</span>(<span class="at">coords =</span> <span class="fu">c</span>(<span class="st">"x"</span>, <span class="st">"y"</span>), <span class="at">crs =</span> <span class="dv">5186</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb16-17"><a href="#cb16-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_bbox</span>() <span class="sc">|&gt;</span> </span>
+<span id="cb16-18"><a href="#cb16-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_as_sfc</span>()</span>
+<span id="cb16-19"><a href="#cb16-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-20"><a href="#cb16-20" aria-hidden="true" tabindex="-1"></a>bb_mid_grid <span class="ot">&lt;-</span> <span class="fu">st_make_grid</span>(bb_mid, <span class="dv">20000</span>)</span>
+<span id="cb16-21"><a href="#cb16-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-22"><a href="#cb16-22" aria-hidden="true" tabindex="-1"></a>my_map <span class="ot">&lt;-</span> <span class="fu">tm_shape</span>(bb_mid_grid) <span class="sc">+</span> <span class="fu">tm_borders</span>(<span class="at">lty =</span> <span class="st">"dotted"</span>, <span class="at">lwd =</span> <span class="fl">0.75</span>) <span class="sc">+</span></span>
+<span id="cb16-23"><a href="#cb16-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_shape</span>(sido) <span class="sc">+</span> <span class="fu">tm_fill</span>(<span class="at">col =</span> <span class="st">"gray75"</span>) <span class="sc">+</span></span>
+<span id="cb16-24"><a href="#cb16-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_graticules</span>(<span class="at">x =</span> <span class="fu">c</span>(<span class="dv">123</span><span class="sc">:</span><span class="dv">132</span>), <span class="at">lwd =</span> <span class="dv">2</span>, <span class="at">labels.size =</span> <span class="dv">1</span>, <span class="at">col =</span> <span class="st">"gray20"</span>) <span class="sc">+</span></span>
+<span id="cb16-25"><a href="#cb16-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_shape</span>(bb_mid_grid) <span class="sc">+</span> <span class="fu">tm_borders</span>(<span class="at">lty =</span> <span class="st">"dotted"</span>, <span class="at">lwd =</span> <span class="dv">1</span>, <span class="at">col =</span> <span class="st">"gray20"</span>) <span class="sc">+</span></span>
+<span id="cb16-26"><a href="#cb16-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_shape</span>(chuncheon) <span class="sc">+</span> <span class="fu">tm_fill</span>(<span class="at">col =</span> <span class="st">"gray50"</span>) <span class="sc">+</span></span>
+<span id="cb16-27"><a href="#cb16-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_shape</span>(sokcho) <span class="sc">+</span> <span class="fu">tm_fill</span>(<span class="at">fill =</span> <span class="st">"gray50"</span>) <span class="sc">+</span></span>
+<span id="cb16-28"><a href="#cb16-28" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_shape</span>(gangreung) <span class="sc">+</span> <span class="fu">tm_fill</span>(<span class="at">fill =</span> <span class="st">"gray50"</span>) <span class="sc">+</span></span>
+<span id="cb16-29"><a href="#cb16-29" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_shape</span>(topo_50) <span class="sc">+</span> <span class="fu">tm_borders</span>(<span class="at">col =</span> <span class="st">"black"</span>, <span class="at">lwd =</span> <span class="fl">1.25</span>) <span class="sc">+</span></span>
+<span id="cb16-30"><a href="#cb16-30" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_shape</span>(origins) <span class="sc">+</span> <span class="fu">tm_symbols</span>(<span class="at">fill =</span> <span class="st">"black"</span>, <span class="at">size =</span> <span class="fl">1.5</span>) <span class="sc">+</span></span>
+<span id="cb16-31"><a href="#cb16-31" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_shape</span>(origin_mid) <span class="sc">+</span> <span class="fu">tm_symbols</span>(<span class="at">fill =</span> <span class="st">"red"</span>, <span class="at">size =</span> <span class="fl">1.5</span>)</span>
+<span id="cb16-32"><a href="#cb16-32" aria-hidden="true" tabindex="-1"></a>my_map</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><a href="06_coordinate_system_files/figure-html/unnamed-chunk-13-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-18"><img src="06_coordinate_system_files/figure-html/unnamed-chunk-13-1.png" class="img-fluid figure-img" width="4200"></a></p>
+<p><a href="06_coordinate_system_files/figure-html/unnamed-chunk-22-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-18"><img src="06_coordinate_system_files/figure-html/unnamed-chunk-22-1.png" class="img-fluid figure-img" width="4200"></a></p>
 </figure>
 </div>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a>my.file.name <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="st">"outputs/6_2_10.png"</span>) </span>
-<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a><span class="fu">tmap_save</span>(my_map, <span class="at">filename =</span> my.file.name,  <span class="at">width =</span> <span class="fl">5.75</span>, <span class="at">dpi =</span> <span class="dv">600</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
 <section id="국가-그리드" class="level3" data-number="6.3.7">

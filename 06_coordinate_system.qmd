@@ -98,6 +98,9 @@ utm_grid <- utm_grid |>
 -   지도 제작 및 저장
 
 ```{r}
+#| fig-height: 12.914
+#| fig-width: 13.93353
+#| fig-dpi: 600
 utm_grid_korea <- utm_grid |> 
   filter(
     utm_name %in% c("51T", "52T", "51S", "52S")
@@ -105,20 +108,35 @@ utm_grid_korea <- utm_grid |>
   st_transform(crs = st_crs(countries))
 
 utm_bound <- c(81, -4, 171, 60)
-my_map <- tm_shape(utm_grid_korea, bbox = utm_bound) + tm_fill(col = "gray80", lwd = 1, border.col = "black") + 
-  tm_shape(countries) + tm_borders(col = "gray50", lwd = 0.75) +
+
+my_map <- tm_shape(utm_grid_korea, bbox = utm_bound) + 
+  tm_polygons(fill = "gray80", lwd = 0.75, col = "black") + 
+  tm_shape(countries) + tm_borders(col = "gray20", lwd = 0.75) +
   tm_shape(utm_grid) + tm_borders(col = "black", lwd = 1) + 
-  tm_text(text = "utm_name", size = 0.7, col = "gray20") +
-  tm_graticules(x = seq(84, 168, 6), y = seq(0, 56, 8), lwd = 0, labels.size = 0.5)
+  tm_text(text = "utm_name", size = 1.5, col = "gray20") +
+  tm_graticules(x = seq(84, 168, 6), y = seq(0, 56, 8), lwd = 0, labels.size = 1)
 my_map
-asp_r <- get_asp_ratio(my_map)
-my.file.name <- paste0("outputs/6_2_1.png") 
-tmap_save(my_map, filename = my.file.name, width = 5.75, dpi = 600)
 ```
+
+```{r}
+#| echo: false
+#| eval: false
+
+my.ratio <- get_asp_ratio(my_map)
+
+my.title <- "6-1 UTM_1"
+my.path.name <- "D:/My Cartography/지도제작/"
+my.file.name <- paste0(my.path.name, my.title, ".png")
+tmap_save(my_map, filename = my.file.name, height = 11.74*1.1, width = my.ratio*11.74*1.1, dpi = 600)
+```
+
 
 다음으로 서울이 포함된 북반구 52구역에 대한 투영을 실행한다. [epsg.io](https://epsg.io/)의 검색 결과 EPSG:32652임을 확인한다.
 
 ```{r}
+#| fig-height: 12.914
+#| fig-width: 12.914
+#| fig-dpi: 600
 # N52를 중심으로 한 대략적인 지역 선정
 bb_utm_52 <- tibble(x = c(81, 81, 171, 171), y = c(-4, 60, -4, 60)) |> 
   st_as_sf(coords = c("x", "y"), crs = 4326) |> 
@@ -152,13 +170,23 @@ bb <- st_bbox(c(xmin = -3000000, xmax = 3500000, ymin = -500000, ymax = 6000000)
         crs = st_crs(32652))
 
 my_map <- tm_shape(countries_bb_utm, bbox = bb) + tm_fill() +
-  tm_graticules(x = seq(84, 172, 6), y = seq(0, 40, 10), lwd = 1.5) +
+  tm_graticules(x = seq(84, 172, 6), y = seq(0, 40, 10), lwd = 2, labels.size = 1) +
   tm_shape(bb_n52_grid) + tm_borders(lwd = 0.5) +
-  tm_shape(origin_n52) + tm_symbols(col = "red", size = 0.5) +
-  tm_shape(seoul_point) + tm_symbols(col = "black", size = 0.2)
+  tm_shape(origin_n52) + tm_symbols(fill = "red", size = 1.2) +
+  tm_shape(seoul_point) + tm_symbols(fill = "black", size = 1)
 my_map
-my.file.name <- paste0("outputs/6_2_2.png") 
-tmap_save(my_map, filename = my.file.name,  width = 5.75, dpi = 600)
+```
+
+```{r}
+#| echo: false
+#| eval: false
+
+my.ratio <- get_asp_ratio(my_map)
+
+my.title <- "6-2 UTM_2"
+my.path.name <- "D:/My Cartography/지도제작/"
+my.file.name <- paste0(my.path.name, my.title, ".png")
+tmap_save(my_map, filename = my.file.name, height = 11.74*1.1, width = my.ratio*11.74*1.1, dpi = 600)
 ```
 
 ### IMW 좌표계
@@ -178,24 +206,41 @@ tmap_save(my_map, filename = my.file.name,  width = 5.75, dpi = 600)
 우리나라와 그 주변에 대해 IWM 구역 체계를 보여주는 지도를 제작한다.
 
 ```{r}
+#| fig-height: 12.914
+#| fig-width: 18.79613
+#| fig-dpi: 600
 # IMW 그리드 파일을 불러온다.
-imw_grid <- st_read(
+imw_grid <- read_sf(
   "imw_grid.shp", options = "ENCODING=CP949") |> 
   st_transform(crs = st_crs(countries))
 
 imw_bd <- c(88, 20, 164, 60)
 my_map <- tm_shape(countries, bbox = imw_bd) + tm_fill() +
-  tm_shape(imw_grid) + tm_borders() +
-  tm_text("imw_id", size = 0.5) +
-  tm_graticules(x = seq(90, 162, 6), y = seq(20, 60, 4))
+  tm_shape(imw_grid) + tm_borders(col = "gray20", lwd = 0.75) +
+  tm_text("imw_id", size = 1.5, col = "gray20") +
+  tm_graticules(x = seq(90, 162, 6), y = seq(20, 60, 4), labels.size = 1)
 my_map
-my.file.name <- paste0("outputs/6_2_3.png") 
-tmap_save(my_map, filename = my.file.name,  width = 5.75, dpi = 600)
 ```
+
+```{r}
+#| echo: false
+#| eval: false
+
+my.ratio <- get_asp_ratio(my_map)
+
+my.title <- "6-3 IMW_1"
+my.path.name <- "D:/My Cartography/지도제작/"
+my.file.name <- paste0(my.path.name, my.title, ".png")
+tmap_save(my_map, filename = my.file.name, height = 11.74*1.1, width = my.ratio*11.74*1.1, dpi = 600)
+```
+
 
 우리나라에 해당하는 IWM 구역과 1:250,000 지세도를 그린다.
 
 ```{r}
+#| fig-height: 12.914
+#| fig-width: 15.69548
+#| fig-dpi: 600
 # IWM 중 NJ51, NJ52, NI51, NI52만 고르기
 imw_kr_south <- imw_grid |> 
   filter(
@@ -205,21 +250,21 @@ imw_kr_south <- imw_grid |>
 tm_shape(imw_kr_south, projection = 5178) + tm_borders()
 
 # 시도 행정구역 지도를 불러옴
-sido <- st_read(
+sido <- read_sf(
   "D:/My R/Korean Administrative Areas/행정구역 셰이프 파일/3 Generalization/2021_4Q/NOT_MOVE/SIDO_NM_2021_4Q_GEN_0040.shp", options = "ENCODING=CP949") 
 
 # 지형도 인덱스: 국토지리정보원에서 다운받은 것: 누락된 것이 있음.
-topo_25 <- st_read(
+topo_25 <- read_sf(
   "D:/My R/Vector Data Manipulation Korea/Korea_Topo_Index/INDEX/TN_MAPINDX_25K.gpkg", options = "ENCODING=CP949")
-topo_50 <- st_read(
+topo_50 <- read_sf(
   "D:/My R/Vector Data Manipulation Korea/Korea_Topo_Index/INDEX/TN_MAPINDX_50K.gpkg", options = "ENCODING=CP949")
-topo_250 <- st_read(
+topo_250 <- read_sf(
   "D:/My R/Vector Data Manipulation Korea/Korea_Topo_Index/INDEX/TN_MAPINDX_250K.gpkg", options = "ENCODING=CP949")
 
 # 지형도 인덱스: 대헌에게서 받은 것: 옛날 것임
-topo_25 <- st_read(
+topo_25 <- read_sf(
   "D:/My R/Vector Data Manipulation Korea/Korea_Topo_Index_Daeheon/c25000.shp", options = "ENCODING=CP949")
-topo_50 <- st_read(
+topo_50 <- read_sf(
   "D:/My R/Vector Data Manipulation Korea/Korea_Topo_Index_Daeheon/c50000.shp", options = "ENCODING=CP949")
 
 topo_25 <- topo_25 |> 
@@ -239,22 +284,36 @@ topo_250_south <- topo_250 |>
 bb <- st_bbox(c(xmin = 265000, xmax = 1450000, ymin = 1300000, ymax = 2275000), 
         crs = st_crs(sido))
 my_map <- tm_shape(topo_250_south, bbox = bb) + tm_borders() +
-  tm_shape(sido) + tm_fill(col = "gray75") +
-  tm_graticules(x = c(120, 126, 132), y = c(32, 36, 40)) +
-  tm_shape(topo_250_south) + tm_borders(lwd = 1.5, col = "gray15") + 
-  tm_text("MAPID_NO", size = 0.75) +
-  tm_credits("NJ51", size = 1, position = c(0.125, 0.85)) +
-  tm_credits("NI51", size = 1, position = c(0.075, 0.1)) +
-  tm_credits("NJ52", size = 1, position = c(0.81, 0.84)) +
-  tm_credits("NI52", size = 1, position = c(0.84, 0.08))
+  tm_shape(sido) + tm_fill(fill = "gray75") +
+  tm_graticules(x = c(120, 126, 132), y = c(32, 36, 40), labels.size = 1) +
+  tm_shape(topo_250_south) + tm_borders(lwd = 1.5, col = "gray20") + 
+  tm_text("MAPID_NO", size = 1.5, col = "gray20") +
+  tm_credits("NJ51", size = 2, position = c(0.125, 0.90)) +
+  tm_credits("NI51", size = 2, position = c(0.08, 0.15)) +
+  tm_credits("NJ52", size = 2, position = c(0.81, 0.89)) +
+  tm_credits("NI52", size = 2, position = c(0.84, 0.13))
 my_map
-my.file.name <- paste0("outputs/6_2_4.png") 
-tmap_save(my_map, filename = my.file.name,  width = 5.75, dpi = 600)
 ```
+
+```{r}
+#| echo: false
+#| eval: false
+
+my.ratio <- get_asp_ratio(my_map)
+
+my.title <- "6-4 IMW_2"
+my.path.name <- "D:/My Cartography/지도제작/"
+my.file.name <- paste0(my.path.name, my.title, ".png")
+tmap_save(my_map, filename = my.file.name, height = 11.74*1.1, width = my.ratio*11.74*1.1, dpi = 600)
+```
+
 
 1:250,000, 1:50,000, 1:25,000의 인덱싱 시스템을 보여주는 지도를 제작한다.
 
 ```{r}
+#| fig-height: 12.914
+#| fig-width: 19.09026
+#| fig-dpi: 600
 # 경주와 대보만 추출함
 
 gyeongju <- topo_50 |> 
@@ -269,18 +328,28 @@ daebo <- topo_25 |>
 # 지도 제작
 bb <- st_bbox(c(xmin = 620000, xmax = 1300000, ymin = 1440000, ymax = 1900000), 
         crs = st_crs(sido))
-my_map <- tm_shape(topo_50, bbox = bb) + tm_fill() + tm_borders() +
-  tm_shape(sido) + tm_borders(col = "gray10", lwd = 0.5) +
-  tm_shape(gyeongju) + tm_fill(col = "gray50") +
-  tm_shape(daebo) + tm_fill(col = "gray50") +
-  tm_graticules(lwd = 0.5, x = seq(124, 130, 1)) +
-  tm_shape(topo_250_south) + tm_borders(lwd = 1.5, col = "gray15") + 
-  tm_text("MAPID_NO", size = 1.25)
+my_map <- tm_shape(topo_50, bbox = bb) + tm_polygons() +
+  tm_shape(sido) + tm_borders(col = "gray10", lwd = 0.75) +
+  tm_shape(gyeongju) + tm_fill(fill = "gray50") +
+  tm_shape(daebo) + tm_fill(fill = "gray50") +
+  tm_graticules(lwd = 0.5, x = seq(124, 130, 1), labels.size = 1) +
+  tm_shape(topo_250_south) + tm_borders(lwd = 2, col = "gray15") + 
+  tm_text("MAPID_NO", size = 2)
 my_map
-my.file.name <- paste0("outputs/6_2_5.png") 
-tmap_save(my_map, filename = my.file.name,  width = 5.75, dpi = 600)
-
 ```
+
+```{r}
+#| echo: false
+#| eval: false
+
+my.ratio <- get_asp_ratio(my_map)
+
+my.title <- "6-5 IMW_3"
+my.path.name <- "D:/My Cartography/지도제작/"
+my.file.name <- paste0(my.path.name, my.title, ".png")
+tmap_save(my_map, filename = my.file.name, height = 11.74*1.1, width = my.ratio*11.74*1.1, dpi = 600)
+```
+
 
 ### 우리나라 TM 좌표계
 
@@ -311,6 +380,9 @@ origin_sea <- st_as_sf(tibble(x = 0, y = 0), coords = c("x", "y"), crs = 5188) |
 중부 투영대의 지도를 제작한다.
 
 ```{r}
+#| fig-height: 12.914
+#| fig-width: 13.93353
+#| fig-dpi: 600
 bb_mid <- tibble(x = c(-100000, 720000), y = c(-40000, 720000)) |> 
   st_as_sf(coords = c("x", "y"), crs = 5186) |> 
   st_bbox() |> 
@@ -318,21 +390,35 @@ bb_mid <- tibble(x = c(-100000, 720000), y = c(-40000, 720000)) |>
 
 bb_mid_grid <- st_make_grid(bb_mid, 20000)
 
-my_map <- tm_shape(bb_mid_grid) + tm_borders(lty = "dotted", lwd = 0.5) +
-  tm_shape(sido) + tm_fill(col = "gray75") +
-  tm_graticules(x = c(123:132), lwd = 1.5) +
-  tm_shape(bb_mid_grid) + tm_borders(lty = "dotted", lwd = 0.5) +
-  tm_shape(topo_50) + tm_borders(col = "black", lwd = 1.25) +
-  tm_shape(origins) + tm_symbols(col = "black", size = 0.5) +
-  tm_shape(origin_mid) + tm_symbols(col = "red", size = 0.5)
+my_map <- tm_shape(bb_mid_grid) + tm_borders(lty = "dotted", lwd = 0.75) +
+  tm_shape(sido) + tm_fill(fill = "gray75") +
+  tm_graticules(x = c(123:132), lwd = 2, labels.size = 1, col = "gray20") +
+  tm_shape(bb_mid_grid) + tm_borders(lty = "dotted", lwd = 1, col = "gray20") +
+  tm_shape(topo_50) + tm_borders(col = "black", lwd = 1.5) +
+  tm_shape(origins) + tm_symbols(fill = "black", size = 1.5) +
+  tm_shape(origin_mid) + tm_symbols(fill = "red", size = 1.5)
 my_map
-my.file.name <- paste0("outputs/6_2_6.png") 
-tmap_save(my_map, filename = my.file.name,  width = 5.75, dpi = 600)
 ```
+
+```{r}
+#| echo: false
+#| eval: false
+
+my.ratio <- get_asp_ratio(my_map)
+
+my.title <- "6-6 TM_1 중부"
+my.path.name <- "D:/My Cartography/지도제작/"
+my.file.name <- paste0(my.path.name, my.title, ".png")
+tmap_save(my_map, filename = my.file.name, height = 11.74*1.1, width = my.ratio*11.74*1.1, dpi = 600)
+```
+
 
 동부 투영대의 지도를 제작한다.
 
 ```{r}
+#| fig-height: 12.914
+#| fig-width: 13.93353
+#| fig-dpi: 600
 bb_east <- tibble(x = c(-300000, 520000), y = c(-40000, 720000)) |> 
   st_as_sf(coords = c("x", "y"), crs = 5187) |> 
   st_bbox() |> 
@@ -340,22 +426,35 @@ bb_east <- tibble(x = c(-300000, 520000), y = c(-40000, 720000)) |>
 
 bb_east_grid <- st_make_grid(bb_east, 20000)
 
-my_map <- tm_shape(bb_east_grid) + tm_borders(lty = "dotted", lwd = 0.5) +
-  tm_shape(sido) + tm_fill(col = "gray75") +
-  tm_graticules(x = c(123:132), lwd = 1.5) +
-  tm_shape(bb_east_grid) + tm_borders(lty = "dotted", lwd = 0.5) +
-  tm_shape(gyeongju) + tm_fill(col = "gray50") +
-  tm_shape(topo_50) + tm_borders(col = "black", lwd = 1.25) +
-  tm_shape(origins) + tm_symbols(col = "black", size = 0.5) +
-  tm_shape(origin_east) + tm_symbols(col = "red", size = 0.5)
+my_map <- tm_shape(bb_east_grid) + tm_borders(lty = "dotted", lwd = 0.75) +
+  tm_shape(sido) + tm_fill(fill = "gray75") +
+  tm_graticules(x = c(123:132), lwd = 2, labels.size = 1, col = "gray20") +
+  tm_shape(bb_east_grid) + tm_borders(lty = "dotted", lwd = 1, col = "gray20") +
+  tm_shape(topo_50) + tm_borders(col = "black", lwd = 1.5) +
+  tm_shape(origins) + tm_symbols(fill = "black", size = 1.5) +
+  tm_shape(origin_east) + tm_symbols(fill = "red", size = 1.5)
 my_map
-my.file.name <- paste0("outputs/6_2_7.png") 
-tmap_save(my_map, filename = my.file.name,  width = 5.75, dpi = 600)
 ```
+
+```{r}
+#| echo: false
+#| eval: false
+
+my.ratio <- get_asp_ratio(my_map)
+
+my.title <- "6-7 TM_2 동부"
+my.path.name <- "D:/My Cartography/지도제작/"
+my.file.name <- paste0(my.path.name, my.title, ".png")
+tmap_save(my_map, filename = my.file.name, height = 11.74*1.1, width = my.ratio*11.74*1.1, dpi = 600)
+```
+
 
 동해 투영대의 지도를 제작한다.
 
 ```{r}
+#| fig-height: 12.914
+#| fig-width: 13.93353
+#| fig-dpi: 600
 bb_sea <- tibble(x = c(-500000, 320000), y = c(-40000, 720000)) |> 
   st_as_sf(coords = c("x", "y"), crs = 5188) |> 
   st_bbox() |> 
@@ -363,20 +462,35 @@ bb_sea <- tibble(x = c(-500000, 320000), y = c(-40000, 720000)) |>
 
 bb_sea_grid <- st_make_grid(bb_sea, 20000)
 
-my_map <- tm_shape(bb_sea_grid) + tm_borders(lty = "dotted", lwd = 0.5) +
-  tm_shape(sido) + tm_fill(col = "gray75") +
-  tm_graticules(x = c(123:132), lwd = 1.5) +
-  tm_shape(topo_50) + tm_borders(col = "black", lwd = 1.25) +
-  tm_shape(origins) + tm_symbols(col = "black", size = 0.5) +
-  tm_shape(origin_sea) + tm_symbols(col = "red", size = 0.5)
+my_map <- tm_shape(bb_sea_grid) + tm_borders(lty = "dotted", lwd = 0.75) +
+  tm_shape(sido) + tm_fill(fill = "gray75") +
+  tm_graticules(x = c(123:132), lwd = 2, labels.size = 1, col = "gray20") +
+  tm_shape(bb_sea_grid) + tm_borders(lty = "dotted", lwd = 1, col = "gray20") +
+  tm_shape(topo_50) + tm_borders(col = "black", lwd = 1.5) +
+  tm_shape(origins) + tm_symbols(fill = "black", size = 1.5) +
+  tm_shape(origin_sea) + tm_symbols(fill = "red", size = 1.5)
 my_map
-my.file.name <- paste0("outputs/6_2_8.png") 
-tmap_save(my_map, filename = my.file.name,  width = 5.75, dpi = 600)
 ```
+
+```{r}
+#| echo: false
+#| eval: false
+
+my.ratio <- get_asp_ratio(my_map)
+
+my.title <- "6-8 TM_3 동해"
+my.path.name <- "D:/My Cartography/지도제작/"
+my.file.name <- paste0(my.path.name, my.title, ".png")
+tmap_save(my_map, filename = my.file.name, height = 11.74*1.1, width = my.ratio*11.74*1.1, dpi = 600)
+```
+
 
 서부 투영대의 지도를 제작한다.
 
 ```{r}
+#| fig-height: 12.914
+#| fig-width: 13.93353
+#| fig-dpi: 600
 bb_west <- tibble(x = c(100000, 920000), y = c(-40000, 720000)) |> 
   st_as_sf(coords = c("x", "y"), crs = 5185) |> 
   st_bbox() |> 
@@ -384,16 +498,28 @@ bb_west <- tibble(x = c(100000, 920000), y = c(-40000, 720000)) |>
 
 bb_west_grid <- st_make_grid(bb_west, 20000)
 
-my_map <- tm_shape(bb_west_grid) + tm_borders(lty = "dotted", lwd = 0.5) +
-  tm_shape(sido) + tm_fill(col = "gray75") +
-  tm_graticules(x = c(123:132), lwd = 1.5) +
-  tm_shape(topo_50) + tm_borders(col = "black", lwd = 1.25) +
-  tm_shape(origins) + tm_symbols(col = "black", size = 0.5) +
-  tm_shape(origin_west) + tm_symbols(col = "red", size = 0.5)
+my_map <- tm_shape(bb_west_grid) + tm_borders(lty = "dotted", lwd = 0.75) +
+  tm_shape(sido) + tm_fill(fill = "gray75") +
+  tm_graticules(x = c(123:132), lwd = 2, labels.size = 1, col = "gray20") +
+  tm_shape(bb_west_grid) + tm_borders(lty = "dotted", lwd = 1, col = "gray20") +
+  tm_shape(topo_50) + tm_borders(col = "black", lwd = 1.5) +
+  tm_shape(origins) + tm_symbols(fill = "black", size = 1.5) +
+  tm_shape(origin_west) + tm_symbols(fill = "red", size = 1.5)
 my_map
-my.file.name <- paste0("outputs/6_2_9.png") 
-tmap_save(my_map, filename = my.file.name,  width = 5.75, dpi = 600)
 ```
+
+```{r}
+#| echo: false
+#| eval: false
+
+my.ratio <- get_asp_ratio(my_map)
+
+my.title <- "6-9 TM_4 서부"
+my.path.name <- "D:/My Cartography/지도제작/"
+my.file.name <- paste0(my.path.name, my.title, ".png")
+tmap_save(my_map, filename = my.file.name, height = 11.74*1.1, width = my.ratio*11.74*1.1, dpi = 600)
+```
+
 
 중간 시험 문제(중부 투영대) 지도를 제작한다.
 
@@ -419,20 +545,31 @@ bb_mid <- tibble(x = c(-100000, 720000), y = c(-40000, 720000)) |>
 
 bb_mid_grid <- st_make_grid(bb_mid, 20000)
 
-my_map <- tm_shape(bb_mid_grid) + tm_borders(lty = "dotted", lwd = 0.5) +
+my_map <- tm_shape(bb_mid_grid) + tm_borders(lty = "dotted", lwd = 0.75) +
   tm_shape(sido) + tm_fill(col = "gray75") +
-  tm_graticules(x = c(123:132), lwd = 1.5) +
-  tm_shape(bb_mid_grid) + tm_borders(lty = "dotted", lwd = 0.5) +
+  tm_graticules(x = c(123:132), lwd = 2, labels.size = 1, col = "gray20") +
+  tm_shape(bb_mid_grid) + tm_borders(lty = "dotted", lwd = 1, col = "gray20") +
   tm_shape(chuncheon) + tm_fill(col = "gray50") +
-  tm_shape(sokcho) + tm_fill(col = "gray50") +
-  tm_shape(gangreung) + tm_fill(col = "gray50") +
+  tm_shape(sokcho) + tm_fill(fill = "gray50") +
+  tm_shape(gangreung) + tm_fill(fill = "gray50") +
   tm_shape(topo_50) + tm_borders(col = "black", lwd = 1.25) +
-  tm_shape(origins) + tm_symbols(col = "black", size = 0.5) +
-  tm_shape(origin_mid) + tm_symbols(col = "red", size = 0.5)
+  tm_shape(origins) + tm_symbols(fill = "black", size = 1.5) +
+  tm_shape(origin_mid) + tm_symbols(fill = "red", size = 1.5)
 my_map
-my.file.name <- paste0("outputs/6_2_10.png") 
-tmap_save(my_map, filename = my.file.name,  width = 5.75, dpi = 600)
 ```
+
+```{r}
+#| echo: false
+#| eval: false
+
+my.ratio <- get_asp_ratio(my_map)
+
+my.title <- "6-10 TM_5 중간시험"
+my.path.name <- "D:/My Cartography/지도제작/"
+my.file.name <- paste0(my.path.name, my.title, ".png")
+tmap_save(my_map, filename = my.file.name, height = 11.74*1.1, width = my.ratio*11.74*1.1, dpi = 600)
+```
+
 
 ### 국가 그리드
 
