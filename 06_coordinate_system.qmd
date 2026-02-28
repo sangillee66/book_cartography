@@ -13,6 +13,8 @@ execute:
   error: false
   freeze: auto
 editor: visual
+editor_options: 
+  chunk_output_type: console
 ---
 
 ## 좌표계의 정의와 기본 좌표계
@@ -146,7 +148,9 @@ bb_n52 <- tibble(x = c(0, 1000000), y = c(-1000000, 7000000)) |>
 bb_n52_grid <- st_make_grid(bb_n52, 100000)
 
 # 지도 표현 영역 지정
-bb <- c(-3000000, -500000, 3500000, 6000000)
+bb <- st_bbox(c(xmin = -3000000, xmax = 3500000, ymin = -500000, ymax = 6000000), 
+        crs = st_crs(32652))
+
 my_map <- tm_shape(countries_bb_utm, bbox = bb) + tm_fill() +
   tm_graticules(x = seq(84, 172, 6), y = seq(0, 40, 10), lwd = 1.5) +
   tm_shape(bb_n52_grid) + tm_borders(lwd = 0.5) +
@@ -232,7 +236,8 @@ topo_250_south <- topo_250 |>
   )
 
 # 지도 제작
-bb <- c(265000, 1300000, 1450000, 2275000)
+bb <- st_bbox(c(xmin = 265000, xmax = 1450000, ymin = 1300000, ymax = 2275000), 
+        crs = st_crs(sido))
 my_map <- tm_shape(topo_250_south, bbox = bb) + tm_borders() +
   tm_shape(sido) + tm_fill(col = "gray75") +
   tm_graticules(x = c(120, 126, 132), y = c(32, 36, 40)) +
@@ -262,7 +267,8 @@ daebo <- topo_25 |>
   )
 
 # 지도 제작
-bb <- c(620000, 1440000, 1300000, 1900000)
+bb <- st_bbox(c(xmin = 620000, xmax = 1300000, ymin = 1440000, ymax = 1900000), 
+        crs = st_crs(sido))
 my_map <- tm_shape(topo_50, bbox = bb) + tm_fill() + tm_borders() +
   tm_shape(sido) + tm_borders(col = "gray10", lwd = 0.5) +
   tm_shape(gyeongju) + tm_fill(col = "gray50") +

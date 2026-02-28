@@ -8,11 +8,40 @@ library(pals)
 alphabet2()
 glasbey()
 
+seoul_EMD <- read_sf(
+  "D:/My R/Korean Administrative Areas/행정구역 셰이프 파일/2 Original Cleaning/2021_4Q/SEOUL_EMD_2021_4Q.shp", options = "ENCODING=CP949")
+seoul_EMD_2020 <- read_sf(
+  "D:/My R/Korean Administrative Areas/행정구역 셰이프 파일/2 Original Cleaning/2020_2Q/SEOUL_EMD_2020_2Q.shp", options = "ENCODING=CP949")
+seoul_gu <- read_sf(
+  "D:/My R/Korean Administrative Areas/행정구역 셰이프 파일/2 Original Cleaning/2021_4Q/SEOUL_GU_2021_4Q.shp", options = "ENCODING=CP949")
+seoul_sido <- read_sf(
+  "D:/My R/Korean Administrative Areas/행정구역 셰이프 파일/2 Original Cleaning/2021_4Q/SEOUL_SIDO_2021_4Q.shp", options = "ENCODING=CP949")
+
+house_SDGGEMD_2020 <- read_excel(
+  "D:/My R/Population Geography/3 Population Structure/Housing_Size_2020_Adj.xlsx", sheet = 1
+)
+
+seoul_EMD_2020 <- seoul_EMD_2020 |> 
+  mutate(
+    EMD_ID = as.numeric(EMD_ID)
+  )
+
+my_df <-seoul_EMD_2020 |> 
+  left_join(
+    house_SDGGEMD_2020, join_by(EMD_ID == Code)
+  )
+
+seoul_gu <- seoul_gu |> 
+  left_join(
+    house_SDGGEMD_2020, join_by(SGG1_CD == Code)
+  )
+
+
 library(ggpattern)
 
 states_map <- map_data("state")
 
-ggplot(states_map %>% distinct(region), aes(map_id = region)) +
+ggplot(states_map  |> distinct(region), aes(map_id = region)) +
   geom_map_pattern(
     map = states_map,
     aes(
@@ -26,6 +55,112 @@ ggplot(states_map %>% distinct(region), aes(map_id = region)) +
   ) +
   expand_limits(x = states_map$long, y = states_map$lat) +
   coord_map()
+
+# 방향
+ggplot(seoul_gu) +
+  geom_sf_pattern(
+    aes(pattern_angle = SGG1_CD),
+    pattern = "stripe",
+    pattern_size = 0.1,
+    pattern_spacing = 0.02,
+    pattern_fill = "white",
+    pattern_color = "gray30",
+    pattern_density = 1,
+    color = "black",
+    fill = "white",
+    lwd = 0.5,
+    show.legend = FALSE
+  ) +
+  coord_sf() + 
+  theme_bw() +
+  theme(
+    panel.grid = element_blank(), 
+    axis.text = element_blank(),
+    axis.ticks = element_blank()
+  )
+  
+# 간격
+ggplot(seoul_gu) +
+  geom_sf_pattern(
+    aes(pattern_spacing = -House1_p),
+    pattern = "weave",
+    pattern_angle = 45,
+    pattern_size = 0.1,
+    pattern_fill = "white",
+    pattern_color = "gray30",
+    pattern_density = 1,
+    color = "black",
+    fill = "white",
+    lwd = 0.5,
+    show.legend = FALSE
+  ) +
+  coord_sf() + 
+  theme_bw() +
+  theme(
+    panel.grid = element_blank(), 
+    axis.text = element_blank(),
+    axis.ticks = element_blank()
+  )
+
+# 질감
+
+library(gridpattern)
+magick_25 <- sample(c("bricks", "checkerboard", "circles", "crosshatch", "fishscales", "hexagons",
+               "horizontal",  "horizontalsaw",   "hs_bdiagonal", "hs_cross", "hs_diagcross",
+               "hs_fdiagonal", "hs_horizontal", "hs_vertical", "left30", "leftshingle", 
+               "octagons", "right45", "rightshingle", "smallfishscales", "vertical", 
+               "verticalbricks", "verticalleftshingle", "verticalrightshingle", "verticalsaw"), 25)        
+
+ggplot(seoul_gu_df) +
+  geom_sf_pattern(
+    aes(pattern_type = SGG1_FNM),
+    pattern = "magick",
+    pattern_scale = 2.5,
+    pattern_fill = "black",
+    color = "black",
+    fill = "white",
+    lwd = 0.5,
+    show.legend = FALSE
+  ) +
+  coord_sf() + 
+  theme_bw() +
+  scale_pattern_type_discrete(choices = magick_25) +
+  theme(
+    panel.grid = element_blank(), 
+    axis.text = element_blank(),
+    axis.ticks = element_blank()
+  )
+
+# 모양: 에러는 없지만 구가 텅텅비어 있음. 나중에 다시 시도.
+
+glyphs25 <- c(
+  "\u25CF","\u25CB","\u25B2","\u25B3","\u25A0","\u25A1","\u25C6","\u25C7","\u2605",
+  "\u2606","\u271A","\u2716","\u2726","\u2736","\u2660","\u2663","\u2665","\u2666",
+  "\u25B6","\u25C0","\u25E6","\u2600","\u2601","\u2708","\u2699")
+names(glyphs25) <- sort(unique(seoul_gu_df$SGG1_FNM))
+
+my_graph <- ggplot(seoul_gu_df) +
+  geom_sf_pattern(
+    aes(pattern_shape = SGG1_FNM),
+    pattern = "text",
+    pattern_density = 0.4,
+    pattern_fill = "white",
+    pattern_color = "gray30",
+    color = "black",
+    fill = "white",
+    lwd = 0.5,
+    show.legend = FALSE
+  ) +
+  coord_sf() + 
+  theme_bw() +
+  scale_pattern_shape_manual(values = glyphs25) +
+  theme(
+    panel.grid = element_blank(), 
+    axis.text = element_blank(),
+    axis.ticks = element_blank()
+  )
+my_graph
+
 
 
 my_df_2 <- my_df |> 
@@ -185,14 +320,16 @@ tm_shape(wld.rob.sf) + tm_borders()
 
 
 library(giscoR)
+library(tmap)
+library(sf)
 
 world_sf <- gisco_get_countries(resolution = 10)
 qtm(world_sf)
 
 crsrobin <- "+proj=robin +lon_0=150 +x_0=0 +y_0=0 +ellps=WGS84 +datum=WGS84 +units=m +no_defs"
 
-world_robinson2 <- world_sf %>%
-  st_break_antimeridian(lon_0 = 150) %>% # insert this before transformation
+world_robinson2 <- world_sf |> 
+  st_break_antimeridian(lon_0 = 150) |>  # insert this before transformation
   st_transform(crs = crsrobin)
 
 qtm(world_robinson2)

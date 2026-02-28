@@ -14,3 +14,9 @@ execute:
   freeze: auto
 editor: visual
 ---
+
+## 지도 투영의 정의와 과정
+
+## 지도 투영의 기본 요소
+
+## 왜곡의 측정과 시각화

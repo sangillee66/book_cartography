@@ -38,6 +38,8 @@ library(sf)
 library(tmap)
 library(tmaptools)
 library(rayshader)
+library(ggpattern)
+library(gridpattern)
 ```
 
 -   지리공간데이터 불러오기
@@ -79,13 +81,101 @@ my_df <-seoul_EMD_2020 |>
   left_join(
     house_SDGGEMD_2020, join_by(EMD_ID == Code)
   )
+seoul_gu_df <- seoul_gu |> 
+  left_join(
+    house_SDGGEMD_2020, join_by(SGG1_CD == Code)
+  )
 ```
+
+#### 크기 size
+
+-   지도 제작
+
+```{r}
+#| fig-height: 12.914
+#| fig-width: 15.7721
+#| fig-dpi: 600
+my_map <- tm_shape(seoul_gu_df) + tm_borders(col = "gray10", lwd = 1.75) +
+  tm_shape(seoul_gu_df) +
+  tm_symbols(
+    size = "T_house", fill_alpha = 0.75, fill = "#a63603", lwd = 0, 
+    size.scale = tm_scale_continuous(values.scale = 8), 
+    size.legend = tm_legend_hide()
+  ) + 
+  tm_layout(inner.margins = c(0.05, 0.05, 0.05, 0.05))
+my_map
+```
+
+-   저장
+
+```{r}
+#| echo: false
+#| eval: false
+
+my.ratio <- get_asp_ratio(my_map)
+
+my.title <- "4-1 크기"
+my.path.name <- "D:/My Cartography/지도제작/"
+my.file.name <- paste0(my.path.name, my.title, ".png")
+tmap_save(my_map, filename = my.file.name, height = 11.74*1.1, width = my.ratio*11.74*1.1, dpi = 600)
+```
+
+#### 모양 shape
+
+-   지도 제작
+
+```{r}
+#| eval: false
+#| fig-height: 12.914
+#| fig-width: 15.7721
+#| fig-dpi: 600
+
+pch_25 <- 0:24
+names(pch_25) <- sort(unique(seoul_gu_df$SGG1_FNM))
+
+my_graph <- ggplot(seoul_gu_df) +
+  geom_sf_pattern(
+    aes(pattern_shape = SGG1_FNM),
+    pattern = "pch",
+    # pattern_size = 0.1, # 외곽선 두께
+    pattern_density = 0.4,
+    pattern_fill = "white",
+    pattern_color = "gray30",
+    color = "black",
+    fill = "white",
+    lwd = 0.5,
+    show.legend = FALSE
+  ) +
+  coord_sf() + 
+  theme_bw() +
+  scale_pattern_shape_manual(values = pch_25) +
+  theme(
+    panel.grid = element_blank(), 
+    axis.text = element_blank(),
+    axis.ticks = element_blank()
+  )
+my_graph
+```
+
+-   저장
+
+```{r}
+#| echo: false
+#| eval: false
+
+my.path.name <- "D:/My Cartography/지도제작/"
+my.file.name <- paste0("4-2 모양", ".png")
+ggsave(my.file.name, plot = my_graph, path = my.path.name, height = 12.914, width = 15.7721, dpi = 600)
+```
+
+![](images/clipboard-1713273734.png)
 
 #### 조감고도 perspective heights
 
 -   ggplot2를 이용하여 지도 제작
 
 ```{r}
+#| eval: false
 my_map <- my_df |> 
   ggplot() +
   geom_sf(
@@ -106,6 +196,7 @@ my_map
 -   3D
 
 ```{r}
+#| eval: false
 plot_gg(my_map, 
         width = 5, height = 4, scale = 300, 
         multicore = TRUE, windowsize = c(1726, 1174), 
@@ -116,8 +207,12 @@ Sys.sleep(0.2)
 -   포착
 
 ```{r}
-render_snapshot(clear = TRUE, file = "D:/My Cartography/지도제작/4-1 조감고도.png")
+#| echo: false
+#| eval: false
+render_snapshot(clear = TRUE, file = "D:/My Cartography/지도제작/4-3 조감고도.png")
 ```
+
+![](images/clipboard-732082816.png)
 
 #### 색상 hue
 
@@ -150,7 +245,7 @@ my_map
 
 my.ratio <- get_asp_ratio(my_map)
 
-my.title <- "4-2 색상"
+my.title <- "4-4 색상"
 my.path.name <- "D:/My Cartography/지도제작/"
 my.file.name <- paste0(my.path.name, my.title, ".png")
 tmap_save(my_map, filename = my.file.name, height = 11.74*1.1, width = my.ratio*11.74*1.1, dpi = 600)
@@ -198,7 +293,7 @@ my_map
 
 my.ratio <- get_asp_ratio(my_map)
 
-my.title <- "4-3 명도 1"
+my.title <- "4-5 명도 1"
 my.path.name <- "D:/My Cartography/지도제작/"
 my.file.name <- paste0(my.path.name, my.title, ".png")
 tmap_save(my_map, filename = my.file.name, height = 11.74*1.1, width = my.ratio*11.74*1.1, dpi = 600)
@@ -234,7 +329,7 @@ my_map
 
 my.ratio <- get_asp_ratio(my_map)
 
-my.title <- "4-3 명도 2"
+my.title <- "4-5 명도 2"
 my.path.name <- "D:/My Cartography/지도제작/"
 my.file.name <- paste0(my.path.name, my.title, ".png")
 tmap_save(my_map, filename = my.file.name, height = 11.74*1.1, width = my.ratio*11.74*1.1, dpi = 600)
@@ -275,49 +370,154 @@ my_map
 
 my.ratio <- get_asp_ratio(my_map)
 
-my.title <- "4-4 채도"
+my.title <- "4-6 채도"
 my.path.name <- "D:/My Cartography/지도제작/"
 my.file.name <- paste0(my.path.name, my.title, ".png")
 tmap_save(my_map, filename = my.file.name, height = 11.74*1.1, width = my.ratio*11.74*1.1, dpi = 600)
 ```
 
+#### 간격 spacing
+
+-   지도 제작
+
+```{r}
+#| eval: false
+#| fig-height: 12.914
+#| fig-width: 15.7721
+#| fig-dpi: 600
+my_graph <- ggplot(seoul_gu_df) +
+  geom_sf_pattern(
+    aes(pattern_spacing = -House1_p),
+    pattern = "weave",
+    pattern_angle = 45,
+    pattern_size = 0.2,
+    pattern_fill = "white",
+    pattern_color = "gray30",
+    pattern_density = 1,
+    color = "black",
+    fill = "white",
+    lwd = 0.5,
+    show.legend = FALSE
+  ) +
+  coord_sf() + 
+  theme_bw() +
+  theme(
+    panel.grid = element_blank(), 
+    axis.text = element_blank(),
+    axis.ticks = element_blank()
+  )
+my_graph
+```
+
+-   저장
+
+```{r}
+#| echo: false
+#| eval: false
+
+my.path.name <- "D:/My Cartography/지도제작/"
+my.file.name <- paste0("4-7 간격", ".png")
+ggsave(my.file.name, plot = my_graph, path = my.path.name, height = 12.914, width = 15.7721, dpi = 600)
+```
+
+![](images/clipboard-4005604477.png)
+
+#### 방향 orientation
+
+-   지도 제작
+
+```{r}
+#| eval: false
+#| fig-height: 12.914
+#| fig-width: 15.7721
+#| fig-dpi: 600
+my_graph <- ggplot(seoul_gu_df) +
+  geom_sf_pattern(
+    aes(pattern_angle = House1_p),
+    pattern = "stripe",
+    pattern_size = 0.2,
+    pattern_spacing = 0.02,
+    pattern_fill = "white",
+    pattern_color = "gray30",
+    pattern_density = 1,
+    color = "black",
+    fill = "white",
+    lwd = 0.5,
+    show.legend = FALSE
+  ) +
+  coord_sf() + 
+  theme_bw() +
+  theme(
+    panel.grid = element_blank(), 
+    axis.text = element_blank(),
+    axis.ticks = element_blank()
+  )
+my_graph
+```
+
+-   저장
+
+```{r}
+#| echo: false
+#| eval: false
+
+my.path.name <- "D:/My Cartography/지도제작/"
+my.file.name <- paste0("4-8 방향", ".png")
+ggsave(my.file.name, plot = my_graph, path = my.path.name, height = 12.914, width = 15.7721, dpi = 600)
+```
+
+![](images/clipboard-3310559350.png)
+
 #### 질감 texture
 
 ```{r}
+#| eval: false
+#| fig-height: 12.914
+#| fig-width: 15.7721
+#| fig-dpi: 600
 library(ggpattern)
 library(gridpattern)
 library(magick)
 
-# 1) 구 이름을 map_id처럼 사용할 범주 변수로 확보
-seoul_gu2 <- seoul_gu |>
-  mutate(gu = as.character(SGG1_FNM))
+set.seed(1234)
+magick_25 <- sample(c("bricks", "checkerboard", "circles", "crosshatch", "fishscales",
+                      "hexagons", "horizontal",  "horizontalsaw",   "hs_bdiagonal", 
+                      "hs_cross", "hs_diagcross", "hs_fdiagonal", "hs_horizontal", 
+                      "hs_vertical", "left30", "leftshingle", "octagons", "right45",
+                      "rightshingle", "smallfishscales", "vertical", "verticalbricks",
+                      "verticalleftshingle", "verticalrightshingle", "verticalsaw"), 25)        
 
-# 2) gu 레벨 수만큼 magick 패턴을 뽑아(무작위) 매핑 벡터를 만든다
-set.seed(20260227)
-lev <- sort(unique(seoul_gu2$gu))
-
-# gridpattern::names_magick 에서 구 개수만큼 "중복 없이" 뽑기
-# (names_magick 길이가 구 개수보다 짧으면 replace=TRUE로 바꾸면 됩니다)
-picked <- sample(gridpattern::names_magick, size = length(lev), replace = FALSE)
-
-# named vector: (이름=gu) -> (값=pattern name)
-pat_map <- setNames(picked, lev)
-
-# 3) sf + geom_sf_pattern
-my_graph <- ggplot(seoul_gu2) +
+my_graph <- ggplot(seoul_gu_df) +
   geom_sf_pattern(
-    aes(pattern_type = gu),
-    pattern              = "magick",
-    pattern_fill         = "black",
-    pattern_aspect_ratio = 1.75,
-    fill                 = "white",
-    colour               = "black"
+    aes(pattern_type = SGG1_FNM),
+    pattern = "magick",
+    pattern_scale = 10, # 해상도 높은 이미지 산출을 위한 핵심
+    pattern_fill = "black",
+    color = "black",
+    fill = "white",
+    lwd = 0.5,
+    show.legend = FALSE
   ) +
-  coord_sf() +
+  coord_sf() + 
   theme_bw() +
-  # 핵심: choices에 “구이름 -> magick패턴” 매핑을 넣는다
-  scale_pattern_type_discrete(choices = pat_map) +
-  theme(legend.position = "none")
+  scale_pattern_type_discrete(choices = magick_25) +
+  theme(
+    panel.grid = element_blank(), 
+    axis.text = element_blank(),
+    axis.ticks = element_blank()
+  )
 my_graph
 ```
 
+-   저장
+
+```{r}
+#| echo: false
+#| eval: false
+
+my.path.name <- "D:/My Cartography/지도제작/"
+my.file.name <- paste0("4-9 질감", ".png")
+ggsave(my.file.name, plot = my_graph, path = my.path.name, height = 12.914, width = 15.7721, dpi = 600)
+```
+
+![](images/clipboard-2838887393.png)
