@@ -21,6 +21,41 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
@@ -44,6 +79,9 @@ ul.task-list li input[type="checkbox"] {
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="site_libs/bootstrap/bootstrap-f2c6d6e2b784ddc5de38779acc06f37d.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script src="site_libs/quarto-contrib/glightbox/glightbox.min.js"></script>
+<link href="site_libs/quarto-contrib/glightbox/glightbox.min.css" rel="stylesheet">
+<link href="site_libs/quarto-contrib/glightbox/lightbox.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -297,7 +335,11 @@ ul.task-list li input[type="checkbox"] {
   <ul>
   <li><a href="#지도-투영의-정의와-과정" id="toc-지도-투영의-정의와-과정" class="nav-link active" data-scroll-target="#지도-투영의-정의와-과정"><span class="header-section-number">7.1</span> 지도 투영의 정의와 과정</a></li>
   <li><a href="#지도-투영의-기본-요소" id="toc-지도-투영의-기본-요소" class="nav-link" data-scroll-target="#지도-투영의-기본-요소"><span class="header-section-number">7.2</span> 지도 투영의 기본 요소</a></li>
-  <li><a href="#왜곡의-측정과-시각화" id="toc-왜곡의-측정과-시각화" class="nav-link" data-scroll-target="#왜곡의-측정과-시각화"><span class="header-section-number">7.3</span> 왜곡의 측정과 시각화</a></li>
+  <li><a href="#왜곡의-측정과-시각화" id="toc-왜곡의-측정과-시각화" class="nav-link" data-scroll-target="#왜곡의-측정과-시각화"><span class="header-section-number">7.3</span> 왜곡의 측정과 시각화</a>
+  <ul class="collapse">
+  <li><a href="#축척-계수" id="toc-축척-계수" class="nav-link" data-scroll-target="#축척-계수"><span class="header-section-number">7.3.1</span> 축척 계수</a></li>
+  <li><a href="#티소의-인디카트릭스" id="toc-티소의-인디카트릭스" class="nav-link" data-scroll-target="#티소의-인디카트릭스"><span class="header-section-number">7.3.2</span> 티소의 인디카트릭스</a></li>
+  </ul></li>
   </ul>
 </nav>
     </div>
@@ -324,7 +366,7 @@ ul.task-list li input[type="checkbox"] {
     <div>
     <div class="quarto-title-meta-heading">Modified</div>
     <div class="quarto-title-meta-contents">
-      <p class="date-modified">February 28, 2026</p>
+      <p class="date-modified">March 3, 2026</p>
     </div>
   </div>
     
@@ -343,8 +385,75 @@ ul.task-list li input[type="checkbox"] {
 </section>
 <section id="왜곡의-측정과-시각화" class="level2" data-number="7.3">
 <h2 data-number="7.3" class="anchored" data-anchor-id="왜곡의-측정과-시각화"><span class="header-section-number">7.3</span> 왜곡의 측정과 시각화</h2>
+<p><a href="images/얼굴.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1"><img src="images/얼굴.png" class="img-fluid"></a></p>
+<section id="축척-계수" class="level3" data-number="7.3.1">
+<h3 data-number="7.3.1" class="anchored" data-anchor-id="축척-계수"><span class="header-section-number">7.3.1</span> 축척 계수</h3>
+<p><a href="images/clipboard-237176163.png" class="lightbox" data-gallery="quarto-lightbox-gallery-2"><img src="images/clipboard-237176163.png" class="img-fluid"></a></p>
+</section>
+<section id="티소의-인디카트릭스" class="level3" data-number="7.3.2">
+<h3 data-number="7.3.2" class="anchored" data-anchor-id="티소의-인디카트릭스"><span class="header-section-number">7.3.2</span> 티소의 인디카트릭스</h3>
+<p><a href="images/clipboard-2353593596.png" class="lightbox" data-gallery="quarto-lightbox-gallery-3"><img src="images/clipboard-2353593596.png" class="img-fluid"></a></p>
+<p><a href="images/clipboard-2503633916.png" class="lightbox" data-gallery="quarto-lightbox-gallery-4"><img src="images/clipboard-2503633916.png" class="img-fluid"></a></p>
+<section id="메르카도법의-사례" class="level4" data-number="7.3.2.1">
+<h4 data-number="7.3.2.1" class="anchored" data-anchor-id="메르카도법의-사례"><span class="header-section-number">7.3.2.1</span> 메르카도법의 사례</h4>
+<ul>
+<li>인디카트릭스 계산</li>
+</ul>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(spData)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sf)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tmap)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tmaptools)</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">source</span>(<span class="st">"https://raw.githubusercontent.com/mgimond/tissot/master/Tissot_functions.r"</span>)</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>proj.merc   <span class="ot">&lt;-</span> <span class="st">"+proj=merc +ellps=WGS84"</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>lat <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="sc">-</span><span class="dv">80</span>,<span class="dv">80</span>, <span class="at">by=</span><span class="dv">20</span>L)</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>lon <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="sc">-</span><span class="dv">150</span>,<span class="dv">150</span>, <span class="at">by=</span><span class="dv">30</span>L)</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>coord <span class="ot">&lt;-</span> <span class="fu">as.matrix</span>(<span class="fu">expand.grid</span>(lon,lat))</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>ts.lst <span class="ot">&lt;-</span> coord <span class="sc">|&gt;</span> <span class="fu">as_tibble</span>() <span class="sc">|&gt;</span> </span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pmap</span>(\(...) <span class="fu">ti</span>(<span class="at">coord =</span> <span class="fu">c</span>(...), <span class="at">proj.out =</span> proj.merc))</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>tsf <span class="ot">&lt;-</span> <span class="fu">tissot_sf</span>(ts.lst, <span class="at">proj.out =</span> proj.merc)</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>world_merc <span class="ot">&lt;-</span> <span class="fu">st_transform</span>(world, proj.merc)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<ul>
+<li>지도 제작</li>
+</ul>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>origin_lines <span class="ot">&lt;-</span> <span class="fu">st_sfc</span>(</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_linestring</span>(<span class="fu">matrix</span>(<span class="fu">c</span>(<span class="sc">-</span><span class="dv">180</span>, <span class="dv">0</span>, <span class="dv">180</span>, <span class="dv">0</span>), <span class="at">ncol =</span> <span class="dv">2</span>, <span class="at">byrow =</span> <span class="cn">TRUE</span>)), </span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_linestring</span>(<span class="fu">matrix</span>(<span class="fu">c</span>(<span class="dv">0</span>, <span class="sc">-</span><span class="dv">85</span>, <span class="dv">0</span>, <span class="dv">85</span>), <span class="at">ncol =</span> <span class="dv">2</span>, <span class="at">byrow =</span> <span class="cn">TRUE</span>)),   </span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">crs =</span> <span class="dv">4326</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>my_map <span class="ot">&lt;-</span> <span class="fu">tm_shape</span>(world_merc, <span class="at">bbox =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">180</span>, <span class="sc">-</span><span class="dv">85</span>, <span class="dv">180</span>, <span class="dv">85</span>)) <span class="sc">+</span> </span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_fill</span>(<span class="at">fill =</span> <span class="st">"#fffff0"</span>) <span class="sc">+</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_graticules</span>(<span class="at">x =</span> <span class="fu">seq</span>(<span class="sc">-</span><span class="dv">180</span>, <span class="dv">180</span>, <span class="dv">10</span>), </span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>                <span class="at">y =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">85</span>, <span class="fu">seq</span>(<span class="sc">-</span><span class="dv">80</span>, <span class="dv">80</span>, <span class="dv">10</span>), <span class="dv">85</span>), </span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>                <span class="at">labels.show =</span> <span class="cn">FALSE</span>, <span class="at">lwd =</span> <span class="fl">0.1</span>, <span class="at">col =</span> <span class="st">"black"</span>) <span class="sc">+</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_shape</span>(origin_lines) <span class="sc">+</span> <span class="fu">tm_lines</span>(<span class="at">col =</span> <span class="st">"black"</span>, <span class="at">lwd =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_shape</span>(tsf<span class="sc">$</span>ind) <span class="sc">+</span> <span class="fu">tm_fill</span>(<span class="at">fill =</span> <span class="st">"#e65100"</span>, <span class="at">fill_alpha =</span> <span class="fl">0.50</span>) <span class="sc">+</span></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_layout</span>(<span class="at">inner.margins =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>), <span class="at">bg.color =</span> <span class="st">"#d1ecf9"</span>) <span class="sc">+</span></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_credits</span>(<span class="st">"SANG-IL LEE, Geography Education at SNU"</span>, </span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>             <span class="at">size =</span> <span class="fl">0.7</span>, <span class="at">position =</span> <span class="fu">c</span>(<span class="fl">0.80</span>, <span class="sc">-</span><span class="fl">0.005</span>))</span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>my_map  </span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><a href="07_concept_projection_files/figure-html/unnamed-chunk-2-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-5"><img src="07_concept_projection_files/figure-html/unnamed-chunk-2-1.png" class="img-fluid figure-img" width="7790"></a></p>
+</figure>
+</div>
+</div>
+</div>
+<ul>
+<li>저장</li>
+</ul>
 
 
+</section>
+</section>
 </section>
 
 </main> <!-- /main -->
@@ -761,6 +870,38 @@ ul.task-list li input[type="checkbox"] {
   </div>
 </nav>
 </div> <!-- /content -->
+<script>var lightboxQuarto = GLightbox({"closeEffect":"zoom","descPosition":"bottom","loop":false,"openEffect":"zoom","selector":".lightbox"});
+(function() {
+  let previousOnload = window.onload;
+  window.onload = () => {
+    if (previousOnload) {
+      previousOnload();
+    }
+    lightboxQuarto.on('slide_before_load', (data) => {
+      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+      const href = trigger.getAttribute('href');
+      if (href !== null) {
+        const imgEl = window.document.querySelector(`a[href="${href}"] img`);
+        if (imgEl !== null) {
+          const srcAttr = imgEl.getAttribute("src");
+          if (srcAttr && srcAttr.startsWith("data:")) {
+            slideConfig.href = srcAttr;
+          }
+        }
+      } 
+    });
+  
+    lightboxQuarto.on('slide_after_load', (data) => {
+      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(slideNode);
+      }
+    });
+  
+  };
+  
+})();
+          </script>
 
 
 

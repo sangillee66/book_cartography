@@ -13,6 +13,8 @@ execute:
   error: false
   freeze: auto
 editor: visual
+editor_options: 
+  chunk_output_type: console
 ---
 
 ## 지도 투영의 정의와 과정
@@ -20,3 +22,78 @@ editor: visual
 ## 지도 투영의 기본 요소
 
 ## 왜곡의 측정과 시각화
+
+![](images/얼굴.png)
+
+### 축척 계수
+
+![](images/clipboard-237176163.png)
+
+### 티소의 인디카트릭스
+
+![](images/clipboard-2353593596.png)
+
+![](images/clipboard-2503633916.png)
+
+#### 메르카도법의 사례
+
+-   인디카트릭스 계산
+
+```{r}
+library(tidyverse)
+library(spData)
+library(sf)
+library(tmap)
+library(tmaptools)
+source("https://raw.githubusercontent.com/mgimond/tissot/master/Tissot_functions.r")
+
+proj.merc   <- "+proj=merc +ellps=WGS84"
+
+lat <- seq(-80,80, by=20L)
+lon <- seq(-150,150, by=30L)
+coord <- as.matrix(expand.grid(lon,lat))
+
+ts.lst <- coord |> as_tibble() |> 
+  pmap(\(...) ti(coord = c(...), proj.out = proj.merc))
+tsf <- tissot_sf(ts.lst, proj.out = proj.merc)
+world_merc <- st_transform(world, proj.merc)
+```
+
+-   지도 제작
+
+```{r}
+#| fig-height: 12.914
+#| fig-width: 12.98416
+#| fig-dpi: 600
+
+origin_lines <- st_sfc(
+  st_linestring(matrix(c(-180, 0, 180, 0), ncol = 2, byrow = TRUE)), 
+  st_linestring(matrix(c(0, -85, 0, 85), ncol = 2, byrow = TRUE)),   
+  crs = 4326
+)
+
+my_map <- tm_shape(world_merc, bbox = c(-180, -85, 180, 85)) + 
+  tm_fill(fill = "#fffff0") +
+  tm_graticules(x = seq(-180, 180, 10), 
+                y = c(-85, seq(-80, 80, 10), 85), 
+                labels.show = FALSE, lwd = 0.1, col = "black") +
+  tm_shape(origin_lines) + tm_lines(col = "black", lwd = 1) +
+  tm_shape(tsf$ind) + tm_fill(fill = "#e65100", fill_alpha = 0.50) +
+  tm_layout(inner.margins = c(0, 0, 0, 0), bg.color = "#d1ecf9") +
+  tm_credits("SANG-IL LEE, Geography Education at SNU", 
+             size = 0.7, position = c(0.80, -0.005))
+my_map  
+```
+
+-   저장
+
+```{r}
+#| echo: false
+#| eval: false
+my.ratio <- get_asp_ratio(my_map)
+
+my.title <- "7-1 티소 메르카토르"
+my.file.name <- paste0("D:/My Cartography/지도제작/", my.title, ".png")
+tmap_save(my_map, filename = my.file.name, height = 11.74*1.1, 
+          width = my.ratio*11.74*1.1, dpi = 600)
+```

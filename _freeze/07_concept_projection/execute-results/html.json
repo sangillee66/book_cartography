@@ -1,0 +1,17 @@
+{
+  "hash": "33101b9ef9ae8783f79b9f98013c4f51",
+  "result": {
+    "engine": "knitr",
+    "markdown": "---\ntitle: \"지도 투영의 개념과 원리\"\nauthor: Sang-Il Lee\ndate-modified: last-modified\nnumber-sections: true\nformat: \n  html: \n    toc: true\ncode-link: true\ncode-copy: true\nexecute: \n  warning: false\n  error: false\n  freeze: auto\neditor: visual\neditor_options: \n  chunk_output_type: console\n---\n\n## 지도 투영의 정의와 과정\n\n## 지도 투영의 기본 요소\n\n## 왜곡의 측정과 시각화\n\n![](images/얼굴.png)\n\n### 축척 계수\n\n![](images/clipboard-237176163.png)\n\n### 티소의 인디카트릭스\n\n![](images/clipboard-2353593596.png)\n\n![](images/clipboard-2503633916.png)\n\n#### 메르카도법의 사례\n\n-   인디카트릭스 계산\n\n\n::: {.cell}\n\n```{.r .cell-code}\nlibrary(tidyverse)\nlibrary(spData)\nlibrary(sf)\nlibrary(tmap)\nlibrary(tmaptools)\nsource(\"https://raw.githubusercontent.com/mgimond/tissot/master/Tissot_functions.r\")\n\nproj.merc   <- \"+proj=merc +ellps=WGS84\"\n\nlat <- seq(-80,80, by=20L)\nlon <- seq(-150,150, by=30L)\ncoord <- as.matrix(expand.grid(lon,lat))\n\nts.lst <- coord |> as_tibble() |> \n  pmap(\\(...) ti(coord = c(...), proj.out = proj.merc))\ntsf <- tissot_sf(ts.lst, proj.out = proj.merc)\nworld_merc <- st_transform(world, proj.merc)\n```\n:::\n\n\n-   지도 제작\n\n\n::: {.cell}\n\n```{.r .cell-code}\norigin_lines <- st_sfc(\n  st_linestring(matrix(c(-180, 0, 180, 0), ncol = 2, byrow = TRUE)), \n  st_linestring(matrix(c(0, -85, 0, 85), ncol = 2, byrow = TRUE)),   \n  crs = 4326\n)\n\nmy_map <- tm_shape(world_merc, bbox = c(-180, -85, 180, 85)) + \n  tm_fill(fill = \"#fffff0\") +\n  tm_graticules(x = seq(-180, 180, 10), \n                y = c(-85, seq(-80, 80, 10), 85), \n                labels.show = FALSE, lwd = 0.1, col = \"black\") +\n  tm_shape(origin_lines) + tm_lines(col = \"black\", lwd = 1) +\n  tm_shape(tsf$ind) + tm_fill(fill = \"#e65100\", fill_alpha = 0.50) +\n  tm_layout(inner.margins = c(0, 0, 0, 0), bg.color = \"#d1ecf9\") +\n  tm_credits(\"SANG-IL LEE, Geography Education at SNU\", \n             size = 0.7, position = c(0.80, -0.005))\nmy_map  \n```\n\n::: {.cell-output-display}\n![](07_concept_projection_files/figure-html/unnamed-chunk-2-1.png){width=7790.496}\n:::\n:::\n\n\n-   저장\n\n\n::: {.cell}\n\n:::\n\n",
+    "supporting": [
+      "07_concept_projection_files"
+    ],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {},
+    "engineDependencies": {},
+    "preserve": {},
+    "postProcess": true
+  }
+}

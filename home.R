@@ -2,6 +2,7 @@ library(tidyverse)
 library(readxl)
 library(sf)
 library(tmap)
+library(tmaptools)
 library(rayshader)
 
 library(pals)
@@ -599,3 +600,119 @@ plt <- penguins %>%
 ragg::agg_png("ragg_10x10.png", width = 10, height = 10, units = "in", res = 300)
 plt
 dev.off()
+
+
+# indicatrix --------------------------------------------------------------
+
+# https://mgimond.github.io/tissot/
+
+source("https://raw.githubusercontent.com/mgimond/tissot/master/Tissot_functions.r")
+
+# world <-  readRDS(gzcon(url("https://github.com/mgimond/tissot/raw/master/smpl_world.rds")))
+# us <-  readRDS(gzcon(url("https://github.com/mgimond/tissot/raw/master/smpl_US.rds")))
+
+library(spData)
+
+# us.crs <- st_crs(us)
+# st_geometry(us) <- st_geometry(us) + c(-360, 0) 
+# st_crs(us) <- us.crs
+
+qtm(world)
+# qtm(us)
+
+proj.rob    <- "+proj=robin +lon_0=0 +x_0=0 +y_0=0 +ellps=WGS84" # Robinson
+proj.aea    <- "+proj=aea +lat_1=30 +lat_2=45 +lat_0=37.5 +lon_0=-96 +x_0=0 +y_0=0 +ellps=GRS80 +datum=NAD83 +units=m +no_defs" # Equal area conic
+proj.eqdc   <- "+proj=eqdc +lat_0=37.5 +lon_0=-96 +lat_1=30 +lat_2=45" # Equidistant conic
+proj.merc   <- "+proj=merc +ellps=WGS84" # Mercator
+proj.ortho1 <- "+proj=ortho +lon_0=-69 +lat_0=45 +ellps=WGS84" # Planar projection
+proj.utm19N <- "+proj=utm +zone=19 +ellps=GRS80 +datum=NAD83 +units=m +no_defs" # UTM NAD83
+proj.cea    <- "+proj=cea +lon_0=0 +lat_ts=0" # Equal Area Cylindrical projection.
+proj.carree <- "+proj=eqc +lat_ts=0 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +ellps=WGS84 
+                +datum=WGS84 +units=m +no_defs" # Plate Carree
+proj.aeqd   <- "+proj=aeqd +lat_0=45 +lon_0=-69 +x_0=0 +y_0=0 +ellps=WGS84 
+                +datum=WGS84 +units=m +no_defs" # Azimuthal Equidistant
+proj.gnom   <- "+proj=gnom +lon_0=-100 +lat_0=30" # Gnomonic
+proj.lcc    <- "+proj=lcc +lat_1=33 +lat_2=45 +lat_0=39 +lon_0=-96 +datum=NAD83" # USA Lambert Conformal
+proj.wintri <- "+proj=wintri +lat_1=50.467 +lon_0=0 +x_0=0 +y_0=0 +datum=WGS84 +units=m +no_defs"
+
+lat <- seq(-80,80, by=20L)
+lon <- seq(-150,150, by=30L)
+coord <- as.matrix(expand.grid(lon,lat))
+
+# coord2 <- coord_check(coord, proj.out = proj.merc)
+
+# i.lst <- apply(coord2, 1, function(x) ti(coord = x, proj.out = proj.merc))
+
+i.lst <- coord2 |> as_tibble() |> 
+  pmap(\(...) ti(coord = c(...), proj.out = proj.merc))
+
+tsf <- tissot_sf(i.lst, proj.out = proj.merc)
+
+world_merc <- st_transform(world, proj.merc) # Project world map
+
+ggplot() + 
+  geom_sf(data = world.merc, fill = "grey90", col = "white") + 
+  geom_sf(data = tsf$base, fill = "bisque", col = "grey50") +
+  geom_sf(data = tsf$ind,  col="red", fill = NA) +
+  geom_sf(data = tsf$mina,  col="red", fill = NA) +
+  geom_sf(data = tsf$maja,  col="green", fill = NA) +
+  geom_sf(data = tsf$lam,  col="grey50", fill = NA) +
+  geom_sf(data = tsf$phi,  col="grey80", fill = NA) +
+  coord_sf(ylim=c(-18800000,18800000), crs = proj.merc) +
+  theme_bw()
+
+ti.maine <- local_TI(long = -69.5, lat = 44.5, proj.out = proj.merc)
+
+
+zero_lines <- st_sfc(
+  st_linestring(matrix(c(-180, 0, 180, 0), ncol = 2, byrow = TRUE)), 
+  st_linestring(matrix(c(0, -85, 0, 85), ncol = 2, byrow = TRUE)),   
+  crs = 4326
+)
+
+my_map <- tm_shape(world_merc, bbox = c(-180, -85, 180, 85)) + tm_fill(fill = "#fffff0") +
+  tm_graticules(x = seq(-180, 180, 10), y = c(-85, seq(-80, 80, 10), 85), 
+                labels.show = FALSE, lwd = 0.1, col = "black") +
+  tm_shape(zero_lines) + tm_lines(col = "black", lwd = 1) +
+  tm_shape(tsf$ind) + tm_fill(fill = "#e65100", fill_alpha = 0.50) +
+  tm_layout(inner.margins = c(0, 0, 0, 0), bg.color = "#d1ecf9") +
+  tm_credits("SANG-IL LEE, Geography Education at SNU", size = 0.7, position = c(0.80, -0.005))
+my_map  
+
+my.ratio <- get_asp_ratio(my_map)
+
+my.title <- "indicatrix 연습"
+my.file.name <- paste0("D:/My Cartography/지도제작/", my.title, ".png")
+tmap_save(my_map, filename = my.file.name, height = 11.74*1.1, width = my.ratio*11.74*1.1, dpi = 600)
+
+
+# tissot 패키지 --------------------------------------------------------------
+
+# https://github.com/hypertidy/tissot
+
+library(tissot)
+library(sf)
+
+proj.rob    <- "+proj=robin +lon_0=0 +x_0=0 +y_0=0 +ellps=WGS84" 
+proj.rob.150E    <- "+proj=robin +lon_0=150 +x_0=0 +y_0=0 +ellps=WGS84" 
+proj.wintri <- "+proj=wintri +lat_1=50.467 +lon_0=0 +x_0=0 +y_0=0 +datum=WGS84 +units=m +no_defs"
+proj.wintri.150E <- "+proj=wintri +lat_1=50.467 +lon_0=150 +x_0=0 +y_0=0 +datum=WGS84 +units=m +no_defs"
+
+lat <- seq(-80,80, by=20L)
+lon <- seq(-150,150, by=30L)
+coord <- as.matrix(expand.grid(lon,lat))
+
+tis_merc <- tissot(coord, proj.merc)
+tis_robin <- tissot(coord, proj.rob)
+tis_robin_150E <- tissot(coord, proj.rob.150E)
+
+lat <- seq(-90,87.5, by=2.5)
+lon <- seq(-180,177.5, by=2.5)
+coord <- as.matrix(expand.grid(lon,lat))
+
+tis_robin <- tissot(coord, proj.rob)
+tis_robin_150E <- tissot(coord, proj.rob.150E)
+tis_wintri <- tissot(coord, proj.wintri)
+tis_wintri_150E <- tissot(coord, proj.wintri.150E)
+
+
