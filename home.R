@@ -643,7 +643,7 @@ coord <- as.matrix(expand.grid(lon,lat))
 
 # i.lst <- apply(coord2, 1, function(x) ti(coord = x, proj.out = proj.merc))
 
-i.lst <- coord2 |> as_tibble() |> 
+i.lst <- coord |> as_tibble() |> 
   pmap(\(...) ti(coord = c(...), proj.out = proj.merc))
 
 tsf <- tissot_sf(i.lst, proj.out = proj.merc)
@@ -685,6 +685,74 @@ my.title <- "indicatrix 연습"
 my.file.name <- paste0("D:/My Cartography/지도제작/", my.title, ".png")
 tmap_save(my_map, filename = my.file.name, height = 11.74*1.1, width = my.ratio*11.74*1.1, dpi = 600)
 
+# 심사도법: 참으로 어렵다!!!!!
+
+# 투영 설정
+lat_0 <- -25
+lon_0 <- 135
+proj.gnomonic <- str_glue("+proj=gnom +lat_0={lat_0} +lon_0={lon_0} +R=6.4e6")
+
+# 특수 영역 세계지도 만들기
+sf_use_s2(TRUE)
+
+center_point <- st_sfc(st_point(c(lon_0, lat_0)), crs = 4326)
+visible_buffer <- st_buffer(center_point, dist = 9900000) 
+qtm(visible_buffer) + qtm(center_point)
+
+world_clipped <- st_intersection(World, visible_buffer)
+world_gnomonic <- st_transform(world_clipped, proj.gnomonic) 
+
+qtm(world_clipped)
+qtm(world_gnomonic)
+
+center_point_0 <- st_sfc(st_point(c(0, 0)), crs = proj.gnomonic) 
+world_gnomonic_buffer <- st_buffer(center_point_0, dist = 25000000)
+
+world_gnomonic_clipped <- world_gnomonic |> st_intersection(
+  world_gnomonic_buffer
+)
+  
+qtm(world_gnomonic_clipped)
+
+# 좌표 생성
+lat <- seq(-50, 40, by = 20)
+lon <- seq(-180, 180, by = 30)
+coord_df <- expand.grid(lon = lon, lat = lat) %>% as_tibble()
+
+# 중심점으로부터의 각거리(Angular Distance) 계산 함수
+# 두 지점 사이의 각거리 c를 구함: cos(c) = sin(phi1)sin(phi2) + cos(phi1)cos(phi2)pos(delta_lambda)
+deg2rad <- function(deg) deg * pi / 180
+
+coord_filtered <- coord_df %>%
+  mutate(
+    phi1 = deg2rad(lat_0),
+    phi2 = deg2rad(lat),
+    d_lambda = deg2rad(lon - lon_0),
+    # 각거리 cos(c) 계산
+    cos_c = sin(phi1) * sin(phi2) + cos(phi1) * cos(phi2) * cos(d_lambda)
+  ) %>%
+  # cos_c가 0보다 커야(즉, 각거리가 90도 미만) 투영이 가능함
+  # 수치적 안정성을 위해 약간의 여유(0.05)를 둡니다.
+  filter(cos_c > 0.05) 
+
+# Tissot 지표 계산
+ts.lst <- coord_filtered %>%
+  select(lon, lat) %>%
+  pmap(~ ti(coord = c(...), proj.out = proj.gnomonic))
+
+tsf <- tissot_sf(ts.lst, proj.out = proj.gnomonic)
+
+buf_ind <- tsf$ind |> st_intersection(world_gnomonic_buffer)
+
+my_map <- tm_shape(world_gnomonic_clipped, bbox = world_gnomonic_buffer) + tm_fill(fill = "#fffff0") +
+  tm_graticules(x = seq(-180, 180, 10), y = c(-85, seq(-80, 80, 10), 85), 
+                labels.show = FALSE, lwd = 0.1, col = "black") +
+  # tm_shape(zero_lines) + tm_lines(col = "black", lwd = 1) +
+  tm_shape(buf_ind) + tm_fill(fill = "#e65100", fill_alpha = 0.50) +
+  tm_layout(inner.margins = c(0, 0, 0, 0), bg.color = "#d1ecf9") +
+  tm_credits("SANG-IL LEE, Geography Education at SNU", size = 0.7, position = c(0.80, -0.005))
+my_map  
+
 
 # tissot 패키지 --------------------------------------------------------------
 
@@ -716,3 +784,10 @@ tis_wintri <- tissot(coord, proj.wintri)
 tis_wintri_150E <- tissot(coord, proj.wintri.150E)
 
 
+proj.gnomonic <- "+proj=gnom +lat_0=-25 +lon_0=135 +R=6.4e6"
+
+tis_gnomonic <- tissot(coord, proj.gnomonic)
+indicatrix_gnomonic <- indicatrix(tis_gnomonic)
+
+plot(indicatrix_gnomonic, scale = 6e5, show.circle = TRUE)
+tissot_map()
