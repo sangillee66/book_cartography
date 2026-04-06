@@ -278,9 +278,142 @@ tm_shape(my_df) +
     size = 0.3, position = c(0.78, 0.01)
   )
 
+# 높이
   
+library(devtools)
+install_github("neocarto/mapextrud")
+library(mapextrud)
+
+
+plot(st_geometry(seoul_gu))
+
+seoul_gu_ht <- deform(seoul_gu, flatten = 0.5)
+plot(st_geometry(seoul_gu_ht))
+
+extrude2 <- function(x, var, k = 1, lwd = 1, col = "white",
+                     border = "black", regular = FALSE, add = FALSE) {
   
-  utm_52 <- "+proj=tmerc +lon_0=129 +x_0=500000 +datum=WGS84 +units=m"
+  xraw <- x
+  
+  v <- x[[var]]
+  v[is.na(v)] <- 0
+  x[[var]] <- v
+  x <- x[v > 0, ]
+  
+  v <- x[[var]]
+  v[is.na(v)] <- 0
+  x[[var]] <- v
+  
+  h <- st_bbox(x)[4] - st_bbox(x)[2]
+  m <- max(x[[var]], na.rm = TRUE)
+  k <- k * 0.1 * h / m
+  
+  x$id <- row.names(x)
+  x$height <- x[[var]] * k
+  x$height[is.na(x$height)] <- 0
+  
+  n1 <- dim(x)[1]
+  
+  single <- x[st_geometry_type(x) == "POLYGON", ]
+  multi  <- x[st_geometry_type(x) == "MULTIPOLYGON", ]
+  exploded <- st_cast(multi, "POLYGON", warn = FALSE)
+  
+  x <- rbind(single, exploded)
+  
+  n2 <- dim(x)[1]
+  if (n2 > n1) {
+    message("Splitting multi-part polygon into single polygons. The same value is assigned to each splitted polygon.")
+    x$id <- row.names(x)
+  }
+  
+  nodes <- st_cast(x, "MULTIPOINT", warn = FALSE)
+  nodes <- st_cast(nodes, "POINT", warn = FALSE)
+  
+  if (dim(nodes)[1] > 2000 && regular == FALSE) {
+    stop("Computation aborted", call. = FALSE)
+  }
+  
+  L1 <- data.frame(st_coordinates(x))
+  nodes <- st_sf(cbind(data.frame(nodes), L1 = L1$L1))
+  nodes$id2 <- paste(nodes$id, nodes$L1, sep = "_")
+  
+  nodes$first <- !duplicated(nodes$id2)
+  nodes$last  <- !duplicated(nodes$id2, fromLast = TRUE)
+  dots1 <- nodes[!nodes$last, ]
+  dots2 <- nodes[!nodes$first, ]
+  
+  p1x <- st_coordinates(dots1)[,1]
+  p1y <- st_coordinates(dots1)[,2]
+  p2x <- st_coordinates(dots2)[,1]
+  p2y <- st_coordinates(dots2)[,2]
+  p3x <- p2x
+  p3y <- p2y + dots2$height
+  p4x <- p1x
+  p4y <- p1y + dots1$height
+  
+  faces <- dots1
+  faces$ang <- atan((p2y - p1y) / (p2x - p1x)) * 180 / pi
+  faces$pos <- (p1y + p2y) / 2
+  
+  st_geometry(faces) <- st_as_sfc(
+    paste0("POLYGON((", p1x, " ", p1y, ", ",
+           p2x, " ", p2y, ", ",
+           p3x, " ", p3y, ", ",
+           p4x, " ", p4y, ", ",
+           p1x, " ", p1y, "))")
+  )
+  
+  if (col %in% names(x)) {
+    fill <- c("white", "#d1c9b2", "#b8b1a0")
+    faces$fill <- fill[2]
+    faces[faces$ang > 0, "fill"] <- fill[3]
+  } else {
+    if (col == "white") {
+      fill <- c("white", "white", "white")
+    } else {
+      pal <- colorRampPalette(c("white", col, "black"))(11)
+      fill <- c(col, pal[3], pal[7])
+    }
+    faces$fill <- fill[2]
+    faces[faces$ang > 0, "fill"] <- fill[3]
+  }
+  
+  tops <- x
+  for (i in seq_len(nrow(tops))) {
+    st_geometry(tops[i, ]) <- st_geometry(tops[i, ]) + c(0, x[[var]][i] * k)
+  }
+  tops <- tops[order(tops$height, decreasing = FALSE), ]
+  st_crs(tops) <- NA
+  
+  message("Extrusion et ordering")
+  faces <- faces[, c("id", "pos", "fill")]
+  
+  for (i in tops$id) {
+    tops[tops$id == i, "pos"] <- max((faces[faces$id == i, "pos"] %>% st_drop_geometry())[,1]) - 1000
+  }
+  
+  if (col %in% names(x)) {
+    tops$fill <- x[[col]]
+  } else {
+    tops$fill <- fill[1]
+  }
+  
+  tops <- tops[, c("id", "pos", "fill")]
+  geom <- rbind(faces, tops)
+  geom <- geom[order(geom$pos, decreasing = TRUE), ]
+  
+  plot(st_geometry(xraw), lwd = lwd, border = border, add = add)
+  plot(st_geometry(geom), col = geom$fill, lwd = lwd, border = border, add = TRUE)
+}
+
+seoul_gu_ht2 <- seoul_gu_ht |>
+  st_simplify(dTolerance = 50)
+
+extrude2(seoul_gu_ht2, var = "House1_p", regular = TRUE, col="#99aed1", k =1.8)
+  
+    
+  
+utm_52 <- "+proj=tmerc +lon_0=129 +x_0=500000 +datum=WGS84 +units=m"
 
 a <- ne_countries(type = "countries", scale = "large")
 qtm(a)
@@ -791,3 +924,5 @@ indicatrix_gnomonic <- indicatrix(tis_gnomonic)
 
 plot(indicatrix_gnomonic, scale = 6e5, show.circle = TRUE)
 tissot_map()
+
+

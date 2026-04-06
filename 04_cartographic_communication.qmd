@@ -300,6 +300,50 @@ seoul_gu_df <- seoul_gu |>
 -   지도 제작
 
 ```{r}
+#| eval: false
+#| fig-height: 12.914
+#| fig-width: 15.7721
+#| fig-dpi: 600
+my_graph <- ggplot(seoul_gu_df) +
+  geom_sf_pattern(
+    aes(pattern_density = House1_p),
+    pattern = "circle",
+    pattern_fill = "gray30",
+    pattern_color = "gray30",
+    pattern_spacing = 0.03, 
+    # pattern_density = 1,
+    color = "black",
+    fill = "white",
+    lwd = 0.5,
+    show.legend = FALSE
+  ) +
+  scale_pattern_density_continuous(range = c(0.05, 0.6)) +
+  coord_sf() + 
+  theme_bw() +
+  theme(
+    panel.grid = element_blank(), 
+    axis.text = element_blank(),
+    axis.ticks = element_blank()
+  )
+my_graph
+```
+
+![](images/clipboard-2589183771.png)
+
+-   저장
+
+```{r}
+#| echo: false
+#| eval: false
+
+my.path.name <- "D:/My Cartography/지도제작/"
+my.file.name <- paste0("4-1 크기 a", ".png")
+ggsave(my.file.name, plot = my_graph, path = my.path.name, height = 12.914, width = 15.7721, dpi = 600)
+```
+
+-   지도 제작
+
+```{r}
 #| fig-height: 12.914
 #| fig-width: 15.7721
 #| fig-dpi: 600
@@ -322,7 +366,7 @@ my_map
 
 my.ratio <- get_asp_ratio(my_map)
 
-my.title <- "4-1 크기"
+my.title <- "4-1 크기 b"
 my.path.name <- "D:/My Cartography/지도제작/"
 my.file.name <- paste0(my.path.name, my.title, ".png")
 tmap_save(my_map, filename = my.file.name, height = 11.74*1.1, width = my.ratio*11.74*1.1, dpi = 600)
