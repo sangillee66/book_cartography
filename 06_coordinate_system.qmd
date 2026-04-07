@@ -23,6 +23,549 @@ editor_options:
 
 ### 기본 좌표계
 
+#### 2차원 데카르트 좌표계
+
+```{r}
+#| fig-height: 12
+#| fig-width: 12
+#| fig-dpi: 600
+library(tidyverse)
+library(grid)
+
+px <- 7
+py <- 6
+
+my_graph <- ggplot() +
+  geom_vline(xintercept = seq(-11, 13, 1), color = "gray", linewidth = 0.3) +
+  geom_hline(yintercept = seq(-11, 13, 1), color = "gray", linewidth = 0.3) +
+  geom_segment(aes(x = -10, y = 0, xend = 10, yend = 0), color = "blue", linewidth = 1, 
+               arrow = arrow(ends = "both", length = unit(0.3, "cm"))) +
+  geom_segment(aes(x = 0, y = -10, xend = 0, yend = 10), color = "red", linewidth = 1, 
+               arrow = arrow(ends = "both", length = unit(0.3, "cm"))) +
+  annotate("segment", x = px, y = 0, xend = px, yend = py, linetype = "dashed", 
+           color = "blue", linewidth = 1) +
+  annotate("segment", x = 0, y = py, xend = px, yend = py, linetype = "dashed", 
+           color = "red", linewidth = 1) +
+  annotate("text", x = px, y = py, label = "(7, 6)", hjust = -0.2, vjust = -0.2,
+           color = "purple4", size = 9) +
+  annotate("text", x = 1:9, y = -0.5, label = 1:9, size = 7) +
+  annotate("text", x = -0.5, y = 1:9, label = 1:9, size = 7) +
+  annotate("text", x = 11.5, y = 0, label = "X-axis", size = 8) +
+  annotate("text", x = 0, y = 11, label = "Y-axis", size = 8) +
+  annotate("text", x = -0.8, y = -0.5, label = "(0,0)", size = 8) +
+  geom_point(aes(px, py), color = "purple4", size = 5) +
+  geom_point(aes(0, 0), color = "black", size = 5) +
+  coord_fixed(xlim = c(-11, 13), ylim = c(-11, 13), expand = FALSE) +
+  theme_void() +
+  theme(panel.border = element_rect(color = "black", fill = NA, linewidth = 0.8))
+my_graph
+```
+
+```{r}
+#| echo: false
+#| eval: false
+
+my.path.name <- "D:/My Cartography/지도제작/"
+my.file.name <- paste0("6-1-1 데카르트 좌표계 2차원", ".png")
+ggsave(my.file.name, plot = my_graph, path = my.path.name, height = 12, width = 12, dpi = 600)
+```
+
+#### 2차원 극 좌표계
+
+```{r}
+#| fig-height: 12
+#| fig-width: 12
+#| fig-dpi: 600
+r <- 3.5
+theta_deg <- 60
+theta <- theta_deg * pi / 180
+
+px <- r * cos(theta)
+py <- r * sin(theta)
+
+px_long <- 6.5 * cos(theta)
+py_long <- 6.5 * sin(theta)
+
+circle_df <- do.call(
+  rbind,
+  lapply(1:6, function(rad) {
+    ang <- seq(0, 2*pi, length.out = 400)
+    data.frame(
+      x = rad * cos(ang),
+      y = rad * sin(ang),
+      id = rad
+    )
+  })
+)
+
+angles_deg <- seq(0, 315, 45)
+spoke_df <- data.frame(
+  x = 0, y = 0,
+  xend = 6.5 * cos(angles_deg * pi / 180),
+  yend = 6.5 * sin(angles_deg * pi / 180)
+)
+
+arc_ang <- seq(0, theta, length.out = 200)
+arc_df <- data.frame(
+  x = 3.5 * cos(arc_ang),
+  y = 3.5 * sin(arc_ang)
+)
+
+label_r <- 6.8
+label_df <- data.frame(
+  angle = angles_deg,
+  label = paste0(angles_deg, "°"),
+  x = label_r * cos(angles_deg * pi / 180),
+  y = label_r * sin(angles_deg * pi / 180)
+)
+
+radius_x_df <- data.frame(x = 1:6, y = 0, label = 1:6)
+radius_y_df <- data.frame(x = 0, y = 1:6, label = 1:6)
+
+my_graph <- ggplot() +
+  geom_path(data = circle_df, aes(x, y, group = id), color = "gray30", linewidth = 0.7) +
+  geom_segment(data = spoke_df, aes(x = x, y = y, xend = xend, yend = yend), 
+               color = "gray30", linewidth = 0.7) +
+  annotate("segment", x = 0, y = 0, xend = px_long, yend = py_long,
+           color = "red", linetype = "dashed", linewidth = 1) +
+  annotate("segment", x = 0, y = 0, xend = px, yend = py, color = "red", linewidth = 1.2) +
+  annotate("segment", x = 0, y = 0, xend = 6.5, yend = 0, color = "blue", linewidth = 1.2) +
+  geom_path(data = arc_df, aes(x, y), color = "red", linewidth = 1, linetype = "dashed") +
+  geom_point(aes(px, py), color = "purple4", size = 5) +
+  annotate("text", x = px - 0.78, y = py + 0.37, label = "(3.5, 60°)", color = "purple4", size = 9) +
+  geom_text(data = label_df, aes(x, y, label = label), color = "black", size = 7) +
+  geom_text(data = radius_x_df, aes(x + 0.15, y - 0.2, label = label), color = "black", size = 7) +
+  geom_text(data = radius_y_df, aes(x - 0.2, y + 0.15, label = label), color = "black", size = 7) +
+  geom_point(aes(0, 0), color = "black", size = 5) +
+  annotate("text", x = px_long + 0.1, y = py_long + 0.1, label = "60°", 
+       color = "purple4", size = 7) +
+  coord_fixed(xlim = c(-7.5, 7.5), ylim = c(-7.5, 7.5), expand = FALSE) +
+  theme_void() +
+  theme(
+    panel.background = element_rect(fill = "white", color = NA),
+    plot.background = element_rect(fill = "white", color = NA),
+    panel.border = element_rect(color = "black", fill = NA, linewidth = 0.8)
+  )
+my_graph
+```
+
+```{r}
+#| echo: false
+#| eval: false
+
+my.path.name <- "D:/My Cartography/지도제작/"
+my.file.name <- paste0("6-1-2 극 좌표계 2차원", ".png")
+ggsave(my.file.name, plot = my_graph, path = my.path.name, height = 12, width = 12, dpi = 600)
+```
+
+#### 2차원 데카르트 좌표계와 극 좌표계의 결합
+
+```{r}
+#| fig-height: 12
+#| fig-width: 12
+#| fig-dpi: 600
+r <- 3.5
+theta_deg <- 60
+theta <- theta_deg * pi / 180
+
+px <- r * cos(theta)
+py <- r * sin(theta)
+
+px_long <- 6.5 * cos(theta)
+py_long <- 6.5 * sin(theta)
+
+circle_df <- do.call(
+  rbind,
+  lapply(1:6, function(rad) {
+    ang <- seq(0, 2*pi, length.out = 400)
+    data.frame(
+      x = rad * cos(ang),
+      y = rad * sin(ang),
+      id = rad
+    )
+  })
+)
+
+angles_deg <- seq(0, 315, 45)
+spoke_df <- data.frame(
+  x = 0, y = 0,
+  xend = 6.5 * cos(angles_deg * pi / 180),
+  yend = 6.5 * sin(angles_deg * pi / 180)
+)
+
+arc_ang <- seq(0, theta, length.out = 200)
+arc_df <- data.frame(
+  x = 3.5 * cos(arc_ang),
+  y = 3.5 * sin(arc_ang)
+)
+
+label_r <- 6.8
+label_df <- data.frame(
+  angle = angles_deg,
+  label = paste0(angles_deg, "°"),
+  x = label_r * cos(angles_deg * pi / 180),
+  y = label_r * sin(angles_deg * pi / 180)
+)
+
+radius_x_df <- data.frame(x = 1:6, y = 0, label = 1:6)
+radius_y_df <- data.frame(x = 0, y = 1:6, label = 1:6)
+
+my_graph <- ggplot() +
+  geom_path(data = circle_df, aes(x, y, group = id), color = "gray30", linewidth = 0.7) +
+  geom_segment(data = spoke_df, aes(x = x, y = y, xend = xend, yend = yend), 
+               color = "gray30", linewidth = 0.7) +
+  # annotate("segment", x = 0, y = 0, xend = px_long, yend = py_long, 
+  #          color = "red", linetype = "dashed", linewidth = 1) +
+  annotate("segment", x = px_long, y = py_long, xend = px + 0.1, yend = py + 0.1, color = "green", 
+           linetype = "solid", linewidth = 1, 
+           arrow = arrow(length = unit(0.3, "cm"), ends = "last")) +
+  annotate("segment", x = 0, y = 0, xend = px, yend = py, color = "red", linewidth = 1.2) +
+  annotate("segment", x = 0, y = 0, xend = 6.5, yend = 0, color = "blue", linewidth = 1.2) +
+  annotate("segment", x = 1.75, y = 0, xend = 1.75, yend = 3.03, linetype = "dashed", 
+           color = "blue", linewidth = 1) +
+  annotate("segment", x = 0, y = 3.03, xend = 1.75, yend = 3.03, linetype = "dashed", 
+           color = "red", linewidth = 1) +
+  geom_path(data = arc_df, aes(x, y), color = "red", linewidth = 1, linetype = "dashed") +
+  geom_point(aes(px, py), color = "purple4", size = 5) +
+  annotate("text", x = px - 0.78, y = py + 0.37, label = "(3.5, 60°)", color = "purple4", size = 9) +
+  annotate("text", x = px_long, y = py_long + 0.3, label = "(1.75, 3.03)", 
+           color = "purple4", size = 9) +
+  geom_text(data = label_df, aes(x, y, label = label), color = "black", size = 7) +
+  geom_text(data = radius_x_df, aes(x + 0.15, y - 0.2, label = label), color = "black", size = 7) +
+  geom_text(data = radius_y_df, aes(x - 0.2, y + 0.15, label = label), color = "black", size = 7) +
+  geom_point(aes(0, 0), color = "black", size = 5) +
+  coord_fixed(xlim = c(-7.5, 7.5), ylim = c(-7.5, 7.5), expand = FALSE) +
+  theme_void() +
+  theme(
+    panel.background = element_rect(fill = "white", color = NA),
+    plot.background = element_rect(fill = "white", color = NA),
+    panel.border = element_rect(color = "black", fill = NA, linewidth = 0.8)
+  )
+my_graph
+```
+
+```{r}
+#| echo: false
+#| eval: false
+
+my.path.name <- "D:/My Cartography/지도제작/"
+my.file.name <- paste0("6-1-3 2차원 종합", ".png")
+ggsave(my.file.name, plot = my_graph, path = my.path.name, height = 12, width = 12, dpi = 600)
+```
+
+#### 3차원 데카르트 좌표계
+
+```{r}
+#| fig-height: 10.5
+#| fig-width: 11.3
+#| fig-dpi: 600
+library(ggplot2)
+library(grid)
+
+O  <- c(0, 0)
+Xb <- c(-3.2, -3.2)
+Yb <- c(4.8, 0)
+Zb <- c(0, 5.2)
+
+B  <- c(2.2, -2.1)
+P  <- c(2.2, 1.2)
+Xc <- c(-2.1, -2.1)
+Yc <- c(4, 0)
+Zc <- c(0, 3.3)
+
+my_graph <- ggplot() +
+  
+  # axes
+  annotate("segment", x=0,y=0,xend=Xb[1],yend=Xb[2],
+           color="blue", linewidth=1,
+           arrow=arrow(length=unit(0.2,"cm"))) +
+  annotate("segment", x=0,y=0,xend=Yb[1],yend=Yb[2],
+           color="blue", linewidth=1,
+           arrow=arrow(length=unit(0.2,"cm"))) +
+  annotate("segment", x=0,y=0,xend=Zb[1],yend=Zb[2],
+           color="blue", linewidth=1,
+           arrow=arrow(length=unit(0.2,"cm"))) +
+  
+  # cartesian components
+  annotate("segment", x=0,y=0,xend=B[1],yend=B[2],
+           color="red", linewidth=1.2) +
+  annotate("segment", x=Xc[1],y=Xc[2],xend=B[1],yend=B[2],
+           color="red", linetype="dashed", linewidth=1) +
+  annotate("segment", x=B[1],y=B[2],xend=P[1],yend=P[2],
+           color="red", linetype="dashed", linewidth=1) +
+  annotate("segment", x=P[1],y=P[2],xend=Zc[1],yend=Zc[2],
+           color="red", linetype="dashed", linewidth=1) +
+  annotate("segment", x=B[1], y=B[2], xend=Yc[1], yend=Yc[2],
+           color="red", linetype="dashed", linewidth=1) +
+  
+  # point
+  geom_point(aes(P[1],P[2]), color="purple4", size=5) +
+  geom_point(aes(0,0), color="black", size=5) +
+
+  # component labels
+  annotate("text", x=Xc[1]-0.2, y=Xc[2], label= expression(italic(x)), color="black", size=7) +
+  annotate("text", x=Yb[1]-0.7, y=0.2, label= expression(italic(y)), color="black", size=7) +
+  annotate("text", x=Zc[1]-0.2, y=Zc[2], label= expression(italic(z)), color="black", size=7) +
+  
+  # axis labels
+  annotate("text", x=Xb[1]-0.3, y=Xb[2]-0.5, label="X-Axis",
+           color="black", size=8) +
+  annotate("text", x=Yb[1]+1, y=Yb[2], label="Y-Axis",
+           color="black", size=8) +
+  annotate("text", x=Zb[1], y=Zb[2]+0.5, label="Z-Axis",
+           color="black", size=8) +
+  
+  # point label
+  annotate("text", x=P[1] + 0.8, y=P[2], 
+          label = expression("(" * italic(x) * ", " * italic(y) * ", " * italic(z) * ")"),
+          color="black", size=9) +
+  
+  coord_fixed(xlim=c(-4.5,6.8), ylim=c(-4.25,6.25), expand = FALSE) +
+  theme_void() +
+  theme(panel.border = element_rect(color="black", fill=NA), linewidth = 0.8)
+
+my_graph
+```
+
+```{r}
+#| echo: false
+#| eval: false
+
+my.path.name <- "D:/My Cartography/지도제작/"
+my.file.name <- paste0("6-1-4 3차원 데카르트", ".png")
+ggsave(my.file.name, plot = my_graph, path = my.path.name, height = 10.5, width = 11.3, dpi = 600)
+```
+
+#### 3차원 극 좌표계
+
+```{r}
+#| fig-height: 10.5
+#| fig-width: 11.3
+#| fig-dpi: 600
+
+library(tidyverse)
+library(grid)
+
+O  <- c(0, 0)
+Xb <- c(-3.2, -3.2)
+Yb <- c(4.8, 0)
+Zb <- c(0, 5.2)
+
+B  <- c(2.2, -2.1)
+P  <- c(2.2, 1.2)
+
+ang_X <- atan2(Xb[2], Xb[1])
+ang_B <- atan2(B[2], B[1])
+
+theta_r <- 1.2
+theta_seq <- seq(ang_X, ang_B, length.out = 120)
+
+theta_arc <- data.frame(
+  x = theta_r * cos(theta_seq),
+  y = theta_r * sin(theta_seq)
+)
+
+# phi arc: O->B 와 O->P 사이의 각 (작게)
+ang_P <- atan2(P[2], P[1])
+
+phi_r <- 0.9
+phi_seq <- seq(ang_B, ang_P, length.out = 120)
+
+phi_arc <- data.frame(
+  x = phi_r * cos(phi_seq),
+  y = phi_r * sin(phi_seq)
+)
+
+my_graph <- ggplot() +
+  
+  # axes
+  annotate("segment", x=0,y=0,xend=Xb[1],yend=Xb[2],
+           color="blue", linewidth=1,
+           arrow=arrow(length=unit(0.2,"cm"))) +
+  annotate("segment", x=0,y=0,xend=Yb[1],yend=Yb[2],
+           color="blue", linewidth=1,
+           arrow=arrow(length=unit(0.2,"cm"))) +
+  annotate("segment", x=0,y=0,xend=Zb[1],yend=Zb[2],
+           color="blue", linewidth=1,
+           arrow=arrow(length=unit(0.2,"cm"))) +
+  
+  # polar components
+  annotate("segment", x=0,y=0,xend=B[1],yend=B[2],
+           color="magenta2", linewidth=1.2) +
+  annotate("segment", x=B[1],y=B[2],xend=P[1],yend=P[2],
+           color="magenta2", linetype="dashed", linewidth=1) +
+  annotate("segment", x=0,y=0,xend=P[1],yend=P[2],
+           color="magenta2", linetype="dashed", linewidth=1) +
+  
+  # angle arcs
+  geom_path(data = theta_arc, aes(x, y),
+            color = "purple4", linetype = "dashed", linewidth = 1) +
+  geom_path(data = phi_arc, aes(x, y),
+            color = "purple4", linetype = "dashed", linewidth = 1) +
+  
+  # point
+  geom_point(aes(P[1],P[2]), color="purple4", size=5) +
+  geom_point(aes(0,0), color="black", size=5) +
+  
+  # component labels
+  annotate("text", x = 1, y = 0.8, label = expression(italic(r)), color = "black", size = 7) +
+  annotate("text", x = 1.1, y = -0.15, label = expression(italic(φ)), color = "black", size = 7) +
+  annotate("text", x = 0, y = -0.95, label = expression(italic(θ)), color = "black", size = 7) +
+  
+  # axis labels
+  annotate("text", x=Xb[1]-0.3, y=Xb[2]-0.5, label="X-Axis",
+           color="black", size=8) +
+  annotate("text", x=Yb[1]+1, y=Yb[2], label="Y-Axis",
+           color="black", size=8) +
+  annotate("text", x=Zb[1], y=Zb[2]+0.5, label="Z-Axis",
+           color="black", size=8) +
+  
+  # point label
+  annotate("text", x=P[1] + 0.8, y=P[2], 
+           label = expression("(" * italic(φ) * ", " * italic(θ) * ", " * italic(r) * ")"),
+           color="black", size=9) +
+  
+  coord_fixed(xlim=c(-4.5,6.8), ylim=c(-4.25,6.25), expand = FALSE) +
+  theme_void() +
+  theme(panel.border = element_rect(color="black", fill=NA), linewidth = 0.8)
+
+my_graph
+```
+
+```{r}
+#| echo: false
+#| eval: false
+
+my.path.name <- "D:/My Cartography/지도제작/"
+my.file.name <- paste0("6-1-5 3차원 극 좌표계", ".png")
+ggsave(my.file.name, plot = my_graph, path = my.path.name, height = 10.5, width = 11.3, dpi = 600)
+```
+
+#### 3차원 데카르트 좌표계와 극 좌표계의 결합
+
+```{r}
+#| fig-height: 10.5
+#| fig-width: 11.3
+#| fig-dpi: 600
+
+library(tidyverse)
+library(grid)
+
+O  <- c(0, 0)
+Xb <- c(-3.2, -3.2)
+Yb <- c(4.8, 0)
+Zb <- c(0, 5.2)
+
+B  <- c(2.2, -2.1)
+P  <- c(2.2, 1.2)
+Xc <- c(-2.1, -2.1)
+Yc <- c(4, 0)
+Zc <- c(0, 3.3)
+
+ang_X <- atan2(Xb[2], Xb[1])
+ang_B <- atan2(B[2], B[1])
+ang_P <- atan2(P[2], P[1])
+
+theta_r <- 1.2
+theta_seq <- seq(ang_X, ang_B, length.out = 120)
+
+theta_arc <- data.frame(
+  x = theta_r * cos(theta_seq),
+  y = theta_r * sin(theta_seq)
+)
+
+phi_r <- 0.9
+phi_seq <- seq(ang_B, ang_P, length.out = 120)
+
+phi_arc <- data.frame(
+  x = phi_r * cos(phi_seq),
+  y = phi_r * sin(phi_seq)
+)
+
+my_graph <- ggplot() +
+  
+  # axes
+  annotate("segment", x = 0, y = 0, xend = Xb[1], yend = Xb[2],
+           color = "blue", linewidth = 1,
+           arrow = arrow(length = unit(0.2, "cm"))) +
+  annotate("segment", x = 0, y = 0, xend = Yb[1], yend = Yb[2],
+           color = "blue", linewidth = 1,
+           arrow = arrow(length = unit(0.2, "cm"))) +
+  annotate("segment", x = 0, y = 0, xend = Zb[1], yend = Zb[2],
+           color = "blue", linewidth = 1,
+           arrow = arrow(length = unit(0.2, "cm"))) +
+  
+  # polar components
+  annotate("segment", x = 0, y = 0, xend = B[1], yend = B[2],
+           color = "magenta2", linewidth = 1.2) +
+  annotate("segment", x = B[1], y = B[2], xend = P[1], yend = P[2],
+           color = "magenta2", linetype = "dashed", linewidth = 1) +
+  annotate("segment", x = 0, y = 0, xend = P[1], yend = P[2],
+           color = "magenta2", linetype = "dashed", linewidth = 1) +
+  
+  # cartesian components
+  annotate("segment", x = Xc[1], y = Xc[2], xend = B[1], yend = B[2],
+           color = "red", linetype = "dashed", linewidth = 1) +
+  annotate("segment", x = B[1], y = B[2], xend = Yc[1], yend = Yc[2],
+           color = "red", linetype = "dashed", linewidth = 1) +
+  annotate("segment", x = P[1], y = P[2], xend = Zc[1], yend = Zc[2],
+           color = "red", linetype = "dashed", linewidth = 1) +
+  
+  # angle arcs
+  geom_path(data = theta_arc, aes(x, y),
+            color = "purple4", linetype = "dashed", linewidth = 1) +
+  geom_path(data = phi_arc, aes(x, y),
+            color = "purple4", linetype = "dashed", linewidth = 1) +
+  
+  # point
+  geom_point(aes(P[1], P[2]), color = "purple4", size = 5) +
+  geom_point(aes(0, 0), color = "black", size = 5) +
+  
+  # polar labels
+  annotate("text", x = 1, y = 0.8, label = expression(italic(r)), color = "black", size = 7) +
+  annotate("text", x = 1.1, y = -0.15, label = expression(italic(φ)), color = "black", size = 7) +
+  annotate("text", x = 0, y = -0.95, label = expression(italic(θ)), color = "black", size = 7) +
+  
+  # cartesian labels
+  annotate("text", x=Xc[1]-0.2, y=Xc[2], label= expression(italic(x)), color="black", size=7) +
+  annotate("text", x=Yb[1]-0.7, y=0.2, label= expression(italic(y)), color="black", size=7) +
+  annotate("text", x=Zc[1]-0.2, y=Zc[2], label= expression(italic(z)), color="black", size=7) +
+  
+  # axis labels
+  annotate("text", x = Xb[1] - 0.3, y = Xb[2] - 0.5, label = "X-Axis",
+           color = "black", size = 8) +
+  annotate("text", x = Yb[1] + 1, y = Yb[2], label = "Y-Axis",
+           color = "black", size = 8) +
+  annotate("text", x = Zb[1], y = Zb[2] + 0.5, label = "Z-Axis",
+           color = "black", size = 8) +
+  
+  # point label
+  annotate("text", x = P[1] + 0.8, y = P[2] + 0.2, 
+          label = expression("(" * italic(x) * ", " * italic(y) * ", " * italic(z) * ")"),
+           color="black", size=9) +
+  annotate("text", x = P[1] + 0.8, y = P[2] - 0.2, 
+           label = expression("(" * italic(φ) * ", " * italic(θ) * ", " * italic(r) * ")"),
+           color = "black", size = 9) +
+  
+  coord_fixed(xlim = c(-4.5, 6.8), ylim = c(-4.25, 6.25), expand = FALSE) +
+  theme_void() +
+  theme(
+    panel.border = element_rect(color = "black", fill = NA),
+    linewidth = 0.8
+  )
+
+my_graph
+```
+
+```{r}
+#| echo: false
+#| eval: false
+
+my.path.name <- "D:/My Cartography/지도제작/"
+my.file.name <- paste0("6-1-6 3차원 종합", ".png")
+ggsave(my.file.name, plot = my_graph, path = my.path.name, height = 10.5, width = 11.3, dpi = 600)
+```
+
 ### 지도 투영을 위한 좌표계
 
 ## 구체 혹은 타원체 좌표계
@@ -130,7 +673,6 @@ my.file.name <- paste0(my.path.name, my.title, ".png")
 tmap_save(my_map, filename = my.file.name, height = 11.74*1.1, width = my.ratio*11.74*1.1, dpi = 600)
 ```
 
-
 다음으로 서울이 포함된 북반구 52구역에 대한 투영을 실행한다. [epsg.io](https://epsg.io/)의 검색 결과 EPSG:32652임을 확인한다.
 
 ```{r}
@@ -234,7 +776,6 @@ my.file.name <- paste0(my.path.name, my.title, ".png")
 tmap_save(my_map, filename = my.file.name, height = 11.74*1.1, width = my.ratio*11.74*1.1, dpi = 600)
 ```
 
-
 우리나라에 해당하는 IWM 구역과 1:250,000 지세도를 그린다.
 
 ```{r}
@@ -307,7 +848,6 @@ my.file.name <- paste0(my.path.name, my.title, ".png")
 tmap_save(my_map, filename = my.file.name, height = 11.74*1.1, width = my.ratio*11.74*1.1, dpi = 600)
 ```
 
-
 1:250,000, 1:50,000, 1:25,000의 인덱싱 시스템을 보여주는 지도를 제작한다.
 
 ```{r}
@@ -349,7 +889,6 @@ my.path.name <- "D:/My Cartography/지도제작/"
 my.file.name <- paste0(my.path.name, my.title, ".png")
 tmap_save(my_map, filename = my.file.name, height = 11.74*1.1, width = my.ratio*11.74*1.1, dpi = 600)
 ```
-
 
 ### 우리나라 TM 좌표계
 
@@ -412,7 +951,6 @@ my.file.name <- paste0(my.path.name, my.title, ".png")
 tmap_save(my_map, filename = my.file.name, height = 11.74*1.1, width = my.ratio*11.74*1.1, dpi = 600)
 ```
 
-
 동부 투영대의 지도를 제작한다.
 
 ```{r}
@@ -447,7 +985,6 @@ my.path.name <- "D:/My Cartography/지도제작/"
 my.file.name <- paste0(my.path.name, my.title, ".png")
 tmap_save(my_map, filename = my.file.name, height = 11.74*1.1, width = my.ratio*11.74*1.1, dpi = 600)
 ```
-
 
 동해 투영대의 지도를 제작한다.
 
@@ -484,7 +1021,6 @@ my.file.name <- paste0(my.path.name, my.title, ".png")
 tmap_save(my_map, filename = my.file.name, height = 11.74*1.1, width = my.ratio*11.74*1.1, dpi = 600)
 ```
 
-
 서부 투영대의 지도를 제작한다.
 
 ```{r}
@@ -519,7 +1055,6 @@ my.path.name <- "D:/My Cartography/지도제작/"
 my.file.name <- paste0(my.path.name, my.title, ".png")
 tmap_save(my_map, filename = my.file.name, height = 11.74*1.1, width = my.ratio*11.74*1.1, dpi = 600)
 ```
-
 
 중간 시험 문제(중부 투영대) 지도를 제작한다.
 
@@ -573,7 +1108,6 @@ my.path.name <- "D:/My Cartography/지도제작/"
 my.file.name <- paste0(my.path.name, my.title, ".png")
 tmap_save(my_map, filename = my.file.name, height = 11.74*1.1, width = my.ratio*11.74*1.1, dpi = 600)
 ```
-
 
 ### 국가 그리드
 
