@@ -237,7 +237,7 @@ editor_options:
 
 #### 준비 작업
 
--   필수적인 패키지 불러오기
+- 필수적인 패키지 불러오기
 
 ```{r}
 library(tidyverse)
@@ -250,7 +250,7 @@ library(ggpattern)
 library(gridpattern)
 ```
 
--   지리공간데이터 불러오기
+- 지리공간데이터 불러오기
 
 ```{r}
 #| output: false
@@ -264,13 +264,13 @@ seoul_sido <- read_sf(
   "D:/My R/Korean Administrative Areas/행정구역 셰이프 파일/2 Original Cleaning/2021_4Q/SEOUL_SIDO_2021_4Q.shp", options = "ENCODING=CP949")
 ```
 
--   지도 확인
+- 지도 확인
 
 ```{r}
 qtm(seoul_EMD)
 ```
 
--   1인가구 속성 데이터 불러오기
+- 1인가구 속성 데이터 불러오기
 
 ```{r}
 house_SDGGEMD_2020 <- read_excel(
@@ -278,7 +278,7 @@ house_SDGGEMD_2020 <- read_excel(
   )
 ```
 
--   결합하기
+- 결합하기
 
 ```{r}
 seoul_EMD_2020 <- seoul_EMD_2020 |> 
@@ -297,7 +297,7 @@ seoul_gu_df <- seoul_gu |>
 
 #### 크기 size
 
--   지도 제작
+- 지도 제작
 
 ```{r}
 #| eval: false
@@ -330,7 +330,7 @@ my_graph
 
 ![](images/clipboard-2589183771.png)
 
--   저장
+- 저장
 
 ```{r}
 #| echo: false
@@ -341,7 +341,7 @@ my.file.name <- paste0("4-1 크기 a", ".png")
 ggsave(my.file.name, plot = my_graph, path = my.path.name, height = 12.914, width = 15.7721, dpi = 600)
 ```
 
--   지도 제작
+- 지도 제작
 
 ```{r}
 #| fig-height: 12.914
@@ -358,7 +358,7 @@ my_map <- tm_shape(seoul_gu_df) + tm_borders(col = "gray10", lwd = 1.75) +
 my_map
 ```
 
--   저장
+- 저장
 
 ```{r}
 #| echo: false
@@ -374,7 +374,7 @@ tmap_save(my_map, filename = my.file.name, height = 11.74*1.1, width = my.ratio*
 
 #### 형태 shape
 
--   지도 제작
+- 지도 제작
 
 ```{r}
 #| eval: false
@@ -409,7 +409,7 @@ my_graph <- ggplot(seoul_gu_df) +
 my_graph
 ```
 
--   저장
+- 저장
 
 ```{r}
 #| echo: false
@@ -424,7 +424,7 @@ ggsave(my.file.name, plot = my_graph, path = my.path.name, height = 12.914, widt
 
 #### 높이 height
 
--   ggplot2를 이용하여 지도 제작
+- ggplot2를 이용하여 지도 제작
 
 ```{r}
 #| eval: false
@@ -445,7 +445,7 @@ my_map <- my_df |>
 my_map
 ```
 
--   3D
+- 3D
 
 ```{r}
 #| eval: false
@@ -456,7 +456,7 @@ plot_gg(my_map,
 Sys.sleep(0.2)
 ```
 
--   포착
+- 포착
 
 ```{r}
 #| echo: false
@@ -468,7 +468,7 @@ render_snapshot(clear = TRUE, file = "D:/My Cartography/지도제작/4-3 조감�
 
 #### 색상 hue
 
--   지도 제작
+- 지도 제작
 
 ```{r}
 #| fig-height: 12.914
@@ -489,7 +489,7 @@ my_map <- my_df |>
 my_map
 ```
 
--   저장
+- 저장
 
 ```{r}
 #| echo: false
@@ -505,7 +505,7 @@ tmap_save(my_map, filename = my.file.name, height = 11.74*1.1, width = my.ratio*
 
 #### 명도 value
 
--   지도 제작
+- 지도 제작
 
 ```{r}
 #| fig-height: 12.914
@@ -537,7 +537,7 @@ my_map <- my_df |>
 my_map
 ```
 
--   저장
+- 저장
 
 ```{r}
 #| echo: false
@@ -551,7 +551,7 @@ my.file.name <- paste0(my.path.name, my.title, ".png")
 tmap_save(my_map, filename = my.file.name, height = 11.74*1.1, width = my.ratio*11.74*1.1, dpi = 600)
 ```
 
--   지도 제작
+- 지도 제작
 
 ```{r}
 #| fig-height: 12.914
@@ -573,7 +573,7 @@ my_map <- my_df |>
 my_map
 ```
 
--   저장
+- 저장
 
 ```{r}
 #| echo: false
@@ -589,7 +589,7 @@ tmap_save(my_map, filename = my.file.name, height = 11.74*1.1, width = my.ratio*
 
 #### 채도 saturation
 
--   지도 제작
+- 지도 제작
 
 ```{r}
 #| fig-height: 12.914
@@ -614,7 +614,7 @@ my_map <- my_df |>
 my_map
 ```
 
--   저장
+- 저장
 
 ```{r}
 #| echo: false
@@ -630,7 +630,7 @@ tmap_save(my_map, filename = my.file.name, height = 11.74*1.1, width = my.ratio*
 
 #### 간격 spacing
 
--   지도 제작
+- 지도 제작
 
 ```{r}
 #| eval: false
@@ -661,7 +661,7 @@ my_graph <- ggplot(seoul_gu_df) +
 my_graph
 ```
 
--   저장
+- 저장
 
 ```{r}
 #| echo: false
@@ -676,7 +676,7 @@ ggsave(my.file.name, plot = my_graph, path = my.path.name, height = 12.914, widt
 
 #### 방향 orientation
 
--   지도 제작
+- 지도 제작
 
 ```{r}
 #| eval: false
@@ -707,7 +707,7 @@ my_graph <- ggplot(seoul_gu_df) +
 my_graph
 ```
 
--   저장
+- 저장
 
 ```{r}
 #| echo: false
@@ -761,7 +761,7 @@ my_graph <- ggplot(seoul_gu_df) +
 my_graph
 ```
 
--   저장
+- 저장
 
 ```{r}
 #| echo: false

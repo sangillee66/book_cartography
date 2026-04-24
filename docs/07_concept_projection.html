@@ -1,13 +1,10 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
-
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta charset="utf-8">
 <meta name="generator" content="quarto-1.8.26">
-
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-
 <meta name="author" content="Sang-Il Lee">
-
 <title>7&nbsp; 지도 투영의 개념과 원리 – Cartography</title>
 <style>
 code{white-space: pre-wrap;}
@@ -58,7 +55,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 }
 </style>
 
-
 <script src="site_libs/quarto-nav/quarto-nav.js"></script>
 <script src="site_libs/quarto-nav/headroom.min.js"></script>
 <script src="site_libs/clipboard/clipboard.min.js"></script>
@@ -81,8 +77,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="site_libs/bootstrap/bootstrap-f2c6d6e2b784ddc5de38779acc06f37d.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script src="site_libs/quarto-contrib/glightbox/glightbox.min.js"></script>
 <link href="site_libs/quarto-contrib/glightbox/glightbox.min.css" rel="stylesheet">
-<link href="site_libs/quarto-contrib/glightbox/lightbox.css" rel="stylesheet">
-<script id="quarto-search-options" type="application/json">{
+<link href="site_libs/quarto-contrib/glightbox/lightbox.css" rel="stylesheet"><script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
   "collapse-after": 3,
@@ -109,33 +104,26 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     "search-label": "Search"
   }
 }</script>
-
-
 </head>
-
 <body class="nav-sidebar floating quarto-light">
 
 <div id="quarto-search-results"></div>
-  <header id="quarto-header" class="headroom fixed-top">
-  <nav class="quarto-secondary-nav">
-    <div class="container-fluid d-flex">
+  <header id="quarto-header" class="headroom fixed-top"><nav class="quarto-secondary-nav"><div class="container-fluid d-flex">
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
         <a class="flex-grow-1 no-decor" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
-          <h1 class="quarto-secondary-nav-title"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">지도 투영의 개념과 원리</span></h1>
+          <h1 class="quarto-secondary-nav-title">
+<span class="chapter-number">7</span>&nbsp; <span class="chapter-title">지도 투영의 개념과 원리</span>
+</h1>
         </a>     
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
         <i class="bi bi-search"></i>
       </button>
     </div>
-  </nav>
-</header>
-<!-- content -->
-<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+  </nav></header><!-- content --><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
 <!-- sidebar -->
-  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
-    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto"><div class="pt-lg-2 mt-2 text-left sidebar-header">
     <div class="sidebar-title mb-0 py-0">
       <a href="./">Cartography</a> 
     </div>
@@ -147,7 +135,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
         </div>
     <div class="sidebar-menu-container"> 
     <ul class="list-unstyled mt-1">
-        <li class="sidebar-item">
+<li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./index.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Preface</span></a>
@@ -161,8 +149,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
-      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
-          <li class="sidebar-item">
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">
+<li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./01_history.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">지도의 역사</span></span></a>
@@ -187,7 +175,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </div>
 </li>
       </ul>
-  </li>
+</li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
             <a href="./part_2.html" class="sidebar-item-text sidebar-link">
@@ -196,8 +184,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
-      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
-          <li class="sidebar-item">
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">
+<li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./05_modeling_earth_datum.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">지구의 모델화와 데이텀</span></span></a>
@@ -222,7 +210,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </div>
 </li>
       </ul>
-  </li>
+</li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
             <a href="./part_3.html" class="sidebar-item-text sidebar-link">
@@ -231,8 +219,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
-      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
-          <li class="sidebar-item">
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">
+<li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./09_spatial_phenomena.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">공간적 현상의 유형화</span></span></a>
@@ -287,7 +275,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </div>
 </li>
       </ul>
-  </li>
+</li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
             <a href="./part_4.html" class="sidebar-item-text sidebar-link">
@@ -296,8 +284,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
-      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
-          <li class="sidebar-item">
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">
+<li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./18_web_mapping.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Web Mapping</span></span></a>
@@ -316,7 +304,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </div>
 </li>
       </ul>
-  </li>
+</li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./references.html" class="sidebar-item-text sidebar-link">
@@ -324,31 +312,43 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </div>
 </li>
     </ul>
-    </div>
-</nav>
-<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+</div>
+</nav><div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        <nav id="TOC" role="doc-toc" class="toc-active">
-    <h2 id="toc-title">Table of contents</h2>
+        <nav id="TOC" role="doc-toc" class="toc-active"><h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#지도-투영의-정의와-과정" id="toc-지도-투영의-정의와-과정" class="nav-link active" data-scroll-target="#지도-투영의-정의와-과정"><span class="header-section-number">7.1</span> 지도 투영의 정의와 과정</a></li>
-  <li><a href="#지도-투영의-기본-요소" id="toc-지도-투영의-기본-요소" class="nav-link" data-scroll-target="#지도-투영의-기본-요소"><span class="header-section-number">7.2</span> 지도 투영의 기본 요소</a></li>
-  <li><a href="#왜곡의-측정과-시각화" id="toc-왜곡의-측정과-시각화" class="nav-link" data-scroll-target="#왜곡의-측정과-시각화"><span class="header-section-number">7.3</span> 왜곡의 측정과 시각화</a>
+<li>
+<a href="#%EC%A7%80%EB%8F%84-%ED%88%AC%EC%98%81%EC%9D%98-%EC%A0%95%EC%9D%98%EC%99%80-%EA%B3%BC%EC%A0%95" id="toc-지도-투영의-정의와-과정" class="nav-link active" data-scroll-target="#%EC%A7%80%EB%8F%84-%ED%88%AC%EC%98%81%EC%9D%98-%EC%A0%95%EC%9D%98%EC%99%80-%EA%B3%BC%EC%A0%95"><span class="header-section-number">7.1</span> 지도 투영의 정의와 과정</a>
   <ul class="collapse">
-  <li><a href="#축척-계수" id="toc-축척-계수" class="nav-link" data-scroll-target="#축척-계수"><span class="header-section-number">7.3.1</span> 축척 계수</a></li>
-  <li><a href="#티소의-인디카트릭스" id="toc-티소의-인디카트릭스" class="nav-link" data-scroll-target="#티소의-인디카트릭스"><span class="header-section-number">7.3.2</span> 티소의 인디카트릭스</a></li>
-  </ul></li>
+<li><a href="#%EC%A7%80%EB%8F%84-%ED%88%AC%EC%98%81%EC%9D%98-%EC%A0%95%EC%9D%98" id="toc-지도-투영의-정의" class="nav-link" data-scroll-target="#%EC%A7%80%EB%8F%84-%ED%88%AC%EC%98%81%EC%9D%98-%EC%A0%95%EC%9D%98"><span class="header-section-number">7.1.1</span> 지도 투영의 정의</a></li>
+  <li><a href="#%EC%A7%80%EB%8F%84-%ED%88%AC%EC%98%81%EC%9D%98-%EA%B3%BC%EC%A0%95" id="toc-지도-투영의-과정" class="nav-link" data-scroll-target="#%EC%A7%80%EB%8F%84-%ED%88%AC%EC%98%81%EC%9D%98-%EA%B3%BC%EC%A0%95"><span class="header-section-number">7.1.2</span> 지도 투영의 과정</a></li>
   </ul>
-</nav>
+</li>
+  <li>
+<a href="#%EC%A7%80%EB%8F%84-%ED%88%AC%EC%98%81%EC%9D%98-%EA%B8%B0%EB%B3%B8-%EC%9A%94%EC%86%8C" id="toc-지도-투영의-기본-요소" class="nav-link" data-scroll-target="#%EC%A7%80%EB%8F%84-%ED%88%AC%EC%98%81%EC%9D%98-%EA%B8%B0%EB%B3%B8-%EC%9A%94%EC%86%8C"><span class="header-section-number">7.2</span> 지도 투영의 기본 요소</a>
+  <ul class="collapse">
+<li><a href="#%EA%B1%B0%EB%A6%AC" id="toc-거리" class="nav-link" data-scroll-target="#%EA%B1%B0%EB%A6%AC"><span class="header-section-number">7.2.1</span> 거리</a></li>
+  <li><a href="#%EB%B0%A9%ED%96%A5%EA%B3%BC-%EB%B0%A9%EC%9C%84" id="toc-방향과-방위" class="nav-link" data-scroll-target="#%EB%B0%A9%ED%96%A5%EA%B3%BC-%EB%B0%A9%EC%9C%84"><span class="header-section-number">7.2.2</span> 방향과 방위</a></li>
+  <li><a href="#%ED%98%95%ED%83%9C-%ED%98%B9%EC%9D%80-%EA%B0%81%EB%8F%84" id="toc-형태-혹은-각도" class="nav-link" data-scroll-target="#%ED%98%95%ED%83%9C-%ED%98%B9%EC%9D%80-%EA%B0%81%EB%8F%84"><span class="header-section-number">7.2.3</span> 형태 혹은 각도</a></li>
+  <li><a href="#%EB%A9%B4%EC%A0%81" id="toc-면적" class="nav-link" data-scroll-target="#%EB%A9%B4%EC%A0%81"><span class="header-section-number">7.2.4</span> 면적</a></li>
+  </ul>
+</li>
+  <li>
+<a href="#%EC%99%9C%EA%B3%A1%EC%9D%98-%EC%B8%A1%EC%A0%95%EA%B3%BC-%EC%8B%9C%EA%B0%81%ED%99%94" id="toc-왜곡의-측정과-시각화" class="nav-link" data-scroll-target="#%EC%99%9C%EA%B3%A1%EC%9D%98-%EC%B8%A1%EC%A0%95%EA%B3%BC-%EC%8B%9C%EA%B0%81%ED%99%94"><span class="header-section-number">7.3</span> 왜곡의 측정과 시각화</a>
+  <ul class="collapse">
+<li><a href="#%EC%B6%95%EC%B2%99-%EA%B3%84%EC%88%98" id="toc-축척-계수" class="nav-link" data-scroll-target="#%EC%B6%95%EC%B2%99-%EA%B3%84%EC%88%98"><span class="header-section-number">7.3.1</span> 축척 계수</a></li>
+  <li><a href="#%ED%8B%B0%EC%86%8C%EC%9D%98-%EC%9D%B8%EB%94%94%EC%B9%B4%ED%8A%B8%EB%A6%AD%EC%8A%A4" id="toc-티소의-인디카트릭스" class="nav-link" data-scroll-target="#%ED%8B%B0%EC%86%8C%EC%9D%98-%EC%9D%B8%EB%94%94%EC%B9%B4%ED%8A%B8%EB%A6%AD%EC%8A%A4"><span class="header-section-number">7.3.2</span> 티소의 인디카트릭스</a></li>
+  </ul>
+</li>
+  </ul></nav>
     </div>
 <!-- main -->
-<main class="content" id="quarto-document-content">
-
-<header id="title-block-header" class="quarto-title-block default">
-<div class="quarto-title">
-<h1 class="title d-none d-lg-block"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">지도 투영의 개념과 원리</span></h1>
+<main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block default"><div class="quarto-title">
+<h1 class="title d-none d-lg-block">
+<span class="chapter-number">7</span>&nbsp; <span class="chapter-title">지도 투영의 개념과 원리</span>
+</h1>
 </div>
 
 
@@ -366,7 +366,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <div>
     <div class="quarto-title-meta-heading">Modified</div>
     <div class="quarto-title-meta-contents">
-      <p class="date-modified">March 6, 2026</p>
+      <p class="date-modified">April 24, 2026</p>
     </div>
   </div>
     
@@ -374,75 +374,105 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   
 
 
-</header>
-
-
-<section id="지도-투영의-정의와-과정" class="level2" data-number="7.1">
-<h2 data-number="7.1" class="anchored" data-anchor-id="지도-투영의-정의와-과정"><span class="header-section-number">7.1</span> 지도 투영의 정의와 과정</h2>
-</section>
-<section id="지도-투영의-기본-요소" class="level2" data-number="7.2">
-<h2 data-number="7.2" class="anchored" data-anchor-id="지도-투영의-기본-요소"><span class="header-section-number">7.2</span> 지도 투영의 기본 요소</h2>
-</section>
-<section id="왜곡의-측정과-시각화" class="level2" data-number="7.3">
-<h2 data-number="7.3" class="anchored" data-anchor-id="왜곡의-측정과-시각화"><span class="header-section-number">7.3</span> 왜곡의 측정과 시각화</h2>
-<p><a href="images/얼굴.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1"><img src="images/얼굴.png" class="img-fluid"></a></p>
-<section id="축척-계수" class="level3" data-number="7.3.1">
-<h3 data-number="7.3.1" class="anchored" data-anchor-id="축척-계수"><span class="header-section-number">7.3.1</span> 축척 계수</h3>
-<p><a href="images/clipboard-237176163.png" class="lightbox" data-gallery="quarto-lightbox-gallery-2"><img src="images/clipboard-237176163.png" class="img-fluid"></a></p>
-</section>
-<section id="티소의-인디카트릭스" class="level3" data-number="7.3.2">
-<h3 data-number="7.3.2" class="anchored" data-anchor-id="티소의-인디카트릭스"><span class="header-section-number">7.3.2</span> 티소의 인디카트릭스</h3>
-<p><a href="images/clipboard-2353593596.png" class="lightbox" data-gallery="quarto-lightbox-gallery-3"><img src="images/clipboard-2353593596.png" class="img-fluid"></a></p>
-<p><a href="images/clipboard-2503633916.png" class="lightbox" data-gallery="quarto-lightbox-gallery-4"><img src="images/clipboard-2503633916.png" class="img-fluid"></a></p>
-<section id="사례-메르카토르-도법" class="level4" data-number="7.3.2.1">
-<h4 data-number="7.3.2.1" class="anchored" data-anchor-id="사례-메르카토르-도법"><span class="header-section-number">7.3.2.1</span> 사례: 메르카토르 도법</h4>
-<ul>
-<li>인디카트릭스 생성</li>
-</ul>
+</header><section id="지도-투영의-정의와-과정" class="level2" data-number="7.1"><h2 data-number="7.1" class="anchored" data-anchor-id="지도-투영의-정의와-과정">
+<span class="header-section-number">7.1</span> 지도 투영의 정의와 과정</h2>
+<section id="지도-투영의-정의" class="level3" data-number="7.1.1"><h3 data-number="7.1.1" class="anchored" data-anchor-id="지도-투영의-정의">
+<span class="header-section-number">7.1.1</span> 지도 투영의 정의</h3>
+<p><a href="images/clipboard-2873206417.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1"><img src="images/clipboard-2873206417.png" class="img-fluid"></a></p>
+</section><section id="지도-투영의-과정" class="level3" data-number="7.1.2"><h3 data-number="7.1.2" class="anchored" data-anchor-id="지도-투영의-과정">
+<span class="header-section-number">7.1.2</span> 지도 투영의 과정</h3>
+<p><a href="images/clipboard-1957611703.png" class="lightbox" data-gallery="quarto-lightbox-gallery-2"><img src="images/clipboard-1957611703.png" class="img-fluid"></a></p>
+</section></section><section id="지도-투영의-기본-요소" class="level2" data-number="7.2"><h2 data-number="7.2" class="anchored" data-anchor-id="지도-투영의-기본-요소">
+<span class="header-section-number">7.2</span> 지도 투영의 기본 요소</h2>
+<section id="거리" class="level3" data-number="7.2.1"><h3 data-number="7.2.1" class="anchored" data-anchor-id="거리">
+<span class="header-section-number">7.2.1</span> 거리</h3>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(spData)</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sf)</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tmap)</span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tmaptools)</span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">source</span>(<span class="st">"https://raw.githubusercontent.com/mgimond/tissot/master/Tissot_functions.r"</span>)</span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>proj.merc   <span class="ot">&lt;-</span> <span class="st">"+proj=merc +ellps=WGS84"</span></span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>lat <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="sc">-</span><span class="dv">80</span>,<span class="dv">80</span>, <span class="at">by=</span><span class="dv">20</span>L)</span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>lon <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="sc">-</span><span class="dv">160</span>,<span class="dv">160</span>, <span class="at">by=</span><span class="dv">20</span>L)</span>
-<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>coord <span class="ot">&lt;-</span> <span class="fu">as.matrix</span>(<span class="fu">expand.grid</span>(lon,lat))</span>
-<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>ts.lst <span class="ot">&lt;-</span> coord <span class="sc">|&gt;</span> <span class="fu">as_tibble</span>() <span class="sc">|&gt;</span> </span>
-<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pmap</span>(\(...) <span class="fu">ti</span>(<span class="at">coord =</span> <span class="fu">c</span>(...), <span class="at">proj.out =</span> proj.merc))</span>
-<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>tsf <span class="ot">&lt;-</span> <span class="fu">tissot_sf</span>(ts.lst, <span class="at">proj.out =</span> proj.merc)</span>
-<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>world_merc <span class="ot">&lt;-</span> <span class="fu">st_transform</span>(world, proj.merc)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org">tidyverse</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://r-spatial.github.io/sf/">sf</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/r-tmap/tmap">tmap</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/r-tmap/tmaptools">tmaptools</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://jakubnowosad.com/spData/">spData</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">geosphere</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">world_whole</span> <span class="op">&lt;-</span> <span class="va">world</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/geos_combine.html">st_union</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="va">ortho_crs</span> <span class="op">&lt;-</span> <span class="st">"+proj=ortho +lat_0=30 +lon_0=20 +datum=WGS84 +units=m +no_defs"</span></span>
+<span></span>
+<span><span class="va">pts</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html">tibble</a></span><span class="op">(</span></span>
+<span>  name <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"A (45°N, 0°E)"</span>, <span class="st">"B (60°N, 60°E)"</span>, <span class="st">"North Pole"</span><span class="op">)</span>,</span>
+<span>  lon  <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">60</span>, <span class="fl">0</span><span class="op">)</span>,</span>
+<span>  lat  <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">45</span>, <span class="fl">60</span>, <span class="fl">90</span><span class="op">)</span></span>
+<span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_as_sf.html">st_as_sf</a></span><span class="op">(</span>coords <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"lon"</span>, <span class="st">"lat"</span><span class="op">)</span>, crs <span class="op">=</span> <span class="fl">4326</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">A</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">45</span><span class="op">)</span> </span>
+<span><span class="va">B</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">60</span>, <span class="fl">60</span><span class="op">)</span></span>
+<span><span class="va">NP</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">90</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># 대권</span></span>
+<span><span class="va">make_gc</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">p1</span>, <span class="va">p2</span>, <span class="va">n</span> <span class="op">=</span> <span class="fl">200</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="va">xy</span> <span class="op">&lt;-</span> <span class="fu">geosphere</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/geosphere/man/intermediate.html">gcIntermediate</a></span><span class="op">(</span></span>
+<span>    <span class="va">p1</span>, <span class="va">p2</span>,</span>
+<span>    n <span class="op">=</span> <span class="va">n</span>,</span>
+<span>    addStartEnd <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>    breakAtDateLine <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span>  <span class="op">)</span></span>
+<span>  <span class="fu"><a href="https://r-spatial.github.io/sf/reference/sfc.html">st_sfc</a></span><span class="op">(</span></span>
+<span>    <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st.html">st_linestring</a></span><span class="op">(</span><span class="va">xy</span><span class="op">)</span>,</span>
+<span>    crs <span class="op">=</span> <span class="fl">4326</span></span>
+<span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>    <span class="fu"><a href="https://r-spatial.github.io/sf/reference/sf.html">st_sf</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="op">}</span></span>
+<span></span>
+<span><span class="va">gc_AB_short</span> <span class="op">&lt;-</span> <span class="fu">make_gc</span><span class="op">(</span><span class="va">A</span>, <span class="va">B</span>, n <span class="op">=</span> <span class="fl">100</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://r-tmap.github.io/tmap/reference/qtm.html">qtm</a></span><span class="op">(</span><span class="va">gc_AB_short</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure"><p><a href="07_concept_projection_files/figure-html/unnamed-chunk-1-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-3"><img src="07_concept_projection_files/figure-html/unnamed-chunk-1-1.png" class="img-fluid figure-img" width="4200"></a></p>
+</figure>
+</div>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">gc_NP_A</span> <span class="op">&lt;-</span> <span class="fu">make_gc</span><span class="op">(</span><span class="va">NP</span>, <span class="va">A</span>, n <span class="op">=</span> <span class="fl">100</span><span class="op">)</span></span>
+<span><span class="va">gc_NP_B</span> <span class="op">&lt;-</span> <span class="fu">make_gc</span><span class="op">(</span><span class="va">NP</span>, <span class="va">B</span>, n <span class="op">=</span> <span class="fl">100</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">gc_AB_full</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/geosphere/man/greatCircle.html">greatCircle</a></span><span class="op">(</span><span class="va">A</span>, <span class="va">B</span>, n <span class="op">=</span> <span class="fl">360</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st.html">st_linestring</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://r-spatial.github.io/sf/reference/sfc.html">st_sfc</a></span><span class="op">(</span>crs <span class="op">=</span> <span class="fl">4326</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://r-spatial.github.io/sf/reference/sf.html">st_sf</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_transform.html">st_wrap_dateline</a></span><span class="op">(</span>options <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"WRAPDATELINE=YES"</span>, <span class="st">"DATELINEOFFSET=180"</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># 구면삼각형</span></span>
+<span><span class="va">tri_coords</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html">rbind</a></span><span class="op">(</span></span>
+<span>  <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_coordinates.html">st_coordinates</a></span><span class="op">(</span><span class="va">gc_NP_A</span><span class="op">)</span><span class="op">[</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">2</span><span class="op">]</span>,</span>
+<span>  <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_coordinates.html">st_coordinates</a></span><span class="op">(</span><span class="va">gc_AB_short</span><span class="op">)</span><span class="op">[</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">2</span><span class="op">]</span>,</span>
+<span>  <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_coordinates.html">st_coordinates</a></span><span class="op">(</span><span class="va">gc_NP_B</span><span class="op">)</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_coordinates.html">st_coordinates</a></span><span class="op">(</span><span class="va">gc_NP_B</span><span class="op">)</span><span class="op">)</span><span class="op">:</span><span class="fl">1</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">2</span><span class="op">]</span>,</span>
+<span>  <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_coordinates.html">st_coordinates</a></span><span class="op">(</span><span class="va">gc_NP_A</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">2</span><span class="op">]</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">spherical_triangle</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/sfc.html">st_sfc</a></span><span class="op">(</span></span>
+<span>  <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st.html">st_polygon</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="va">tri_coords</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>  crs <span class="op">=</span> <span class="fl">4326</span></span>
+<span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://r-spatial.github.io/sf/reference/sf.html">st_sf</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <ul>
 <li>지도 제작</li>
 </ul>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>origin_lines <span class="ot">&lt;-</span> <span class="fu">st_sfc</span>(</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_linestring</span>(<span class="fu">matrix</span>(<span class="fu">c</span>(<span class="sc">-</span><span class="dv">180</span>, <span class="dv">0</span>, <span class="dv">180</span>, <span class="dv">0</span>), <span class="at">ncol =</span> <span class="dv">2</span>, <span class="at">byrow =</span> <span class="cn">TRUE</span>)), </span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_linestring</span>(<span class="fu">matrix</span>(<span class="fu">c</span>(<span class="dv">0</span>, <span class="sc">-</span><span class="dv">85</span>, <span class="dv">0</span>, <span class="dv">85</span>), <span class="at">ncol =</span> <span class="dv">2</span>, <span class="at">byrow =</span> <span class="cn">TRUE</span>)),   </span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">crs =</span> <span class="dv">4326</span></span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>my_map <span class="ot">&lt;-</span> <span class="fu">tm_shape</span>(world_merc, <span class="at">bbox =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">180</span>, <span class="sc">-</span><span class="dv">85</span>, <span class="dv">180</span>, <span class="dv">85</span>)) <span class="sc">+</span> </span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_fill</span>(<span class="at">fill =</span> <span class="st">"#fffff0"</span>) <span class="sc">+</span></span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_graticules</span>(<span class="at">x =</span> <span class="fu">seq</span>(<span class="sc">-</span><span class="dv">180</span>, <span class="dv">180</span>, <span class="dv">10</span>), </span>
-<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>                <span class="at">y =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">85</span>, <span class="fu">seq</span>(<span class="sc">-</span><span class="dv">80</span>, <span class="dv">80</span>, <span class="dv">10</span>), <span class="dv">85</span>), </span>
-<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>                <span class="at">labels.show =</span> <span class="cn">FALSE</span>, <span class="at">lwd =</span> <span class="fl">0.1</span>, <span class="at">col =</span> <span class="st">"black"</span>) <span class="sc">+</span></span>
-<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_shape</span>(origin_lines) <span class="sc">+</span> <span class="fu">tm_lines</span>(<span class="at">col =</span> <span class="st">"black"</span>, <span class="at">lwd =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
-<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_shape</span>(tsf<span class="sc">$</span>ind) <span class="sc">+</span> <span class="fu">tm_fill</span>(<span class="at">fill =</span> <span class="st">"#e65100"</span>, <span class="at">fill_alpha =</span> <span class="fl">0.50</span>) <span class="sc">+</span></span>
-<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_layout</span>(<span class="at">inner.margins =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>), <span class="at">bg.color =</span> <span class="st">"#d1ecf9"</span>) <span class="sc">+</span></span>
-<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_credits</span>(<span class="st">"SANG-IL LEE, Geography Education at SNU"</span>, </span>
-<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>             <span class="at">size =</span> <span class="fl">0.7</span>, <span class="at">position =</span> <span class="fu">c</span>(<span class="fl">0.80</span>, <span class="sc">-</span><span class="fl">0.005</span>))</span>
-<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>my_map  </span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">my_map</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tm_shape.html">tm_shape</a></span><span class="op">(</span><span class="va">world_whole</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tm_polygons.html">tm_polygons</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="st">"gray90"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tm_crs.html">tm_crs</a></span><span class="op">(</span><span class="va">ortho_crs</span>, bbox <span class="op">=</span> <span class="st">"FULL"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tm_grid.html">tm_graticules</a></span><span class="op">(</span></span>
+<span>    x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="op">-</span><span class="fl">180</span>, <span class="fl">180</span>, by <span class="op">=</span> <span class="fl">30</span><span class="op">)</span>,</span>
+<span>    y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="op">-</span><span class="fl">90</span>, <span class="fl">90</span>, by <span class="op">=</span> <span class="fl">30</span><span class="op">)</span>,</span>
+<span>    labels.show <span class="op">=</span> <span class="cn">FALSE</span>, lwd <span class="op">=</span> <span class="fl">2</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tm_shape.html">tm_shape</a></span><span class="op">(</span><span class="va">gc_AB_full</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tm_lines.html">tm_lines</a></span><span class="op">(</span>lwd <span class="op">=</span> <span class="fl">3</span>, lty <span class="op">=</span> <span class="fl">2</span>, col <span class="op">=</span> <span class="st">"gray20"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tm_shape.html">tm_shape</a></span><span class="op">(</span><span class="va">gc_AB_short</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tm_lines.html">tm_lines</a></span><span class="op">(</span>lwd <span class="op">=</span> <span class="fl">4</span>, col <span class="op">=</span> <span class="st">"black"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tm_layout.html">tm_layout</a></span><span class="op">(</span>earth_boundary <span class="op">=</span> <span class="cn">TRUE</span>, frame <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tm_credits.html">tm_credits</a></span><span class="op">(</span><span class="st">"SANG-IL LEE, Geography Education at SNU"</span>, </span>
+<span>             size <span class="op">=</span> <span class="fl">0.7</span>, position <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0.80</span>, <span class="op">-</span><span class="fl">0.005</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">my_map</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
-<figure class="figure">
-<p><a href="07_concept_projection_files/figure-html/unnamed-chunk-2-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-5"><img src="07_concept_projection_files/figure-html/unnamed-chunk-2-1.png" class="img-fluid figure-img" width="7790"></a></p>
+<figure class="figure"><p><a href="07_concept_projection_files/figure-html/unnamed-chunk-2-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-4"><img src="07_concept_projection_files/figure-html/unnamed-chunk-2-1.png" class="img-fluid figure-img" width="7764"></a></p>
 </figure>
 </div>
 </div>
@@ -450,288 +480,360 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <ul>
 <li>저장</li>
 </ul>
-</section>
-<section id="사례-심사-도법" class="level4" data-number="7.3.2.2">
-<h4 data-number="7.3.2.2" class="anchored" data-anchor-id="사례-심사-도법"><span class="header-section-number">7.3.2.2</span> 사례: 심사 도법</h4>
+<ul>
+<li>지도 제작</li>
+</ul>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">my_map</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tm_shape.html">tm_shape</a></span><span class="op">(</span><span class="va">world_whole</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tm_polygons.html">tm_polygons</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="st">"gray90"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tm_crs.html">tm_crs</a></span><span class="op">(</span><span class="va">ortho_crs</span>, bbox <span class="op">=</span> <span class="st">"FULL"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tm_grid.html">tm_graticules</a></span><span class="op">(</span></span>
+<span>    x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="op">-</span><span class="fl">180</span>, <span class="fl">180</span>, by <span class="op">=</span> <span class="fl">30</span><span class="op">)</span>,</span>
+<span>    y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="op">-</span><span class="fl">90</span>, <span class="fl">90</span>, by <span class="op">=</span> <span class="fl">30</span><span class="op">)</span>,</span>
+<span>    labels.show <span class="op">=</span> <span class="cn">FALSE</span>, lwd <span class="op">=</span> <span class="fl">2</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tm_shape.html">tm_shape</a></span><span class="op">(</span><span class="va">spherical_triangle</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tm_polygons.html">tm_polygons</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="cn">NULL</span>, lwd <span class="op">=</span> <span class="fl">4</span>, col <span class="op">=</span> <span class="st">"black"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tm_shape.html">tm_shape</a></span><span class="op">(</span><span class="va">gc_AB_full</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tm_lines.html">tm_lines</a></span><span class="op">(</span>lwd <span class="op">=</span> <span class="fl">3</span>, lty <span class="op">=</span> <span class="fl">2</span>, col <span class="op">=</span> <span class="st">"gray20"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tm_layout.html">tm_layout</a></span><span class="op">(</span>earth_boundary <span class="op">=</span> <span class="cn">TRUE</span>, frame <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tm_credits.html">tm_credits</a></span><span class="op">(</span><span class="st">"SANG-IL LEE, Geography Education at SNU"</span>, </span>
+<span>             size <span class="op">=</span> <span class="fl">0.7</span>, position <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0.80</span>, <span class="op">-</span><span class="fl">0.005</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">my_map</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure"><p><a href="07_concept_projection_files/figure-html/unnamed-chunk-4-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-5"><img src="07_concept_projection_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid figure-img" width="7764"></a></p>
+</figure>
+</div>
+</div>
+</div>
+<ul>
+<li>저장</li>
+</ul></section><section id="방향과-방위" class="level3" data-number="7.2.2"><h3 data-number="7.2.2" class="anchored" data-anchor-id="방향과-방위">
+<span class="header-section-number">7.2.2</span> 방향과 방위</h3>
+</section><section id="형태-혹은-각도" class="level3" data-number="7.2.3"><h3 data-number="7.2.3" class="anchored" data-anchor-id="형태-혹은-각도">
+<span class="header-section-number">7.2.3</span> 형태 혹은 각도</h3>
+</section><section id="면적" class="level3" data-number="7.2.4"><h3 data-number="7.2.4" class="anchored" data-anchor-id="면적">
+<span class="header-section-number">7.2.4</span> 면적</h3>
+</section></section><section id="왜곡의-측정과-시각화" class="level2" data-number="7.3"><h2 data-number="7.3" class="anchored" data-anchor-id="왜곡의-측정과-시각화">
+<span class="header-section-number">7.3</span> 왜곡의 측정과 시각화</h2>
+<p><a href="images/얼굴.png" class="lightbox" data-gallery="quarto-lightbox-gallery-6"><img src="images/얼굴.png" class="img-fluid"></a></p>
+<section id="축척-계수" class="level3" data-number="7.3.1"><h3 data-number="7.3.1" class="anchored" data-anchor-id="축척-계수">
+<span class="header-section-number">7.3.1</span> 축척 계수</h3>
+<p><a href="images/clipboard-237176163.png" class="lightbox" data-gallery="quarto-lightbox-gallery-7"><img src="images/clipboard-237176163.png" class="img-fluid"></a></p>
+</section><section id="티소의-인디카트릭스" class="level3" data-number="7.3.2"><h3 data-number="7.3.2" class="anchored" data-anchor-id="티소의-인디카트릭스">
+<span class="header-section-number">7.3.2</span> 티소의 인디카트릭스</h3>
+<p><a href="images/clipboard-2353593596.png" class="lightbox" data-gallery="quarto-lightbox-gallery-8"><img src="images/clipboard-2353593596.png" class="img-fluid"></a></p>
+<p><a href="images/clipboard-2503633916.png" class="lightbox" data-gallery="quarto-lightbox-gallery-9"><img src="images/clipboard-2503633916.png" class="img-fluid"></a></p>
+<section id="사례-메르카토르-도법" class="level4" data-number="7.3.2.1"><h4 data-number="7.3.2.1" class="anchored" data-anchor-id="사례-메르카토르-도법">
+<span class="header-section-number">7.3.2.1</span> 사례: 메르카토르 도법</h4>
+<ul>
+<li>인디카트릭스 생성</li>
+</ul>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org">tidyverse</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://jakubnowosad.com/spData/">spData</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://r-spatial.github.io/sf/">sf</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/r-tmap/tmap">tmap</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/r-tmap/tmaptools">tmaptools</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/source.html">source</a></span><span class="op">(</span><span class="st">"https://raw.githubusercontent.com/mgimond/tissot/master/Tissot_functions.r"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">proj.merc</span>   <span class="op">&lt;-</span> <span class="st">"+proj=merc +ellps=WGS84"</span></span>
+<span></span>
+<span><span class="va">lat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="op">-</span><span class="fl">80</span>,<span class="fl">80</span>, by<span class="op">=</span><span class="fl">20L</span><span class="op">)</span></span>
+<span><span class="va">lon</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="op">-</span><span class="fl">160</span>,<span class="fl">160</span>, by<span class="op">=</span><span class="fl">20L</span><span class="op">)</span></span>
+<span><span class="va">coord</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html">as.matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/expand.grid.html">expand.grid</a></span><span class="op">(</span><span class="va">lon</span>,<span class="va">lat</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">ts.lst</span> <span class="op">&lt;-</span> <span class="va">coord</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/as_tibble.html">as_tibble</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://purrr.tidyverse.org/reference/pmap.html">pmap</a></span><span class="op">(</span>\<span class="op">(</span><span class="va">...</span><span class="op">)</span> <span class="fu">ti</span><span class="op">(</span>coord <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="va">...</span><span class="op">)</span>, proj.out <span class="op">=</span> <span class="va">proj.merc</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">tsf</span> <span class="op">&lt;-</span> <span class="fu">tissot_sf</span><span class="op">(</span><span class="va">ts.lst</span>, proj.out <span class="op">=</span> <span class="va">proj.merc</span><span class="op">)</span></span>
+<span><span class="va">world_merc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_transform.html">st_transform</a></span><span class="op">(</span><span class="va">world</span>, <span class="va">proj.merc</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<ul>
+<li>지도 제작</li>
+</ul>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">origin_lines</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/sfc.html">st_sfc</a></span><span class="op">(</span></span>
+<span>  <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st.html">st_linestring</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/matrix.html">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">180</span>, <span class="fl">0</span>, <span class="fl">180</span>, <span class="fl">0</span><span class="op">)</span>, ncol <span class="op">=</span> <span class="fl">2</span>, byrow <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span>, </span>
+<span>  <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st.html">st_linestring</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/matrix.html">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="op">-</span><span class="fl">85</span>, <span class="fl">0</span>, <span class="fl">85</span><span class="op">)</span>, ncol <span class="op">=</span> <span class="fl">2</span>, byrow <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span>,   </span>
+<span>  crs <span class="op">=</span> <span class="fl">4326</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">my_map</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tm_shape.html">tm_shape</a></span><span class="op">(</span><span class="va">world_merc</span>, bbox <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">180</span>, <span class="op">-</span><span class="fl">85</span>, <span class="fl">180</span>, <span class="fl">85</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> </span>
+<span>  <span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tm_polygons.html">tm_fill</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="st">"#fffff0"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tm_grid.html">tm_graticules</a></span><span class="op">(</span>x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="op">-</span><span class="fl">180</span>, <span class="fl">180</span>, <span class="fl">10</span><span class="op">)</span>, </span>
+<span>                y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">85</span>, <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="op">-</span><span class="fl">80</span>, <span class="fl">80</span>, <span class="fl">10</span><span class="op">)</span>, <span class="fl">85</span><span class="op">)</span>, </span>
+<span>                labels.show <span class="op">=</span> <span class="cn">FALSE</span>, lwd <span class="op">=</span> <span class="fl">0.1</span>, col <span class="op">=</span> <span class="st">"black"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tm_shape.html">tm_shape</a></span><span class="op">(</span><span class="va">origin_lines</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tm_lines.html">tm_lines</a></span><span class="op">(</span>col <span class="op">=</span> <span class="st">"black"</span>, lwd <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tm_shape.html">tm_shape</a></span><span class="op">(</span><span class="va">tsf</span><span class="op">$</span><span class="va">ind</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tm_polygons.html">tm_fill</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="st">"#e65100"</span>, fill_alpha <span class="op">=</span> <span class="fl">0.50</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tm_layout.html">tm_layout</a></span><span class="op">(</span>inner.margins <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">0</span><span class="op">)</span>, bg.color <span class="op">=</span> <span class="st">"#d1ecf9"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tm_credits.html">tm_credits</a></span><span class="op">(</span><span class="st">"SANG-IL LEE, Geography Education at SNU"</span>, </span>
+<span>             size <span class="op">=</span> <span class="fl">0.7</span>, position <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0.80</span>, <span class="op">-</span><span class="fl">0.005</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">my_map</span>  </span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure"><p><a href="07_concept_projection_files/figure-html/unnamed-chunk-7-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-10"><img src="07_concept_projection_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid figure-img" width="7790"></a></p>
+</figure>
+</div>
+</div>
+</div>
+<ul>
+<li>저장</li>
+</ul></section><section id="사례-심사-도법" class="level4" data-number="7.3.2.2"><h4 data-number="7.3.2.2" class="anchored" data-anchor-id="사례-심사-도법">
+<span class="header-section-number">7.3.2.2</span> 사례: 심사 도법</h4>
 <ul>
 <li>정말 어렵다.</li>
-</ul>
-</section>
-<section id="사례-플라트-카레" class="level4" data-number="7.3.2.3">
-<h4 data-number="7.3.2.3" class="anchored" data-anchor-id="사례-플라트-카레"><span class="header-section-number">7.3.2.3</span> 사례: 플라트 카레</h4>
+</ul></section><section id="사례-플라트-카레" class="level4" data-number="7.3.2.3"><h4 data-number="7.3.2.3" class="anchored" data-anchor-id="사례-플라트-카레">
+<span class="header-section-number">7.3.2.3</span> 사례: 플라트 카레</h4>
 <ul>
 <li>인디카트릭스 생성</li>
 </ul>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>proj.eqc   <span class="ot">&lt;-</span> <span class="st">"+proj=eqc +lat_ts=0 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +datum=WGS84 +units=m +no_defs"</span></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>lat <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="sc">-</span><span class="dv">80</span>,<span class="dv">80</span>, <span class="at">by=</span><span class="dv">20</span>L)</span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>lon <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="sc">-</span><span class="dv">160</span>,<span class="dv">160</span>, <span class="at">by=</span><span class="dv">20</span>L)</span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>coord <span class="ot">&lt;-</span> <span class="fu">as.matrix</span>(<span class="fu">expand.grid</span>(lon,lat))</span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>ts.lst <span class="ot">&lt;-</span> coord <span class="sc">|&gt;</span> <span class="fu">as_tibble</span>() <span class="sc">|&gt;</span> </span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pmap</span>(\(...) <span class="fu">ti</span>(<span class="at">coord =</span> <span class="fu">c</span>(...), <span class="at">proj.out =</span> proj.eqc))</span>
-<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>tsf <span class="ot">&lt;-</span> <span class="fu">tissot_sf</span>(ts.lst, <span class="at">proj.out =</span> proj.eqc)</span>
-<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>world_eqc <span class="ot">&lt;-</span> <span class="fu">st_transform</span>(world, proj.eqc)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">proj.eqc</span>   <span class="op">&lt;-</span> <span class="st">"+proj=eqc +lat_ts=0 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +datum=WGS84 +units=m +no_defs"</span></span>
+<span></span>
+<span><span class="va">lat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="op">-</span><span class="fl">80</span>,<span class="fl">80</span>, by<span class="op">=</span><span class="fl">20L</span><span class="op">)</span></span>
+<span><span class="va">lon</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="op">-</span><span class="fl">160</span>,<span class="fl">160</span>, by<span class="op">=</span><span class="fl">20L</span><span class="op">)</span></span>
+<span><span class="va">coord</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html">as.matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/expand.grid.html">expand.grid</a></span><span class="op">(</span><span class="va">lon</span>,<span class="va">lat</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">ts.lst</span> <span class="op">&lt;-</span> <span class="va">coord</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/as_tibble.html">as_tibble</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://purrr.tidyverse.org/reference/pmap.html">pmap</a></span><span class="op">(</span>\<span class="op">(</span><span class="va">...</span><span class="op">)</span> <span class="fu">ti</span><span class="op">(</span>coord <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="va">...</span><span class="op">)</span>, proj.out <span class="op">=</span> <span class="va">proj.eqc</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">tsf</span> <span class="op">&lt;-</span> <span class="fu">tissot_sf</span><span class="op">(</span><span class="va">ts.lst</span>, proj.out <span class="op">=</span> <span class="va">proj.eqc</span><span class="op">)</span></span>
+<span><span class="va">world_eqc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_transform.html">st_transform</a></span><span class="op">(</span><span class="va">world</span>, <span class="va">proj.eqc</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <ul>
 <li>지도 제작</li>
 </ul>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>my_map <span class="ot">&lt;-</span> <span class="fu">tm_shape</span>(world_eqc, <span class="at">bbox =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">180</span>, <span class="sc">-</span><span class="dv">90</span>, <span class="dv">180</span>, <span class="dv">90</span>)) <span class="sc">+</span> </span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_fill</span>(<span class="at">fill =</span> <span class="st">"#fffff0"</span>) <span class="sc">+</span></span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_graticules</span>(<span class="at">x =</span> <span class="fu">seq</span>(<span class="sc">-</span><span class="dv">180</span>, <span class="dv">180</span>, <span class="dv">10</span>), </span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>                <span class="at">y =</span> <span class="fu">seq</span>(<span class="sc">-</span><span class="dv">90</span>, <span class="dv">90</span>, <span class="dv">10</span>), </span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>                <span class="at">labels.show =</span> <span class="cn">FALSE</span>, <span class="at">lwd =</span> <span class="fl">0.1</span>, <span class="at">col =</span> <span class="st">"black"</span>) <span class="sc">+</span></span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_shape</span>(origin_lines) <span class="sc">+</span> <span class="fu">tm_lines</span>(<span class="at">col =</span> <span class="st">"black"</span>, <span class="at">lwd =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_shape</span>(tsf<span class="sc">$</span>ind) <span class="sc">+</span> <span class="fu">tm_fill</span>(<span class="at">fill =</span> <span class="st">"#e65100"</span>, <span class="at">fill_alpha =</span> <span class="fl">0.50</span>) <span class="sc">+</span></span>
-<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_layout</span>(<span class="at">inner.margins =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>), <span class="at">bg.color =</span> <span class="st">"#d1ecf9"</span>) <span class="sc">+</span></span>
-<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_credits</span>(<span class="st">"SANG-IL LEE, Geography Education at SNU"</span>, </span>
-<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>             <span class="at">size =</span> <span class="fl">0.7</span>, <span class="at">position =</span> <span class="fu">c</span>(<span class="fl">0.80</span>, <span class="sc">-</span><span class="fl">0.005</span>))</span>
-<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>my_map</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">my_map</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tm_shape.html">tm_shape</a></span><span class="op">(</span><span class="va">world_eqc</span>, bbox <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">180</span>, <span class="op">-</span><span class="fl">90</span>, <span class="fl">180</span>, <span class="fl">90</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> </span>
+<span>  <span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tm_polygons.html">tm_fill</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="st">"#fffff0"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tm_grid.html">tm_graticules</a></span><span class="op">(</span>x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="op">-</span><span class="fl">180</span>, <span class="fl">180</span>, <span class="fl">10</span><span class="op">)</span>, </span>
+<span>                y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="op">-</span><span class="fl">90</span>, <span class="fl">90</span>, <span class="fl">10</span><span class="op">)</span>, </span>
+<span>                labels.show <span class="op">=</span> <span class="cn">FALSE</span>, lwd <span class="op">=</span> <span class="fl">0.1</span>, col <span class="op">=</span> <span class="st">"black"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tm_shape.html">tm_shape</a></span><span class="op">(</span><span class="va">origin_lines</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tm_lines.html">tm_lines</a></span><span class="op">(</span>col <span class="op">=</span> <span class="st">"black"</span>, lwd <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tm_shape.html">tm_shape</a></span><span class="op">(</span><span class="va">tsf</span><span class="op">$</span><span class="va">ind</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tm_polygons.html">tm_fill</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="st">"#e65100"</span>, fill_alpha <span class="op">=</span> <span class="fl">0.50</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tm_layout.html">tm_layout</a></span><span class="op">(</span>inner.margins <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">0</span><span class="op">)</span>, bg.color <span class="op">=</span> <span class="st">"#d1ecf9"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tm_credits.html">tm_credits</a></span><span class="op">(</span><span class="st">"SANG-IL LEE, Geography Education at SNU"</span>, </span>
+<span>             size <span class="op">=</span> <span class="fl">0.7</span>, position <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0.80</span>, <span class="op">-</span><span class="fl">0.005</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">my_map</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
-<figure class="figure">
-<p><a href="07_concept_projection_files/figure-html/unnamed-chunk-5-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-6"><img src="07_concept_projection_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid figure-img" width="15496"></a></p>
+<figure class="figure"><p><a href="07_concept_projection_files/figure-html/unnamed-chunk-10-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-11"><img src="07_concept_projection_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid figure-img" width="15496"></a></p>
 </figure>
 </div>
 </div>
 </div>
 <ul>
 <li>저장</li>
-</ul>
-</section>
-<section id="사례-람베르트-정적-원통-도법" class="level4" data-number="7.3.2.4">
-<h4 data-number="7.3.2.4" class="anchored" data-anchor-id="사례-람베르트-정적-원통-도법"><span class="header-section-number">7.3.2.4</span> 사례: 람베르트 정적 원통 도법</h4>
+</ul></section><section id="사례-람베르트-정적-원통-도법" class="level4" data-number="7.3.2.4"><h4 data-number="7.3.2.4" class="anchored" data-anchor-id="사례-람베르트-정적-원통-도법">
+<span class="header-section-number">7.3.2.4</span> 사례: 람베르트 정적 원통 도법</h4>
 <ul>
 <li>인디카트릭스 생성</li>
 </ul>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>proj.cea   <span class="ot">&lt;-</span> <span class="st">"+proj=cea +lat_ts=0 +lon_0=0 +x_0=0 +y_0=0 +ellps=WGS84 +units=m +no_defs"</span></span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>lat <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="sc">-</span><span class="dv">80</span>,<span class="dv">80</span>, <span class="at">by=</span><span class="dv">20</span>L)</span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>lon <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="sc">-</span><span class="dv">160</span>,<span class="dv">160</span>, <span class="at">by=</span><span class="dv">20</span>L)</span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>coord <span class="ot">&lt;-</span> <span class="fu">as.matrix</span>(<span class="fu">expand.grid</span>(lon,lat))</span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>ts.lst <span class="ot">&lt;-</span> coord <span class="sc">|&gt;</span> <span class="fu">as_tibble</span>() <span class="sc">|&gt;</span> </span>
-<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pmap</span>(\(...) <span class="fu">ti</span>(<span class="at">coord =</span> <span class="fu">c</span>(...), <span class="at">proj.out =</span> proj.cea))</span>
-<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>tsf <span class="ot">&lt;-</span> <span class="fu">tissot_sf</span>(ts.lst, <span class="at">proj.out =</span> proj.cea)</span>
-<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>world_cea <span class="ot">&lt;-</span> <span class="fu">st_transform</span>(world, proj.cea)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">proj.cea</span>   <span class="op">&lt;-</span> <span class="st">"+proj=cea +lat_ts=0 +lon_0=0 +x_0=0 +y_0=0 +ellps=WGS84 +units=m +no_defs"</span></span>
+<span></span>
+<span><span class="va">lat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="op">-</span><span class="fl">80</span>,<span class="fl">80</span>, by<span class="op">=</span><span class="fl">20L</span><span class="op">)</span></span>
+<span><span class="va">lon</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="op">-</span><span class="fl">160</span>,<span class="fl">160</span>, by<span class="op">=</span><span class="fl">20L</span><span class="op">)</span></span>
+<span><span class="va">coord</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html">as.matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/expand.grid.html">expand.grid</a></span><span class="op">(</span><span class="va">lon</span>,<span class="va">lat</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">ts.lst</span> <span class="op">&lt;-</span> <span class="va">coord</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/as_tibble.html">as_tibble</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://purrr.tidyverse.org/reference/pmap.html">pmap</a></span><span class="op">(</span>\<span class="op">(</span><span class="va">...</span><span class="op">)</span> <span class="fu">ti</span><span class="op">(</span>coord <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="va">...</span><span class="op">)</span>, proj.out <span class="op">=</span> <span class="va">proj.cea</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">tsf</span> <span class="op">&lt;-</span> <span class="fu">tissot_sf</span><span class="op">(</span><span class="va">ts.lst</span>, proj.out <span class="op">=</span> <span class="va">proj.cea</span><span class="op">)</span></span>
+<span><span class="va">world_cea</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_transform.html">st_transform</a></span><span class="op">(</span><span class="va">world</span>, <span class="va">proj.cea</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <ul>
 <li>지도 제작</li>
 </ul>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>my_map <span class="ot">&lt;-</span> <span class="fu">tm_shape</span>(world_cea, <span class="at">bbox =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">180</span>, <span class="sc">-</span><span class="dv">90</span>, <span class="dv">180</span>, <span class="dv">90</span>)) <span class="sc">+</span> </span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_fill</span>(<span class="at">fill =</span> <span class="st">"#fffff0"</span>) <span class="sc">+</span></span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_graticules</span>(<span class="at">x =</span> <span class="fu">seq</span>(<span class="sc">-</span><span class="dv">180</span>, <span class="dv">180</span>, <span class="dv">10</span>), </span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>                <span class="at">y =</span> <span class="fu">seq</span>(<span class="sc">-</span><span class="dv">90</span>, <span class="dv">90</span>, <span class="dv">10</span>), </span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>                <span class="at">labels.show =</span> <span class="cn">FALSE</span>, <span class="at">lwd =</span> <span class="fl">0.1</span>, <span class="at">col =</span> <span class="st">"black"</span>) <span class="sc">+</span></span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_shape</span>(origin_lines) <span class="sc">+</span> <span class="fu">tm_lines</span>(<span class="at">col =</span> <span class="st">"black"</span>, <span class="at">lwd =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
-<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_shape</span>(tsf<span class="sc">$</span>ind) <span class="sc">+</span> <span class="fu">tm_fill</span>(<span class="at">fill =</span> <span class="st">"#e65100"</span>, <span class="at">fill_alpha =</span> <span class="fl">0.50</span>) <span class="sc">+</span></span>
-<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_layout</span>(<span class="at">inner.margins =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>), <span class="at">bg.color =</span> <span class="st">"#d1ecf9"</span>) <span class="sc">+</span></span>
-<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_credits</span>(<span class="st">"SANG-IL LEE, Geography Education at SNU"</span>, </span>
-<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>             <span class="at">size =</span> <span class="fl">0.7</span>, <span class="at">position =</span> <span class="fu">c</span>(<span class="fl">0.80</span>, <span class="sc">-</span><span class="fl">0.005</span>))</span>
-<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>my_map</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">my_map</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tm_shape.html">tm_shape</a></span><span class="op">(</span><span class="va">world_cea</span>, bbox <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">180</span>, <span class="op">-</span><span class="fl">90</span>, <span class="fl">180</span>, <span class="fl">90</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> </span>
+<span>  <span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tm_polygons.html">tm_fill</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="st">"#fffff0"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tm_grid.html">tm_graticules</a></span><span class="op">(</span>x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="op">-</span><span class="fl">180</span>, <span class="fl">180</span>, <span class="fl">10</span><span class="op">)</span>, </span>
+<span>                y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="op">-</span><span class="fl">90</span>, <span class="fl">90</span>, <span class="fl">10</span><span class="op">)</span>, </span>
+<span>                labels.show <span class="op">=</span> <span class="cn">FALSE</span>, lwd <span class="op">=</span> <span class="fl">0.1</span>, col <span class="op">=</span> <span class="st">"black"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tm_shape.html">tm_shape</a></span><span class="op">(</span><span class="va">origin_lines</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tm_lines.html">tm_lines</a></span><span class="op">(</span>col <span class="op">=</span> <span class="st">"black"</span>, lwd <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tm_shape.html">tm_shape</a></span><span class="op">(</span><span class="va">tsf</span><span class="op">$</span><span class="va">ind</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tm_polygons.html">tm_fill</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="st">"#e65100"</span>, fill_alpha <span class="op">=</span> <span class="fl">0.50</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tm_layout.html">tm_layout</a></span><span class="op">(</span>inner.margins <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">0</span><span class="op">)</span>, bg.color <span class="op">=</span> <span class="st">"#d1ecf9"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tm_credits.html">tm_credits</a></span><span class="op">(</span><span class="st">"SANG-IL LEE, Geography Education at SNU"</span>, </span>
+<span>             size <span class="op">=</span> <span class="fl">0.7</span>, position <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0.80</span>, <span class="op">-</span><span class="fl">0.005</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">my_map</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
-<figure class="figure">
-<p><a href="07_concept_projection_files/figure-html/unnamed-chunk-8-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-7"><img src="07_concept_projection_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid figure-img" width="14546"></a></p>
+<figure class="figure"><p><a href="07_concept_projection_files/figure-html/unnamed-chunk-13-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-12"><img src="07_concept_projection_files/figure-html/unnamed-chunk-13-1.png" class="img-fluid figure-img" width="14546"></a></p>
 </figure>
 </div>
 </div>
 </div>
 <ul>
 <li>저장</li>
-</ul>
-</section>
-<section id="사례-골-페터스-도법" class="level4" data-number="7.3.2.5">
-<h4 data-number="7.3.2.5" class="anchored" data-anchor-id="사례-골-페터스-도법"><span class="header-section-number">7.3.2.5</span> 사례: 골-페터스 도법</h4>
+</ul></section><section id="사례-골-페터스-도법" class="level4" data-number="7.3.2.5"><h4 data-number="7.3.2.5" class="anchored" data-anchor-id="사례-골-페터스-도법">
+<span class="header-section-number">7.3.2.5</span> 사례: 골-페터스 도법</h4>
 <ul>
 <li>인디카트릭스 생성</li>
 </ul>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>proj.peters <span class="ot">&lt;-</span> <span class="st">"+proj=cea +lat_ts=45 +lon_0=0 +x_0=0 +y_0=0 +ellps=WGS84 +units=m +no_defs"</span></span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>lat <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="sc">-</span><span class="dv">80</span>,<span class="dv">80</span>, <span class="at">by=</span><span class="dv">20</span>L)</span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>lon <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="sc">-</span><span class="dv">160</span>,<span class="dv">160</span>, <span class="at">by=</span><span class="dv">20</span>L)</span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>coord <span class="ot">&lt;-</span> <span class="fu">as.matrix</span>(<span class="fu">expand.grid</span>(lon,lat))</span>
-<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>ts.lst <span class="ot">&lt;-</span> coord <span class="sc">|&gt;</span> <span class="fu">as_tibble</span>() <span class="sc">|&gt;</span> </span>
-<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pmap</span>(\(...) <span class="fu">ti</span>(<span class="at">coord =</span> <span class="fu">c</span>(...), <span class="at">proj.out =</span> proj.peters))</span>
-<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>tsf <span class="ot">&lt;-</span> <span class="fu">tissot_sf</span>(ts.lst, <span class="at">proj.out =</span> proj.peters)</span>
-<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>world_peters <span class="ot">&lt;-</span> <span class="fu">st_transform</span>(world, proj.peters)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb11"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">proj.peters</span> <span class="op">&lt;-</span> <span class="st">"+proj=cea +lat_ts=45 +lon_0=0 +x_0=0 +y_0=0 +ellps=WGS84 +units=m +no_defs"</span></span>
+<span></span>
+<span><span class="va">lat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="op">-</span><span class="fl">80</span>,<span class="fl">80</span>, by<span class="op">=</span><span class="fl">20L</span><span class="op">)</span></span>
+<span><span class="va">lon</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="op">-</span><span class="fl">160</span>,<span class="fl">160</span>, by<span class="op">=</span><span class="fl">20L</span><span class="op">)</span></span>
+<span><span class="va">coord</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html">as.matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/expand.grid.html">expand.grid</a></span><span class="op">(</span><span class="va">lon</span>,<span class="va">lat</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">ts.lst</span> <span class="op">&lt;-</span> <span class="va">coord</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/as_tibble.html">as_tibble</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://purrr.tidyverse.org/reference/pmap.html">pmap</a></span><span class="op">(</span>\<span class="op">(</span><span class="va">...</span><span class="op">)</span> <span class="fu">ti</span><span class="op">(</span>coord <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="va">...</span><span class="op">)</span>, proj.out <span class="op">=</span> <span class="va">proj.peters</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">tsf</span> <span class="op">&lt;-</span> <span class="fu">tissot_sf</span><span class="op">(</span><span class="va">ts.lst</span>, proj.out <span class="op">=</span> <span class="va">proj.peters</span><span class="op">)</span></span>
+<span><span class="va">world_peters</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_transform.html">st_transform</a></span><span class="op">(</span><span class="va">world</span>, <span class="va">proj.peters</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <ul>
 <li>지도 제작</li>
 </ul>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>standard_parallels <span class="ot">&lt;-</span> <span class="fu">st_sfc</span>(</span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_linestring</span>(<span class="fu">matrix</span>(<span class="fu">c</span>(<span class="sc">-</span><span class="dv">180</span>, <span class="dv">45</span>, <span class="dv">180</span>, <span class="dv">45</span>), <span class="at">ncol =</span> <span class="dv">2</span>, <span class="at">byrow =</span> <span class="cn">TRUE</span>)), </span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_linestring</span>(<span class="fu">matrix</span>(<span class="fu">c</span>(<span class="sc">-</span><span class="dv">180</span>, <span class="sc">-</span><span class="dv">45</span>, <span class="dv">180</span>, <span class="sc">-</span><span class="dv">45</span>), <span class="at">ncol =</span> <span class="dv">2</span>, <span class="at">byrow =</span> <span class="cn">TRUE</span>)), </span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">crs =</span> <span class="dv">4326</span></span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>my_map <span class="ot">&lt;-</span> <span class="fu">tm_shape</span>(world_peters, <span class="at">bbox =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">180</span>, <span class="sc">-</span><span class="dv">90</span>, <span class="dv">180</span>, <span class="dv">90</span>)) <span class="sc">+</span> </span>
-<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_fill</span>(<span class="at">fill =</span> <span class="st">"#fffff0"</span>) <span class="sc">+</span></span>
-<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_graticules</span>(<span class="at">x =</span> <span class="fu">seq</span>(<span class="sc">-</span><span class="dv">180</span>, <span class="dv">180</span>, <span class="dv">10</span>), </span>
-<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>                <span class="at">y =</span> <span class="fu">seq</span>(<span class="sc">-</span><span class="dv">90</span>, <span class="dv">90</span>, <span class="dv">10</span>), </span>
-<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>                <span class="at">labels.show =</span> <span class="cn">FALSE</span>, <span class="at">lwd =</span> <span class="fl">0.1</span>, <span class="at">col =</span> <span class="st">"black"</span>) <span class="sc">+</span></span>
-<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_shape</span>(origin_lines) <span class="sc">+</span> <span class="fu">tm_lines</span>(<span class="at">col =</span> <span class="st">"black"</span>, <span class="at">lwd =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
-<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_shape</span>(standard_parallels) <span class="sc">+</span> <span class="fu">tm_lines</span>(<span class="at">col =</span> <span class="st">"#e41a1c"</span>, <span class="at">lwd =</span> <span class="fl">1.5</span>) <span class="sc">+</span></span>
-<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_shape</span>(tsf<span class="sc">$</span>ind) <span class="sc">+</span> <span class="fu">tm_fill</span>(<span class="at">fill =</span> <span class="st">"#e65100"</span>, <span class="at">fill_alpha =</span> <span class="fl">0.50</span>) <span class="sc">+</span></span>
-<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_layout</span>(<span class="at">inner.margins =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>), <span class="at">bg.color =</span> <span class="st">"#d1ecf9"</span>) <span class="sc">+</span></span>
-<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_credits</span>(<span class="st">"SANG-IL LEE, Geography Education at SNU"</span>, </span>
-<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a>             <span class="at">size =</span> <span class="fl">0.7</span>, <span class="at">position =</span> <span class="fu">c</span>(<span class="fl">0.80</span>, <span class="sc">-</span><span class="fl">0.005</span>))</span>
-<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a>my_map</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb12"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">standard_parallels</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/sfc.html">st_sfc</a></span><span class="op">(</span></span>
+<span>  <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st.html">st_linestring</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/matrix.html">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">180</span>, <span class="fl">45</span>, <span class="fl">180</span>, <span class="fl">45</span><span class="op">)</span>, ncol <span class="op">=</span> <span class="fl">2</span>, byrow <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span>, </span>
+<span>  <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st.html">st_linestring</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/matrix.html">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">180</span>, <span class="op">-</span><span class="fl">45</span>, <span class="fl">180</span>, <span class="op">-</span><span class="fl">45</span><span class="op">)</span>, ncol <span class="op">=</span> <span class="fl">2</span>, byrow <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span>, </span>
+<span>  crs <span class="op">=</span> <span class="fl">4326</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">my_map</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tm_shape.html">tm_shape</a></span><span class="op">(</span><span class="va">world_peters</span>, bbox <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">180</span>, <span class="op">-</span><span class="fl">90</span>, <span class="fl">180</span>, <span class="fl">90</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> </span>
+<span>  <span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tm_polygons.html">tm_fill</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="st">"#fffff0"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tm_grid.html">tm_graticules</a></span><span class="op">(</span>x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="op">-</span><span class="fl">180</span>, <span class="fl">180</span>, <span class="fl">10</span><span class="op">)</span>, </span>
+<span>                y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="op">-</span><span class="fl">90</span>, <span class="fl">90</span>, <span class="fl">10</span><span class="op">)</span>, </span>
+<span>                labels.show <span class="op">=</span> <span class="cn">FALSE</span>, lwd <span class="op">=</span> <span class="fl">0.1</span>, col <span class="op">=</span> <span class="st">"black"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tm_shape.html">tm_shape</a></span><span class="op">(</span><span class="va">origin_lines</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tm_lines.html">tm_lines</a></span><span class="op">(</span>col <span class="op">=</span> <span class="st">"black"</span>, lwd <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tm_shape.html">tm_shape</a></span><span class="op">(</span><span class="va">standard_parallels</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tm_lines.html">tm_lines</a></span><span class="op">(</span>col <span class="op">=</span> <span class="st">"#e41a1c"</span>, lwd <span class="op">=</span> <span class="fl">1.5</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tm_shape.html">tm_shape</a></span><span class="op">(</span><span class="va">tsf</span><span class="op">$</span><span class="va">ind</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tm_polygons.html">tm_fill</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="st">"#e65100"</span>, fill_alpha <span class="op">=</span> <span class="fl">0.50</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tm_layout.html">tm_layout</a></span><span class="op">(</span>inner.margins <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">0</span><span class="op">)</span>, bg.color <span class="op">=</span> <span class="st">"#d1ecf9"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tm_credits.html">tm_credits</a></span><span class="op">(</span><span class="st">"SANG-IL LEE, Geography Education at SNU"</span>, </span>
+<span>             size <span class="op">=</span> <span class="fl">0.7</span>, position <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0.80</span>, <span class="op">-</span><span class="fl">0.005</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">my_map</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
-<figure class="figure">
-<p><a href="07_concept_projection_files/figure-html/unnamed-chunk-11-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-8"><img src="07_concept_projection_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid figure-img" width="12239"></a></p>
+<figure class="figure"><p><a href="07_concept_projection_files/figure-html/unnamed-chunk-16-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-13"><img src="07_concept_projection_files/figure-html/unnamed-chunk-16-1.png" class="img-fluid figure-img" width="12239"></a></p>
 </figure>
 </div>
 </div>
 </div>
 <ul>
 <li>저장</li>
-</ul>
-</section>
-<section id="사례-호보-다이어-도법" class="level4" data-number="7.3.2.6">
-<h4 data-number="7.3.2.6" class="anchored" data-anchor-id="사례-호보-다이어-도법"><span class="header-section-number">7.3.2.6</span> 사례: 호보-다이어 도법</h4>
+</ul></section><section id="사례-호보-다이어-도법" class="level4" data-number="7.3.2.6"><h4 data-number="7.3.2.6" class="anchored" data-anchor-id="사례-호보-다이어-도법">
+<span class="header-section-number">7.3.2.6</span> 사례: 호보-다이어 도법</h4>
 <ul>
 <li>인디카트릭스 생성</li>
 </ul>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>proj.hobo <span class="ot">&lt;-</span> <span class="st">"+proj=cea +lat_ts=37.5 +lon_0=0 +x_0=0 +y_0=0 +ellps=WGS84 +units=m +no_defs"</span></span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>lat <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="sc">-</span><span class="dv">80</span>,<span class="dv">80</span>, <span class="at">by=</span><span class="dv">20</span>L)</span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>lon <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="sc">-</span><span class="dv">160</span>,<span class="dv">160</span>, <span class="at">by=</span><span class="dv">20</span>L)</span>
-<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>coord <span class="ot">&lt;-</span> <span class="fu">as.matrix</span>(<span class="fu">expand.grid</span>(lon,lat))</span>
-<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>ts.lst <span class="ot">&lt;-</span> coord <span class="sc">|&gt;</span> <span class="fu">as_tibble</span>() <span class="sc">|&gt;</span> </span>
-<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pmap</span>(\(...) <span class="fu">ti</span>(<span class="at">coord =</span> <span class="fu">c</span>(...), <span class="at">proj.out =</span> proj.hobo))</span>
-<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>tsf <span class="ot">&lt;-</span> <span class="fu">tissot_sf</span>(ts.lst, <span class="at">proj.out =</span> proj.hobo)</span>
-<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>world_hobo <span class="ot">&lt;-</span> <span class="fu">st_transform</span>(world, proj.hobo)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb13"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">proj.hobo</span> <span class="op">&lt;-</span> <span class="st">"+proj=cea +lat_ts=37.5 +lon_0=0 +x_0=0 +y_0=0 +ellps=WGS84 +units=m +no_defs"</span></span>
+<span></span>
+<span><span class="va">lat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="op">-</span><span class="fl">80</span>,<span class="fl">80</span>, by<span class="op">=</span><span class="fl">20L</span><span class="op">)</span></span>
+<span><span class="va">lon</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="op">-</span><span class="fl">160</span>,<span class="fl">160</span>, by<span class="op">=</span><span class="fl">20L</span><span class="op">)</span></span>
+<span><span class="va">coord</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html">as.matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/expand.grid.html">expand.grid</a></span><span class="op">(</span><span class="va">lon</span>,<span class="va">lat</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">ts.lst</span> <span class="op">&lt;-</span> <span class="va">coord</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/as_tibble.html">as_tibble</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://purrr.tidyverse.org/reference/pmap.html">pmap</a></span><span class="op">(</span>\<span class="op">(</span><span class="va">...</span><span class="op">)</span> <span class="fu">ti</span><span class="op">(</span>coord <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="va">...</span><span class="op">)</span>, proj.out <span class="op">=</span> <span class="va">proj.hobo</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">tsf</span> <span class="op">&lt;-</span> <span class="fu">tissot_sf</span><span class="op">(</span><span class="va">ts.lst</span>, proj.out <span class="op">=</span> <span class="va">proj.hobo</span><span class="op">)</span></span>
+<span><span class="va">world_hobo</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_transform.html">st_transform</a></span><span class="op">(</span><span class="va">world</span>, <span class="va">proj.hobo</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <ul>
 <li>지도 제작</li>
 </ul>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>standard_parallels <span class="ot">&lt;-</span> <span class="fu">st_sfc</span>(</span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_linestring</span>(<span class="fu">matrix</span>(<span class="fu">c</span>(<span class="sc">-</span><span class="dv">180</span>, <span class="fl">37.5</span>, <span class="dv">180</span>, <span class="fl">37.5</span>), <span class="at">ncol =</span> <span class="dv">2</span>, <span class="at">byrow =</span> <span class="cn">TRUE</span>)), </span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_linestring</span>(<span class="fu">matrix</span>(<span class="fu">c</span>(<span class="sc">-</span><span class="dv">180</span>, <span class="sc">-</span><span class="fl">37.5</span>, <span class="dv">180</span>, <span class="sc">-</span><span class="fl">37.5</span>), <span class="at">ncol =</span> <span class="dv">2</span>, <span class="at">byrow =</span> <span class="cn">TRUE</span>)), </span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">crs =</span> <span class="dv">4326</span></span>
-<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>my_map <span class="ot">&lt;-</span> <span class="fu">tm_shape</span>(world_hobo, <span class="at">bbox =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">180</span>, <span class="sc">-</span><span class="dv">90</span>, <span class="dv">180</span>, <span class="dv">90</span>)) <span class="sc">+</span> </span>
-<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_fill</span>(<span class="at">fill =</span> <span class="st">"#fffff0"</span>) <span class="sc">+</span></span>
-<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_graticules</span>(<span class="at">x =</span> <span class="fu">seq</span>(<span class="sc">-</span><span class="dv">180</span>, <span class="dv">180</span>, <span class="dv">10</span>), </span>
-<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>                <span class="at">y =</span> <span class="fu">seq</span>(<span class="sc">-</span><span class="dv">90</span>, <span class="dv">90</span>, <span class="dv">10</span>), </span>
-<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>                <span class="at">labels.show =</span> <span class="cn">FALSE</span>, <span class="at">lwd =</span> <span class="fl">0.1</span>, <span class="at">col =</span> <span class="st">"black"</span>) <span class="sc">+</span></span>
-<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_shape</span>(origin_lines) <span class="sc">+</span> <span class="fu">tm_lines</span>(<span class="at">col =</span> <span class="st">"black"</span>, <span class="at">lwd =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
-<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_shape</span>(standard_parallels) <span class="sc">+</span> <span class="fu">tm_lines</span>(<span class="at">col =</span> <span class="st">"#e41a1c"</span>, <span class="at">lwd =</span> <span class="fl">1.5</span>) <span class="sc">+</span></span>
-<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_shape</span>(tsf<span class="sc">$</span>ind) <span class="sc">+</span> <span class="fu">tm_fill</span>(<span class="at">fill =</span> <span class="st">"#e65100"</span>, <span class="at">fill_alpha =</span> <span class="fl">0.50</span>) <span class="sc">+</span></span>
-<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_layout</span>(<span class="at">inner.margins =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>), <span class="at">bg.color =</span> <span class="st">"#d1ecf9"</span>) <span class="sc">+</span></span>
-<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_credits</span>(<span class="st">"SANG-IL LEE, Geography Education at SNU"</span>, </span>
-<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a>             <span class="at">size =</span> <span class="fl">0.7</span>, <span class="at">position =</span> <span class="fu">c</span>(<span class="fl">0.80</span>, <span class="sc">-</span><span class="fl">0.005</span>))</span>
-<span id="cb10-18"><a href="#cb10-18" aria-hidden="true" tabindex="-1"></a>my_map</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb14"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">standard_parallels</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/sfc.html">st_sfc</a></span><span class="op">(</span></span>
+<span>  <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st.html">st_linestring</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/matrix.html">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">180</span>, <span class="fl">37.5</span>, <span class="fl">180</span>, <span class="fl">37.5</span><span class="op">)</span>, ncol <span class="op">=</span> <span class="fl">2</span>, byrow <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span>, </span>
+<span>  <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st.html">st_linestring</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/matrix.html">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">180</span>, <span class="op">-</span><span class="fl">37.5</span>, <span class="fl">180</span>, <span class="op">-</span><span class="fl">37.5</span><span class="op">)</span>, ncol <span class="op">=</span> <span class="fl">2</span>, byrow <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span>, </span>
+<span>  crs <span class="op">=</span> <span class="fl">4326</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">my_map</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tm_shape.html">tm_shape</a></span><span class="op">(</span><span class="va">world_hobo</span>, bbox <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">180</span>, <span class="op">-</span><span class="fl">90</span>, <span class="fl">180</span>, <span class="fl">90</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> </span>
+<span>  <span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tm_polygons.html">tm_fill</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="st">"#fffff0"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tm_grid.html">tm_graticules</a></span><span class="op">(</span>x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="op">-</span><span class="fl">180</span>, <span class="fl">180</span>, <span class="fl">10</span><span class="op">)</span>, </span>
+<span>                y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="op">-</span><span class="fl">90</span>, <span class="fl">90</span>, <span class="fl">10</span><span class="op">)</span>, </span>
+<span>                labels.show <span class="op">=</span> <span class="cn">FALSE</span>, lwd <span class="op">=</span> <span class="fl">0.1</span>, col <span class="op">=</span> <span class="st">"black"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tm_shape.html">tm_shape</a></span><span class="op">(</span><span class="va">origin_lines</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tm_lines.html">tm_lines</a></span><span class="op">(</span>col <span class="op">=</span> <span class="st">"black"</span>, lwd <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tm_shape.html">tm_shape</a></span><span class="op">(</span><span class="va">standard_parallels</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tm_lines.html">tm_lines</a></span><span class="op">(</span>col <span class="op">=</span> <span class="st">"#e41a1c"</span>, lwd <span class="op">=</span> <span class="fl">1.5</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tm_shape.html">tm_shape</a></span><span class="op">(</span><span class="va">tsf</span><span class="op">$</span><span class="va">ind</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tm_polygons.html">tm_fill</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="st">"#e65100"</span>, fill_alpha <span class="op">=</span> <span class="fl">0.50</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tm_layout.html">tm_layout</a></span><span class="op">(</span>inner.margins <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">0</span><span class="op">)</span>, bg.color <span class="op">=</span> <span class="st">"#d1ecf9"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tm_credits.html">tm_credits</a></span><span class="op">(</span><span class="st">"SANG-IL LEE, Geography Education at SNU"</span>, </span>
+<span>             size <span class="op">=</span> <span class="fl">0.7</span>, position <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0.80</span>, <span class="op">-</span><span class="fl">0.005</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">my_map</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
-<figure class="figure">
-<p><a href="07_concept_projection_files/figure-html/unnamed-chunk-14-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-9"><img src="07_concept_projection_files/figure-html/unnamed-chunk-14-1.png" class="img-fluid figure-img" width="15393"></a></p>
+<figure class="figure"><p><a href="07_concept_projection_files/figure-html/unnamed-chunk-19-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-14"><img src="07_concept_projection_files/figure-html/unnamed-chunk-19-1.png" class="img-fluid figure-img" width="15393"></a></p>
 </figure>
 </div>
 </div>
 </div>
 <ul>
 <li>저장</li>
-</ul>
-</section>
-<section id="사례-밀러-도법" class="level4" data-number="7.3.2.7">
-<h4 data-number="7.3.2.7" class="anchored" data-anchor-id="사례-밀러-도법"><span class="header-section-number">7.3.2.7</span> 사례: 밀러 도법</h4>
+</ul></section><section id="사례-밀러-도법" class="level4" data-number="7.3.2.7"><h4 data-number="7.3.2.7" class="anchored" data-anchor-id="사례-밀러-도법">
+<span class="header-section-number">7.3.2.7</span> 사례: 밀러 도법</h4>
 <ul>
 <li>인디카트릭스 생성</li>
 </ul>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>proj.mill <span class="ot">&lt;-</span> <span class="st">"+proj=mill +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +R=6371000 +units=m +no_defs"</span></span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>lat <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="sc">-</span><span class="dv">80</span>,<span class="dv">80</span>, <span class="at">by=</span><span class="dv">20</span>L)</span>
-<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>lon <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="sc">-</span><span class="dv">160</span>,<span class="dv">160</span>, <span class="at">by=</span><span class="dv">20</span>L)</span>
-<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>coord <span class="ot">&lt;-</span> <span class="fu">as.matrix</span>(<span class="fu">expand.grid</span>(lon,lat))</span>
-<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>ts.lst <span class="ot">&lt;-</span> coord <span class="sc">|&gt;</span> <span class="fu">as_tibble</span>() <span class="sc">|&gt;</span> </span>
-<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pmap</span>(\(...) <span class="fu">ti</span>(<span class="at">coord =</span> <span class="fu">c</span>(...), <span class="at">proj.out =</span> proj.mill))</span>
-<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>tsf <span class="ot">&lt;-</span> <span class="fu">tissot_sf</span>(ts.lst, <span class="at">proj.out =</span> proj.mill)</span>
-<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>world_mill <span class="ot">&lt;-</span> <span class="fu">st_transform</span>(world, proj.mill)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb15"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">proj.mill</span> <span class="op">&lt;-</span> <span class="st">"+proj=mill +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +R=6371000 +units=m +no_defs"</span></span>
+<span></span>
+<span><span class="va">lat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="op">-</span><span class="fl">80</span>,<span class="fl">80</span>, by<span class="op">=</span><span class="fl">20L</span><span class="op">)</span></span>
+<span><span class="va">lon</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="op">-</span><span class="fl">160</span>,<span class="fl">160</span>, by<span class="op">=</span><span class="fl">20L</span><span class="op">)</span></span>
+<span><span class="va">coord</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html">as.matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/expand.grid.html">expand.grid</a></span><span class="op">(</span><span class="va">lon</span>,<span class="va">lat</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">ts.lst</span> <span class="op">&lt;-</span> <span class="va">coord</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/as_tibble.html">as_tibble</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://purrr.tidyverse.org/reference/pmap.html">pmap</a></span><span class="op">(</span>\<span class="op">(</span><span class="va">...</span><span class="op">)</span> <span class="fu">ti</span><span class="op">(</span>coord <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="va">...</span><span class="op">)</span>, proj.out <span class="op">=</span> <span class="va">proj.mill</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">tsf</span> <span class="op">&lt;-</span> <span class="fu">tissot_sf</span><span class="op">(</span><span class="va">ts.lst</span>, proj.out <span class="op">=</span> <span class="va">proj.mill</span><span class="op">)</span></span>
+<span><span class="va">world_mill</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_transform.html">st_transform</a></span><span class="op">(</span><span class="va">world</span>, <span class="va">proj.mill</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <ul>
 <li>지도 제작</li>
 </ul>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>my_map <span class="ot">&lt;-</span> <span class="fu">tm_shape</span>(world_mill, <span class="at">bbox =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">180</span>, <span class="sc">-</span><span class="dv">85</span>, <span class="dv">180</span>, <span class="dv">85</span>)) <span class="sc">+</span> </span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_fill</span>(<span class="at">fill =</span> <span class="st">"#fffff0"</span>) <span class="sc">+</span></span>
-<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_graticules</span>(<span class="at">x =</span> <span class="fu">seq</span>(<span class="sc">-</span><span class="dv">180</span>, <span class="dv">180</span>, <span class="dv">10</span>), </span>
-<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>                <span class="at">y =</span> <span class="fu">seq</span>(<span class="sc">-</span><span class="dv">90</span>, <span class="dv">90</span>, <span class="dv">10</span>), </span>
-<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>                <span class="at">labels.show =</span> <span class="cn">FALSE</span>, <span class="at">lwd =</span> <span class="fl">0.1</span>, <span class="at">col =</span> <span class="st">"black"</span>) <span class="sc">+</span></span>
-<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_shape</span>(origin_lines) <span class="sc">+</span> <span class="fu">tm_lines</span>(<span class="at">col =</span> <span class="st">"black"</span>, <span class="at">lwd =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
-<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_shape</span>(tsf<span class="sc">$</span>ind) <span class="sc">+</span> <span class="fu">tm_fill</span>(<span class="at">fill =</span> <span class="st">"#e65100"</span>, <span class="at">fill_alpha =</span> <span class="fl">0.50</span>) <span class="sc">+</span></span>
-<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_layout</span>(<span class="at">inner.margins =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>), <span class="at">bg.color =</span> <span class="st">"#d1ecf9"</span>) <span class="sc">+</span></span>
-<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_credits</span>(<span class="st">"SANG-IL LEE, Geography Education at SNU"</span>, </span>
-<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>             <span class="at">size =</span> <span class="fl">0.7</span>, <span class="at">position =</span> <span class="fu">c</span>(<span class="fl">0.80</span>, <span class="sc">-</span><span class="fl">0.005</span>))</span>
-<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>my_map</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb16"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">my_map</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tm_shape.html">tm_shape</a></span><span class="op">(</span><span class="va">world_mill</span>, bbox <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">180</span>, <span class="op">-</span><span class="fl">85</span>, <span class="fl">180</span>, <span class="fl">85</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> </span>
+<span>  <span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tm_polygons.html">tm_fill</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="st">"#fffff0"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tm_grid.html">tm_graticules</a></span><span class="op">(</span>x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="op">-</span><span class="fl">180</span>, <span class="fl">180</span>, <span class="fl">10</span><span class="op">)</span>, </span>
+<span>                y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="op">-</span><span class="fl">90</span>, <span class="fl">90</span>, <span class="fl">10</span><span class="op">)</span>, </span>
+<span>                labels.show <span class="op">=</span> <span class="cn">FALSE</span>, lwd <span class="op">=</span> <span class="fl">0.1</span>, col <span class="op">=</span> <span class="st">"black"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tm_shape.html">tm_shape</a></span><span class="op">(</span><span class="va">origin_lines</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tm_lines.html">tm_lines</a></span><span class="op">(</span>col <span class="op">=</span> <span class="st">"black"</span>, lwd <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tm_shape.html">tm_shape</a></span><span class="op">(</span><span class="va">tsf</span><span class="op">$</span><span class="va">ind</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tm_polygons.html">tm_fill</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="st">"#e65100"</span>, fill_alpha <span class="op">=</span> <span class="fl">0.50</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tm_layout.html">tm_layout</a></span><span class="op">(</span>inner.margins <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">0</span><span class="op">)</span>, bg.color <span class="op">=</span> <span class="st">"#d1ecf9"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tm_credits.html">tm_credits</a></span><span class="op">(</span><span class="st">"SANG-IL LEE, Geography Education at SNU"</span>, </span>
+<span>             size <span class="op">=</span> <span class="fl">0.7</span>, position <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0.80</span>, <span class="op">-</span><span class="fl">0.005</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">my_map</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
-<figure class="figure">
-<p><a href="07_concept_projection_files/figure-html/unnamed-chunk-17-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-10"><img src="07_concept_projection_files/figure-html/unnamed-chunk-17-1.png" class="img-fluid figure-img" width="11889"></a></p>
+<figure class="figure"><p><a href="07_concept_projection_files/figure-html/unnamed-chunk-22-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-15"><img src="07_concept_projection_files/figure-html/unnamed-chunk-22-1.png" class="img-fluid figure-img" width="11889"></a></p>
 </figure>
 </div>
 </div>
 </div>
 <ul>
 <li>저장</li>
-</ul>
-</section>
-<section id="사례-정거-원추-도법-어렵다" class="level4" data-number="7.3.2.8">
-<h4 data-number="7.3.2.8" class="anchored" data-anchor-id="사례-정거-원추-도법-어렵다"><span class="header-section-number">7.3.2.8</span> 사례: 정거 원추 도법: 어렵다!!!!</h4>
+</ul></section><section id="사례-정거-원추-도법-어렵다" class="level4" data-number="7.3.2.8"><h4 data-number="7.3.2.8" class="anchored" data-anchor-id="사례-정거-원추-도법-어렵다">
+<span class="header-section-number">7.3.2.8</span> 사례: 정거 원추 도법: 어렵다!!!!</h4>
 <ul>
 <li>인디카트릭스 생성</li>
 </ul>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>proj.eqdc <span class="ot">&lt;-</span> <span class="st">"+proj=eqdc +lat_1=33 +lat_2=45 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +datum=WGS84 +units=m +no_defs"</span></span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>lat <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="sc">-</span><span class="dv">60</span>,<span class="dv">80</span>, <span class="at">by=</span><span class="dv">20</span>L)</span>
-<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>lon <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="sc">-</span><span class="dv">160</span>,<span class="dv">160</span>, <span class="at">by=</span><span class="dv">20</span>L)</span>
-<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>coord <span class="ot">&lt;-</span> <span class="fu">as.matrix</span>(<span class="fu">expand.grid</span>(lon,lat))</span>
-<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>ts.lst <span class="ot">&lt;-</span> coord <span class="sc">|&gt;</span> <span class="fu">as_tibble</span>() <span class="sc">|&gt;</span> </span>
-<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pmap</span>(\(...) <span class="fu">ti</span>(<span class="at">coord =</span> <span class="fu">c</span>(...), <span class="at">proj.out =</span> proj.eqdc))</span>
-<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>tsf <span class="ot">&lt;-</span> <span class="fu">tissot_sf</span>(ts.lst, <span class="at">proj.out =</span> proj.eqdc)</span>
-<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>world_eqdc <span class="ot">&lt;-</span> <span class="fu">st_transform</span>(world, proj.eqdc)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb17"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">proj.eqdc</span> <span class="op">&lt;-</span> <span class="st">"+proj=eqdc +lat_1=33 +lat_2=45 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +datum=WGS84 +units=m +no_defs"</span></span>
+<span></span>
+<span><span class="va">lat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="op">-</span><span class="fl">60</span>,<span class="fl">80</span>, by<span class="op">=</span><span class="fl">20L</span><span class="op">)</span></span>
+<span><span class="va">lon</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="op">-</span><span class="fl">160</span>,<span class="fl">160</span>, by<span class="op">=</span><span class="fl">20L</span><span class="op">)</span></span>
+<span><span class="va">coord</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html">as.matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/expand.grid.html">expand.grid</a></span><span class="op">(</span><span class="va">lon</span>,<span class="va">lat</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">ts.lst</span> <span class="op">&lt;-</span> <span class="va">coord</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/as_tibble.html">as_tibble</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://purrr.tidyverse.org/reference/pmap.html">pmap</a></span><span class="op">(</span>\<span class="op">(</span><span class="va">...</span><span class="op">)</span> <span class="fu">ti</span><span class="op">(</span>coord <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="va">...</span><span class="op">)</span>, proj.out <span class="op">=</span> <span class="va">proj.eqdc</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">tsf</span> <span class="op">&lt;-</span> <span class="fu">tissot_sf</span><span class="op">(</span><span class="va">ts.lst</span>, proj.out <span class="op">=</span> <span class="va">proj.eqdc</span><span class="op">)</span></span>
+<span><span class="va">world_eqdc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_transform.html">st_transform</a></span><span class="op">(</span><span class="va">world</span>, <span class="va">proj.eqdc</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <ul>
 <li>지도 제작</li>
 </ul>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>my_map <span class="ot">&lt;-</span> <span class="fu">tm_shape</span>(world_eqdc, <span class="at">bbox =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">180</span>, <span class="sc">-</span><span class="dv">90</span>, <span class="dv">180</span>, <span class="dv">90</span>)) <span class="sc">+</span> </span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_fill</span>(<span class="at">fill =</span> <span class="st">"#fffff0"</span>) <span class="sc">+</span></span>
-<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_graticules</span>(<span class="at">x =</span> <span class="fu">seq</span>(<span class="sc">-</span><span class="dv">180</span>, <span class="dv">180</span>, <span class="dv">10</span>), </span>
-<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>                <span class="at">y =</span> <span class="fu">seq</span>(<span class="sc">-</span><span class="dv">90</span>, <span class="dv">90</span>, <span class="dv">10</span>), </span>
-<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>                <span class="at">labels.show =</span> <span class="cn">FALSE</span>, <span class="at">lwd =</span> <span class="fl">0.1</span>, <span class="at">col =</span> <span class="st">"black"</span>) <span class="sc">+</span></span>
-<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_shape</span>(origin_lines) <span class="sc">+</span> <span class="fu">tm_lines</span>(<span class="at">col =</span> <span class="st">"black"</span>, <span class="at">lwd =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
-<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_shape</span>(tsf<span class="sc">$</span>ind) <span class="sc">+</span> <span class="fu">tm_fill</span>(<span class="at">fill =</span> <span class="st">"#e65100"</span>, <span class="at">fill_alpha =</span> <span class="fl">0.50</span>) <span class="sc">+</span></span>
-<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_layout</span>(<span class="at">inner.margins =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>), <span class="at">bg.color =</span> <span class="st">"#d1ecf9"</span>) <span class="sc">+</span></span>
-<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_credits</span>(<span class="st">"SANG-IL LEE, Geography Education at SNU"</span>, </span>
-<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>             <span class="at">size =</span> <span class="fl">0.7</span>, <span class="at">position =</span> <span class="fu">c</span>(<span class="fl">0.80</span>, <span class="sc">-</span><span class="fl">0.005</span>))</span>
-<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>my_map</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb18"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">my_map</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tm_shape.html">tm_shape</a></span><span class="op">(</span><span class="va">world_eqdc</span>, bbox <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">180</span>, <span class="op">-</span><span class="fl">90</span>, <span class="fl">180</span>, <span class="fl">90</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> </span>
+<span>  <span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tm_polygons.html">tm_fill</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="st">"#fffff0"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tm_grid.html">tm_graticules</a></span><span class="op">(</span>x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="op">-</span><span class="fl">180</span>, <span class="fl">180</span>, <span class="fl">10</span><span class="op">)</span>, </span>
+<span>                y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="op">-</span><span class="fl">90</span>, <span class="fl">90</span>, <span class="fl">10</span><span class="op">)</span>, </span>
+<span>                labels.show <span class="op">=</span> <span class="cn">FALSE</span>, lwd <span class="op">=</span> <span class="fl">0.1</span>, col <span class="op">=</span> <span class="st">"black"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tm_shape.html">tm_shape</a></span><span class="op">(</span><span class="va">origin_lines</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tm_lines.html">tm_lines</a></span><span class="op">(</span>col <span class="op">=</span> <span class="st">"black"</span>, lwd <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tm_shape.html">tm_shape</a></span><span class="op">(</span><span class="va">tsf</span><span class="op">$</span><span class="va">ind</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tm_polygons.html">tm_fill</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="st">"#e65100"</span>, fill_alpha <span class="op">=</span> <span class="fl">0.50</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tm_layout.html">tm_layout</a></span><span class="op">(</span>inner.margins <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">0</span><span class="op">)</span>, bg.color <span class="op">=</span> <span class="st">"#d1ecf9"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tm_credits.html">tm_credits</a></span><span class="op">(</span><span class="st">"SANG-IL LEE, Geography Education at SNU"</span>, </span>
+<span>             size <span class="op">=</span> <span class="fl">0.7</span>, position <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0.80</span>, <span class="op">-</span><span class="fl">0.005</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">my_map</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 
 
-</section>
-</section>
-</section>
-
-</main> <!-- /main -->
-<script id="quarto-html-after-body" type="application/javascript">
+</section></section></section></main><!-- /main --><script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
     const icon = "";
     const anchorJS = new window.AnchorJS();
@@ -1130,9 +1232,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       }
     }
   });
-  </script>
-<nav class="page-navigation">
-  <div class="nav-page nav-page-previous">
+  </script><nav class="page-navigation"><div class="nav-page nav-page-previous">
       <a href="./06_coordinate_system.html" class="pagination-link" aria-label="좌표계">
         <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">좌표계</span></span>
       </a>          
@@ -1176,8 +1276,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   
 })();
           </script>
-
-
 
 
 </body></html>

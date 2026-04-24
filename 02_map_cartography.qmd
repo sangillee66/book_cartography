@@ -83,7 +83,7 @@ my_graph <- ggplot(
 my_graph
 ```
 
--   저장
+- 저장
 
 ```{r}
 #| eval: false

@@ -221,7 +221,7 @@ digraph add_left_box {
 
 #### 전형적인 주제도
 
--   필수적인 패키지 불러오기
+- 필수적인 패키지 불러오기
 
 ```{r}
 library(tidyverse) 
@@ -235,7 +235,7 @@ library(cartogramR)
 library(rmapshaper)
 ```
 
--   지리공간데이터 불러오기
+- 지리공간데이터 불러오기
 
 ```{r}
 seoul_EMD <- read_sf(
@@ -252,13 +252,13 @@ seoul_sido <- read_sf(
   )
 ```
 
--   지도 확인
+- 지도 확인
 
 ```{r}
 qtm(seoul_EMD_2020)
 ```
 
--   1인가구 속성 데이터 불러오기
+- 1인가구 속성 데이터 불러오기
 
 ```{r}
 house_SDGGEMD_2020 <- read_excel(
@@ -266,7 +266,7 @@ house_SDGGEMD_2020 <- read_excel(
   )
 ```
 
--   결합하기
+- 결합하기
 
 ```{r}
 seoul_EMD_2020 <- seoul_EMD_2020 |> 
@@ -279,7 +279,7 @@ my_df <-seoul_EMD_2020 |>
   )
 ```
 
--   전형적인 주제도 제작
+- 전형적인 주제도 제작
 
 ```{r}
 #| fig-height: 12.914
@@ -327,7 +327,7 @@ my_map <- tm_shape(my_df) +
 my_map
 ```
 
--   저장
+- 저장
 
 ```{r}
 #| echo: false
@@ -356,13 +356,13 @@ tmap_save(my_map, filename = my.file.name, height = 11.74*1.1, width = my.ratio*
 
 #### 피처맵: 소방서
 
--   데이터 불러오기
+- 데이터 불러오기
 
 ```{r}
 sobang_seoul <- read_sf("D:/My R/Vector Data Manipulation Korea/Seoul_Data_Plaza/sobang_station_seoul.shp", options = "ENCODING=CP949")
 ```
 
--   지도 제작
+- 지도 제작
 
 ```{r}
 #| fig-height: 12.914
@@ -374,7 +374,7 @@ my_map <- tm_shape(seoul_sido) + tm_borders(col = "gray20", lwd = 1) +
 my_map
 ```
 
--   저장
+- 저장
 
 ```{r}
 #| echo: false
@@ -389,7 +389,7 @@ tmap_save(my_map, filename = my.file.name, height = 11.74*1.1, width = my.ratio*
 
 #### 피처맵: 동 행정구역도
 
--   지도 제작
+- 지도 제작
 
 ```{r}
 #| fig-height: 12.914
@@ -402,7 +402,7 @@ my_map <- my_df |>
 my_map
 ```
 
--   저장
+- 저장
 
 ```{r}
 #| echo: false
@@ -418,13 +418,13 @@ tmap_save(my_map, filename = my.file.name, height = 11.74*1.1, width = my.ratio*
 
 #### 사건 분포도
 
--   사망 교통사고 데이터 불러오기
+- 사망 교통사고 데이터 불러오기
 
 ```{r}
 accident <- st_read("D:/My R/Vector Data Manipulation Korea/Public_Data_Portal/accident_seoul_2022.shp")
 ```
 
--   지도 제작
+- 지도 제작
 
 ```{r}
 #| fig-height: 12.914
@@ -436,7 +436,7 @@ my_map <- tm_shape(seoul_sido) + tm_borders(col = "gray20", lwd = 1) +
 my_map
 ```
 
--   저장
+- 저장
 
 ```{r}
 #| echo: false
@@ -452,7 +452,7 @@ tmap_save(my_map, filename = my.file.name, height = 11.74*1.1, width = my.ratio*
 
 #### 정성적 주제도
 
--   지도 제작
+- 지도 제작
 
 ```{r}
 #| fig-height: 12.914
@@ -473,7 +473,7 @@ my_map <- my_df |>
 my_map
 ```
 
--   저장
+- 저장
 
 ```{r}
 #| echo: false
@@ -489,7 +489,7 @@ tmap_save(my_map, filename = my.file.name, height = 11.74*1.1, width = my.ratio*
 
 #### 정량적 주제도
 
--   지도 제작
+- 지도 제작
 
 ```{r}
 #| fig-height: 12.914
@@ -510,7 +510,7 @@ my_map <- my_df |>
 my_map
 ```
 
--   저장
+- 저장
 
 ```{r}
 #| echo: false
@@ -546,7 +546,7 @@ tmap_save(my_map, filename = my.file.name, height = 11.74*1.1, width = my.ratio*
 
 #### 서울의 인구분포 사례
 
--   인구수 속성 데이터 불러오기
+- 인구수 속성 데이터 불러오기
 
 ```{r}
 pop_SDGGEMD_2020 <- read_excel(
@@ -554,7 +554,7 @@ pop_SDGGEMD_2020 <- read_excel(
   )
 ```
 
--   결합하기: 위와 구분하기 위해 `my_df_2`라고 지정
+- 결합하기: 위와 구분하기 위해 `my_df_2`라고 지정
 
 ```{r}
 my_df_2 <-seoul_EMD_2020 |> 
@@ -563,7 +563,7 @@ my_df_2 <-seoul_EMD_2020 |>
   )
 ```
 
--   인구밀도 계산
+- 인구밀도 계산
 
 ```{r}
 #| output: false
@@ -576,7 +576,7 @@ my_df_2 <- my_df_2 |>
 
 #### 도형표현도
 
--   지도 제작
+- 지도 제작
 
 ```{r}
 #| fig-height: 12.914
@@ -600,7 +600,7 @@ my_map <- tm_shape(my_df_2) + tm_borders(col = "gray10", lwd = 0.75) +
 my_map
 ```
 
--   저장
+- 저장
 
 ```{r}
 #| echo: false
@@ -616,7 +616,7 @@ tmap_save(my_map, filename = my.file.name, height = 11.74*1.1, width = my.ratio*
 
 #### 점밀도도
 
--   포인트 생성: 시간이 조금 걸리므로 따로 실행해서 저장
+- 포인트 생성: 시간이 조금 걸리므로 따로 실행해서 저장
 
 ```{r}
 #| eval: false
@@ -630,7 +630,7 @@ write_sf(my_seoul_point, "my_seoul_point.shp")
 my_seoul_point <- read_sf("my_seoul_point.shp")
 ```
 
--   지도 제작
+- 지도 제작
 
 ```{r}
 #| fig-height: 12.914
@@ -650,7 +650,7 @@ my_map <- tm_shape(my_df_2) + tm_borders(col = "gray10", lwd = 0.75) +
 my_map
 ```
 
--   저장
+- 저장
 
 ```{r}
 #| echo: false
@@ -666,7 +666,7 @@ tmap_save(my_map, filename = my.file.name, height = 11.74*1.1, width = my.ratio*
 
 #### 단계구분도
 
--   지도 제작
+- 지도 제작
 
 ```{r}
 #| fig-height: 12.914
@@ -692,7 +692,7 @@ my_map <- tm_shape(my_df_2) +
 my_map 
 ```
 
--   저장
+- 저장
 
 ```{r}
 #| echo: false
@@ -708,7 +708,7 @@ tmap_save(my_map, filename = my.file.name, height = 11.74*1.1, width = my.ratio*
 
 #### 등치선도
 
--   준비 과정
+- 준비 과정
 
 ```{r}
 #| eval: false
@@ -750,7 +750,7 @@ tps <- raster("tps.grd")
 cont.tps <- read_sf("cont_tps.shp")
 ```
 
--   지도 제작
+- 지도 제작
 
 ```{r}
 #| fig-height: 12.914
@@ -776,7 +776,7 @@ my_map <- tm_shape(seoul_gu) + tm_borders(lwd = 0.75) +
 my_map   
 ```
 
--   저장
+- 저장
 
 ```{r}
 #| echo: false
@@ -792,7 +792,7 @@ tmap_save(my_map, filename = my.file.name, height = 11.74*1.1, width = my.ratio*
 
 #### 카토그램
 
--   카토그램 제작
+- 카토그램 제작
 
 ```{r}
 #| eval: false
@@ -817,7 +817,7 @@ agg.carto.shp <- read_sf("agg_carto.shp")
 agg.carto.polyline.shp <- read_sf("agg_carto_polyline.shp")
 ```
 
--   지도 제작
+- 지도 제작
 
 ```{r}
 #| fig-height: 12.914
@@ -833,7 +833,7 @@ my_map <- tm_shape(carto.shp) + tm_borders(col = "gray10", lwd = 0.75) +
 my_map
 ```
 
--   저장
+- 저장
 
 ```{r}
 #| echo: false
@@ -863,7 +863,7 @@ tmap_save(my_map, filename = my.file.name, height = 11.74*1.1, width = my.ratio*
 
 다른 하나는 **다중 심볼 체계**로, 서로 다른 심볼을 사용하여 각각의 변수를 표현하는 방식이다. 이 경우 지도는 사실상 여러 개의 주제도를 하나의 지도 위에 결합한 형태가 되며, 이러한 지도는 \*\*복합 지도(composite map)\*\*라고 부르기도 한다.
 
--   지도 제작
+- 지도 제작
 
 ```{r}
 #| fig-height: 12.914
@@ -889,7 +889,7 @@ my_map <- tm_shape(my_df_2) +
 my_map
 ```
 
--   저장
+- 저장
 
 ```{r}
 #| echo: false
