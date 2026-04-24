@@ -69,7 +69,6 @@ make_gc <- function(p1, p2, n = 200) {
 }
 
 gc_AB_short <- make_gc(A, B, n = 100)
-qtm(gc_AB_short)
 
 gc_NP_A <- make_gc(NP, A, n = 100)
 gc_NP_B <- make_gc(NP, B, n = 100)
