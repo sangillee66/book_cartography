@@ -602,7 +602,7 @@ ggsave(my.file.name, plot = my_graph, path = my.path.name, height = 10.5, width 
 
 우선 우리나라가 포함된 UTM 그리드(51T, 52T, 51S, 52S)에 대한 개관도를 작성한다.
 
--   필수 패키지 불러오기
+- 필수 패키지 불러오기
 
 ```{r}
 library(tidyverse) 
@@ -612,7 +612,7 @@ library(tmap)
 library(tmaptools)
 ```
 
--   지리공간데이터 불러와 정리하기
+- 지리공간데이터 불러와 정리하기
 
 ```{r}
 #| echo: true
@@ -638,7 +638,7 @@ utm_grid <- utm_grid |>
   )
 ```
 
--   지도 제작 및 저장
+- 지도 제작 및 저장
 
 ```{r}
 #| fig-height: 12.914
@@ -894,7 +894,7 @@ tmap_save(my_map, filename = my.file.name, height = 11.74*1.1, width = my.ratio*
 
 우리나라의 TM 좌표계 지도를 제작한다.
 
--   지리공간데이터 불러와 정리하기
+- 지리공간데이터 불러와 정리하기
 
 ```{r}
 topo_250 |> 

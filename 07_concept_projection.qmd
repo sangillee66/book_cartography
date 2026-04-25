@@ -175,11 +175,634 @@ tmap_save(my_map, filename = my.file.name, height = 11.74*1.1,
 
 ![](images/clipboard-237176163.png)
 
-### 티소의 인디카트릭스
+### 티소의 지시타원
 
 ![](images/clipboard-2353593596.png)
 
 ![](images/clipboard-2503633916.png)
+
+#### 지시타원의 종류
+
+- 첫 번째
+
+```{r}
+#| fig-height: 12
+#| fig-width: 12
+#| fig-dpi: 600
+
+library(tidyverse)
+library(grid)
+
+# 1. 기하학적 파라미터 설정
+r_inner  <- 1.5
+r_outer  <- r_inner * 4 / 3
+theta    <- pi / 4
+axis_len <- r_outer * 1.25
+label_off <- 0.15  # 라벨 위치 조정
+
+# 2. 고해상도(데이터 포인트 증가) 원 생성 함수
+get_circle_data <- function(r, start = 0, end = 2*pi, n = 1000) {
+  data.frame(
+    x = r * cos(seq(start, end, length.out = n)),
+    y = r * sin(seq(start, end, length.out = n))
+  )
+}
+
+# 3. 시각화
+my_graph <- ggplot() +
+  # 안쪽 원
+  geom_path(data = get_circle_data(r_inner), aes(x, y), 
+            color = "grey65", size = 2) +
+
+  # 좌표축 (양방향 화살표)
+  geom_segment(aes(x = -axis_len, y = 0, xend = axis_len, yend = 0),
+               arrow = arrow(length = unit(0.4, "cm"), ends = "both", type = "closed"), lwd = 1.2) +
+  geom_segment(aes(x = 0, y = -axis_len, xend = 0, yend = axis_len),
+               arrow = arrow(length = unit(0.4, "cm"), ends = "both", type = "closed"), lwd = 1.2) +
+  scale_x_continuous(expand = c(0, 0)) +
+  scale_y_continuous(expand = c(0, 0)) +
+  # 그리스 문자 라벨 (phi, lambda)
+  annotate("text", x = c(axis_len + label_off, -axis_len - label_off), y = 0, label = "italic(phi)", parse = TRUE, size = 15) +
+  annotate("text", x = 0, y = c(axis_len + label_off, -axis_len - label_off), label = "italic(lambda)", parse = TRUE, size = 15) +
+  
+  # 방사선
+  geom_segment(aes(x = 0, y = 0, xend = r_inner * cos(theta), yend = r_inner * sin(theta)), size = 1) +
+
+  # 각도 표시 호 (Single Arc)
+  geom_path(data = get_circle_data(r_inner * 0.45, end = theta), aes(x, y), size = 0.6) +
+
+  # 불필요한 여백 및 요소 완전 제거
+  coord_fixed(clip = "off") + 
+  theme_void() +
+  theme(
+    plot.margin = margin(20, 20, 20, 20, "pt"),
+    plot.background = element_blank(),
+    panel.background = element_blank()
+  )
+my_graph
+```
+
+```{r}
+#| echo: false
+#| eval: false
+
+my.path.name <- "D:/My Cartography/지도제작/"
+my.file.name <- paste0("7-3-1 지시타원1", ".png")
+ggsave(my.file.name, plot = my_graph, path = my.path.name, height = 12, width = 12, dpi = 600)
+```
+
+- 두 번째
+
+```{r}
+#| fig-height: 12
+#| fig-width: 12
+#| fig-dpi: 600
+
+library(tidyverse)
+library(grid)
+
+# 1. 기하학적 파라미터 설정
+r_inner  <- 1.5
+r_outer  <- r_inner * 4 / 3
+theta    <- pi / 4
+axis_len <- r_outer * 1.25
+label_off <- 0.15  # 라벨 위치 조정
+
+# 2. 고해상도(데이터 포인트 증가) 원 생성 함수
+get_circle_data <- function(r, start = 0, end = 2*pi, n = 1000) {
+  data.frame(
+    x = r * cos(seq(start, end, length.out = n)),
+    y = r * sin(seq(start, end, length.out = n))
+  )
+}
+
+# 3. 시각화
+my_graph <- ggplot() +
+  # 안쪽 원
+  geom_path(data = get_circle_data(r_inner), aes(x, y), 
+            color = "grey65", size = 2) +
+  # 바깥쪽 원
+  geom_path(data = get_circle_data(r_outer), aes(x, y), 
+            color = "black", size = 2) +
+  
+  # 좌표축 (양방향 화살표)
+  geom_segment(aes(x = -axis_len, y = 0, xend = axis_len, yend = 0),
+               arrow = arrow(length = unit(0.4, "cm"), ends = "both", type = "closed"), lwd = 1.2) +
+  geom_segment(aes(x = 0, y = -axis_len, xend = 0, yend = axis_len),
+               arrow = arrow(length = unit(0.4, "cm"), ends = "both", type = "closed"), lwd = 1.2) +
+  scale_x_continuous(expand = c(0, 0)) +
+  scale_y_continuous(expand = c(0, 0)) +
+  # 그리스 문자 라벨 (phi, lambda)
+  annotate("text", x = c(axis_len + label_off, -axis_len - label_off), y = 0,
+           label = "italic(phi)", parse = TRUE, size = 15) +
+  annotate("text", x = 0, y = c(axis_len + label_off, -axis_len - label_off),
+           label = "italic(lambda)", parse = TRUE, size = 15) +
+  
+  # 방사선 및 교점
+  geom_segment(aes(x = 0, y = 0, xend = r_outer * cos(theta), yend = r_outer * sin(theta)), size = 1) +
+  geom_point(aes(x = r_inner * cos(theta), y = r_inner * sin(theta)), size = 7, color = "black") +
+  geom_point(aes(x = r_outer * cos(theta), y = r_outer * sin(theta)), 
+             size = 7, shape = 21, fill = "grey80", color = "black", stroke = 1) +
+  
+  # 각도 표시 호 (Double Arc)
+  geom_path(data = get_circle_data(r_inner * 0.45, end = theta), aes(x, y), size = 0.6) +
+  geom_path(data = get_circle_data(r_inner * 0.70, end = theta), aes(x, y), size = 0.6) +
+  
+  # 불필요한 여백 및 요소 완전 제거
+  coord_fixed(clip = "off") + 
+  theme_void() +
+  theme(
+    plot.margin = margin(20, 20, 20, 20, "pt"),
+    plot.background = element_blank(),
+    panel.background = element_blank()
+  )
+my_graph
+```
+
+```{r}
+#| echo: false
+#| eval: false
+
+my.path.name <- "D:/My Cartography/지도제작/"
+my.file.name <- paste0("7-3-2 지시타원2", ".png")
+ggsave(my.file.name, plot = my_graph, path = my.path.name, height = 12, width = 12, dpi = 600)
+```
+
+- 세 번째
+
+```{r}
+#| fig-height: 12
+#| fig-width: 12
+#| fig-dpi: 600
+
+library(tidyverse)
+library(grid)
+
+# 1. 기하학적 파라미터 설정 (기본 코드 스케일 유지)
+r_inner  <- 1.5                # 안쪽 원 반지름 (타원의 반단축 b)
+r_outer  <- r_inner * 4 / 3     # 바깥쪽 원 반지름 (타원의 반장축 a = 2.0)
+theta    <- pi / 4             # 각도
+axis_len <- r_outer * 1.25      # 축 길이 (2.5)
+label_off <- 0.15               # 라벨 위치
+pt_size  <- 7                  # 교점 크기
+alpha <- atan2(r_inner * sin(theta), r_outer * cos(theta))
+alpha
+# 2. 고해상도 도형 데이터 생성 함수
+get_circle_data <- function(r, start = 0, end = 2*pi, n = 1000) {
+  data.frame(
+    x = r * cos(seq(start, end, length.out = n)),
+    y = r * sin(seq(start, end, length.out = n))
+  )
+}
+get_ellipse_data <- function(a, b, n = 1000) {
+  t <- seq(0, 2*pi, length.out = n)
+  data.frame(x = a * cos(t), y = b * sin(t))
+}
+
+# 3. 시각화
+my_graph <- ggplot() +
+  # 바깥쪽 보조원 (회색 점선)
+  geom_path(data = get_circle_data(r_outer), aes(x, y), 
+            color = "grey65", linetype = "11", lwd = 2) +
+  
+  # 안쪽 원 (회색 실선)
+  geom_path(data = get_circle_data(r_inner), aes(x, y), 
+            color = "grey65", lwd = 2) +
+  
+  # 타원 (검정색 실선: 장반경 a=2.0, 단반경 b=1.5)
+  geom_path(data = get_ellipse_data(r_outer, r_inner), aes(x, y), 
+            color = "black", lwd = 2) +
+  
+  # 좌표축 (양방향 화살표)
+  geom_segment(aes(x = -axis_len, y = 0, xend = axis_len, yend = 0),
+               arrow = arrow(length = unit(0.4, "cm"), ends = "both", type = "closed"), lwd = 1.2) +
+  geom_segment(aes(x = 0, y = -axis_len, xend = 0, yend = axis_len),
+               arrow = arrow(length = unit(0.4, "cm"), ends = "both", type = "closed"), lwd = 1.2) +
+  scale_x_continuous(expand = c(0, 0)) +
+  scale_y_continuous(expand = c(0, 0)) +
+    # 그리스 문자 라벨 (phi, lambda) - 이탤릭체
+  annotate("text", x = c(axis_len + label_off, -axis_len - label_off), y = 0,
+           label = "italic(phi)", parse = TRUE, size = 15) +
+  annotate("text", x = 0, y = c(axis_len + label_off, -axis_len - label_off),
+           label = "italic(lambda)", parse = TRUE, size = 15) +
+  # 수직 보조선 (바깥 원의 점 P에서 x축까지)
+  geom_segment(aes(x = r_outer * cos(theta), y = 0, 
+                   xend = r_outer * cos(theta), yend = r_outer * sin(theta)), 
+               color = "black", lwd = 0.8) +
+  
+  # 사선 (원점에서 바깥 원의 점 P까지)
+  geom_segment(aes(x = 0, y = 0, 
+                   xend = r_outer * cos(theta), yend = r_outer * sin(theta)), 
+               color = "black", lwd = 1) +
+  geom_segment(aes(x = 0, y = 0, 
+                   xend = r_outer * cos(theta), yend = r_inner * sin(theta)), 
+               color = "black", lwd = 1) +
+  
+  # 교점 표시
+  # 1. 사선과 안쪽 원의 교점 (검정색 점)
+  geom_point(aes(x = r_inner * cos(theta), y = r_inner * sin(theta)), 
+             size = pt_size, color = "black") +
+  # 2. 수직선과 타원의 교점 (회색 채우기 점)
+  geom_point(aes(x = r_outer * cos(theta), y = r_inner * sin(theta)), 
+             size = pt_size, shape = 21, fill = "grey80", color = "black", stroke = 1.5) +
+  
+  # 각도 표시 호 (Double Arc)
+  geom_path(data = get_circle_data(r_inner * 0.45, end = theta), aes(x, y), size = 0.6) +
+  geom_path(data = get_circle_data(r_inner * 0.70, end = alpha), aes(x, y), size = 0.6) +
+
+  
+  # --- 여백 제거 및 스케일 최적화 ---
+  coord_fixed(clip = "off") + 
+  theme_void() +
+  theme(
+    plot.margin = margin(20, 20, 20, 20, "pt"),
+    plot.background = element_blank(),
+    panel.background = element_blank()
+  )
+
+# 출력
+my_graph
+```
+
+```{r}
+#| echo: false
+#| eval: false
+
+my.path.name <- "D:/My Cartography/지도제작/"
+my.file.name <- paste0("7-3-3 지시타원3", ".png")
+ggsave(my.file.name, plot = my_graph, path = my.path.name, height = 12, width = 12, dpi = 600)
+```
+
+- 네 번째
+
+```{r}
+#| fig-height: 12
+#| fig-width: 12
+#| fig-dpi: 600
+
+library(tidyverse)
+library(grid)
+
+# 1. 기하학적 파라미터 설정 (수학적 교점 기반)
+r_inner  <- 1.5                               # 내부 원 반지름
+r_outer  <- r_inner * 4 / 3                    # 바깥 보조원 반지름 (a = 2.0)
+r_ell_b  <- r_inner * 3 / 4                    # 타원의 반단축 (b = 1.125)
+
+# [수학적 해] 내부 원과 타원의 교점 x좌표 산출
+# x^2 + y^2 = r_inner^2  와  (x/a)^2 + (y/b)^2 = 1 을 연립
+x_intersect <- sqrt((r_inner^2 - r_ell_b^2) / (1 - (r_ell_b/r_outer)^2))
+y_intersect <- sqrt(r_inner^2 - x_intersect^2)
+
+# 각도 계산
+alpha <- atan2(y_intersect, x_intersect)       # 회색 점의 각도
+theta <- atan2(sqrt(r_outer^2 - x_intersect^2), x_intersect) # 외부 원 교점의 각도
+
+axis_len <- r_outer * 1.25
+label_off <- 0.15
+pt_size  <- 7
+
+# 2. 고해상도 도형 데이터 생성 함수
+get_circle_data <- function(r, start = 0, end = 2*pi, n = 1000) {
+  data.frame(x = r * cos(seq(start, end, length.out = n)),
+             y = r * sin(seq(start, end, length.out = n)))
+}
+get_ellipse_data <- function(a, b, n = 1000) {
+  t <- seq(0, 2*pi, length.out = n)
+  data.frame(x = a * cos(t), y = b * sin(t))
+}
+
+# 3. 시각화
+my_graph <- ggplot() +
+  # 바깥쪽 보조원 (회색 점선)
+  geom_path(data = get_circle_data(r_outer), aes(x, y), 
+            color = "grey65", linetype = "11", lwd = 2) +
+  
+  # 안쪽 원 (회색 실선)
+  geom_path(data = get_circle_data(r_inner), aes(x, y), 
+            color = "grey65", lwd = 2) +
+  
+  # 타원 (검정색 실선)
+  geom_path(data = get_ellipse_data(r_outer, r_ell_b), aes(x, y), 
+            color = "black", lwd = 2) +
+  
+  # 좌표축
+  geom_segment(aes(x = -axis_len, y = 0, xend = axis_len, yend = 0),
+               arrow = arrow(length = unit(0.4, "cm"), ends = "both", type = "closed"), lwd = 1.2) +
+  geom_segment(aes(x = 0, y = -axis_len, xend = 0, yend = axis_len),
+               arrow = arrow(length = unit(0.4, "cm"), ends = "both", type = "closed"), lwd = 1.2) +
+  
+  scale_x_continuous(expand = c(0, 0)) +
+  scale_y_continuous(expand = c(0, 0)) +
+  
+  # 수직 보조선 (외부 원에서 x축까지, 회색 점을 통과)
+  geom_segment(aes(x = x_intersect, y = 0, 
+                   xend = x_intersect, yend = r_outer * sin(theta)), 
+               color = "black", lwd = 0.8) +
+  
+  # 사선 1: 원점에서 외부 원의 점 P_top까지 (검은 점을 관통)
+  geom_segment(aes(x = 0, y = 0, 
+                   xend = r_outer * cos(theta), yend = r_outer * sin(theta)), 
+               color = "black", lwd = 1) +
+  
+  # 사선 2: 원점에서 회색 점(타원/내부원 교점)까지
+  geom_segment(aes(x = 0, y = 0, xend = x_intersect, yend = y_intersect), 
+               color = "black", lwd = 1) +
+  
+  # 교점 표시
+  # 1. 검은색 점: 내부 원 위, theta 방향 사선과의 교점
+  geom_point(aes(x = r_inner * cos(theta), y = r_inner * sin(theta)), 
+             size = pt_size, color = "black") +
+  
+  # 2. 회색 채우기 점: 내부 원과 타원의 실제 교점
+  geom_point(aes(x = x_intersect, y = y_intersect), 
+             size = pt_size, shape = 21, fill = "grey80", color = "black", stroke = 1.5) +
+  
+  # 각도 표시 호 (Double Arc)
+  geom_path(data = get_circle_data(r_inner * 0.45, end = theta), aes(x, y), size = 0.6) +
+  geom_path(data = get_circle_data(r_inner * 0.70, end = alpha), aes(x, y), size = 0.6) +
+  
+  # 라벨
+  annotate("text", x = c(axis_len + label_off, -axis_len - label_off), y = 0,
+           label = "italic(phi)", parse = TRUE, size = 15) +
+  annotate("text", x = 0, y = c(axis_len + label_off, -axis_len - label_off),
+           label = "italic(lambda)", parse = TRUE, size = 15) +
+  
+  coord_fixed(clip = "off") + 
+  theme_void() +
+  theme(
+    plot.margin = margin(20, 20, 20, 20, "pt"),
+    plot.background = element_blank(),
+    panel.background = element_blank()
+  )
+
+# 출력
+my_graph
+```
+
+```{r}
+#| echo: false
+#| eval: false
+
+my.path.name <- "D:/My Cartography/지도제작/"
+my.file.name <- paste0("7-3-4 지시타원4", ".png")
+ggsave(my.file.name, plot = my_graph, path = my.path.name, height = 12, width = 12, dpi = 600)
+```
+
+- 다섯 번째
+
+```{r}
+#| fig-height: 12
+#| fig-width: 12
+#| fig-dpi: 600
+
+library(tidyverse)
+library(grid)
+
+# 1. 기하학적 파라미터 설정 (Prolate 모델: 세로형 타원)
+r_inner  <- 1.5                               # 내부 원 반지름
+r_outer  <- r_inner * 4 / 3                    # 외부 보조원 반지름 (2.0)
+r_ell_a  <- r_inner * 3 / 4                    # 타원의 반단축 (가로 = 1.125)
+r_ell_b  <- r_outer                            # 타원의 반장축 (세로 = 2.0)
+
+# [수학적 해] 내부 원과 세로 타원의 교점 (회색점) 산출
+x_gray <- 0.9
+y_gray <- 1.2
+alpha  <- atan2(y_gray, x_gray)               # 회색점 방사선의 각도
+
+# 회색점을 관통하는 방사선이 외부원과 만나는 지점 (P_ext)
+x_ext  <- 1.2                                  
+y_ext  <- 1.6                                  
+
+# [검은점 산출] P_ext에서 내린 수직선(x=1.2)이 내부원과 만나는 지점
+x_black <- x_ext                               
+y_black <- 0.9                                 
+theta   <- atan2(y_black, x_black)             # 검은점 방사선의 각도
+
+axis_len <- r_outer * 1.25
+label_off <- 0.15
+pt_size  <- 7
+
+# 2. 고해상도 도형 데이터 생성 함수
+get_circle_data <- function(r, start = 0, end = 2*pi, n = 1000) {
+  data.frame(x = r * cos(seq(start, end, length.out = n)),
+             y = r * sin(seq(start, end, length.out = n)))
+}
+get_ellipse_data <- function(a, b, n = 1000) {
+  t <- seq(0, 2*pi, length.out = n)
+  data.frame(x = a * cos(t), y = b * sin(t))
+}
+
+# 3. 시각화
+my_graph <- ggplot() +
+  # 바깥쪽 보조원 (회색 점선)
+  geom_path(data = get_circle_data(r_outer), aes(x, y), 
+            color = "grey65", linetype = "11", lwd = 2) +
+  
+  # 안쪽 원 (회색 실선)
+  geom_path(data = get_circle_data(r_inner), aes(x, y), 
+            color = "grey65", lwd = 2) +
+  
+  # 타원 (검정색 실선)
+  geom_path(data = get_ellipse_data(r_ell_a, r_ell_b), aes(x, y), 
+            color = "black", lwd = 2) +
+  
+  # 좌표축
+  geom_segment(aes(x = -axis_len, y = 0, xend = axis_len, yend = 0),
+               arrow = arrow(length = unit(0.4, "cm"), ends = "both", type = "closed"), lwd = 1.2) +
+  geom_segment(aes(x = 0, y = -axis_len, xend = 0, yend = axis_len),
+               arrow = arrow(length = unit(0.4, "cm"), ends = "both", type = "closed"), lwd = 1.2) +
+  
+  scale_x_continuous(expand = c(0, 0)) +
+  scale_y_continuous(expand = c(0, 0)) +
+  
+  # 그리스 문자 라벨
+  annotate("text", x = c(axis_len + label_off, -axis_len - label_off), y = 0,
+           label = "italic(phi)", parse = TRUE, size = 15) +
+  annotate("text", x = 0, y = c(axis_len + label_off, -axis_len - label_off),
+           label = "italic(lambda)", parse = TRUE, size = 15) +
+
+  # 수직 보조선 (P_ext에서 x축까지, 검은점을 통과)
+  geom_segment(aes(x = x_ext, y = 0, 
+                   xend = x_ext, yend = y_ext), 
+               color = "black", lwd = 0.8) +
+  
+  # 사선 1: 원점에서 P_ext까지 (회색점을 관통하여 외부원까지 도달)
+  geom_segment(aes(x = 0, y = 0, xend = x_ext, yend = y_ext), 
+               color = "black", lwd = 1) +
+  
+  # [수정] 사선 2: 원점에서 검은점까지만 연결 (검은점에서 멈춤)
+  geom_segment(aes(x = 0, y = 0, xend = x_black, yend = y_black), 
+               color = "black", lwd = 1) +
+  
+  # 교점 표시
+  # 1. 회색 채우기 점: 내부 원과 타원의 실제 교점
+  geom_point(aes(x = x_gray, y = y_gray), 
+             size = pt_size, shape = 21, fill = "grey80", color = "black", stroke = 1.5) +
+             
+  # 2. 검은색 점: 수직선과 내부 원의 교점
+  geom_point(aes(x = x_black, y = y_black), 
+             size = pt_size, color = "black") +
+  
+  # 각도 표시 호 (Double Arc)
+  geom_path(data = get_circle_data(r_inner * 0.45, end = alpha), aes(x, y), size = 0.6) +
+  geom_path(data = get_circle_data(r_inner * 0.70, end = theta), aes(x, y), size = 0.6) +
+  
+  coord_fixed(clip = "off") + 
+  theme_void() +
+  theme(
+    plot.margin = margin(20, 20, 20, 20, "pt"),
+    plot.background = element_blank(),
+    panel.background = element_blank()
+  )
+
+# 출력
+my_graph
+```
+
+```{r}
+#| echo: false
+#| eval: false
+
+my.path.name <- "D:/My Cartography/지도제작/"
+my.file.name <- paste0("7-3-5 지시타원5", ".png")
+ggsave(my.file.name, plot = my_graph, path = my.path.name, height = 12, width = 12, dpi = 600)
+```
+
+- 여섯 번째
+
+```{r}
+#| fig-height: 12
+#| fig-width: 12
+#| fig-dpi: 600
+
+library(tidyverse)
+library(grid)
+
+# 1. 기하학적 파라미터 설정 (Prolate 모델: 세로형 타원)
+r_inner  <- 1.5                               # 내부 원 반지름
+r_outer  <- r_inner * 4 / 3                    # 외부 보조원 반지름 (2.0)
+r_ell_a  <- r_inner * 3 / 4                    # 타원의 반단축 (가로 = 1.125)
+r_ell_b  <- r_outer                            # 타원의 반장축 (세로 = 2.0)
+
+# (1) 타원 회전 설정: 오른쪽으로 45도 (시계 방향 -45도)
+rot_phi <- -45 * pi / 180
+
+# 회전 변환 함수
+rot_x <- function(x, y, phi) x * cos(phi) - y * sin(phi)
+rot_y <- function(x, y, phi) x * sin(phi) + y * cos(phi)
+
+# (2) 점들의 위치 설정 (수평축으로부터 시계반대방향 절대 각도)
+alpha_black_abs <- 53.12 * pi / 180           # 검은점 (높음)
+theta_grey_abs  <- 36.88 * pi / 180           # 회색점 (낮음)
+
+# --- 좌표 계산 ---
+# 1. 검은색 점 (내부 원 위, 1사분면)
+x_black <- r_inner * cos(alpha_black_abs)
+y_black <- r_inner * sin(alpha_black_abs)
+
+# 2. 회색 채우기 점 (회전된 타원 위, 1사분면)
+phi_rel_grey <- theta_grey_abs - rot_phi
+r_at_phi <- (r_ell_a * r_ell_b) / sqrt((r_ell_b * cos(phi_rel_grey))^2 + (r_ell_a * sin(phi_rel_grey))^2)
+x_gray <- rot_x(r_at_phi * cos(phi_rel_grey), r_at_phi * sin(phi_rel_grey), rot_phi)
+y_gray <- rot_y(r_at_phi * cos(phi_rel_grey), r_at_phi * sin(phi_rel_grey), rot_phi)
+
+axis_len <- r_outer * 1.25  # 기본 축 길이 2.5
+label_off <- 0.15           # 라벨 간격 약간 확대
+pt_size  <- 7
+
+# (3) 새로운 사교 좌표축 각도 설정 (사이각 65도 유지)
+# 길이를 원래 축과 같게 하기 위해 스케일(Km, Kp)을 1로 설정합니다.
+phi_prime_angle    <- -5 * pi / 180           
+lambda_prime_angle <- 60 * pi / 180           
+
+# 2. 고해상도 도형 데이터 생성 함수
+get_circle_data <- function(r, start = 0, end = 2*pi, n = 1000) {
+  data.frame(x = r * cos(seq(start, end, length.out = n)),
+             y = r * sin(seq(start, end, length.out = n)))
+}
+
+get_ellipse_data_rot <- function(a, b, phi, n = 1000) {
+  t <- seq(0, 2*pi, length.out = n)
+  x_orig <- a * cos(t); y_orig <- b * sin(t)
+  data.frame(x = rot_x(x_orig, y_orig, phi), y = rot_y(x_orig, y_orig, phi))
+}
+
+# 3. 시각화
+my_graph <- ggplot() +
+  # 보조원
+  geom_path(data = get_circle_data(r_outer), aes(x, y), color = "grey65", linetype = "11", lwd = 2) +
+  geom_path(data = get_circle_data(r_inner), aes(x, y), color = "grey65", lwd = 2) +
+  
+  # 타원 (45도 회전)
+  geom_path(data = get_ellipse_data_rot(r_ell_a, r_ell_b, rot_phi), aes(x, y), color = "black", lwd = 2) +
+  
+  # 타원의 장축과 단축 점선
+  geom_segment(aes(x = rot_x(-r_ell_a, 0, rot_phi), y = rot_y(-r_ell_a, 0, rot_phi), 
+                   xend = rot_x(r_ell_a, 0, rot_phi), yend = rot_y(r_ell_a, 0, rot_phi)),
+               linetype = "dashed", color = "grey30", lwd = 0.8) +
+  geom_segment(aes(x = rot_x(0, -r_ell_b, rot_phi), y = rot_y(0, -r_ell_b, rot_phi), 
+                   xend = rot_x(0, r_ell_b, rot_phi), yend = rot_y(0, r_ell_b, rot_phi)),
+               linetype = "dashed", color = "grey30", lwd = 0.8) +
+  
+  # 1. 기존 직교 좌표축 (phi, lambda) - 모든 방향 화살표 및 라벨 복구
+  geom_segment(aes(x = -axis_len, y = 0, xend = axis_len, yend = 0),
+               arrow = arrow(length = unit(0.4, "cm"), ends = "both", type = "closed"), lwd = 1.2) +
+  geom_segment(aes(x = 0, y = -axis_len, xend = 0, yend = axis_len),
+               arrow = arrow(length = unit(0.4, "cm"), ends = "both", type = "closed"), lwd = 1.2) +
+  
+  # 2. 새로운 사교 좌표축 (phi', lambda') - 길이 통일 및 모든 방향 라벨 추가
+  geom_segment(aes(x = axis_len * cos(phi_prime_angle + pi), y = axis_len * sin(phi_prime_angle + pi), 
+                   xend = axis_len * cos(phi_prime_angle), yend = axis_len * sin(phi_prime_angle)),
+               arrow = arrow(length = unit(0.4, "cm"), ends = "both", type = "closed"), 
+               linetype = "11", lwd = 1.2, color = "gray30") +
+  geom_segment(aes(x = axis_len * cos(lambda_prime_angle + pi), y = axis_len * sin(lambda_prime_angle + pi), 
+                   xend = axis_len * cos(lambda_prime_angle), yend = axis_len * sin(lambda_prime_angle)),
+               arrow = arrow(length = unit(0.4, "cm"), ends = "both", type = "closed"), 
+               linetype = "11", lwd = 1.2, color = "gray30") +
+
+  scale_x_continuous(expand = c(0, 0)) + 
+  scale_y_continuous(expand = c(0, 0)) +
+  
+  # 방사선 및 점
+  geom_segment(aes(x = 0, y = 0, xend = x_black, yend = y_black), color = "black", lwd = 1) +
+  geom_segment(aes(x = 0, y = 0, xend = x_gray, yend = y_gray), color = "black", lwd = 1) +
+  geom_point(aes(x = x_black, y = y_black), size = pt_size, color = "black") +
+  geom_point(aes(x = x_gray, y = y_gray), size = pt_size, shape = 21, fill = "grey80", color = "black", stroke = 1.5) +
+  
+  # 각도 표시 호
+  geom_path(data = get_circle_data(r_inner * 0.45, start = 0, end = alpha_black_abs), aes(x, y), size = 0.6) +
+  geom_path(data = get_circle_data(r_inner * 0.70, start = 0, end = theta_grey_abs), aes(x, y), size = 0.6) +
+  
+  # --- 모든 라벨 복구 및 추가 ---
+  # 기존 축 라벨 (phi, lambda)
+  annotate("text", x = c(axis_len + label_off, -axis_len - label_off), y = 0, label = "italic(phi)", parse = TRUE, size = 15) +
+  annotate("text", x = 0, y = c(axis_len + label_off, -axis_len - label_off), label = "italic(lambda)", parse = TRUE, size = 15) +
+  
+  # 새로운 축 라벨 (phi', lambda') - 네 방향 끝단에 모두 배치
+  annotate("text", x = (axis_len + label_off) * cos(phi_prime_angle), y = (axis_len + label_off) * sin(phi_prime_angle), 
+           label = "italic(phi)*{minute}", parse = TRUE, size = 15) +
+  annotate("text", x = (axis_len + label_off) * cos(phi_prime_angle + pi), y = (axis_len + label_off) * sin(phi_prime_angle + pi), 
+           label = "italic(phi)*{minute}", parse = TRUE, size = 15) +
+  annotate("text", x = (axis_len + label_off) * cos(lambda_prime_angle), y = (axis_len + label_off) * sin(lambda_prime_angle), 
+           label = "italic(lambda)*{minute}", parse = TRUE, size = 15) +
+  annotate("text", x = (axis_len + label_off) * cos(lambda_prime_angle + pi), y = (axis_len + label_off) * sin(lambda_prime_angle + pi), 
+           label = "italic(lambda)*{minute}", parse = TRUE, size = 15) +
+
+  coord_fixed(clip = "off") + theme_void() +
+  theme(plot.margin = margin(20, 20, 20, 20, "pt"))
+
+# 출력
+my_graph
+```
+
+```{r}
+#| echo: false
+#| eval: false
+
+my.path.name <- "D:/My Cartography/지도제작/"
+my.file.name <- paste0("7-3-6 지시타원6", ".png")
+ggsave(my.file.name, plot = my_graph, path = my.path.name, height = 12, width = 12, dpi = 600)
+```
 
 #### 사례: 메르카토르 도법
 
