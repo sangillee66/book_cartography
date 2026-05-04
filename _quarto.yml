@@ -21,22 +21,26 @@ book:
         - 06_coordinate_system.qmd
         - 07_concept_projection.qmd
         - 08_types_projection.qmd
+        - 09_cylindrical.qmd
+        - 10_conic.qmd
+        - 11_planar.qmd
+        - 12_other.qmd
     - part: part_3.qmd
       chapters: 
-        - 09_spatial_phenomena.qmd
-        - 10_map_design.qmd
-        - 11_proportional.qmd
-        - 12_dot.qmd
-        - 13_chropleth.qmd
-        - 14_isoline.qmd
-        - 15_flow.qmd
-        - 16_cartogram.qmd
-        - 17_dasymetric.qmd
+        - 13_spatial_phenomena.qmd
+        - 14_map_design.qmd
+        - 15_proportional.qmd
+        - 16_dot.qmd
+        - 17_chropleth.qmd
+        - 18_isoline.qmd
+        - 19_flow.qmd
+        - 20_cartogram.qmd
+        - 21_dasymetric.qmd
     - part: part_4.qmd
       chapters: 
-        - 18_web_mapping.qmd
-        - 19_ESDA.qmd
-        - 20_Future.qmd
+        - 22_web_mapping.qmd
+        - 23_ESDA.qmd
+        - 24_future.qmd
     - references.qmd
 
 bibliography: references.bib

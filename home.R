@@ -891,8 +891,14 @@ my_map
 
 # https://github.com/hypertidy/tissot
 
+library(tidyverse)
 library(tissot)
 library(sf)
+library(tmap)
+
+pak::pak("hypertidy/tissot@refactor-2026")
+library(tissot)
+
 
 proj.rob    <- "+proj=robin +lon_0=0 +x_0=0 +y_0=0 +ellps=WGS84" 
 proj.rob.150E    <- "+proj=robin +lon_0=150 +x_0=0 +y_0=0 +ellps=WGS84" 
@@ -926,3 +932,167 @@ plot(indicatrix_gnomonic, scale = 6e5, show.circle = TRUE)
 tissot_map()
 
 
+tissot::tissot(c(147, -42), "+proj=utm +zone=55 +south")
+
+
+xy <- expand.grid(seq(-150, 150, by = 30), seq(-60, 60, by = 30))
+xy <- expand.grid(seq(-160, 160, by = 20), seq(-80, 80, by = 20))
+r <- tissot::tissot(xy, "+proj=robin")
+ii <- tissot::indicatrix(r)
+plot(ii, scale = 6e5, add = FALSE, show.axes  = TRUE, show.circle = TRUE)
+tissot_map()
+
+crs_robin <- "+proj=robin +lon_0=0 +datum=WGS84 +units=m +no_defs"
+
+# ii 한 개를 sf polygon으로 변환하는 함수
+indicatrix_to_sf_polygon <- function(z, scale = 6e5, n = 120) {
+  
+  center <- z$center
+  
+  a <- z$scale_a * scale
+  b <- z$scale_b * scale
+  
+  theta <- z$convergence
+  
+  # convergence가 degree로 들어 있는 경우를 대비
+  if (abs(theta) > 2 * pi) {
+    theta <- theta * pi / 180
+  }
+  
+  t <- seq(0, 2 * pi, length.out = n)
+  
+  x0 <- a * cos(t)
+  y0 <- b * sin(t)
+  
+  # 회전
+  x <- center[1] + x0 * cos(theta) - y0 * sin(theta)
+  y <- center[2] + x0 * sin(theta) + y0 * cos(theta)
+  
+  mat <- cbind(x, y)
+  
+  # polygon 닫기
+  if (!all(mat[1, ] == mat[nrow(mat), ])) {
+    mat <- rbind(mat, mat[1, ])
+  }
+  
+  st_polygon(list(mat))
+}
+
+tissot_sf <- st_sf(
+  lon = map_dbl(ii, "lon"),
+  lat = map_dbl(ii, "lat"),
+  scale_h = map_dbl(ii, "scale_h"),
+  scale_k = map_dbl(ii, "scale_k"),
+  scale_a = map_dbl(ii, "scale_a"),
+  scale_b = map_dbl(ii, "scale_b"),
+  scale_area = map_dbl(ii, "scale_area"),
+  angle_deformation = map_dbl(ii, "angle_deformation"),
+  convergence = map_dbl(ii, "convergence"),
+  geometry = st_sfc(
+    map(ii, indicatrix_to_sf_polygon, scale = 6e5, n = 120),
+    crs = crs_robin
+  )
+)
+
+plot(st_geometry(tissot_sf), border = "red")
+
+world_whole_150 <- world_whole |> 
+  st_set_precision(1e6) |> 
+  st_break_antimeridian(lon_0 = 150) |> 
+  st_transform(crs_robin)
+
+library(spData)
+library(tmap)
+
+tm_shape(world) +
+  tm_fill(col = "gray85") +
+  tm_borders(col = "gray50") +
+  tm_shape(tissot_sf) +
+  tm_polygons(
+    col = "#fdd49e",
+    border.col = "black",
+    lwd = 0.8,
+    alpha = 0.7
+  ) +
+  tm_crs(crs_robin) +
+  tm_layout(frame = FALSE)
+
+
+## 한꺼번에 하는 함수: 죽이는 함수
+
+indicatrix_list_to_sf <- function(
+    ii,
+    crs_out,
+    scale = 6e5,
+    n = 120
+) {
+  
+  # tissot 내부/외부의 ti_ellipse 함수 가져오기
+  ti_ellipse_fun <- get("ti_ellipse", envir = asNamespace("tissot"))
+  
+  # ii 한 개를 sf polygon으로 변환
+  indicatrix_to_sf_polygon <- function(z) {
+    
+    mat <- ti_ellipse_fun(z, scale = scale, n = n)
+    
+    mat <- as.matrix(mat)
+    mat <- mat[complete.cases(mat), , drop = FALSE]
+    
+    if (nrow(mat) < 4) {
+      return(st_polygon())
+    }
+    
+    if (!all(mat[1, ] == mat[nrow(mat), ])) {
+      mat <- rbind(mat, mat[1, ])
+    }
+    
+    st_polygon(list(mat))
+  }
+  
+  get_num <- function(z, name) {
+    x <- z[[name]]
+    if (is.null(x) || length(x) == 0) return(NA_real_)
+    as.numeric(x[1])
+  }
+  
+  st_sf(
+    lon = map_dbl(ii, \(z) get_num(z, "lon")),
+    lat = map_dbl(ii, \(z) get_num(z, "lat")),
+    scale_h = map_dbl(ii, \(z) get_num(z, "scale_h")),
+    scale_k = map_dbl(ii, \(z) get_num(z, "scale_k")),
+    scale_a = map_dbl(ii, \(z) get_num(z, "scale_a")),
+    scale_b = map_dbl(ii, \(z) get_num(z, "scale_b")),
+    scale_area = map_dbl(ii, \(z) get_num(z, "scale_area")),
+    angle_deformation = map_dbl(ii, \(z) get_num(z, "angle_deformation")),
+    convergence = map_dbl(ii, \(z) get_num(z, "convergence")),
+    geometry = st_sfc(
+      map(ii, indicatrix_to_sf_polygon),
+      crs = crs_out
+    )
+  )
+}
+
+
+tissot_sf <- indicatrix_list_to_sf(
+  ii,
+  crs_out = crs_robin,
+  scale = 6e5,
+  n = 120
+)
+
+plot(st_geometry(tissot_sf), border = "red")
+
+library(spData)
+
+tm_shape(world) +
+  tm_fill(col = "gray85") +
+  tm_borders(col = "gray50") +
+  tm_shape(tissot_sf) +
+  tm_polygons(
+    col = "#fdd49e",
+    border.col = "black",
+    lwd = 0.8,
+    alpha = 0.7
+  ) +
+  tm_crs(crs_robin) +
+  tm_layout(frame = FALSE)

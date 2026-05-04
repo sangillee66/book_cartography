@@ -13,4 +13,33 @@ execute:
   error: false
   freeze: auto
 editor: visual
+editor_options: 
+  chunk_output_type: console
 ---
+
+## 분류 체계
+
+## 투영 속성에 의한 분류
+
+### 정거 도법
+
+### 정형 도법
+
+### 정적 도법
+
+### 정방위 도법
+
+### 절충 도법
+
+## 투영 면에 의한 분류
+
+### 투영 계열
+
+### 투영 파라미터
+
+## 투영 원점과 왜곡의 양상
+
+### BP
+
+
+

@@ -1,0 +1,447 @@
+---
+title: "원추 도법"
+author: Sang-Il Lee
+date-modified: last-modified
+number-sections: true
+format: 
+  html: 
+    toc: true
+code-link: true
+code-copy: true
+execute: 
+  warning: false
+  error: false
+  freeze: auto
+editor: visual
+editor_options: 
+  chunk_output_type: console
+---
+
+## 준비
+
+```{r}
+library(tidyverse)
+library(sf)
+library(tmap)
+library(tmaptools)
+library(spData)
+library(geosphere)
+library(tissot)
+source("https://raw.githubusercontent.com/mgimond/tissot/master/Tissot_functions.r")
+
+world <- spData::world
+world_whole <- world |> st_union() |> st_as_sf() # 어떤 경우에 잘 안 먹음.
+world_no_antarctica <- world |> filter(iso_a2 != "AQ")
+
+# 함수
+indicatrix_list_to_sf <- function(
+    ii,
+    crs_out,
+    scale = 6e5,
+    n = 120
+) {
+  
+  ti_ellipse_fun <- get("ti_ellipse", envir = asNamespace("tissot"))
+  indicatrix_to_sf_polygon <- function(z) {
+    mat <- ti_ellipse_fun(z, scale = scale, n = n)
+    mat <- as.matrix(mat)
+    mat <- mat[complete.cases(mat), , drop = FALSE]
+    if (nrow(mat) < 4) {
+      return(st_polygon())
+    }
+    if (!all(mat[1, ] == mat[nrow(mat), ])) {
+      mat <- rbind(mat, mat[1, ])
+    }
+    st_polygon(list(mat))
+  }
+  get_num <- function(z, name) {
+    x <- z[[name]]
+    if (is.null(x) || length(x) == 0) return(NA_real_)
+    as.numeric(x[1])
+  }
+  st_sf(
+    lon = map_dbl(ii, \(z) get_num(z, "lon")),
+    lat = map_dbl(ii, \(z) get_num(z, "lat")),
+    scale_h = map_dbl(ii, \(z) get_num(z, "scale_h")),
+    scale_k = map_dbl(ii, \(z) get_num(z, "scale_k")),
+    scale_a = map_dbl(ii, \(z) get_num(z, "scale_a")),
+    scale_b = map_dbl(ii, \(z) get_num(z, "scale_b")),
+    scale_area = map_dbl(ii, \(z) get_num(z, "scale_area")),
+    angle_deformation = map_dbl(ii, \(z) get_num(z, "angle_deformation")),
+    convergence = map_dbl(ii, \(z) get_num(z, "convergence")),
+    geometry = st_sfc(
+      map(ii, indicatrix_to_sf_polygon),
+      crs = crs_out
+    )
+  )
+}
+```
+
+## 정거원추 도법
+
+### 표준 지도
+
+- 지도 제작
+
+```{r}
+#| fig-height: 12
+#| fig-width: 15.02929
+#| fig-dpi: 600
+
+crs_eqdc_0 <- "+proj=eqdc +lat_1=35 +lat_2=55 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +datum=WGS84 +units=m +no_defs"
+
+equator_line <- st_sfc(
+  st_linestring(cbind(seq(-180, 180, by = 1), rep(0, 361))),
+  crs = 4326
+)
+
+prime_meridian_line <- st_sfc(
+  st_linestring(cbind(rep(0, 181), seq(-90, 90, by = 1))),
+  crs = 4326
+)
+
+standard_parallels <- st_sfc(
+  st_linestring(cbind(seq(-180, 180, by = 1), rep(35, 361))),
+  st_linestring(cbind(seq(-180, 180, by = 1), rep(55, 361))),
+  crs = 4326
+) 
+
+grat <- st_graticule(
+  lon = seq(-180, 180, 20),
+  lat = seq(-90, 90, 15)
+) 
+
+world_no_antarctica <- spData::world |>
+  filter(iso_a2 != "AQ") |> st_union()
+
+bg_eqdc <- tmaptools::bb_earth(projection = crs_eqdc_0)
+
+my_map <- tm_shape(world_no_antarctica, bbox = c(-180, -90, 180, 90)) + 
+  tm_fill() +
+  tm_shape(grat) + tm_lines(lwd = 0.5, col = "black") +
+  tm_shape(prime_meridian_line) + tm_lines(col = "black", lwd = 1.5) +
+  tm_shape(equator_line) + tm_lines(col = "black", lwd = 1.5) +
+  tm_shape(standard_parallels) + tm_lines(col = "#e41a1c", lwd = 1.5) +
+  tm_crs(crs_eqdc_0) +
+  tm_layout(inner.margins = c(0, 0, 0, 0), earth_boundary = TRUE, frame = FALSE) +
+  tm_credits("SANG-IL LEE, Geography Education at SNU", 
+             size = 0.7, position = c(0.80, -0.005))
+my_map
+```
+
+- 저장
+
+```{r}
+#| echo: false
+#| eval: false
+my.ratio <- get_asp_ratio(my_map)
+
+my.title <- "8-2-1-1 정거원추 도법"
+my.file.name <- paste0("D:/My Cartography/지도제작/", my.title, ".png")
+tmap_save(my_map, filename = my.file.name, height = 12, 
+          width = my.ratio*12, dpi = 600)
+```
+
+### 지시타원
+
+- 인디카트릭스 생성
+
+```{r}
+lat <- seq(-60,80, by=20L)
+lon <- seq(-160,160, by=20L)
+coord <- as.matrix(expand.grid(lon,lat))
+
+a_scale <- 6e5
+res_list <- tissot::tissot(coord, crs_eqdc_0) |> tissot::indicatrix(scale = a_scale)
+tissot_sf <- indicatrix_list_to_sf(
+  res_list, crs_out = crs_eqdc_0, scale = a_scale, n = 120)
+```
+
+- 지도 제작
+
+```{r}
+#| fig-height: 12
+#| fig-width: 15.02929
+#| fig-dpi: 600
+
+world_whole_eqdc <- st_transform(world_no_antarctica, crs_eqdc_0)
+
+grat <- st_graticule(
+  lon = seq(-180, 180, 10),
+  lat = seq(-90, 90, 10)
+) 
+
+my_map <- tm_shape(bg_eqdc, bbox = c(-180, -90, 180, 90)) + 
+  tm_fill(fill = "#d1ecf9") +
+  tm_shape(world_whole_eqdc) + tm_fill(fill = "#fffff0") +
+  tm_shape(grat) + tm_lines(lwd = 0.5, col = "black") +
+  # tm_shape(equator_line) + tm_lines(col = "black", lwd = 1.5) + # 이상한 선
+  tm_shape(standard_parallels) + tm_lines(col = "#e41a1c", lwd = 1.5) +
+  tm_shape(tissot_sf) + tm_fill(fill = "#e65100", fill_alpha = 0.50) +
+  tm_crs(crs_eqdc_0) +
+  tm_layout(inner.margins = c(0, 0, 0, 0), frame = FALSE) +
+  tm_credits("SANG-IL LEE, Geography Education at SNU", 
+             size = 0.7, position = c(0.80, -0.005))
+my_map
+```
+
+- 저장
+
+```{r}
+#| echo: false
+#| eval: false
+my.ratio <- get_asp_ratio(my_map)
+
+my.title <- "8-2-1-2 정거원추 도법"
+my.file.name <- paste0("D:/My Cartography/지도제작/", my.title, ".png")
+tmap_save(my_map, filename = my.file.name, height = 12, 
+          width = my.ratio*12, dpi = 600)
+```
+
+## 람베르트 정형원추 도법
+
+### 표준 지도
+
+- 지도 제작
+
+```{r}
+#| fig-height: 12
+#| fig-width: 14.84819
+#| fig-dpi: 600
+
+crs_lcc_0 <- "+proj=lcc +lat_1=35 +lat_2=55 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +datum=WGS84 +units=m +no_defs"
+
+clip_bbox <- st_bbox(
+  c(xmin = -180, xmax = 180, ymin = -60, ymax = 90)) |> 
+  st_as_sfc(4326) |> st_segmentize(dfMaxLength = 1) |> 
+  st_set_crs(4326) 
+
+world_no_antarctica <- spData::world |>
+  filter(iso_a2 != "AQ") |> st_union()
+
+sf_use_s2(FALSE)
+
+world_clip <- world_no_antarctica |>
+  st_make_valid() |>
+  st_intersection(clip_bbox) 
+
+grat_clip <- st_graticule(
+  lon = seq(-180, 180, 20),
+  lat = seq(-90, 90, 15)
+) |>  st_intersection(clip_bbox)
+
+sf_use_s2(TRUE)
+
+prime_meridian_line <- st_sfc(
+  st_linestring(cbind(rep(0, 181), seq(-60, 90, by = 1))),
+  crs = 4326
+)
+
+my_map <- tm_shape(world_clip, bbox = c(-180, -60, 180, 90)) + 
+  tm_fill() +
+  tm_shape(grat_clip) + tm_lines(lwd = 0.5, col = "black") +
+  tm_shape(prime_meridian_line) + tm_lines(col = "black", lwd = 1.5) +
+  tm_shape(equator_line) + tm_lines(col = "black", lwd = 1.5) +
+  tm_shape(standard_parallels) + tm_lines(col = "#e41a1c", lwd = 1.5) +
+  tm_crs(crs_lcc_0) +
+  tm_layout(inner.margins = c(0.0007, 0.0007, 0.0007, 0.0007), frame = FALSE) +
+  tm_credits("SANG-IL LEE, Geography Education at SNU", 
+             size = 0.7, position = c(0.80, -0.005))
+my_map
+```
+
+- 저장
+
+```{r}
+#| echo: false
+#| eval: false
+my.ratio <- get_asp_ratio(my_map)
+
+my.title <- "8-2-2-1 람베르트 정형원추 도법"
+my.file.name <- paste0("D:/My Cartography/지도제작/", my.title, ".png")
+tmap_save(my_map, filename = my.file.name, height = 12, 
+          width = my.ratio*12, dpi = 600)
+```
+
+### 지시타원
+
+- 지시타원 생성
+
+```{r}
+lat <- seq(-60,80, by=20L)
+lon <- seq(-160,160, by=20L)
+coord <- as.matrix(expand.grid(lon,lat))
+
+a_scale <- 6e5
+res_list <- tissot::tissot(coord, crs_lcc_0) |> tissot::indicatrix(scale = a_scale)
+tissot_sf <- indicatrix_list_to_sf(
+  res_list, crs_out = crs_lcc_0, scale = a_scale, n = 120)
+```
+
+- 지도 제작
+
+```{r}
+#| fig-height: 12
+#| fig-width: 14.84819
+#| fig-dpi: 600
+
+world_whole_lcc <- st_transform(world_clip, crs_lcc_0)
+
+sf_use_s2(FALSE)
+
+grat_clip <- st_graticule(
+  lon = seq(-180, 180, 10),
+  lat = seq(-90, 90, 10)
+) |>  st_intersection(clip_bbox)
+
+sf_use_s2(TRUE)
+
+my_map <- tm_shape(clip_bbox) + tm_fill(fill = "#d1ecf9") +
+  tm_shape(world_whole_lcc, is.main = TRUE, bbox = c(-180, -64, 180, 90)) + tm_fill(fill = "#fffff0") +
+  tm_shape(grat_clip) + tm_lines(lwd = 0.5, col = "black") +
+  tm_shape(prime_meridian_line) + tm_lines(col = "black", lwd = 1.5) +
+  tm_shape(equator_line) + tm_lines(col = "black", lwd = 1.5) +
+  tm_shape(standard_parallels) + tm_lines(col = "#e41a1c", lwd = 1.5) +
+  tm_shape(tissot_sf) + tm_fill(fill = "#e65100", fill_alpha = 0.50) +
+  tm_layout(inner.margins = c(0.01, 0.01, 0.01, 0.01), frame = FALSE) +
+  tm_credits("SANG-IL LEE, Geography Education at SNU", 
+             size = 0.7, position = c(0.80, -0.005))
+my_map
+```
+
+- 저장
+
+```{r}
+#| echo: false
+#| eval: false
+my.ratio <- get_asp_ratio(my_map)
+
+my.title <- "8-2-2-2 람베르트 정형원추 도법 티소"
+my.file.name <- paste0("D:/My Cartography/지도제작/", my.title, ".png")
+tmap_save(my_map, filename = my.file.name, height = 12, 
+          width = my.ratio*12, dpi = 600)
+```
+
+## 알베르스 정적원추 도법
+
+### 표준 지도
+
+- 지도 제작
+
+```{r}
+#| fig-height: 12
+#| fig-width: 15.20125
+#| fig-dpi: 600
+
+crs_aea_0 <- "+proj=aea +lat_1=35 +lat_2=55 +lat_0=0 +lon_0=0 +datum=WGS84 +units=m +no_defs"
+
+clip_bbox <- st_bbox(
+  c(xmin = -180, xmax = 180, ymin = -60, ymax = 90)) |> 
+  st_as_sfc(4326) |> st_segmentize(dfMaxLength = 1) |> 
+  st_set_crs(4326) 
+
+sf_use_s2(FALSE)
+
+world_clip <- world_no_antarctica |>
+  st_make_valid() |>
+  st_intersection(clip_bbox)
+
+grat_clip <- st_graticule(
+  lon = seq(-180, 180, 20),
+  lat = seq(-90, 90, 15)
+) |>  st_intersection(clip_bbox)
+
+sf_use_s2(TRUE)
+
+prime_meridian_line <- st_sfc(
+  st_linestring(cbind(rep(0, 181), seq(-60, 90, by = 1))),
+  crs = 4326
+)
+
+my_map <- tm_shape(world_clip, bbox = c(-180, -60, 180, 90)) + 
+  tm_fill() +
+  tm_shape(clip_bbox) + tm_lines(lwd = 0.5, col = "black") +
+  tm_shape(grat_clip) + tm_lines(lwd = 0.5, col = "black") +
+  tm_shape(prime_meridian_line) + tm_lines(col = "black", lwd = 1.5) +
+  tm_shape(equator_line) + tm_lines(col = "black", lwd = 1.5) +
+  tm_shape(standard_parallels) + tm_lines(col = "#e41a1c", lwd = 1.5) +
+  tm_crs(crs_aea_0) +
+  tm_layout(inner.margins = c(0, 0, 0, 0), frame = FALSE) +
+  tm_credits("SANG-IL LEE, Geography Education at SNU", 
+             size = 0.7, position = c(0.80, -0.005))
+my_map
+```
+
+- 저장
+
+```{r}
+#| echo: false
+#| eval: false
+my.ratio <- get_asp_ratio(my_map)
+
+my.title <- "8-2-3-1 알베르스 정적원추 도법"
+my.file.name <- paste0("D:/My Cartography/지도제작/", my.title, ".png")
+tmap_save(my_map, filename = my.file.name, height = 12, 
+          width = my.ratio*12, dpi = 600)
+```
+
+### 지시타원
+
+- 지시타원 생성
+
+```{r}
+lat <- seq(-60,80, by=20L)
+lon <- seq(-160,160, by=20L)
+coord <- as.matrix(expand.grid(lon,lat))
+
+a_scale <- 6e5
+res_list <- tissot::tissot(coord, crs_aea_0) |> tissot::indicatrix(scale = a_scale)
+tissot_sf <- indicatrix_list_to_sf(
+  res_list, crs_out = crs_aea_0, scale = a_scale, n = 120)
+```
+
+- 지도 제작
+
+```{r}
+#| fig-height: 12
+#| fig-width: 15.20125
+#| fig-dpi: 600
+
+world_whole_aea <- st_transform(world_clip, crs_aea_0)
+
+sf_use_s2(FALSE)
+
+grat_clip <- st_graticule(
+  lon = seq(-180, 180, 10),
+  lat = seq(-90, 90, 10)
+) |>  st_intersection(clip_bbox)
+
+sf_use_s2(TRUE)
+
+
+my_map <- tm_shape(clip_bbox) + tm_fill(fill = "#d1ecf9") +
+  tm_shape(world_whole_aea, is.main = TRUE, bbox = c(-180, -60, 180, 90)) + tm_fill(fill = "#fffff0") +
+  tm_shape(clip_bbox) + tm_lines(lwd = 0.5, col = "black") +
+  tm_shape(grat_clip) + tm_lines(lwd = 0.5, col = "black") +
+  tm_shape(prime_meridian_line) + tm_lines(col = "black", lwd = 1.5) +
+  tm_shape(equator_line) + tm_lines(col = "black", lwd = 1.5) +
+  tm_shape(standard_parallels) + tm_lines(col = "#e41a1c", lwd = 1.5) +
+  tm_shape(tissot_sf) + tm_fill(fill = "#e65100", fill_alpha = 0.50) +
+  tm_layout(inner.margins = c(0.01, 0.01, 0.01, 0.01), frame = FALSE) +
+  tm_credits("SANG-IL LEE, Geography Education at SNU", 
+             size = 0.7, position = c(0.80, -0.005))
+my_map
+```
+
+- 저장
+
+```{r}
+#| echo: false
+#| eval: false
+my.ratio <- get_asp_ratio(my_map)
+
+my.title <- "8-2-3-2 알베르스 정적원추 도법 티소"
+my.file.name <- paste0("D:/My Cartography/지도제작/", my.title, ".png")
+tmap_save(my_map, filename = my.file.name, height = 12, 
+          width = my.ratio*12, dpi = 600)
+```

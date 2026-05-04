@@ -1,0 +1,1908 @@
+---
+title: "평면(방위) 도법"
+author: Sang-Il Lee
+date-modified: last-modified
+number-sections: true
+format: 
+  html: 
+    toc: true
+code-link: true
+code-copy: true
+execute: 
+  warning: false
+  error: false
+  freeze: auto
+editor: visual
+editor_options: 
+  chunk_output_type: console
+---
+
+## 준비
+
+```{r}
+library(tidyverse)
+library(sf)
+library(tmap)
+library(tmaptools)
+library(spData)
+library(geosphere)
+library(tissot)
+library(rnaturalearth)
+source("https://raw.githubusercontent.com/mgimond/tissot/master/Tissot_functions.r")
+
+world <- spData::world
+
+world_whole <- world |> st_union() |> st_as_sf() # 어떤 경우에 잘 안 먹음.
+world_land <- ne_download(scale = 110, type = "land", category = "physical", returnclass = "sf")
+world_no_antarctica <- world |> filter(iso_a2 != "AQ")
+
+# 함수
+indicatrix_list_to_sf <- function(
+    ii,
+    crs_out,
+    scale = 6e5,
+    n = 120
+) {
+  
+  ti_ellipse_fun <- get("ti_ellipse", envir = asNamespace("tissot"))
+  indicatrix_to_sf_polygon <- function(z) {
+    mat <- ti_ellipse_fun(z, scale = scale, n = n)
+    mat <- as.matrix(mat)
+    mat <- mat[complete.cases(mat), , drop = FALSE]
+    if (nrow(mat) < 4) {
+      return(st_polygon())
+    }
+    if (!all(mat[1, ] == mat[nrow(mat), ])) {
+      mat <- rbind(mat, mat[1, ])
+    }
+    st_polygon(list(mat))
+  }
+  get_num <- function(z, name) {
+    x <- z[[name]]
+    if (is.null(x) || length(x) == 0) return(NA_real_)
+    as.numeric(x[1])
+  }
+  st_sf(
+    lon = map_dbl(ii, \(z) get_num(z, "lon")),
+    lat = map_dbl(ii, \(z) get_num(z, "lat")),
+    scale_h = map_dbl(ii, \(z) get_num(z, "scale_h")),
+    scale_k = map_dbl(ii, \(z) get_num(z, "scale_k")),
+    scale_a = map_dbl(ii, \(z) get_num(z, "scale_a")),
+    scale_b = map_dbl(ii, \(z) get_num(z, "scale_b")),
+    scale_area = map_dbl(ii, \(z) get_num(z, "scale_area")),
+    angle_deformation = map_dbl(ii, \(z) get_num(z, "angle_deformation")),
+    convergence = map_dbl(ii, \(z) get_num(z, "convergence")),
+    geometry = st_sfc(
+      map(ii, indicatrix_to_sf_polygon),
+      crs = crs_out
+    )
+  )
+}
+```
+
+## 정사 도법 1: 0-90
+
+### 표준 지도
+
+- 지도 제작
+
+```{r}
+#| fig-height: 12
+#| fig-width: 11.99835
+#| fig-dpi: 600
+
+crs_ortho_0_90 <- "+proj=ortho +lat_0=90 +lon_0=0 +datum=WGS84 +units=m +no_defs"
+
+origin_lines <- st_sfc(
+  st_linestring(matrix(c(-180, 0, 180, 0), ncol = 2, byrow = TRUE)), 
+  st_linestring(matrix(c(0, -90, 0, 90), ncol = 2, byrow = TRUE)),   
+  crs = 4326
+)
+
+grat <- st_graticule(
+  lon = seq(-180, 180, 20),
+  lat = seq(-90, 90, 15)
+) 
+
+my_map <- tm_shape(world_whole, bbox = c(-180, -85, 180, 85)) + tm_fill() +
+  tm_shape(grat) + tm_lines(col = "black", lwd = 0.5) +
+  tm_shape(origin_lines) + tm_lines(col = "black", lwd = 1.5) +
+  tm_crs(crs_ortho_0_90, bbox = "FULL") + 
+  tm_layout(inner.margins = c(0, 0, 0, 0), earth_boundary = TRUE, frame = FALSE) + # earth_boundary 반드시
+  tm_credits("SANG-IL LEE, Geography Education at SNU", 
+             size = 0.7, position = c(0.80, -0.005))
+my_map
+```
+
+- 저장
+
+```{r}
+#| echo: false
+#| eval: false
+my.ratio <- get_asp_ratio(my_map)
+
+my.title <- "8-3-1-1-1 정사 도법 0-90"
+my.file.name <- paste0("D:/My Cartography/지도제작/", my.title, ".png")
+tmap_save(my_map, filename = my.file.name, height = 12, 
+          width = my.ratio*12, dpi = 600)
+```
+
+### 지시타원
+
+- 지시타원 생성
+
+```{r}
+lat <- seq(10, 90, by=20L) # 0보다 큰 값
+lon <- seq(-160, 180, by=20L) # -180을 하면 -180과 180에 각각 생겨 두 개가 중첩됨
+coord <- as.matrix(expand.grid(lon,lat))
+
+a_scale <- 6e5
+res_list <- tissot::tissot(coord, crs_ortho_0_90) |> tissot::indicatrix(scale = a_scale)
+tissot_sf <- indicatrix_list_to_sf(
+  res_list, crs_out = crs_ortho_0_90, scale = a_scale, n = 120)
+```
+
+- 지도 제작
+
+```{r}
+#| fig-height: 12
+#| fig-width: 11.99792
+#| fig-dpi: 600
+
+world_ortho_0_90 <- st_transform(world, crs_ortho_0_90) # world_whole은 안 먹음. 희안함.
+
+grat <- st_graticule(
+  lon = seq(-180, 180, 10),
+  lat = seq(-90, 90, 10)
+) 
+
+my_map <- tm_shape(world_ortho_0_90) + tm_fill(fill = "#fffff0") +
+  tm_shape(grat) + tm_lines(lwd = 0.5, col = "black") +
+  tm_shape(origin_lines) + tm_lines(col = "black", lwd = 1.5) +
+  tm_shape(tissot_sf) + tm_fill(fill = "#e65100", fill_alpha = 0.5) +
+  tm_crs(crs_ortho_0_90, bbox = "FULL") +
+  tm_layout(inner.margins = c(0, 0, 0, 0), earth_boundary = TRUE, bg.color = "#d1ecf9", frame = FALSE) +
+  tm_credits("SANG-IL LEE, Geography Education at SNU", 
+             size = 0.7, position = c(0.80, -0.005))
+my_map
+```
+
+- 저장
+
+```{r}
+#| echo: false
+#| eval: false
+my.ratio <- get_asp_ratio(my_map)
+
+my.title <- "8-3-1-1-2 정사 도법 0-90 티소"
+my.file.name <- paste0("D:/My Cartography/지도제작/", my.title, ".png")
+tmap_save(my_map, filename = my.file.name, height = 12, 
+          width = my.ratio*12, dpi = 600)
+```
+
+## 정사 도법 2: 150-0
+
+### 표준 지도
+
+- 지도 제작
+
+```{r}
+#| fig-height: 12
+#| fig-width: 12.03955
+#| fig-dpi: 600
+
+crs_ortho_150_0 <- "+proj=ortho +lat_0=0 +lon_0=150 +datum=WGS84 +units=m +no_defs"
+
+origin_lines <- st_sfc(
+  st_linestring(matrix(c(-180, 0, 180, 0), ncol = 2, byrow = TRUE)), 
+  st_linestring(matrix(c(0, -90, 0, 90), ncol = 2, byrow = TRUE)),   
+  crs = 4326
+)
+
+# clip_bbox <- st_bbox(
+#   c(xmin = 60, xmax = 240, ymin = -90, ymax = 90)) |> 
+#   st_as_sfc(4326) |> st_segmentize(dfMaxLength = 1) |> 
+#   st_set_crs(4326) 
+
+grat <- st_graticule(
+  lon = seq(-180, 180, 20),
+  lat = seq(-90, 90, 15)
+) 
+
+prime_meridian_line <- st_sfc(
+  st_linestring(cbind(rep(150, 181), seq(-90, 90, by = 1))),
+  crs = 4326
+)
+
+equator_line <- st_sfc(
+  st_linestring(cbind(seq(-180, 180, by = 1), rep(0, 361))),
+  crs = 4326
+)
+
+my_map <- tm_shape(world_whole, bbox = c(-180, -85, 180, 85)) + tm_fill() +
+  tm_shape(grat) + tm_lines(lwd = 0.5, col = "black") +
+  tm_shape(equator_line) + tm_lines(col = "black", lwd = 1.5) +
+  tm_shape(prime_meridian_line) + tm_lines(col = "black", lwd = 1.5) +
+  tm_crs(crs_ortho_150_0, bbox = "FULL") +
+  tm_layout(inner.margins = c(0, 0, 0, 0), earth_boundary = TRUE, frame = FALSE) +
+  tm_credits("SANG-IL LEE, Geography Education at SNU", 
+             size = 0.7, position = c(0.80, -0.005))
+my_map
+```
+
+- 저장
+
+```{r}
+#| echo: false
+#| eval: false
+my.ratio <- get_asp_ratio(my_map)
+
+my.title <- "8-3-1-2-1 정사 도법 150 0"
+my.file.name <- paste0("D:/My Cartography/지도제작/", my.title, ".png")
+tmap_save(my_map, filename = my.file.name, height = 12, 
+          width = my.ratio*12, dpi = 600)
+```
+
+### 지시타원
+
+- 지시타원 생성
+
+```{r}
+lat <- seq(-70, 70, by=20L) 
+lon <- seq(70, 230, by=20L) 
+coord <- as.matrix(expand.grid(lon,lat))
+
+a_scale <- 6e5
+res_list <- tissot::tissot(coord, crs_ortho_150_0) |> tissot::indicatrix(scale = a_scale)
+tissot_sf <- indicatrix_list_to_sf(
+  res_list, crs_out = crs_ortho_150_0, scale = a_scale, n = 120)
+```
+
+- 지도 제작
+
+```{r}
+#| fig-height: 12
+#| fig-width: 12.032
+#| fig-dpi: 600
+
+world_ortho_150_0 <- st_transform(world, crs_ortho_150_0)
+
+grat <- st_graticule(
+  lon = seq(-180, 180, 10),
+  lat = seq(-90, 90, 10)
+) 
+
+my_map <- tm_shape(world_ortho_150_0) + tm_fill(fill = "#fffff0") +
+  tm_shape(grat) + tm_lines(lwd = 0.5, col = "black") +
+  tm_shape(origin_lines) + tm_lines(col = "black", lwd = 1.5) +
+  tm_shape(tissot_sf) + tm_fill(fill = "#e65100", fill_alpha = 0.5) +
+  tm_crs(crs_ortho_150_0, bbox = "FULL") +
+  tm_layout(inner.margins = c(0, 0, 0, 0), earth_boundary = TRUE, bg.color = "#d1ecf9", frame = FALSE) +
+  tm_credits("SANG-IL LEE, Geography Education at SNU", 
+             size = 0.7, position = c(0.80, -0.005))
+my_map
+```
+
+- 저장
+
+```{r}
+#| echo: false
+#| eval: false
+my.ratio <- get_asp_ratio(my_map)
+
+my.title <- "8-3-1-2-2 정사 도법 티소"
+my.file.name <- paste0("D:/My Cartography/지도제작/", my.title, ".png")
+tmap_save(my_map, filename = my.file.name, height = 12, 
+          width = my.ratio*12, dpi = 600)
+```
+
+## 정사 도법 3: 127-37.5
+
+### 표준지도
+
+- 지도 제작
+
+```{r}
+#| fig-height: 12
+#| fig-width: 12.02871
+#| fig-dpi: 600
+
+crs_ortho_127_37.5 <- "+proj=ortho +lat_0=37.5 +lon_0=127 +datum=WGS84 +units=m +no_defs"
+
+grat <- st_graticule(
+  lon = seq(-180, 180, 20),
+  lat = seq(-90, 90, 15)
+) 
+
+prime_meridian_line <- st_sfc(
+  st_linestring(cbind(rep(127, 181), seq(-90, 90, by = 1))),
+  crs = 4326
+)
+
+standard_parallel_line <- st_sfc(
+  st_linestring(cbind(seq(-180, 180, by = 1), rep(37.5, 361))),
+  crs = 4326
+)
+
+equator_line <- st_sfc(
+  st_linestring(cbind(seq(-180, 180, by = 1), rep(0, 361))),
+  crs = 4326
+)
+
+ortho_boundary <- st_sfc(st_point(c(0, 0)), crs = crs_ortho_127_37.5) |>
+  st_buffer(dist = 6371000, nQuadSegs = 720) |> # 왜 6371km지? 잘 안됨.
+  st_boundary()
+
+my_map <- tm_shape(world_whole) + tm_fill() + 
+  tm_shape(grat) + tm_lines(lwd = 0.5, col = "black") +
+  tm_shape(equator_line) + tm_lines(col = "black", lwd = 1.5) +
+  tm_shape(ortho_boundary) + tm_lines(col = "black", lwd = 1.5) +
+  tm_crs(crs_ortho_127_37.5, bbox = "FULL") +
+  tm_layout(inner.margins = c(0.001, 0.001, 0.001, 0.001), earth_boundary = TRUE, frame = FALSE) +
+  tm_credits("SANG-IL LEE, Geography Education at SNU", 
+             size = 0.7, position = c(0.80, -0.005))
+my_map
+```
+
+- 저장
+
+```{r}
+#| echo: false
+#| eval: false
+my.ratio <- get_asp_ratio(my_map)
+
+my.title <- "8-3-1-3-1 정사 도법 127 37.5"
+my.file.name <- paste0("D:/My Cartography/지도제작/", my.title, ".png")
+tmap_save(my_map, filename = my.file.name, height = 12, 
+          width = my.ratio*12, dpi = 600)
+```
+
+### 지시타원
+
+- 지시타원 생성
+
+```{r}
+lat <- seq(-90, 90, by=20L) 
+lon <- seq(-160, 180, by=20L) 
+coord <- as.matrix(expand.grid(lon,lat))
+
+a_scale <- 6e5
+res_list <- tissot::tissot(coord, crs_ortho_127_37.5) |> tissot::indicatrix(scale = a_scale)
+tissot_sf <- indicatrix_list_to_sf(
+  res_list, crs_out = crs_ortho_127_37.5, scale = a_scale, n = 120)
+```
+
+- 지도 제작
+
+```{r}
+#| fig-height: 12
+#| fig-width: 12.03031
+#| fig-dpi: 600
+
+world_ortho_127_37.5 <- st_transform(spData::world, crs_ortho_127_37.5)
+
+grat <- st_graticule(
+  lon = seq(-180, 180, 10),
+  lat = seq(-90, 90, 10)
+) 
+
+equator_line <- st_sfc(
+  st_linestring(cbind(seq(-180, 180, by = 1), rep(0, 361))),
+  crs = 4326
+)
+
+my_map <- tm_shape(world_ortho_127_37.5) + tm_fill(fill = "#fffff0") +
+  tm_shape(grat) + tm_lines(lwd = 0.5, col = "black") +
+  tm_shape(equator_line) + tm_lines(col = "black", lwd = 1.5) +
+  tm_shape(tissot_sf) + tm_fill(fill = "#e65100", fill_alpha = 0.5) +
+  tm_crs(crs_ortho_127_37.5, bbox = "FULL") +
+  tm_layout(inner.margins = c(0, 0, 0, 0), earth_boundary = TRUE, bg.color = "#d1ecf9", frame = FALSE) +
+  tm_credits("SANG-IL LEE, Geography Education at SNU", 
+             size = 0.7, position = c(0.80, -0.005))
+my_map
+```
+
+- 저장
+
+```{r}
+#| echo: false
+#| eval: false
+my.ratio <- get_asp_ratio(my_map)
+
+my.title <- "8-3-1-3-2 정사 도법 127 37.5 티소"
+my.file.name <- paste0("D:/My Cartography/지도제작/", my.title, ".png")
+tmap_save(my_map, filename = my.file.name, height = 12, 
+          width = my.ratio*12, dpi = 600)
+```
+
+## 평사 도법 1: 0-90
+
+### 표준 지도
+
+- 지도 제작
+
+```{r}
+#| fig-height: 12
+#| fig-width: 11.98919
+#| fig-dpi: 600
+
+# 완전히 다른 접근을 해야 함.
+
+crs_stere_0_90 <- "+proj=stere +lat_0=90 +lon_0=0 +datum=WGS84 +units=m +no_defs"
+
+clip_bbox <- st_bbox(
+  c(xmin = -180, xmax = 180, ymin = -45, ymax = 90)) |> 
+  st_as_sfc(4326) |> st_segmentize(dfMaxLength = 1) |> 
+  st_set_crs(4326) 
+
+sf_use_s2(FALSE)
+
+world_clip <- world_no_antarctica |>
+  st_make_valid() |>
+  st_intersection(clip_bbox)
+
+grat_clip <- st_graticule(
+  lon = seq(-180, 180, 20),
+  lat = seq(-90, 90, 15)
+) |>  st_intersection(clip_bbox)
+
+sf_use_s2(TRUE)
+
+prime_meridian_line <- st_sfc(
+  st_linestring(cbind(rep(0, 181), seq(-90, 90, by = 1))),
+  crs = 4326
+)
+
+my_map <- tm_shape(world_clip, bbox = c(-180, -45.1, 180, 90)) + tm_fill() +
+  tm_shape(grat_clip) + tm_lines(lwd = 0.5, col = "black") +
+  tm_shape(prime_meridian_line) + tm_lines(lwd = 1.5, col = "black") +
+  tm_crs(crs_stere_0_90) + # bbox = "FULL" 안됨
+  tm_layout(inner.margins = c(0, 0, 0, 0), earth_boundary = FALSE, frame = FALSE) + # 
+  tm_credits("SANG-IL LEE, Geography Education at SNU", 
+             size = 0.7, position = c(0.80, -0.005))
+my_map
+```
+
+- 저장
+
+```{r}
+#| echo: false
+#| eval: false
+my.ratio <- get_asp_ratio(my_map)
+
+my.title <- "8-3-2-1-1 평사 도법 0 90"
+my.file.name <- paste0("D:/My Cartography/지도제작/", my.title, ".png")
+tmap_save(my_map, filename = my.file.name, height = 12, 
+          width = my.ratio*12, dpi = 600)
+```
+
+### 지시타원
+
+- 지시타원 생성
+
+```{r}
+lat <- seq(-40, 80, by=20L) # 0보다 큰 값
+lon <- seq(-160, 180, by=20L) # -180을 하면 -180과 180에 각각 생겨 두 개가 중첩됨
+coord <- as.matrix(expand.grid(lon,lat))
+
+a_scale <- 6e5
+res_list <- tissot::tissot(coord, crs_stere_0_90) |> tissot::indicatrix(scale = a_scale)
+tissot_sf <- indicatrix_list_to_sf(
+  res_list, crs_out = crs_stere_0_90, scale = a_scale, n = 120)
+```
+
+- 지도 제작
+
+```{r}
+#| fig-height: 12
+#| fig-width: 12
+#| fig-dpi: 600
+
+world_stere_0_90 <- st_transform(world, crs_stere_0_90) # world_whole은 안 먹음. 희안함.
+
+clip_bbox <- st_bbox(
+  c(xmin = -180, xmax = 180, ymin = -45, ymax = 90)) |> 
+  st_as_sfc(4326) |> st_segmentize(dfMaxLength = 1) |> 
+  st_set_crs(4326) 
+
+sf_use_s2(FALSE)
+grat_clip <- st_graticule(
+  lon = seq(-180, 180, 10),
+  lat = seq(-90, 90, 10)
+) |>  st_intersection(clip_bbox)
+sf_use_s2(TRUE)
+
+my_map <- tm_shape(clip_bbox) + tm_fill(fill = "#d1ecf9") +
+  tm_shape(world_clip, bbox = c(-180, -50.1, 180, 90)) + tm_fill(fill = "#fffff0") +
+  tm_shape(grat_clip) + tm_lines(lwd = 0.5, col = "black") +
+  tm_shape(prime_meridian_line) + tm_lines(lwd = 1.5, col = "black") +
+  tm_shape(tissot_sf) + tm_fill(fill = "#e65100", fill_alpha = 0.5) +
+  tm_shape(clip_bbox) + tm_borders(lwd = 1.5, col = "black") + 
+  tm_crs(crs_stere_0_90) + 
+  tm_layout(inner.margins = c(0.001, 0.001, 0.001, 0.001), earth_boundary = FALSE, frame = FALSE) + # 
+  tm_credits("SANG-IL LEE, Geography Education at SNU", 
+             size = 0.7, position = c(0.80, -0.005))
+my_map
+```
+
+- 저장
+
+```{r}
+#| echo: false
+#| eval: false
+my.ratio <- get_asp_ratio(my_map)
+
+my.title <- "8-3-2-1-2 평사 도법 0 90 티소"
+my.file.name <- paste0("D:/My Cartography/지도제작/", my.title, ".png")
+tmap_save(my_map, filename = my.file.name, height = 12, 
+          width = my.ratio*12, dpi = 600)
+```
+
+## 평사 도법 2: 150-0
+
+### 표준 지도
+
+- 지도 제작
+
+```{r}
+#| fig-height: 12
+#| fig-width: 12.16813
+#| fig-dpi: 600
+
+crs_stere_150_0 <- "+proj=stere +lat_0=0 +lon_0=150 +datum=WGS84 +units=m +no_defs"
+
+stere_bbox <- st_sfc(st_point(c(0, 0)), crs = crs_stere_150_0) |> 
+  st_buffer(dist = 31855000, nQuadSegs = 720) 
+  
+sf_use_s2(FALSE)
+
+world_clip <- world_whole |>
+  st_make_valid() |> st_transform(crs = crs_stere_150_0) |> 
+  st_intersection(stere_bbox)
+
+grat_clip <- st_graticule(
+  lon = seq(-180, 180, 20),
+  lat = seq(-90, 90, 15)
+) |> st_transform(crs = crs_stere_150_0) |> st_intersection(stere_bbox)
+
+sf_use_s2(TRUE)
+
+prime_meridian_line <- st_sfc(
+  st_linestring(cbind(rep(150, 181), seq(-90, 90, by = 1))),
+  crs = 4326
+) |> st_set_precision(1e6) |> st_break_antimeridian(lon_0 = 150) |> 
+  st_transform(crs_stere_150_0) |>  st_intersection(stere_bbox)
+
+equator_line <- st_sfc(
+  st_linestring(cbind(seq(-180, 180, by = 1), rep(0, 361))),
+  crs = 4326
+) |> st_set_precision(1e6) |> st_break_antimeridian(lon_0 = 150) |> 
+  st_transform(crs_stere_150_0) |>  st_intersection(stere_bbox)
+
+my_map <- tm_shape(world_clip) + tm_fill() +
+  tm_shape(grat_clip) + tm_lines(lwd = 0.5, col = "black") +
+  tm_shape(prime_meridian_line) + tm_lines(lwd = 1.5, col = "black") +
+  tm_shape(equator_line) + tm_lines(lwd = 1.5, col = "black") +
+  tm_shape(stere_bbox) + tm_lines(lwd = 1.5, col = "black") +
+  tm_crs(crs_stere_150_0) + 
+  tm_layout(inner.margins = c(0.09, 0.01, 0.05, 0.01), earth_boundary = FALSE, frame = FALSE) +  
+  tm_credits("SANG-IL LEE, Geography Education at SNU", 
+             size = 0.7, position = c(0.80, -0.005))
+my_map
+```
+
+- 저장
+
+```{r}
+#| echo: false
+#| eval: false
+my.ratio <- get_asp_ratio(my_map)
+
+my.title <- "8-3-2-2-1 평사 도법 150 0"
+my.file.name <- paste0("D:/My Cartography/지도제작/", my.title, ".png")
+tmap_save(my_map, filename = my.file.name, height = 12, 
+          width = my.ratio*12, dpi = 600)
+```
+
+### 지시타원
+
+- 지시타원 생성
+
+```{r}
+lat <- seq(-80, 80, by=20L) # 0보다 큰 값
+lon <- seq(-160, 180, by=20L) # -180을 하면 -180과 180에 각각 생겨 두 개가 중첩됨
+coord <- as.matrix(expand.grid(lon,lat))
+
+a_scale <- 6e5
+res_list <- tissot::tissot(coord, crs_stere_150_0) |> tissot::indicatrix(scale = a_scale)
+tissot_sf <- indicatrix_list_to_sf(
+  res_list, crs_out = crs_stere_150_0, scale = a_scale, n = 120)
+```
+
+- 지도 제작
+
+```{r}
+#| fig-height: 12
+#| fig-width: 12
+#| fig-dpi: 600
+
+world_stere_0_90 <- st_transform(world, crs_stere_0_90) # world_whole은 안 먹음. 희안함.
+
+sf_use_s2(FALSE)
+
+grat_clip <- st_graticule(
+  lon = seq(-180, 180, 10),
+  lat = seq(-90, 90, 10)
+) |> st_transform(crs = crs_stere_150_0) |> st_intersection(stere_bbox)
+
+tissot_sf_clip <- tissot_sf |> st_intersection(stere_bbox)
+
+sf_use_s2(TRUE)
+
+my_map <- tm_shape(stere_bbox) + tm_fill(fill = "#d1ecf9") +
+  tm_shape(world_clip) + tm_fill(fill = "#fffff0") +
+  tm_shape(grat_clip) + tm_lines(lwd = 0.5, col = "black") +
+  tm_shape(prime_meridian_line) + tm_lines(lwd = 1.5, col = "black") +
+  tm_shape(equator_line) + tm_lines(lwd = 1.5, col = "black") +
+  tm_shape(tissot_sf_clip) + tm_fill(fill = "#e65100", fill_alpha = 0.5) +
+  tm_shape(stere_bbox) + tm_borders(lwd = 1.5, col = "black") +
+  tm_crs(crs_stere_150_0) + 
+  tm_layout(inner.margins = c(0, 0, 0, 0), earth_boundary = FALSE, frame = FALSE) +  
+  tm_credits("SANG-IL LEE, Geography Education at SNU", 
+             size = 0.7, position = c(0.80, -0.005))
+my_map
+```
+
+- 저장
+
+```{r}
+#| echo: false
+#| eval: false
+my.ratio <- get_asp_ratio(my_map)
+
+my.title <- "8-3-2-2-2 평사 도법 150 0 티소"
+my.file.name <- paste0("D:/My Cartography/지도제작/", my.title, ".png")
+tmap_save(my_map, filename = my.file.name, height = 12, 
+          width = my.ratio*12, dpi = 600)
+```
+
+## 평사 도법 2: 127-37.5
+
+### 표준 지도
+
+- 지도 제작
+
+```{r}
+#| fig-height: 12
+#| fig-width: 12.02801
+#| fig-dpi: 600
+
+crs_stere_127_37.5 <- "+proj=stere +lat_0=37.5 +lon_0=127 +datum=WGS84 +units=m +no_defs"
+
+stere_bbox <- st_sfc(st_point(c(0, 0)), crs = crs_stere_127_37.5) |> 
+  st_buffer(dist = 31855000, nQuadSegs = 720) 
+  
+sf_use_s2(FALSE)
+
+world_clip <- world_whole |>
+  st_make_valid() |> st_transform(crs = crs_stere_127_37.5) |> 
+  st_intersection(stere_bbox)
+
+grat_clip <- st_graticule(
+  lon = seq(-180, 180, 20),
+  lat = seq(-90, 90, 15)
+) |> st_set_precision(1e6) |> st_break_antimeridian(lon_0 = 127) |>
+  st_transform(crs = crs_stere_127_37.5) |> 
+  st_intersection(stere_bbox)
+
+prime_meridian_line <- st_sfc(
+  st_linestring(cbind(rep(127, 181), seq(-90, 90, by = 1))),
+  crs = 4326
+) |> st_set_precision(1e6) |> st_break_antimeridian(lon_0 = 150) |> 
+  st_transform(crs_stere_127_37.5) |>  st_intersection(stere_bbox)
+
+equator_line <- st_sfc(
+  st_linestring(cbind(seq(-180, 180, by = 1), rep(0, 361))),
+  crs = 4326
+) |> st_set_precision(1e6) |> 
+  st_transform(crs_stere_127_37.5) |>  st_intersection(stere_bbox)
+
+sf_use_s2(TRUE)
+
+my_map <- tm_shape(world_clip) + tm_fill() +
+  tm_shape(grat_clip, is.main = TRUE) + tm_lines(lwd = 0.5, col = "black") +
+  # tm_shape(prime_meridian_line) + tm_lines(lwd = 1.5, col = "black") +
+  tm_shape(equator_line) + tm_lines(lwd = 1.5, col = "black") +
+  tm_shape(stere_bbox) + tm_lines(lwd = 1.5, col = "black") +
+  tm_crs(crs_stere_127_37.5) + 
+  tm_layout(inner.margins = c(0.01, 0.01, 0.01, 0.01), earth_boundary = FALSE, frame = FALSE) +  
+  tm_credits("SANG-IL LEE, Geography Education at SNU", 
+             size = 0.7, position = c(0.80, -0.005))
+my_map
+```
+
+- 저장
+
+```{r}
+#| echo: false
+#| eval: false
+my.ratio <- get_asp_ratio(my_map)
+
+my.title <- "8-3-2-3-1 평사 도법 127 37.5"
+my.file.name <- paste0("D:/My Cartography/지도제작/", my.title, ".png")
+tmap_save(my_map, filename = my.file.name, height = 12, 
+          width = my.ratio*12, dpi = 600)
+```
+
+### 지시타원
+
+- 지시타원 생성
+
+```{r}
+lat <- seq(-80, 80, by=20L) # 0보다 큰 값
+lon <- seq(-160, 180, by=20L) # -180을 하면 -180과 180에 각각 생겨 두 개가 중첩됨
+coord <- as.matrix(expand.grid(lon,lat))
+
+a_scale <- 6e5
+res_list <- tissot::tissot(coord, crs_stere_127_37.5) |> tissot::indicatrix(scale = a_scale)
+tissot_sf <- indicatrix_list_to_sf(
+  res_list, crs_out = crs_stere_127_37.5, scale = a_scale, n = 120)
+```
+
+- 지도 제작
+
+```{r}
+#| fig-height: 12
+#| fig-width: 12.02801
+#| fig-dpi: 600
+
+world_stere_127_37.5 <- st_transform(world, crs_stere_127_37.5) # world_whole은 안 먹음. 희안함.
+
+tissot_sf <- tissot_sf |> 
+  filter(scale_k < 10) # 굉장히 큰 것 제거
+
+sf_use_s2(FALSE)
+
+grat_clip <- st_graticule(
+  lon = seq(-180, 180, 10),
+  lat = seq(-90, 90, 10)
+) |> st_transform(crs = crs_stere_127_37.5) |> st_intersection(stere_bbox)
+
+tissot_sf_clip <- tissot_sf |> st_intersection(stere_bbox)
+
+sf_use_s2(TRUE)
+
+my_map <- tm_shape(stere_bbox) + tm_fill(fill = "#d1ecf9") +
+  tm_shape(world_clip) + tm_fill(fill = "#fffff0") +
+  tm_shape(grat_clip) + tm_lines(lwd = 0.5, col = "black") +
+  # tm_shape(prime_meridian_line) + tm_lines(lwd = 1.5, col = "black") +
+  tm_shape(equator_line) + tm_lines(lwd = 1.5, col = "black") +
+  tm_shape(tissot_sf_clip) + tm_fill(fill = "#e65100", fill_alpha = 0.5) +
+  tm_shape(stere_bbox) + tm_borders(lwd = 1.5, col = "black") +
+  tm_crs(crs_stere_127_37.5) + 
+  tm_layout(inner.margins = c(0.01, 0.01, 0.01, 0.01), earth_boundary = FALSE, frame = FALSE) +  
+  tm_credits("SANG-IL LEE, Geography Education at SNU", 
+             size = 0.7, position = c(0.80, -0.005))
+my_map
+```
+
+- 저장
+
+```{r}
+#| echo: false
+#| eval: false
+my.ratio <- get_asp_ratio(my_map)
+
+my.title <- "8-3-2-3-2 평사 도법 127 37.5 티소"
+my.file.name <- paste0("D:/My Cartography/지도제작/", my.title, ".png")
+tmap_save(my_map, filename = my.file.name, height = 12, 
+          width = my.ratio*12, dpi = 600)
+
+```
+
+## 심사 도법 1: 0-90
+
+### 표준 지도
+
+- 지도 제작
+
+```{r}
+#| fig-height: 12
+#| fig-width: 11.98919
+#| fig-dpi: 600
+
+crs_gnom_0_90 <- "+proj=gnom +lat_0=90 +lon_0=0 +datum=WGS84 +units=m +no_defs"
+
+clip_bbox <- st_bbox(
+  c(xmin = -180, xmax = 180, ymin = 15, ymax = 90)) |> 
+  st_as_sfc(4326) |> st_segmentize(dfMaxLength = 1) |> 
+  st_set_crs(4326) 
+
+sf_use_s2(FALSE)
+
+world_clip <- world_no_antarctica |>
+  st_make_valid() |>
+  st_intersection(clip_bbox)
+
+grat_clip <- st_graticule(
+  lon = seq(-180, 180, 20),
+  lat = seq(-90, 90, 15)
+) |>  st_intersection(clip_bbox)
+
+sf_use_s2(FALSE)
+
+prime_meridian_line <- st_sfc(
+  st_linestring(cbind(rep(0, 181), seq(-90, 90, by = 1))),
+  crs = 4326
+)
+
+my_map <- tm_shape(world_clip, bbox = c(-180, 14.95, 180, 90)) + 
+  tm_fill() +
+#  tm_shape(clip_bbox) + tm_lines(lwd = 0.5, col = "black") +
+  tm_shape(grat_clip) + tm_lines(lwd = 0.5, col = "black") +
+  tm_shape(prime_meridian_line) + tm_lines(lwd = 1.5, col = "black") +
+  tm_crs(crs_gnom_0_90) +
+  tm_layout(inner.margins = c(0, 0, 0, 0), frame = FALSE) +
+  tm_credits("SANG-IL LEE, Geography Education at SNU", 
+             size = 0.7, position = c(0.80, -0.005))
+my_map
+```
+
+- 저장
+
+```{r}
+#| echo: false
+#| eval: false
+my.ratio <- get_asp_ratio(my_map)
+
+my.title <- "8-3-3-1-1 심사 도법 0 90"
+my.file.name <- paste0("D:/My Cartography/지도제작/", my.title, ".png")
+tmap_save(my_map, filename = my.file.name, height = 12, 
+          width = my.ratio*12, dpi = 600)
+```
+
+### 지시타원
+
+- 지시타원 생성
+
+```{r}
+lat <- seq(20, 80, by=20L) # 0보다 큰 값
+lon <- seq(-160, 180, by=20L) # -180을 하면 -180과 180에 각각 생겨 두 개가 중첩됨
+coord <- as.matrix(expand.grid(lon,lat))
+
+a_scale <- 6e5
+res_list <- tissot::tissot(coord, crs_gnom_0_90) |> tissot::indicatrix(scale = a_scale)
+tissot_sf <- indicatrix_list_to_sf(
+  res_list, crs_out = crs_gnom_0_90, scale = a_scale, n = 120)
+```
+
+- 지도 제작
+
+```{r}
+#| fig-height: 12
+#| fig-width: 12
+#| fig-dpi: 600
+
+world_gnom_0_90 <- st_transform(world, crs_gnom_0_90) # world_whole은 안 먹음. 희안함.
+
+# clip_bbox <- st_bbox(
+#   c(xmin = -180, xmax = 180, ymin = 20, ymax = 90)) |> 
+#   st_as_sfc(4326) |> st_segmentize(dfMaxLength = 1) |> 
+#   st_set_crs(4326) 
+
+sf_use_s2(FALSE)
+
+grat_clip <- st_graticule(
+  lon = seq(-180, 180, 10),
+  lat = seq(-90, 90, 10)
+) |>  st_intersection(clip_bbox)
+
+tissot_sf_clip <- tissot_sf |> st_intersection(clip_bbox |> st_transform(crs_gnom_0_90))
+
+sf_use_s2(TRUE)
+
+my_map <- tm_shape(clip_bbox) + tm_fill(fill = "#d1ecf9") +
+  tm_shape(world_clip, bbox = c(-180, 14.95, 180, 90)) + tm_fill(fill = "#fffff0") +
+  tm_shape(grat_clip) + tm_lines(lwd = 0.5, col = "black") +
+  tm_shape(prime_meridian_line) + tm_lines(lwd = 1.5, col = "black") +
+  tm_shape(tissot_sf_clip) + tm_fill(fill = "#e65100", fill_alpha = 0.5) +
+  tm_shape(clip_bbox) + tm_borders(lwd = 1.5, col = "black") + 
+  tm_crs(crs_gnom_0_90) + 
+  tm_layout(inner.margins = c(0.001, 0.001, 0.001, 0.001), earth_boundary = FALSE, frame = FALSE) + # 
+  tm_credits("SANG-IL LEE, Geography Education at SNU", 
+             size = 0.7, position = c(0.80, -0.005))
+my_map
+```
+
+- 저장
+
+```{r}
+#| echo: false
+#| eval: false
+my.ratio <- get_asp_ratio(my_map)
+
+my.title <- "8-3-3-1-2 심사 도법 0 90 티소"
+my.file.name <- paste0("D:/My Cartography/지도제작/", my.title, ".png")
+tmap_save(my_map, filename = my.file.name, height = 12, 
+          width = my.ratio*12, dpi = 600)
+```
+
+## 심사 도법 2: 150-0 (문제 있음)
+
+### 표준 지도
+
+- 지도 제작
+
+```{r}
+#| fig-height: 12
+#| fig-width: 12.16813
+#| fig-dpi: 600
+
+crs_gnom_150_0 <- "+proj=gnom +lat_0=0 +lon_0=150 +datum=WGS84 +units=m +no_defs"
+
+gnom_bbox <- st_sfc(st_point(c(0, 0)), crs = crs_gnom_150_0) |> 
+  st_buffer(dist = 20000000, nQuadSegs = 720) 
+
+sf_use_s2(FALSE)
+
+world_clip <- world |>
+  st_make_valid() |> st_break_antimeridian(lon_0 = 150) |> 
+  st_transform(crs_gnom_150_0) |>  st_intersection(gnom_bbox) # world, world_whole, world_land에 따라 다름
+
+grat_clip <- st_graticule(
+  lon = seq(-180, 180, 20),
+  lat = seq(-90, 90, 15)
+) |> st_set_precision(1e6) |> st_break_antimeridian(lon_0 = 150) |> 
+  st_transform(crs = crs_gnom_150_0) |> st_intersection(gnom_bbox)
+
+equator_line <- st_sfc(
+  st_linestring(cbind(seq(-180, 180, by = 1), rep(0, 361))),
+  crs = 4326
+) |> st_set_precision(1e6) |> 
+  st_transform(crs_gnom_150_0) |>  st_intersection(gnom_bbox) # 여긴 st_break_antimeridian 사용 안함
+
+prime_meridian_line <- st_sfc(
+  st_linestring(cbind(rep(150, 181), seq(-90, 90, by = 1))),
+  crs = 4326
+) |> st_set_precision(1e6) |> st_break_antimeridian(lon_0 = 150) |> 
+  st_transform(crs_gnom_150_0) |>  st_intersection(gnom_bbox)
+
+sf_use_s2(TRUE)
+
+my_map <- tm_shape(world_clip) + tm_fill() +
+  tm_shape(grat_clip, is.main = TRUE) + tm_lines(lwd = 0.5, col = "black") +
+  tm_shape(prime_meridian_line) + tm_lines(lwd = 1.5, col = "black") +
+  tm_shape(equator_line) + tm_lines(lwd = 1.5, col = "black") +
+  tm_shape(gnom_bbox) + tm_lines(lwd = 1.5, col = "black") +
+  tm_crs(crs_gnom_150_0) + 
+  tm_layout(inner.margins = c(0.01, 0.01, 0.01, 0.01), earth_boundary = FALSE, frame = FALSE) +  
+  tm_credits("SANG-IL LEE, Geography Education at SNU", 
+             size = 0.7, position = c(0.80, -0.005))
+my_map
+```
+
+- 저장
+
+```{r}
+#| echo: false
+#| eval: false
+my.ratio <- get_asp_ratio(my_map)
+
+my.title <- "8-3-3-2-1 심사 도법 150 0"
+my.file.name <- paste0("D:/My Cartography/지도제작/", my.title, ".png")
+tmap_save(my_map, filename = my.file.name, height = 12, 
+          width = my.ratio*12, dpi = 600)
+```
+
+### 지시타원
+
+- 지시타원 생성
+
+```{r}
+lat <- seq(-80, 80, by=20L) # 0보다 큰 값
+lon <- seq(-160, 180, by=20L) # -180을 하면 -180과 180에 각각 생겨 두 개가 중첩됨
+coord <- as.matrix(expand.grid(lon,lat))
+
+a_scale <- 6e5
+res_list <- tissot::tissot(coord, crs_gnom_150_0) |> tissot::indicatrix(scale = a_scale)
+tissot_sf <- indicatrix_list_to_sf(
+  res_list, crs_out = crs_gnom_150_0, scale = a_scale, n = 120)
+```
+
+- 지도 제작
+
+```{r}
+#| fig-height: 12
+#| fig-width: 12.16813
+#| fig-dpi: 600
+
+world_geom_150_0 <- st_transform(world, crs_gnom_150_0) # world_whole은 안 먹음. 희안함.
+
+tissot_sf <- tissot_sf |> filter(scale_k < 50)
+
+sf_use_s2(FALSE)
+
+grat_clip <- st_graticule(
+  lon = seq(-180, 180, 10),
+  lat = seq(-90, 90, 10)
+) |> st_set_precision(1e6) |> st_break_antimeridian(lon_0 = 150) |> 
+  st_transform(crs = crs_gnom_150_0) |> st_intersection(gnom_bbox)
+
+tissot_sf_clip <- tissot_sf |> st_intersection(gnom_bbox)
+
+sf_use_s2(TRUE)
+
+my_map <- tm_shape(gnom_bbox) + tm_fill(fill = "#d1ecf9") +
+  tm_shape(world_clip) + tm_fill(fill = "#fffff0") +
+  tm_shape(grat_clip) + tm_lines(lwd = 0.5, col = "black") +
+  tm_shape(prime_meridian_line) + tm_lines(lwd = 1.5, col = "black") +
+  tm_shape(equator_line) + tm_lines(lwd = 1.5, col = "black") +
+  tm_shape(tissot_sf_clip) + tm_fill(fill = "#e65100", fill_alpha = 0.5) +
+  tm_shape(gnom_bbox) + tm_borders(lwd = 1.5, col = "black") +
+  tm_crs(crs_gnom_150_0) + 
+  tm_layout(inner.margins = c(0, 0, 0, 0), earth_boundary = FALSE, frame = FALSE) +  
+  tm_credits("SANG-IL LEE, Geography Education at SNU", 
+             size = 0.7, position = c(0.80, -0.005))
+my_map
+```
+
+- 저장
+
+```{r}
+#| echo: false
+#| eval: false
+my.ratio <- get_asp_ratio(my_map)
+
+my.title <- "8-3-3-2-2 심사 도법 150 0 티소"
+my.file.name <- paste0("D:/My Cartography/지도제작/", my.title, ".png")
+tmap_save(my_map, filename = my.file.name, height = 12, 
+          width = my.ratio*12, dpi = 600)
+```
+
+## 심사 도법 3: 127-37.5
+
+### 표준 지도
+
+- 지도 제작
+
+```{r}
+#| fig-height: 12
+#| fig-width: 12.16813
+#| fig-dpi: 600
+
+crs_gnom_127_37.5 <- "+proj=gnom +lat_0=37.5 +lon_0=127 +datum=WGS84 +units=m +no_defs"
+
+gnom_bbox <- st_sfc(st_point(c(0, 0)), crs = crs_gnom_127_37.5) |> 
+  st_buffer(dist = 20000000, nQuadSegs = 720) 
+
+sf_use_s2(FALSE)
+
+world_clip <- world_land |>
+  st_make_valid() |> st_break_antimeridian(lon_0 = 127) |> 
+  st_transform(crs_gnom_127_37.5) |>  st_intersection(gnom_bbox)
+
+grat_clip <- st_graticule(
+  lon = seq(-180, 180, 20),
+  lat = seq(-90, 90, 15)
+) |> st_set_precision(1e6) |> st_break_antimeridian(lon_0 = 127) |> # 여긴 st_break_antimeridian 사용 안함
+  st_transform(crs_gnom_127_37.5) |> st_intersection(gnom_bbox)
+
+equator_line <- st_sfc(
+  st_linestring(cbind(seq(-180, 180, by = 1), rep(0, 361))),
+  crs = 4326
+) |> st_set_precision(1e6) |>  
+  st_transform(crs_gnom_127_37.5) |>  st_intersection(gnom_bbox) # 여긴 st_break_antimeridian 사용 안함
+
+prime_meridian_line <- st_sfc(
+  st_linestring(cbind(rep(127, 181), seq(-90, 90, by = 1))),
+  crs = 4326
+) |> st_set_precision(1e6) |> 
+  st_transform(crs_gnom_127_37.5) |>  st_intersection(gnom_bbox)
+
+sf_use_s2(TRUE)
+
+my_map <- tm_shape(world_clip) + tm_fill() +
+  tm_shape(grat_clip, is.main = TRUE) + tm_lines(lwd = 0.5, col = "black") +
+  # tm_shape(prime_meridian_line) + tm_lines(lwd = 1.5, col = "black") + 
+  # tm_shape(equator_line) + tm_lines(lwd = 1.5, col = "black") + # 두 줄이 생김
+  tm_shape(gnom_bbox) + tm_lines(lwd = 1.5, col = "black") +
+  tm_crs(crs_gnom_127_37.5) + 
+  tm_layout(inner.margins = c(0.01, 0.01, 0.01, 0.01), earth_boundary = FALSE, frame = FALSE) +  
+  tm_credits("SANG-IL LEE, Geography Education at SNU", 
+             size = 0.7, position = c(0.80, -0.005))
+my_map
+```
+
+- 저장
+
+```{r}
+#| echo: false
+#| eval: false
+my.ratio <- get_asp_ratio(my_map)
+
+my.title <- "8-3-3-3-1 심사 도법 127 37.5"
+my.file.name <- paste0("D:/My Cartography/지도제작/", my.title, ".png")
+tmap_save(my_map, filename = my.file.name, height = 12, 
+          width = my.ratio*12, dpi = 600)
+```
+
+### 지시타원
+
+- 지시타원 생성
+
+```{r}
+lat <- seq(-80, 80, by=20L) # 0보다 큰 값
+lon <- seq(-160, 180, by=20L) # -180을 하면 -180과 180에 각각 생겨 두 개가 중첩됨
+coord <- as.matrix(expand.grid(lon,lat))
+
+a_scale <- 6e5
+res_list <- tissot::tissot(coord, crs_gnom_127_37.5) |> tissot::indicatrix(scale = a_scale)
+tissot_sf <- indicatrix_list_to_sf(
+  res_list, crs_out = crs_gnom_127_37.5, scale = a_scale, n = 120)
+```
+
+- 지도 제작
+
+```{r}
+#| fig-height: 12
+#| fig-width: 12.16813
+#| fig-dpi: 600
+
+world_geom_127_37.5 <- st_transform(world, crs_gnom_127_37.5) # world_whole은 안 먹음. 희안함.
+
+# tissot_sf <- tissot_sf |> filter(scale_k < 100)
+
+sf_use_s2(FALSE)
+
+grat_clip <- st_graticule(
+  lon = seq(-180, 180, 10),
+  lat = seq(-90, 90, 10)
+) |> st_set_precision(1e6) |> st_break_antimeridian(lon_0 = 127) |> 
+  st_transform(crs = crs_gnom_127_37.5) |> st_intersection(gnom_bbox)
+
+tissot_sf_clip <- tissot_sf |> st_intersection(gnom_bbox)
+
+sf_use_s2(TRUE)
+
+my_map <- tm_shape(gnom_bbox) + tm_fill(fill = "#d1ecf9") +
+  tm_shape(world_clip) + tm_fill(fill = "#fffff0") +
+  tm_shape(grat_clip) + tm_lines(lwd = 0.5, col = "black") +
+  # tm_shape(prime_meridian_line) + tm_lines(lwd = 1.5, col = "black") +
+  # tm_shape(equator_line) + tm_lines(lwd = 1.5, col = "black") +
+  tm_shape(tissot_sf_clip) + tm_fill(fill = "#e65100", fill_alpha = 0.5) +
+  tm_shape(gnom_bbox) + tm_borders(lwd = 1.5, col = "black") +
+  tm_crs(crs_gnom_127_37.5) + 
+  tm_layout(inner.margins = c(0, 0, 0, 0), earth_boundary = FALSE, frame = FALSE) +  
+  tm_credits("SANG-IL LEE, Geography Education at SNU", 
+             size = 0.7, position = c(0.80, -0.005))
+my_map
+```
+
+- 저장
+
+```{r}
+#| echo: false
+#| eval: false
+my.ratio <- get_asp_ratio(my_map)
+
+my.title <- "8-3-3-3-2 심사 도법 127 37.5 티소"
+my.file.name <- paste0("D:/My Cartography/지도제작/", my.title, ".png")
+tmap_save(my_map, filename = my.file.name, height = 12, 
+          width = my.ratio*12, dpi = 600)
+```
+
+## 정거방위 도법 1: 0-90
+
+### 표준지도
+
+- 지도 제작
+
+```{r}
+#| fig-height: 12
+#| fig-width: 11.99835
+#| fig-dpi: 600
+
+crs_aeqd_0_90 <- "+proj=aeqd +lat_0=90 +lon_0=0 +datum=WGS84 +units=m +no_defs"
+
+origin_lines <- st_sfc(
+  st_linestring(matrix(c(-180, 0, 180, 0), ncol = 2, byrow = TRUE)), 
+  st_linestring(matrix(c(0, -90, 0, 90), ncol = 2, byrow = TRUE)),   
+  crs = 4326
+)
+
+grat <- st_graticule(
+  lon = seq(-180, 180, 20),
+  lat = seq(-90, 90, 15)
+) 
+
+aeqd_bbox <- st_sfc(st_point(c(0, 0)), crs = crs_aeqd_0_90) |> 
+  st_buffer(dist = 20000000, nQuadSegs = 720) # 20000000 이게 핵심!!!
+
+sf_use_s2(FALSE)
+
+world_clip <- world_land |>
+  st_make_valid() |> st_transform(crs_aeqd_0_90) |>  st_intersection(aeqd_bbox)
+
+grat_clip <- st_graticule(
+  lon = seq(-180, 180, 20),
+  lat = seq(-90, 90, 15)
+) |> st_transform(crs_aeqd_0_90) |> st_intersection(aeqd_bbox)
+
+equator_line <- st_sfc(
+  st_linestring(cbind(seq(-180, 180, by = 1), rep(0, 361))),
+  crs = 4326
+) |> st_transform(crs_aeqd_0_90) |>  st_intersection(aeqd_bbox) 
+
+prime_meridian_line <- st_sfc(
+  st_linestring(cbind(rep(0, 181), seq(-90, 90, by = 1))),
+  crs = 4326
+) |> st_transform(crs_aeqd_0_90) |>  st_intersection(aeqd_bbox)
+
+sf_use_s2(TRUE)
+
+my_map <- tm_shape(aeqd_bbox) + tm_borders(lwd = 1.5) +
+  tm_shape(world_clip) + tm_fill() + 
+  tm_shape(grat_clip) + tm_lines(lwd = 0.5, col = "black") +
+  tm_shape(equator_line) + tm_lines(lwd = 1.5, col = "black") +
+  tm_shape(prime_meridian_line) + tm_lines(lwd = 1.5, col = "black") +
+  tm_crs(crs_aeqd_0_90) +
+  tm_layout(inner.margins = c(0, 0, 0, 0), earth_boundary = TRUE, frame = FALSE) +
+  tm_credits("SANG-IL LEE, Geography Education at SNU", 
+             size = 0.7, position = c(0.80, -0.005))
+my_map
+```
+
+- 저장
+
+```{r}
+#| echo: false
+#| eval: false
+my.ratio <- get_asp_ratio(my_map)
+
+my.title <- "8-3-4-1-1 정거방위 도법 0 90"
+my.file.name <- paste0("D:/My Cartography/지도제작/", my.title, ".png")
+tmap_save(my_map, filename = my.file.name, height = 12, 
+          width = my.ratio*12, dpi = 600)
+```
+
+### 지시타원
+
+- 지시타원 생성
+
+```{r}
+lat <- seq(-80, 80, by=20L) # 0보다 큰 값
+lon <- seq(-160, 180, by=20L) # -180을 하면 -180과 180에 각각 생겨 두 개가 중첩됨
+coord <- as.matrix(expand.grid(lon,lat))
+
+a_scale <- 6e5
+res_list <- tissot::tissot(coord, crs_aeqd_0_90) |> tissot::indicatrix(scale = a_scale)
+tissot_sf <- indicatrix_list_to_sf(
+  res_list, crs_out = crs_aeqd_0_90, scale = a_scale, n = 120)
+```
+
+- 지도 제작
+
+```{r}
+#| fig-height: 12
+#| fig-width: 11.99835
+#| fig-dpi: 600
+
+world_crs_aeqd_0_90 <- st_transform(world, crs_aeqd_0_90) # world_whole은 안 먹음. 희안함.
+
+tissot_sf <- tissot_sf |> filter(scale_k < 50)
+
+sf_use_s2(FALSE)
+
+grat_clip <- st_graticule(
+  lon = seq(-180, 180, 10),
+  lat = seq(-90, 90, 10)
+) |> st_transform(crs_aeqd_0_90) |> st_intersection(aeqd_bbox)
+
+tissot_sf_clip <- tissot_sf |> st_intersection(aeqd_bbox)
+
+sf_use_s2(TRUE)
+
+my_map <- tm_shape(aeqd_bbox) + tm_fill(fill = "#d1ecf9") +
+  tm_shape(world_clip) + tm_fill(fill = "#fffff0") +
+  tm_shape(grat_clip) + tm_lines(lwd = 0.5, col = "black") +
+  # tm_shape(prime_meridian_line) + tm_lines(lwd = 1.5, col = "black") +
+  # tm_shape(equator_line) + tm_lines(lwd = 1.5, col = "black") +
+  tm_shape(tissot_sf_clip) + tm_fill(fill = "#e65100", fill_alpha = 0.5) +
+  tm_shape(aeqd_bbox) + tm_borders(lwd = 1.5, col = "black") +
+  tm_crs(crs_aeqd_0_90) + 
+  tm_layout(inner.margins = c(0, 0, 0, 0), earth_boundary = FALSE, frame = FALSE) +  
+  tm_credits("SANG-IL LEE, Geography Education at SNU", 
+             size = 0.7, position = c(0.80, -0.005))
+my_map
+```
+
+- 저장
+
+```{r}
+#| echo: false
+#| eval: false
+my.ratio <- get_asp_ratio(my_map)
+
+my.title <- "8-3-4-1-2 정거방위 도법 0 90 티소"
+my.file.name <- paste0("D:/My Cartography/지도제작/", my.title, ".png")
+tmap_save(my_map, filename = my.file.name, height = 12, 
+          width = my.ratio*12, dpi = 600)
+```
+
+## 정거방위 도법 2: 150-0
+
+### 표준지도
+
+- 지도 제작
+
+```{r}
+#| fig-height: 12
+#| fig-width: 11.99835
+#| fig-dpi: 600
+
+crs_aeqd_150_0 <- "+proj=aeqd +lat_0=0 +lon_0=150 +datum=WGS84 +units=m +no_defs"
+
+grat <- st_graticule(
+  lon = seq(-180, 180, 20),
+  lat = seq(-90, 90, 15)
+) 
+
+equator_line <- st_sfc(
+  st_linestring(cbind(seq(-180, 180, by = 1), rep(0, 361))),
+  crs = 4326
+) 
+
+aeqd_bbox <- st_sfc(st_point(c(0, 0)), crs = crs_aeqd_150_0) |> 
+  st_buffer(dist = 20000000, nQuadSegs = 720) 
+
+my_map <- tm_shape(aeqd_bbox) + tm_borders(lwd = 1.5) +
+  tm_shape(world) + tm_fill() + 
+  tm_shape(grat) + tm_lines(lwd = 0.5, col = "black") +
+  # tm_shape(equator_line) + tm_lines(lwd = 1.5, col = "black") + # 이상함
+  tm_crs(crs_aeqd_150_0) +
+  tm_layout(inner.margins = c(0.001, 0.001, 0.001, 0.001), frame = FALSE) +
+  tm_credits("SANG-IL LEE, Geography Education at SNU", 
+             size = 0.7, position = c(0.80, -0.005))
+my_map
+```
+
+- 저장
+
+```{r}
+#| echo: false
+#| eval: false
+my.ratio <- get_asp_ratio(my_map)
+
+my.title <- "8-3-4-2-1 정거방위 도법 150 0"
+my.file.name <- paste0("D:/My Cartography/지도제작/", my.title, ".png")
+tmap_save(my_map, filename = my.file.name, height = 12, 
+          width = my.ratio*12, dpi = 600)
+```
+
+### 지시타원
+
+- 지시타원 생성
+
+```{r}
+lat <- seq(-80, 80, by=20L) # 0보다 큰 값
+lon <- seq(-160, 180, by=20L) # -180을 하면 -180과 180에 각각 생겨 두 개가 중첩됨
+coord <- as.matrix(expand.grid(lon,lat))
+
+a_scale <- 6e5
+res_list <- tissot::tissot(coord, crs_aeqd_150_0) |> tissot::indicatrix(scale = a_scale)
+tissot_sf <- indicatrix_list_to_sf(
+  res_list, crs_out = crs_aeqd_150_0, scale = a_scale, n = 120)
+```
+
+- 지도 제작
+
+```{r}
+world_aeqd_150_0 <- st_transform(world, crs_aeqd_150_0) # world_whole은 안 먹음. 희안함.
+
+tissot_sf <- tissot_sf |> filter(scale_k < 50)
+
+sf_use_s2(FALSE)
+
+grat_clip <- st_graticule(
+  lon = seq(-180, 180, 10),
+  lat = seq(-90, 90, 10)
+) |> st_set_precision(1e6) |> st_break_antimeridian(lon_0 = 127) |> 
+  st_transform(crs = crs_aeqd_150_0) |> st_intersection(aeqd_bbox)
+
+tissot_sf_clip <- tissot_sf |> st_intersection(aeqd_bbox)
+
+sf_use_s2(TRUE)
+
+my_map <- tm_shape(aeqd_bbox) + tm_fill(fill = "#d1ecf9") +
+  tm_shape(world) + tm_fill(fill = "#fffff0") +
+  tm_shape(grat_clip) + tm_lines(lwd = 0.5, col = "black") +
+  # tm_shape(prime_meridian_line) + tm_lines(lwd = 1.5, col = "black") +
+  # tm_shape(equator_line) + tm_lines(lwd = 1.5, col = "black") +
+  tm_shape(tissot_sf_clip) + tm_fill(fill = "#e65100", fill_alpha = 0.5) +
+  tm_shape(aeqd_bbox) + tm_borders(lwd = 1.5, col = "black") +
+  tm_crs(crs_aeqd_150_0) + 
+  tm_layout(inner.margins = c(0.001, 0.001, 0.001, 0.001), earth_boundary = FALSE, frame = FALSE) +  
+  tm_credits("SANG-IL LEE, Geography Education at SNU", 
+             size = 0.7, position = c(0.80, -0.005))
+my_map
+```
+
+- 저장
+
+```{r}
+#| echo: false
+#| eval: false
+my.ratio <- get_asp_ratio(my_map)
+
+my.title <- "8-3-4-2-2 정거방위 도법 150 0 티소"
+my.file.name <- paste0("D:/My Cartography/지도제작/", my.title, ".png")
+tmap_save(my_map, filename = my.file.name, height = 12, 
+          width = my.ratio*12, dpi = 600)
+```
+
+## 정거방위 도법 3: 127-37.5
+
+### 표준지도
+
+- 지도 제작
+
+```{r}
+#| fig-height: 12
+#| fig-width: 12
+#| fig-dpi: 600
+
+crs_aeqd_127_37.5 <- "+proj=aeqd +lat_0=37.5 +lon_0=127 +datum=WGS84 +units=m +no_defs"
+
+grat <- st_graticule(
+  lon = seq(-180, 180, 20),
+  lat = seq(-90, 90, 15)
+) 
+
+aeqd_bbox <- st_sfc(st_point(c(0, 0)), crs = crs_aeqd_127_37.5) |> 
+  st_buffer(dist = pi * 6371000, nQuadSegs = 720) 
+
+my_map <- tm_shape(aeqd_bbox) + tm_borders(lwd = 1.5) +
+  tm_shape(world) + tm_fill() + 
+  tm_shape(grat) + tm_lines(lwd = 0.5, col = "black") +
+  tm_crs(crs_aeqd_127_37.5) +
+  tm_layout(inner.margins = c(0.001, 0.001, 0.001, 0.001), frame = FALSE) +
+  tm_credits("SANG-IL LEE, Geography Education at SNU", 
+             size = 0.7, position = c(0.80, -0.005))
+my_map
+```
+
+- 저장
+
+```{r}
+#| echo: false
+#| eval: false
+my.ratio <- get_asp_ratio(my_map)
+
+my.title <- "8-3-4-3-1 정거방위 도법 127 37.5"
+my.file.name <- paste0("D:/My Cartography/지도제작/", my.title, ".png")
+tmap_save(my_map, filename = my.file.name, height = 12, 
+          width = my.ratio*12, dpi = 600)
+```
+
+### 지시타원
+
+- 지시타원 생성
+
+```{r}
+lat <- seq(-80, 80, by=20L) # 0보다 큰 값
+lon <- seq(-160, 180, by=20L) # -180을 하면 -180과 180에 각각 생겨 두 개가 중첩됨
+coord <- as.matrix(expand.grid(lon,lat))
+
+a_scale <- 6e5
+res_list <- tissot::tissot(coord, crs_aeqd_127_37.5) |> tissot::indicatrix(scale = a_scale)
+tissot_sf <- indicatrix_list_to_sf(
+  res_list, crs_out = crs_aeqd_127_37.5, scale = a_scale, n = 120)
+```
+
+- 지도 제작
+
+```{r}
+#| fig-height: 12
+#| fig-width: 12
+#| fig-dpi: 600
+
+world_aeqd_127_37.5 <- st_transform(world, crs_aeqd_127_37.5) # world_whole은 안 먹음. 희안함.
+
+tissot_sf <- tissot_sf |> filter(scale_k < 50)
+
+sf_use_s2(FALSE)
+
+grat_clip <- st_graticule(
+  lon = seq(-180, 180, 10),
+  lat = seq(-90, 90, 10)
+) |> st_set_precision(1e6) |> st_break_antimeridian(lon_0 = 127) |> 
+  st_transform(crs = crs_aeqd_127_37.5) |> st_intersection(aeqd_bbox)
+
+tissot_sf_clip <- tissot_sf |> st_intersection(aeqd_bbox)
+
+sf_use_s2(TRUE)
+
+my_map <- tm_shape(aeqd_bbox) + tm_fill(fill = "#d1ecf9") +
+  tm_shape(world) + tm_fill(fill = "#fffff0") +
+  tm_shape(grat_clip) + tm_lines(lwd = 0.5, col = "black") +
+  # tm_shape(prime_meridian_line) + tm_lines(lwd = 1.5, col = "black") +
+  # tm_shape(equator_line) + tm_lines(lwd = 1.5, col = "black") +
+  tm_shape(tissot_sf_clip) + tm_fill(fill = "#e65100", fill_alpha = 0.5) +
+  tm_shape(aeqd_bbox) + tm_borders(lwd = 1.5, col = "black") +
+  # tm_crs(world_aeqd_127_37.5) + # 에러가 남
+  tm_layout(inner.margins = c(0, 0, 0, 0), earth_boundary = FALSE, frame = FALSE) +  
+  tm_credits("SANG-IL LEE, Geography Education at SNU", 
+             size = 0.7, position = c(0.80, -0.005))
+my_map
+```
+
+- 저장
+
+```{r}
+#| echo: false
+#| eval: false
+my.ratio <- get_asp_ratio(my_map)
+
+my.title <- "8-3-4-3-2 정거방위 도법 127 37.5 티소"
+my.file.name <- paste0("D:/My Cartography/지도제작/", my.title, ".png")
+tmap_save(my_map, filename = my.file.name, height = 12, 
+          width = my.ratio*12, dpi = 600)
+```
+
+## 람베르트 정적방위 도법 1: 0-90
+
+### 표준지도
+
+- 지도 제작
+
+```{r}
+#| fig-height: 12
+#| fig-width: 11.99835
+#| fig-dpi: 600
+
+crs_laea_0_90 <- "+proj=laea +lat_0=90 +lon_0=0 +datum=WGS84 +units=m +no_defs"
+
+origin_lines <- st_sfc(
+  st_linestring(matrix(c(-180, 0, 180, 0), ncol = 2, byrow = TRUE)), 
+  st_linestring(matrix(c(0, -90, 0, 90), ncol = 2, byrow = TRUE)),   
+  crs = 4326
+)
+
+grat <- st_graticule(
+  lon = seq(-180, 180, 20),
+  lat = seq(-90, 90, 15)
+) 
+
+laea_bbox <- st_sfc(st_point(c(0, 0)), crs = crs_laea_0_90) |> 
+  st_buffer(dist = 2 * 6371000 - 1000, nQuadSegs = 720) 
+
+sf_use_s2(FALSE)
+
+world_clip <- world_no_antarctica |>
+  st_make_valid() |> st_transform(crs_laea_0_90) |> st_intersection(laea_bbox)
+
+qtm(world_clip)
+
+grat_clip <- st_graticule(
+  lon = seq(-180, 180, 20),
+  lat = seq(-90, 90, 15)
+) |> st_transform(crs_laea_0_90) |> st_intersection(laea_bbox)
+
+equator_line <- st_sfc(
+  st_linestring(cbind(seq(-180, 180, by = 1), rep(0, 361))),
+  crs = 4326
+) |> st_transform(crs_laea_0_90) |>  st_intersection(laea_bbox) 
+
+prime_meridian_line <- st_sfc(
+  st_linestring(cbind(rep(0, 181), seq(-90, 90, by = 1))),
+  crs = 4326
+) |> st_transform(crs_laea_0_90) |>  st_intersection(laea_bbox)
+
+sf_use_s2(TRUE)
+
+my_map <- tm_shape(laea_bbox) + tm_borders(lwd = 1.5) +
+  tm_shape(world_clip) + tm_fill() + 
+  tm_shape(grat_clip) + tm_lines(lwd = 0.5, col = "black") +
+  tm_shape(equator_line) + tm_lines(lwd = 1.5, col = "black") +
+  tm_shape(prime_meridian_line) + tm_lines(lwd = 1.5, col = "black") +
+  tm_crs(crs_laea_0_90) +
+  tm_layout(inner.margins = c(0.001, 0.001, 0.001, 0.001), earth_boundary = TRUE, frame = FALSE) +
+  tm_credits("SANG-IL LEE, Geography Education at SNU", 
+             size = 0.7, position = c(0.80, -0.005))
+my_map
+```
+
+- 저장
+
+```{r}
+#| echo: false
+#| eval: false
+my.ratio <- get_asp_ratio(my_map)
+
+my.title <- "8-3-5-1-1 람베르트 정적방위 도법 0 90"
+my.file.name <- paste0("D:/My Cartography/지도제작/", my.title, ".png")
+tmap_save(my_map, filename = my.file.name, height = 12, 
+          width = my.ratio*12, dpi = 600)
+```
+
+### 지시타원
+
+- 지시타원 생성
+
+```{r}
+lat <- seq(-80, 80, by=20L) # 0보다 큰 값
+lon <- seq(-160, 180, by=20L) # -180을 하면 -180과 180에 각각 생겨 두 개가 중첩됨
+coord <- as.matrix(expand.grid(lon,lat))
+
+a_scale <- 6e5
+res_list <- tissot::tissot(coord, crs_laea_0_90) |> tissot::indicatrix(scale = a_scale)
+tissot_sf <- indicatrix_list_to_sf(
+  res_list, crs_out = crs_laea_0_90, scale = a_scale, n = 120)
+```
+
+- 지도 제작
+
+```{r}
+world_crs_laes_0_90 <- st_transform(world, crs_laea_0_90) # world_whole은 안 먹음. 희안함.
+
+tissot_sf <- tissot_sf |> filter(scale_k < 50)
+
+sf_use_s2(FALSE)
+
+grat_clip <- st_graticule(
+  lon = seq(-180, 180, 10),
+  lat = seq(-90, 90, 10)
+) |> st_transform(crs_laea_0_90) |> st_intersection(laea_bbox)
+
+tissot_sf_clip <- tissot_sf |> st_intersection(laea_bbox)
+
+sf_use_s2(TRUE)
+
+my_map <- tm_shape(laea_bbox) + tm_fill(fill = "#d1ecf9") +
+  tm_shape(world_clip) + tm_fill(fill = "#fffff0") +
+  tm_shape(grat_clip) + tm_lines(lwd = 0.5, col = "black") +
+  # tm_shape(prime_meridian_line) + tm_lines(lwd = 1.5, col = "black") +
+  # tm_shape(equator_line) + tm_lines(lwd = 1.5, col = "black") +
+  tm_shape(tissot_sf_clip) + tm_fill(fill = "#e65100", fill_alpha = 0.5) +
+  tm_shape(laea_bbox) + tm_borders(lwd = 1.5, col = "black") +
+  tm_crs(crs_laea_0_90) + 
+  tm_layout(inner.margins = c(0.001, 0.001, 0.001, 0.001), earth_boundary = FALSE, frame = FALSE) +  
+  tm_credits("SANG-IL LEE, Geography Education at SNU", 
+             size = 0.7, position = c(0.80, -0.005))
+my_map
+```
+
+- 저장
+
+```{r}
+#| echo: false
+#| eval: false
+my.ratio <- get_asp_ratio(my_map)
+
+my.title <- "8-3-5-1-2 람베르트 정적방위 도법 0 90 티소"
+my.file.name <- paste0("D:/My Cartography/지도제작/", my.title, ".png")
+tmap_save(my_map, filename = my.file.name, height = 12, 
+          width = my.ratio*12, dpi = 600)
+```
+
+## 람베르트 정적방위 도법 3: 150-0
+
+### 표준지도
+
+- 지도 제작
+
+```{r}
+#| fig-height: 12
+#| fig-width: 12
+#| fig-dpi: 600
+
+crs_laea_150_0 <- "+proj=laea +lat_0=0 +lon_0=150 +datum=WGS84 +units=m +no_defs"
+
+grat <- st_graticule(
+  lon = seq(-180, 180, 20),
+  lat = seq(-90, 90, 15)
+) 
+
+equator_line <- st_sfc(
+  st_linestring(cbind(seq(-180, 180, by = 1), rep(0, 361))),
+  crs = 4326
+) 
+
+laea_bbox <- st_sfc(st_point(c(0, 0)), crs = crs_laea_150_0) |> 
+  st_buffer(dist = 2 * 6371000 - 1000, nQuadSegs = 720) 
+
+my_map <- tm_shape(laea_bbox) + tm_borders(lwd = 1.5) +
+  tm_shape(world) + tm_fill() + 
+  tm_shape(grat) + tm_lines(lwd = 0.5, col = "black") +
+  tm_shape(equator_line) + tm_lines(lwd = 1.5, col = "black") + 
+  tm_crs(crs_laea_150_0) +
+  tm_layout(inner.margins = c(0.001, 0.001, 0.001, 0.001), frame = FALSE) +
+  tm_credits("SANG-IL LEE, Geography Education at SNU", 
+             size = 0.7, position = c(0.80, -0.005))
+my_map
+```
+
+- 저장
+
+```{r}
+#| echo: false
+#| eval: false
+my.ratio <- get_asp_ratio(my_map)
+
+my.title <- "8-3-5-2-1 람베르트 정적방위 도법 150 0"
+my.file.name <- paste0("D:/My Cartography/지도제작/", my.title, ".png")
+tmap_save(my_map, filename = my.file.name, height = 12, 
+          width = my.ratio*12, dpi = 600)
+```
+
+### 지시타원
+
+- 지시타원 생성
+
+```{r}
+lat <- seq(-80, 80, by=20L) # 0보다 큰 값
+lon <- seq(-160, 180, by=20L) # -180을 하면 -180과 180에 각각 생겨 두 개가 중첩됨
+coord <- as.matrix(expand.grid(lon,lat))
+
+a_scale <- 6e5
+res_list <- tissot::tissot(coord, crs_laea_150_0) |> tissot::indicatrix(scale = a_scale)
+tissot_sf <- indicatrix_list_to_sf(
+  res_list, crs_out = crs_laea_150_0, scale = a_scale, n = 120)
+```
+
+- 지도 제작
+
+```{r}
+#| fig-height: 12
+#| fig-width: 12
+#| fig-dpi: 600
+
+world_laea_150_0 <- st_transform(world, crs_laea_150_0) # world_whole은 안 먹음. 희안함.
+
+tissot_sf <- tissot_sf |> filter(scale_k < 50)
+
+sf_use_s2(FALSE)
+
+grat_clip <- st_graticule(
+  lon = seq(-180, 180, 10),
+  lat = seq(-90, 90, 10)
+) |> st_set_precision(1e6) |> st_break_antimeridian(lon_0 = 127) |> 
+  st_transform(crs = crs_laea_150_0) |> st_intersection(laea_bbox)
+
+tissot_sf_clip <- tissot_sf |> st_intersection(laea_bbox)
+
+sf_use_s2(TRUE)
+
+my_map <- tm_shape(laea_bbox) + tm_fill(fill = "#d1ecf9") +
+  tm_shape(world) + tm_fill(fill = "#fffff0") +
+  tm_shape(grat_clip) + tm_lines(lwd = 0.5, col = "black") +
+  # tm_shape(prime_meridian_line) + tm_lines(lwd = 1.5, col = "black") +
+  # tm_shape(equator_line) + tm_lines(lwd = 1.5, col = "black") +
+  tm_shape(tissot_sf_clip) + tm_fill(fill = "#e65100", fill_alpha = 0.5) +
+  tm_shape(laea_bbox) + tm_borders(lwd = 1.5, col = "black") +
+  tm_crs(crs_laea_150_0) + # 에러가 남
+  tm_layout(inner.margins = c(0, 0, 0, 0), earth_boundary = FALSE, frame = FALSE) +  
+  tm_credits("SANG-IL LEE, Geography Education at SNU", 
+             size = 0.7, position = c(0.80, -0.005))
+my_map
+```
+
+- 저장
+
+```{r}
+#| echo: false
+#| eval: false
+my.ratio <- get_asp_ratio(my_map)
+
+my.title <- "8-3-5-2-2 람베르트 정적방위 도법 150 0 티소"
+my.file.name <- paste0("D:/My Cartography/지도제작/", my.title, ".png")
+tmap_save(my_map, filename = my.file.name, height = 12, 
+          width = my.ratio*12, dpi = 600)
+```
+
+## 람베르트 정적방위 도법 3: 127-37.5
+
+- 지도 제작
+
+```{r}
+#| fig-height: 12
+#| fig-width: 12
+#| fig-dpi: 600
+
+crs_laea_127_37.5 <- "+proj=laea +lat_0=37.5 +lon_0=127 +datum=WGS84 +units=m +no_defs"
+
+grat <- st_graticule(
+  lon = seq(-180, 180, 20),
+  lat = seq(-90, 90, 15)
+) 
+
+laea_bbox <- st_sfc(st_point(c(0, 0)), crs = crs_laea_127_37.5) |> 
+  st_buffer(dist = 6371000 * 2, nQuadSegs = 720)
+
+my_map <- tm_shape(laea_bbox) + tm_borders(lwd = 1.5) +
+  tm_shape(world_whole) + tm_fill() + 
+  tm_shape(grat) + tm_lines(lwd = 0.5, col = "black") +
+  tm_crs(crs_laea_127_37.5) +
+  tm_layout(inner.margins = c(0.001, 0.001, 0.001, 0.001), frame = FALSE) +
+  tm_credits("SANG-IL LEE, Geography Education at SNU", 
+             size = 0.7, position = c(0.80, -0.005))
+my_map
+```
+
+- 저장
+
+```{r}
+#| echo: false
+#| eval: false
+my.ratio <- get_asp_ratio(my_map)
+
+my.title <- "8-3-5-3-1 람베르트 정적방위 도법 127 37.5"
+my.file.name <- paste0("D:/My Cartography/지도제작/", my.title, ".png")
+tmap_save(my_map, filename = my.file.name, height = 12, 
+          width = my.ratio*12, dpi = 600)
+```
+
+### 지시타원
+
+- 지시타원 생성
+
+```{r}
+lat <- seq(-80, 80, by=20L) # 0보다 큰 값
+lon <- seq(-160, 180, by=20L) # -180을 하면 -180과 180에 각각 생겨 두 개가 중첩됨
+coord <- as.matrix(expand.grid(lon,lat))
+
+a_scale <- 6e5
+res_list <- tissot::tissot(coord, crs_laea_127_37.5) |> tissot::indicatrix(scale = a_scale)
+tissot_sf <- indicatrix_list_to_sf(
+  res_list, crs_out = crs_laea_127_37.5, scale = a_scale, n = 120)
+```
+
+- 지도 제작
+
+```{r}
+#| fig-height: 12
+#| fig-width: 12
+#| fig-dpi: 600
+
+world_laea_127_37.5 <- st_transform(world, crs_laea_127_37.5) # world_whole은 안 먹음. 희안함.
+
+tissot_sf <- tissot_sf |> filter(scale_k < 50)
+
+sf_use_s2(FALSE)
+
+grat_clip <- st_graticule(
+  lon = seq(-180, 180, 10),
+  lat = seq(-90, 90, 10)
+) |> st_set_precision(1e6) |> st_break_antimeridian(lon_0 = 127) |> 
+  st_transform(crs = crs_laea_127_37.5) |> st_intersection(laea_bbox)
+
+tissot_sf_clip <- tissot_sf |> st_intersection(laea_bbox)
+
+sf_use_s2(TRUE)
+
+my_map <- tm_shape(laea_bbox) + tm_fill(fill = "#d1ecf9") +
+  tm_shape(world) + tm_fill(fill = "#fffff0") +
+  tm_shape(grat_clip) + tm_lines(lwd = 0.5, col = "black") +
+  # tm_shape(prime_meridian_line) + tm_lines(lwd = 1.5, col = "black") +
+  # tm_shape(equator_line) + tm_lines(lwd = 1.5, col = "black") +
+  tm_shape(tissot_sf_clip) + tm_fill(fill = "#e65100", fill_alpha = 0.5) +
+  tm_shape(laea_bbox) + tm_borders(lwd = 1.5, col = "black") +
+  # tm_crs(crs_laea_127_37.5) + # 에러가 남
+  tm_layout(inner.margins = c(0, 0, 0, 0), earth_boundary = FALSE, frame = FALSE) +  
+  tm_credits("SANG-IL LEE, Geography Education at SNU", 
+             size = 0.7, position = c(0.80, -0.005))
+my_map
+```
+
+- 저장
+
+```{r}
+#| echo: false
+#| eval: false
+my.ratio <- get_asp_ratio(my_map)
+
+my.title <- "8-3-5-3-2 람베르트 정적방위 도법 127 37.5 티소"
+my.file.name <- paste0("D:/My Cartography/지도제작/", my.title, ".png")
+tmap_save(my_map, filename = my.file.name, height = 12, 
+          width = my.ratio*12, dpi = 600)
+```
