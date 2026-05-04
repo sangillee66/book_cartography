@@ -492,7 +492,7 @@ grat <- st_graticule(
   lat = c(-85, seq(-80, 80, 10), 85)
 ) 
 
-my_map <- tm_shape(world_merc_150e, bbox = c(-180, -85, 180, 85)) + # world whole하면 이상해짐
+my_map <- tm_shape(world_whole_proj, bbox = c(-180, -85, 180, 85)) + 
   tm_fill(fill = "#fffff0") +
   tm_shape(grat) + tm_lines(col = "black", lwd = 0.5) +
   tm_shape(origin_lines) + tm_lines(col = "black", lwd = 1.5) +
@@ -1403,7 +1403,7 @@ grat <- st_graticule(
   lat = seq(-90, 90, 10)
 )
 
-my_map <- tm_shape(world_mill_150e, bbox = c(-180, -85, 180, 85)) + 
+my_map <- tm_shape(world_whole_proj, bbox = c(-180, -85, 180, 85)) + 
   tm_fill(fill = "#fffff0") +
   tm_shape(grat) + tm_lines(col = "black", lwd = 0.5) +
   tm_shape(origin_lines) + tm_lines(col = "black", lwd = 1.5) +

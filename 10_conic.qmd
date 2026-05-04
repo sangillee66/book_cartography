@@ -77,7 +77,7 @@ indicatrix_list_to_sf <- function(
 }
 ```
 
-## 정거원추 도법
+## 정거원추 도법 1: 0
 
 ### 표준 지도
 
@@ -136,7 +136,7 @@ my_map
 #| eval: false
 my.ratio <- get_asp_ratio(my_map)
 
-my.title <- "8-2-1-1 정거원추 도법"
+my.title <- "8-2-1-1-1 정거원추 도법"
 my.file.name <- paste0("D:/My Cartography/지도제작/", my.title, ".png")
 tmap_save(my_map, filename = my.file.name, height = 12, 
           width = my.ratio*12, dpi = 600)
@@ -197,6 +197,138 @@ my.file.name <- paste0("D:/My Cartography/지도제작/", my.title, ".png")
 tmap_save(my_map, filename = my.file.name, height = 12, 
           width = my.ratio*12, dpi = 600)
 ```
+
+## 정거원추 도법 2: 150
+
+### 표준 지도
+
+- 지도 제작
+
+```{r}
+#| fig-height: 12
+#| fig-width: 15.02929
+#| fig-dpi: 600
+
+crs_eqdc_150e <- "+proj=eqdc +lat_1=35 +lat_2=55 +lat_0=0 +lon_0=150 +x_0=0 +y_0=0 +datum=WGS84 +units=m +no_defs"
+
+equator_line <- st_sfc(
+  st_linestring(cbind(seq(-180, 180, by = 1), rep(0, 361))),
+  crs = 4326
+) |> st_set_precision(1e6) |> 
+  st_break_antimeridian(lon_0 = 150) |> 
+  st_transform(crs_eqdc_150e) 
+
+prime_meridian_line <- st_sfc(
+  st_linestring(cbind(rep(150, 181), seq(-90, 90, by = 1))),
+  crs = 4326
+) |> st_set_precision(1e6) |> 
+  st_break_antimeridian(lon_0 = 150) |> 
+  st_transform(crs_eqdc_150e) 
+
+standard_parallels <- st_sfc(
+  st_linestring(cbind(seq(-180, 180, by = 1), rep(35, 361))),
+  st_linestring(cbind(seq(-180, 180, by = 1), rep(55, 361))),
+  crs = 4326
+) |> st_set_precision(1e6) |> 
+  st_break_antimeridian(lon_0 = 150) |> 
+  st_transform(crs_eqdc_150e) 
+
+grat <- st_graticule(
+  lon = seq(-180, 180, 20),
+  lat = seq(-90, 90, 15)
+) |> st_set_precision(1e6) |> 
+  st_break_antimeridian(lon_0 = 150) |> 
+  st_transform(crs_eqdc_150e)  
+
+world_no_antarctica <- spData::world |>
+  filter(iso_a2 != "AQ") |> st_union() |> st_set_precision(1e6) |> 
+  st_break_antimeridian(lon_0 = 150) |> 
+  st_transform(crs_eqdc_150e) 
+
+bg_eqdc <- tmaptools::bb_earth(projection = crs_eqdc_150e)
+
+my_map <- tm_shape(world_no_antarctica, c(-180, -90, 180, 90)) + 
+  tm_fill() +
+  tm_shape(grat) + tm_lines(lwd = 0.5, col = "black") +
+  tm_shape(prime_meridian_line) + tm_lines(col = "black", lwd = 1.5) +
+  tm_shape(equator_line) + tm_lines(col = "black", lwd = 1.5) +
+  tm_shape(standard_parallels) + tm_lines(col = "#e41a1c", lwd = 1.5) +
+  tm_crs(crs_eqdc_150e) +
+  tm_layout(inner.margins = c(0, 0, 0, 0), earth_boundary = TRUE, frame = FALSE) +
+  tm_credits("SANG-IL LEE, Geography Education at SNU", 
+             size = 0.7, position = c(0.80, -0.005))
+my_map
+```
+
+- 저장
+
+```{r}
+#| echo: false
+#| eval: false
+my.ratio <- get_asp_ratio(my_map)
+
+my.title <- "8-2-1-1-1 정거원추 도법"
+my.file.name <- paste0("D:/My Cartography/지도제작/", my.title, ".png")
+tmap_save(my_map, filename = my.file.name, height = 12, 
+          width = my.ratio*12, dpi = 600)
+```
+
+### 지시타원
+
+- 인디카트릭스 생성
+
+```{r}
+lat <- seq(-60,80, by=20L)
+lon <- seq(-160,160, by=20L)
+coord <- as.matrix(expand.grid(lon,lat))
+
+a_scale <- 6e5
+res_list <- tissot::tissot(coord, crs_eqdc_0) |> tissot::indicatrix(scale = a_scale)
+tissot_sf <- indicatrix_list_to_sf(
+  res_list, crs_out = crs_eqdc_0, scale = a_scale, n = 120)
+```
+
+- 지도 제작
+
+```{r}
+#| fig-height: 12
+#| fig-width: 15.02929
+#| fig-dpi: 600
+
+world_whole_eqdc <- st_transform(world_no_antarctica, crs_eqdc_0)
+
+grat <- st_graticule(
+  lon = seq(-180, 180, 10),
+  lat = seq(-90, 90, 10)
+) 
+
+my_map <- tm_shape(bg_eqdc, bbox = c(-180, -90, 180, 90)) + 
+  tm_fill(fill = "#d1ecf9") +
+  tm_shape(world_whole_eqdc) + tm_fill(fill = "#fffff0") +
+  tm_shape(grat) + tm_lines(lwd = 0.5, col = "black") +
+  # tm_shape(equator_line) + tm_lines(col = "black", lwd = 1.5) + # 이상한 선
+  tm_shape(standard_parallels) + tm_lines(col = "#e41a1c", lwd = 1.5) +
+  tm_shape(tissot_sf) + tm_fill(fill = "#e65100", fill_alpha = 0.50) +
+  tm_crs(crs_eqdc_0) +
+  tm_layout(inner.margins = c(0, 0, 0, 0), frame = FALSE) +
+  tm_credits("SANG-IL LEE, Geography Education at SNU", 
+             size = 0.7, position = c(0.80, -0.005))
+my_map
+```
+
+- 저장
+
+```{r}
+#| echo: false
+#| eval: false
+my.ratio <- get_asp_ratio(my_map)
+
+my.title <- "8-2-1-2 정거원추 도법"
+my.file.name <- paste0("D:/My Cartography/지도제작/", my.title, ".png")
+tmap_save(my_map, filename = my.file.name, height = 12, 
+          width = my.ratio*12, dpi = 600)
+```
+
 
 ## 람베르트 정형원추 도법
 
