@@ -27,11 +27,13 @@ library(tmaptools)
 library(spData)
 library(geosphere)
 library(tissot)
+library(rnaturalearth)
 source("https://raw.githubusercontent.com/mgimond/tissot/master/Tissot_functions.r")
 
 world <- spData::world
 world_whole <- world |> st_union() |> st_as_sf() # 어떤 경우에 잘 안 먹음.
 world_no_antarctica <- world |> filter(iso_a2 != "AQ")
+world_land <- ne_download(scale = 110, type = "land", category = "physical", returnclass = "sf")
 
 # 함수
 indicatrix_list_to_sf <- function(
@@ -178,6 +180,8 @@ grat <- st_graticule(
   lat = seq(-90, 90, 10)
 ) 
 
+tissot_sf_clip <- tissot_sf |> st_intersection(world_bbox_0)
+
 my_map <- tm_shape(world_bbox_0) + 
   tm_fill(fill = "#d1ecf9", col = "black", lwd = 1.5) +
   tm_shape(world_whole_eqdc) + tm_fill(fill = "#fffff0") +
@@ -185,7 +189,7 @@ my_map <- tm_shape(world_bbox_0) +
   tm_shape(equator_line) + tm_lines(col = "black", lwd = 1.5) + 
   tm_shape(central_meridian_line) + tm_lines(col = "black", lwd = 1.5) +
   tm_shape(standard_parallels) + tm_lines(col = "#e41a1c", lwd = 1.5) +
-  tm_shape(tissot_sf) + tm_fill(fill = "#e65100", fill_alpha = 0.50) +
+  tm_shape(tissot_sf_clip) + tm_fill(fill = "#e65100", fill_alpha = 0.50) +
   tm_shape(world_bbox_0) + tm_lines(col = "black", lwd = 1.5) +
   tm_crs(crs_eqdc_0) +
   tm_layout(inner.margins = c(0.002, 0.002, 0.002, 0.002), frame = FALSE) +

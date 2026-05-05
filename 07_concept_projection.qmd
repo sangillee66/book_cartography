@@ -225,11 +225,13 @@ my_graph <- ggplot() +
   annotate("text", x = c(axis_len + label_off, -axis_len - label_off), y = 0, label = "italic(phi)", parse = TRUE, size = 15) +
   annotate("text", x = 0, y = c(axis_len + label_off, -axis_len - label_off), label = "italic(lambda)", parse = TRUE, size = 15) +
   
-  # 방사선
+  # 방사선 및 교점
   geom_segment(aes(x = 0, y = 0, xend = r_inner * cos(theta), yend = r_inner * sin(theta)), size = 1) +
+  geom_point(aes(x = r_inner * cos(theta), y = r_inner * sin(theta)), size = 7, color = "black") +
 
   # 각도 표시 호 (Single Arc)
   geom_path(data = get_circle_data(r_inner * 0.45, end = theta), aes(x, y), size = 0.6) +
+  geom_path(data = get_circle_data(r_inner * 0.70, end = theta), aes(x, y), size = 0.6) +
 
   # 불필요한 여백 및 요소 완전 제거
   coord_fixed(clip = "off") + 

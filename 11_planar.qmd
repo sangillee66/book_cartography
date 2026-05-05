@@ -108,7 +108,7 @@ my_map <- tm_shape(world_whole, bbox = c(-180, -85, 180, 85)) + tm_fill() +
   tm_shape(grat) + tm_lines(col = "black", lwd = 0.5) +
   tm_shape(origin_lines) + tm_lines(col = "black", lwd = 1.5) +
   tm_crs(crs_ortho_0_90, bbox = "FULL") + 
-  tm_layout(inner.margins = c(0, 0, 0, 0), earth_boundary = TRUE, frame = FALSE) + # earth_boundary 반드시
+  tm_layout(inner.margins = c(0, 0.001, 0, 0.001), earth_boundary = TRUE, frame = FALSE) + # earth_boundary 반드시
   tm_credits("SANG-IL LEE, Geography Education at SNU", 
              size = 0.7, position = c(0.80, -0.005))
 my_map
@@ -161,7 +161,7 @@ my_map <- tm_shape(world_ortho_0_90) + tm_fill(fill = "#fffff0") +
   tm_shape(origin_lines) + tm_lines(col = "black", lwd = 1.5) +
   tm_shape(tissot_sf) + tm_fill(fill = "#e65100", fill_alpha = 0.5) +
   tm_crs(crs_ortho_0_90, bbox = "FULL") +
-  tm_layout(inner.margins = c(0, 0, 0, 0), earth_boundary = TRUE, bg.color = "#d1ecf9", frame = FALSE) +
+  tm_layout(inner.margins = c(0, 0.001, 0, 0.001), earth_boundary = TRUE, bg.color = "#d1ecf9", frame = FALSE) +
   tm_credits("SANG-IL LEE, Geography Education at SNU", 
              size = 0.7, position = c(0.80, -0.005))
 my_map
@@ -329,14 +329,17 @@ equator_line <- st_sfc(
   crs = 4326
 )
 
-ortho_boundary <- st_sfc(st_point(c(0, 0)), crs = crs_ortho_127_37.5) |>
-  st_buffer(dist = 6371000, nQuadSegs = 720) |> # 왜 6371km지? 잘 안됨.
-  st_boundary()
+# ortho_boundary <- st_sfc(st_point(c(0, 0)), crs = crs_ortho_127_37.5) |>
+#   st_buffer(dist = 6371000, nQuadSegs = 720) |> # 왜 6371km지? 잘 안됨.
+#   st_boundary()
+
+ortho_bbox <- st_sfc(st_point(c(0, 0)), crs = crs_ortho_127_37.5) |> # 왜 6371km지? 잘 안됨.
+  st_buffer(dist = 6371000, nQuadSegs = 720) 
 
 my_map <- tm_shape(world_whole) + tm_fill() + 
   tm_shape(grat) + tm_lines(lwd = 0.5, col = "black") +
   tm_shape(equator_line) + tm_lines(col = "black", lwd = 1.5) +
-  tm_shape(ortho_boundary) + tm_lines(col = "black", lwd = 1.5) +
+  # tm_shape(ortho_bbox) + tm_lines(col = "black", lwd = 5) +
   tm_crs(crs_ortho_127_37.5, bbox = "FULL") +
   tm_layout(inner.margins = c(0.001, 0.001, 0.001, 0.001), earth_boundary = TRUE, frame = FALSE) +
   tm_credits("SANG-IL LEE, Geography Education at SNU", 
@@ -556,7 +559,7 @@ stere_bbox <- st_sfc(st_point(c(0, 0)), crs = crs_stere_150_0) |>
   
 sf_use_s2(FALSE)
 
-world_clip <- world_whole |>
+world_clip <- world |> # world_whole안 안됨.
   st_make_valid() |> st_transform(crs = crs_stere_150_0) |> 
   st_intersection(stere_bbox)
 
@@ -666,7 +669,7 @@ tmap_save(my_map, filename = my.file.name, height = 12,
           width = my.ratio*12, dpi = 600)
 ```
 
-## 평사 도법 2: 127-37.5
+## 평사 도법 3: 127-37.5
 
 ### 표준 지도
 
@@ -684,7 +687,7 @@ stere_bbox <- st_sfc(st_point(c(0, 0)), crs = crs_stere_127_37.5) |>
   
 sf_use_s2(FALSE)
 
-world_clip <- world_whole |>
+world_clip <- world |>
   st_make_valid() |> st_transform(crs = crs_stere_127_37.5) |> 
   st_intersection(stere_bbox)
 
@@ -927,7 +930,7 @@ tmap_save(my_map, filename = my.file.name, height = 12,
           width = my.ratio*12, dpi = 600)
 ```
 
-## 심사 도법 2: 150-0 (문제 있음)
+## 심사 도법 2: 150-0 (고생함)
 
 ### 표준 지도
 
@@ -938,16 +941,36 @@ tmap_save(my_map, filename = my.file.name, height = 12,
 #| fig-width: 12.16813
 #| fig-dpi: 600
 
+# 문제의 본질: 사축 심사도법처럼 아래와 같은 버퍼원을 해당 투영법으로 만들어 진행하면 world를 잘랐을 때 캄차카 반도 등의 특정 영역이 사라짐. 이 횡축 심사 도법에서만 나타나는 이상한 현상. 
+
+# gnom_bbox <- st_sfc(st_point(c(0, 0)), crs = crs_gnom_150_0) |> 
+#   st_buffer(dist = 22000000, nQuadSegs = 720) 
+
 crs_gnom_150_0 <- "+proj=gnom +lat_0=0 +lon_0=150 +datum=WGS84 +units=m +no_defs"
 
+# 우선 4326 상태에서 작게 자름. 그것 가지고 world를 잘라냄(이 과정에서 뭔가 좋은 일?).
+# 심사 도법은 아주 작은 영역만 표현할 수 있으므로 먼저 그렇게 하고, 투영 이후에는 아주 작은 거리도 매우 큰 값을 가질 수 있음. 그래서 뒤 22000km로 자르는 것이 가능.(이것이 핵심!!! 투영 이후에는 거리가 맞지 않으므로 지구 상의 거리보다 훨씬 더 큰 값이 가능함)
+
+sf_use_s2(TRUE)
+visible_disk <- st_sfc(st_point(c(150, 0)), crs = 4326) |> 
+  st_buffer(dist = 6371000 * (89 * pi / 180)) |> # 10,000km가 되지 않게 작게 설정하는 것이 핵심. 크게 설정하면 캄차카 날라감. 
+  st_make_valid()
+
+world_clip <- spData::world |> 
+  st_make_valid() |> 
+  st_intersection(visible_disk) |> 
+  st_make_valid() |> 
+  st_transform(crs_gnom_150_0) |> 
+  st_collection_extract("POLYGON") |> 
+  st_make_valid() # qtm(world_clip) 정말 이상한 모습임
+
+# 그리고 나서 보통의 방식으로 클립함
+
 gnom_bbox <- st_sfc(st_point(c(0, 0)), crs = crs_gnom_150_0) |> 
-  st_buffer(dist = 20000000, nQuadSegs = 720) 
+  st_buffer(dist = 22000000, nQuadSegs = 720) 
 
-sf_use_s2(FALSE)
-
-world_clip <- world |>
-  st_make_valid() |> st_break_antimeridian(lon_0 = 150) |> 
-  st_transform(crs_gnom_150_0) |>  st_intersection(gnom_bbox) # world, world_whole, world_land에 따라 다름
+world_final <- st_intersection(world_clip, gnom_bbox) |> 
+  st_make_valid()
 
 grat_clip <- st_graticule(
   lon = seq(-180, 180, 20),
@@ -969,7 +992,7 @@ prime_meridian_line <- st_sfc(
 
 sf_use_s2(TRUE)
 
-my_map <- tm_shape(world_clip) + tm_fill() +
+my_map <- tm_shape(world_final) + tm_fill() +
   tm_shape(grat_clip, is.main = TRUE) + tm_lines(lwd = 0.5, col = "black") +
   tm_shape(prime_meridian_line) + tm_lines(lwd = 1.5, col = "black") +
   tm_shape(equator_line) + tm_lines(lwd = 1.5, col = "black") +

@@ -27,11 +27,13 @@ library(tmaptools)
 library(spData)
 library(geosphere)
 library(tissot)
+library(rnaturalearth)
 source("https://raw.githubusercontent.com/mgimond/tissot/master/Tissot_functions.r")
 
 world <- spData::world
 world_whole <- world |> st_union() |> st_as_sf() # 어떤 경우에 잘 안 먹음.
 world_no_antarctica <- world |> filter(iso_a2 != "AQ")
+world_land <- ne_download(scale = 110, type = "land", category = "physical", returnclass = "sf")
 
 # 함수
 indicatrix_list_to_sf <- function(

@@ -27,11 +27,13 @@ library(tmaptools)
 library(spData)
 library(geosphere)
 library(tissot)
+library(rnaturalearth)
 source("https://raw.githubusercontent.com/mgimond/tissot/master/Tissot_functions.r")
 
 world <- spData::world
 world_whole <- world |> st_union() |> st_as_sf() # 어떤 경우에 잘 안 먹음.
 world_no_antarctica <- world |> filter(iso_a2 != "AQ")
+world_land <- ne_download(scale = 110, type = "land", category = "physical", returnclass = "sf")
 
 # 함수
 indicatrix_list_to_sf <- function(
@@ -337,7 +339,7 @@ tmap_save(my_map, filename = my.file.name, height = 12,
 
 ```{r}
 #| fig-height: 12
-#| fig-width: 27.88002
+#| fig-width: 27.74661
 #| fig-dpi: 600
 
 crs_igh  <- "+proj=igh +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +datum=WGS84 +units=m +no_defs"
@@ -345,15 +347,83 @@ crs_igh  <- "+proj=igh +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +datum=WGS84 +units=m +no
 grat <- st_graticule(
   lon = seq(-180, 180, 20),
   lat = seq(-90, 90, 15)
-) |> st_transform(crs_igh)
+) |> st_set_precision(1e6) |>
+  st_transform(crs_igh)
 
-world_whole_igh <- world_whole |> st_transform(crs_igh)
+world_whole_igh <- world_whole |> st_set_precision(1e6) |>
+  st_transform(crs_igh)
 
-my_map <- tm_shape(world_whole_igh, bbox = c(-180, -90, 180, 90)) + tm_fill() +
-  tm_shape(grat) + tm_lines(lwd = 0.5, col = "black") +
+# lon_0 <- 0
+# eps <- 0.00001
+# world_bbox_0 <- st_bbox(
+#   c(xmin = lon_0 - 180 + eps, xmax = lon_0 + 180 - eps, ymin = -90 + eps, ymax = 90 - eps)) |>
+#   st_as_sfc(crs = 4326) |> st_segmentize(dfMaxLength = 1) |> st_set_crs(4326) |> st_transform(crs_igh)
+
+# my_map <- tm_shape(world_whole_igh, bbox = c(-180, -90, 180, 90)) + tm_fill() +
+#   tm_shape(grat) + tm_lines(lwd = 0.5, col = "black") +
+#   tm_crs(crs_igh) +
+#   tm_layout(inner.margins = c(0, 0, 0, 0), frame = FALSE) +
+#   tm_credits("SANG-IL LEE, Geography Education at SNU",
+#              size = 0.7, position = c(0.89, -0.005))
+# my_map
+
+# 경위도 좌표열을 투영 좌표열로 변환
+project_xy <- function(xy) {
+  st_sfc(
+    st_linestring(xy),
+    crs = 4326
+  ) |>
+    st_transform(crs_igh) |>
+    st_coordinates() |>
+    as.matrix() |>
+    _[, 1:2]
+}
+
+# 투영된 좌표로 lobe polygon 만들기
+make_igh_lobe_projected <- function(xmin, xmax, ymin, ymax, n = 720) {
+  
+  bottom_ll <- cbind(seq(xmin, xmax, length.out = n), rep(ymin, n))
+  right_ll  <- cbind(rep(xmax, n), seq(ymin, ymax, length.out = n))
+  top_ll    <- cbind(seq(xmax, xmin, length.out = n), rep(ymax, n))
+  left_ll   <- cbind(rep(xmin, n), seq(ymax, ymin, length.out = n))
+  
+  bottom <- project_xy(bottom_ll)
+  right  <- project_xy(right_ll)
+  top    <- project_xy(top_ll)
+  left   <- project_xy(left_ll)
+  
+  coords <- rbind(
+    bottom,
+    right[-1, ],
+    top[-1, ],
+    left[-1, ],
+    bottom[1, ]
+  )
+  
+  st_polygon(list(coords))
+}
+
+# 단열형 Goode Homolosine lobe polygon
+eps <- 1e-5
+igh_lobes_proj <- st_sfc(
+  make_igh_lobe_projected(-180 + eps,  -40 - eps,   0 + eps,  90 - eps),
+  make_igh_lobe_projected( -40 + eps,  180 - eps,   0 + eps,  90 - eps),
+  make_igh_lobe_projected(-180 + eps, -100 - eps, -90 + eps,   0 - eps),
+  make_igh_lobe_projected(-100 + eps,  -20 - eps, -90 + eps,   0 - eps),
+  make_igh_lobe_projected( -20 + eps,   80 - eps, -90 + eps,   0 - eps),
+  make_igh_lobe_projected(  80 + eps,  180 - eps, -90 + eps,   0 - eps),
+  crs = crs_igh
+) |>
+  st_sf(geometry = _)
+
+world_whole_igh_clip <- world_whole_igh |> st_make_valid() |> st_intersection(igh_lobes_proj)
+grat_clip <- grat |> st_make_valid() |> st_intersection(igh_lobes_proj)
+
+my_map <- tm_shape(world_whole_igh_clip, bbox = c(-180, -90, 180, 90)) + tm_fill() +
+  tm_shape(grat_clip) + tm_lines(lwd = 0.5, col = "black") +
+  tm_shape(igh_lobes_proj) + tm_borders(col = "black", lwd = 1.5) +
   tm_crs(crs_igh) +
-  tm_layout(inner.margins = c(0, 0, 0, 0), frame = FALSE) +
-  # tm_layout(inner.margins = c(0, 0, 0, 0), frame = FALSE, earth_boundary = TRUE, bg.color = "lightblue") +
+  tm_layout(inner.margins = c(0.001, 0.001, 0.001, 0.001), frame = FALSE) +
   tm_credits("SANG-IL LEE, Geography Education at SNU", 
              size = 0.7, position = c(0.89, -0.005))
 my_map
@@ -366,11 +436,663 @@ my_map
 #| eval: false
 my.ratio <- get_asp_ratio(my_map)
 
-my.title <- "8-4-2-1-1 구드 호몰로사인 도법(비단열형) 0"
+my.title <- "8-4-2-1-1 구드 호몰로사인 도법(단열형) 1 육지형"
 my.file.name <- paste0("D:/My Cartography/지도제작/", my.title, ".png")
 tmap_save(my_map, filename = my.file.name, height = 12, 
           width = my.ratio*12, dpi = 600)
 ```
+
+### 지시타원
+
+- 지시타원 생성
+
+
+```{r}
+lat <- seq(-80,80, by=20L)
+lon <- seq(-160,160, by=20L)
+coord <- as.matrix(expand.grid(lon,lat))
+
+# a_scale <- 6e5
+# res_list <- tissot::tissot(coord, crs_igh) |> tissot::indicatrix(scale = a_scale) 
+# tissot_sf <- indicatrix_list_to_sf(
+#   res_list, crs_out = crs_igh, scale = a_scale, n = 120) 
+
+coord_df <- expand.grid(lon = lon, lat = lat)
+coord_df <- coord_df |>
+  dplyr::filter(
+    !(
+      lat > 0 & lon == -40 |
+      lat < 0 & lon %in% c(-100, -20, 80) |
+      lat == 0 & lon %in% c(-100, -40, -20, 80)
+    )
+  )
+coord <- as.matrix(coord_df[, c("lon", "lat")])
+
+a_scale <- 6e5
+res_list <- tissot::tissot(coord, crs_igh) |> tissot::indicatrix(scale = a_scale) 
+tissot_sf <- indicatrix_list_to_sf(
+  res_list, crs_out = crs_igh, scale = a_scale, n = 120) 
+```
+
+- 지도 제작
+
+```{r}
+#| fig-height: 12
+#| fig-width: 27.74661
+#| fig-dpi: 600
+
+tissot_sf_clip <- tissot_sf |> st_intersection(igh_lobes_proj)
+grat_clip <- st_graticule(
+  lon = seq(-180, 180, 10),
+  lat = seq(-90, 90, 10)
+) |> st_set_precision(1e6) |>
+  st_transform(crs_igh) |> st_intersection(igh_lobes_proj)
+
+my_map <- tm_shape(igh_lobes_proj) + tm_fill("#d1ecf9") +
+  tm_shape(world_whole_igh_clip, bbox = c(-180, -90, 180, 90)) + tm_fill("#fffff0") +
+  tm_shape(tissot_sf_clip) + tm_fill(fill = "#e65100", fill_alpha = 0.50) +
+  tm_shape(grat_clip) + tm_lines(lwd = 0.5, col = "black") +
+  tm_shape(igh_lobes_proj) + tm_borders(col = "black", lwd = 1.5) +
+  tm_crs(crs_igh) +
+  tm_layout(inner.margins = c(0.001, 0.001, 0.001, 0.001), frame = FALSE) +
+  tm_credits("SANG-IL LEE, Geography Education at SNU", 
+             size = 0.7, position = c(0.89, -0.005))
+my_map
+```
+
+- 저장
+
+```{r}
+#| echo: false
+#| eval: false
+my.ratio <- get_asp_ratio(my_map)
+
+my.title <- "8-4-2-1-2 구드 호몰로사인 도법(단열형) 1 육지형 티소"
+my.file.name <- paste0("D:/My Cartography/지도제작/", my.title, ".png")
+tmap_save(my_map, filename = my.file.name, height = 12, 
+          width = my.ratio*12, dpi = 600)
+```
+
+
+## 구드 호몰로사인 도법(단열형) 2: 해양형
+
+### 표준 지도
+
+- 지도 제작
+
+```{r}
+
+# ------------------------------------------------------------
+# 1. 해양형 Goode Homolosine 설정
+# ------------------------------------------------------------
+
+R <- 6371007.181
+degR <- R * pi / 180
+
+phi0 <- 40 + 44 / 60 + 11.8 / 3600
+phi0_rad <- phi0 * pi / 180
+
+lobe_tbl <- tribble(
+  ~id, ~hemi, ~xmin, ~xmax, ~ymin, ~ymax, ~lon0, ~lon0_display,
+  "N1", "N",  -30,    50,     0,    90,    10,    10,
+  "N2", "N",   50,  -150,     0,    90,   140,   140,
+  "N3", "N", -150,   -30,     0,    90,   -80,   280,
+  "S1", "S",  -30,    90,   -90,     0,    40,    40,
+  "S2", "S",   90,  -110,   -90,     0,   170,   170,
+  "S3", "S", -110,   -30,   -90,     0,   -70,   290
+) |>
+  mutate(xoff = lon0_display * degR)
+
+# ------------------------------------------------------------
+# 2. 직접 투영 함수
+# ------------------------------------------------------------
+
+wrap_dlon <- function(lon, lon0) {
+  ((lon - lon0 + 180) %% 360) - 180
+}
+
+moll_theta <- function(phi) {
+  
+  theta <- phi
+  
+  near_north <- abs(phi - pi / 2) < 1e-12
+  near_south <- abs(phi + pi / 2) < 1e-12
+  normal <- !(near_north | near_south)
+  
+  theta[near_north] <-  pi / 2
+  theta[near_south] <- -pi / 2
+  
+  if (any(normal)) {
+    th <- theta[normal]
+    ph <- phi[normal]
+    
+    for (i in seq_len(12)) {
+      th <- th -
+        (2 * th + sin(2 * th) - pi * sin(ph)) /
+        (2 + 2 * cos(2 * th))
+    }
+    
+    theta[normal] <- th
+  }
+  
+  theta
+}
+
+theta0 <- moll_theta(phi0_rad)
+y0_sinu <- R * phi0_rad
+y0_moll <- sqrt(2) * R * sin(theta0)
+y_offset <- y0_sinu - y0_moll
+
+goode_xy <- function(lon, lat, lon0, xoff = 0) {
+  
+  lat <- pmax(pmin(lat, 90 - 1e-10), -90 + 1e-10)
+  
+  lambda <- wrap_dlon(lon, lon0) * pi / 180
+  phi <- lat * pi / 180
+  
+  x <- numeric(length(phi))
+  y <- numeric(length(phi))
+  
+  low <- abs(lat) <= phi0
+  high <- !low
+  
+  x[low] <- R * lambda[low] * cos(phi[low])
+  y[low] <- R * phi[low]
+  
+  if (any(high)) {
+    theta <- moll_theta(phi[high])
+    x[high] <- (2 * sqrt(2) * R / pi) * lambda[high] * cos(theta)
+    y_moll <- sqrt(2) * R * sin(theta)
+    y[high] <- y_moll + sign(phi[high]) * y_offset
+  }
+  
+  cbind(x + xoff, y)
+}
+
+# ------------------------------------------------------------
+# 3. sf geometry 투영 함수
+# ------------------------------------------------------------
+
+project_mat <- function(mat, lon0, xoff) {
+  goode_xy(mat[, 1], mat[, 2], lon0 = lon0, xoff = xoff)
+}
+
+project_sfg <- function(g, lon0, xoff) {
+  
+  gt <- as.character(st_geometry_type(g))
+  
+  if (st_is_empty(g)) {
+    return(st_geometrycollection())
+  }
+  
+  if (gt == "POINT") {
+    st_point(as.numeric(project_mat(matrix(g, ncol = 2), lon0, xoff)))
+    
+  } else if (gt == "MULTIPOINT") {
+    st_multipoint(project_mat(g, lon0, xoff))
+    
+  } else if (gt == "LINESTRING") {
+    st_linestring(project_mat(g, lon0, xoff))
+    
+  } else if (gt == "MULTILINESTRING") {
+    st_multilinestring(lapply(g, project_mat, lon0 = lon0, xoff = xoff))
+    
+  } else if (gt == "POLYGON") {
+    st_polygon(lapply(g, project_mat, lon0 = lon0, xoff = xoff))
+    
+  } else if (gt == "MULTIPOLYGON") {
+    st_multipolygon(
+      lapply(g, function(poly) {
+        lapply(poly, project_mat, lon0 = lon0, xoff = xoff)
+      })
+    )
+    
+  } else if (gt == "GEOMETRYCOLLECTION") {
+    st_geometrycollection(
+      lapply(g, project_sfg, lon0 = lon0, xoff = xoff)
+    )
+    
+  } else {
+    stop("지원하지 않는 geometry type입니다: ", gt)
+  }
+}
+
+project_sf <- function(x, lon0, xoff) {
+  
+  if (nrow(x) == 0) {
+    return(x)
+  }
+  
+  geom2 <- st_sfc(
+    lapply(st_geometry(x), project_sfg, lon0 = lon0, xoff = xoff)
+  )
+  
+  st_sf(st_drop_geometry(x), geometry = geom2)
+}
+
+# ------------------------------------------------------------
+# 4. lobe polygon 생성 함수: 경계 densify
+# ------------------------------------------------------------
+
+make_box_ll <- function(xmin, xmax, ymin, ymax, eps = 1e-5, n = 720) {
+  
+  bottom <- cbind(seq(xmin + eps, xmax - eps, length.out = n), ymin + eps)
+  right  <- cbind(xmax - eps, seq(ymin + eps, ymax - eps, length.out = n))
+  top    <- cbind(seq(xmax - eps, xmin + eps, length.out = n), ymax - eps)
+  left   <- cbind(xmin + eps, seq(ymax - eps, ymin + eps, length.out = n))
+  
+  st_polygon(list(rbind(
+    bottom,
+    right[-1, ],
+    top[-1, ],
+    left[-1, ],
+    bottom[1, ]
+  )))
+}
+
+make_lobe_ll_parts <- function(xmin, xmax, ymin, ymax, eps = 1e-5, n = 720) {
+  
+  if (xmin < xmax) {
+    st_sfc(
+      make_box_ll(xmin, xmax, ymin, ymax, eps, n),
+      crs = 4326
+    )
+  } else {
+    st_sfc(
+      make_box_ll(xmin, 180, ymin, ymax, eps, n),
+      make_box_ll(-180, xmax, ymin, ymax, eps, n),
+      crs = 4326
+    )
+  }
+}
+
+make_lobe_projected <- function(xmin, xmax, ymin, ymax, lon0, xoff, eps = 1e-5, n = 720) {
+  
+  if (xmin < xmax) {
+    lon_left <- xmin + eps
+    lon_right <- xmax - eps
+  } else {
+    lon_left <- xmin + eps
+    lon_right <- xmax + 360 - eps
+  }
+  
+  bottom <- cbind(seq(lon_left, lon_right, length.out = n), ymin + eps)
+  right  <- cbind(lon_right, seq(ymin + eps, ymax - eps, length.out = n))
+  top    <- cbind(seq(lon_right, lon_left, length.out = n), ymax - eps)
+  left   <- cbind(lon_left, seq(ymax - eps, ymin + eps, length.out = n))
+  
+  ll <- rbind(
+    bottom,
+    right[-1, ],
+    top[-1, ],
+    left[-1, ],
+    bottom[1, ]
+  )
+  
+  ll[, 1] <- ((ll[, 1] + 180) %% 360) - 180
+  ll[ll[, 1] == -180, 1] <- 180
+  
+  st_polygon(list(
+    goode_xy(ll[, 1], ll[, 2], lon0 = lon0, xoff = xoff)
+  ))
+}
+
+# ------------------------------------------------------------
+# 5. 원자료 준비
+# ------------------------------------------------------------
+
+sf::sf_use_s2(FALSE)
+
+world_ll <- world_whole |>
+  st_set_precision(1e6) |>
+  st_make_valid()
+
+grat_ll <- st_graticule(
+  lon = seq(-160, 160, 20),
+  lat = seq(-90, 90, 15)
+) |>
+  st_set_precision(1e6)
+
+# ------------------------------------------------------------
+# 6. lobe별 clipping + 투영 + projected clipping
+# ------------------------------------------------------------
+
+world_ocean_list <- list()
+grat_ocean_list <- list()
+lobe_border_list <- list()
+
+eps <- 1e-5
+
+for (i in seq_len(nrow(lobe_tbl))) {
+  
+  lb <- lobe_tbl[i, ]
+  
+  lobe_ll <- make_lobe_ll_parts(
+    xmin = lb$xmin,
+    xmax = lb$xmax,
+    ymin = lb$ymin,
+    ymax = lb$ymax,
+    eps  = eps
+  )
+  
+  lobe_sf <- st_sf(geometry = lobe_ll)
+  
+  lobe_proj <- st_sf(
+    id = lb$id,
+    geometry = st_sfc(
+      make_lobe_projected(
+        xmin = lb$xmin,
+        xmax = lb$xmax,
+        ymin = lb$ymin,
+        ymax = lb$ymax,
+        lon0 = lb$lon0,
+        xoff = lb$xoff,
+        eps = eps
+      )
+    )
+  )
+  
+  world_clip_ll <- suppressWarnings(
+    st_intersection(world_ll, lobe_sf)
+  ) |>
+    st_make_valid()
+  
+  grat_clip_ll <- suppressWarnings(
+    st_intersection(grat_ll, lobe_sf)
+  )
+  
+  if (nrow(world_clip_ll) > 0) {
+    
+    world_proj <- project_sf(
+      world_clip_ll,
+      lon0 = lb$lon0,
+      xoff = lb$xoff
+    ) |>
+      st_make_valid()
+    
+    # 핵심: 투영 후 lobe polygon으로 다시 자르기
+    world_proj_clip <- suppressWarnings(
+      st_intersection(world_proj, lobe_proj)
+    ) |>
+      st_make_valid()
+    
+    world_ocean_list[[length(world_ocean_list) + 1]] <- world_proj_clip
+  }
+  
+  if (nrow(grat_clip_ll) > 0) {
+    
+    grat_ocean_list[[length(grat_ocean_list) + 1]] <- project_sf(
+      grat_clip_ll,
+      lon0 = lb$lon0,
+      xoff = lb$xoff
+    )
+  }
+  
+  if (lb$xmin > lb$xmax) {
+    
+    dateline_xy <- goode_xy(
+      lon = rep(180, 300),
+      lat = seq(lb$ymin + eps, lb$ymax - eps, length.out = 300),
+      lon0 = lb$lon0,
+      xoff = lb$xoff
+    )
+    
+    grat_ocean_list[[length(grat_ocean_list) + 1]] <- st_sf(
+      geometry = st_sfc(st_linestring(dateline_xy))
+    )
+  }
+  
+  lobe_border_list[[length(lobe_border_list) + 1]] <- lobe_proj
+}
+
+world_ocean <- do.call(
+  rbind,
+  lapply(world_ocean_list, \(x) st_sf(geometry = st_geometry(x)))
+)
+
+grat_ocean <- do.call(
+  rbind,
+  lapply(grat_ocean_list, \(x) st_sf(geometry = st_geometry(x)))
+)
+
+igh_lobes_ocean <- do.call(rbind, lobe_border_list)
+
+# ------------------------------------------------------------
+# 7. 지도 출력
+# ------------------------------------------------------------
+
+my_map <-   tm_shape(igh_lobes_ocean) + tm_borders(col = "black", lwd = 1.5) +
+  tm_shape(world_ocean) + tm_fill() +
+  tm_shape(grat_ocean) + tm_lines(lwd = 0.5, col = "black") +
+  tm_shape(igh_lobes_ocean) + tm_borders(col = "black", lwd = 1.5) +
+  tm_layout(inner.margins = c(0.001, 0.001, 0.001, 0.001), frame = FALSE) +
+  tm_credits("SANG-IL LEE, Geography Education at SNU", 
+             size = 0.7, position = c(0.89, -0.005))
+my_map
+```
+
+- 저장
+
+```{r}
+#| echo: false
+#| eval: false
+my.ratio <- get_asp_ratio(my_map)
+
+my.title <- "8-4-2-2-1 구드 호몰로사인 도법(단열형) 2 해양형"
+my.file.name <- paste0("D:/My Cartography/지도제작/", my.title, ".png")
+tmap_save(my_map, filename = my.file.name, height = 12, 
+          width = my.ratio*12, dpi = 600)
+```
+
+### 지시타원
+
+- 지시타원 생성
+
+```{r}
+# ------------------------------------------------------------
+# 8. 해양형 Goode Homolosine indicatrix 생성
+# ------------------------------------------------------------
+
+get_ocean_lobe <- function(lon, lat) {
+  
+  if (lat >= 0) {
+    
+    if (lon >= -30 & lon < 50) {
+      list(lon0 = 10, xoff = 10 * degR)
+      
+    } else if (lon >= 50 | lon < -150 | lon == 180) {
+      list(lon0 = 140, xoff = 140 * degR)
+      
+    } else {
+      list(lon0 = -80, xoff = 280 * degR)
+    }
+    
+  } else {
+    
+    if (lon >= -30 & lon < 90) {
+      list(lon0 = 40, xoff = 40 * degR)
+      
+    } else if (lon >= 90 | lon < -110 | lon == 180) {
+      list(lon0 = 170, xoff = 170 * degR)
+      
+    } else {
+      list(lon0 = -70, xoff = 290 * degR)
+    }
+  }
+}
+
+make_indicatrix_goode_ocean <- function(
+    coord_df,
+    radius = 2,
+    n = 120
+) {
+  
+make_circle <- function(lon0, lat0, r_deg, n) {
+  
+  ang <- seq(0, 2 * pi, length.out = n)
+  
+  lat_rad <- lat0 * pi / 180
+  
+  # ★ 핵심 보정
+  dlat <- r_deg * sin(ang)
+  dlon <- (r_deg * cos(ang)) / cos(lat_rad)
+  
+  cbind(
+    lon0 + dlon,
+    lat0 + dlat
+  )
+}
+  
+  poly_list <- list()
+  lon_list <- numeric(0)
+  lat_list <- numeric(0)
+  
+  for (i in seq_len(nrow(coord_df))) {
+    
+    lon <- coord_df$lon[i]
+    lat <- coord_df$lat[i]
+    
+    lb <- get_ocean_lobe(lon, lat)
+    
+    circ_ll <- make_circle(
+      lon0 = lon,
+      lat0 = lat,
+      r = radius,
+      n = n
+    )
+    
+    circ_ll[, 2] <- pmax(pmin(circ_ll[, 2], 90 - 1e-10), -90 + 1e-10)
+    circ_ll[, 1] <- ((circ_ll[, 1] + 180) %% 360) - 180
+    circ_ll[circ_ll[, 1] == -180, 1] <- 180
+    
+    circ_xy <- goode_xy(
+      lon = circ_ll[, 1],
+      lat = circ_ll[, 2],
+      lon0 = lb$lon0,
+      xoff = lb$xoff
+    )
+    
+    if (any(!is.finite(circ_xy))) {
+      next
+    }
+    
+    if (!all(circ_xy[1, ] == circ_xy[nrow(circ_xy), ])) {
+      circ_xy <- rbind(circ_xy, circ_xy[1, ])
+    }
+    
+    poly_list[[length(poly_list) + 1]] <- st_polygon(list(circ_xy))
+    lon_list <- c(lon_list, lon)
+    lat_list <- c(lat_list, lat)
+  }
+  
+  st_sf(
+    lon = lon_list,
+    lat = lat_list,
+    geometry = st_sfc(poly_list)
+  )
+}
+
+# ------------------------------------------------------------
+# 9. indicatrix 중심점 생성
+# ------------------------------------------------------------
+
+lat <- seq(-80, 80, by = 20)
+lon <- c(seq(-160, 160, by = 20), 180)
+
+coord_df_ocean <- expand.grid(lon = lon, lat = lat) |>
+  dplyr::filter(
+    !(
+      lat > 0 & lon %in% c(-30, 50, -150) |
+      lat < 0 & lon %in% c(-30, 90, -110) |
+      lat == 0 & lon %in% c(-30, 50, -150, 90, -110)
+    )
+  )
+
+# ------------------------------------------------------------
+# 10. indicatrix 생성
+# ------------------------------------------------------------
+
+a_scale = 6e5
+tissot_ocean <- make_indicatrix_goode_ocean(
+  coord_df = coord_df_ocean,
+  radius = a_scale / 111000,
+  n = 120
+)
+
+```
+
+- 지도 제작
+
+```{r}
+
+grat_ll_ind <- st_graticule(
+  lon = seq(-180, 180, 10),
+  lat = seq(-90, 90, 10)
+) |>
+  st_set_precision(1e6)
+
+grat_ocean_list_ind <- list()
+eps <- 1e-5
+for (i in seq_len(nrow(lobe_tbl))) {
+  lb <- lobe_tbl[i, ]
+  lobe_ll <- make_lobe_ll_parts(
+    xmin = lb$xmin, xmax = lb$xmax, ymin = lb$ymin, ymax = lb$ymax,
+    eps  = eps
+  )
+  lobe_sf <- st_sf(geometry = lobe_ll)
+  grat_clip_ll <- suppressWarnings(
+    st_intersection(grat_ll_ind, lobe_sf)
+  )
+  if (nrow(grat_clip_ll) > 0) {
+    grat_ocean_list_ind[[length(grat_ocean_list_ind) + 1]] <- project_sf(
+      grat_clip_ll,
+      lon0 = lb$lon0,
+      xoff = lb$xoff
+    )
+  }
+  if (lb$xmin > lb$xmax) {
+    dateline_xy <- goode_xy(
+      lon = rep(180, 300),
+      lat = seq(lb$ymin + eps, lb$ymax - eps, length.out = 300),
+      lon0 = lb$lon0,
+      xoff = lb$xoff
+    )
+    grat_ocean_list_ind[[length(grat_ocean_list_ind) + 1]] <- st_sf(
+      geometry = st_sfc(st_linestring(dateline_xy))
+    )
+  }
+}
+grat_ocean_ind <- do.call(
+  rbind, lapply(grat_ocean_list_ind, \(x) st_sf(geometry = st_geometry(x)))
+)
+
+tissot_ocean_clip <- tissot_ocean |> st_intersection(igh_lobes_ocean)
+
+my_map <- tm_shape(igh_lobes_ocean) + tm_fill("#d1ecf9") +
+  tm_shape(world_ocean) + tm_fill("#fffff0") +
+  tm_shape(tissot_ocean_clip) + tm_fill(fill = "#e65100", fill_alpha = 0.50) +
+  tm_shape(grat_ocean_ind) + tm_lines(lwd = 0.5, col = "black") +
+  tm_shape(igh_lobes_ocean) + tm_borders(col = "black", lwd = 1.5) +
+  tm_layout(inner.margins = c(0.001, 0.001, 0.001, 0.001), frame = FALSE) +
+  tm_credits("SANG-IL LEE, Geography Education at SNU", 
+             size = 0.7, position = c(0.89, -0.005))
+my_map
+
+```
+
+- 저장
+
+```{r}
+#| echo: false
+#| eval: false
+my.ratio <- get_asp_ratio(my_map)
+
+my.title <- "8-4-2-2-2 구드 호몰로사인 도법(단열형) 2 해양형 티소"
+my.file.name <- paste0("D:/My Cartography/지도제작/", my.title, ".png")
+tmap_save(my_map, filename = my.file.name, height = 12, 
+          width = my.ratio*12, dpi = 600)
+```
+
 
 ## 시뉴소이드 도법 1: 0
 
