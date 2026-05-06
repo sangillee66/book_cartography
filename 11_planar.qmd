@@ -1572,6 +1572,63 @@ tmap_save(my_map, filename = my.file.name, height = 12,
           width = my.ratio*12, dpi = 600)
 ```
 
+### 동심원 지도
+
+- 지도 제작
+
+```{r}
+world_aeqd_127_37.5 <- st_transform(world, crs_aeqd_127_37.5) 
+
+grat_clip <- st_graticule(
+  lon = seq(-180, 180, 20),
+  lat = seq(-90, 90, 15)
+) |> st_set_precision(1e6) |> st_break_antimeridian(lon_0 = 127) |> 
+  st_transform(crs = crs_aeqd_127_37.5) |> st_intersection(aeqd_bbox)
+
+center <- st_sfc(
+  st_point(c(0, 0)),
+  crs = crs_aeqd_127_37.5
+)
+radii <- c(2500000, 5000000, 7500000, 10000000)
+circles <- st_sfc(
+  lapply(
+    radii,
+    \(d) st_buffer(center, dist = d, nQuadSegs = 720)[[1]]
+  ),
+  crs = crs_aeqd_127_37.5
+)
+circles <- st_sf(
+  radius_km = radii / 1000,
+  geometry = circles
+)
+
+qtm(circles)
+
+my_map <- tm_shape(aeqd_bbox) + tm_fill(fill = "#d1ecf9") +
+  tm_shape(world) + tm_fill(fill = "#fffff0") +
+  tm_shape(grat_clip) + tm_lines(lwd = 0.5, col = "gray30") +
+  tm_shape(aeqd_bbox) + tm_borders(lwd = 1.5, col = "black") +
+  tm_shape(circles) + tm_borders(lwd = 3, col = "black") +
+  tm_layout(inner.margins = c(0, 0, 0, 0), earth_boundary = FALSE, frame = FALSE) +  
+  tm_credits("SANG-IL LEE, Geography Education at SNU", 
+             size = 0.7, position = c(0.80, -0.005))
+my_map
+```
+
+- 저장
+
+```{r}
+#| echo: false
+#| eval: false
+my.ratio <- get_asp_ratio(my_map)
+
+my.title <- "8-3-4-3-3 정거방위 도법 127 37.5 동심원"
+my.file.name <- paste0("D:/My Cartography/지도제작/", my.title, ".png")
+tmap_save(my_map, filename = my.file.name, height = 12, 
+          width = my.ratio*12, dpi = 600)
+```
+
+
 ## 람베르트 정적방위 도법 1: 0-90
 
 ### 표준지도

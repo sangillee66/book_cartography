@@ -547,9 +547,9 @@ my_map <- tm_shape(world_whole, bbox = c(-180, -90, 180, 90)) + tm_fill() +
   tm_shape(grat) + tm_lines(col = "black", lwd = 0.5) +
   tm_shape(origin_lines) + tm_lines(col = "black", lwd = 1.5) +
   tm_crs(crs_cea_0) +
-  tm_layout(inner.margins = c(0, 0, 0, 0)) +
+  tm_layout(inner.margins = c(0, 0, 0, 0), outer.margins = c(0.025, 0, 0, 0)) +
   tm_credits("SANG-IL LEE, Geography Education at SNU", 
-             size = 0.7, position = c(0.89, -0.005))
+             size = 0.7, position = c(0.90, -0.005))
 my_map
 ```
 
@@ -601,9 +601,9 @@ my_map <- tm_shape(world_cea, bbox = c(-180, -90, 180, 90)) +
   tm_shape(origin_lines) + tm_lines(col = "black", lwd = 1.5) +
   tm_shape(tissot_sf) + tm_fill(fill = "#e65100", fill_alpha = 0.50) +
   tm_crs(crs_cea_0) +
-  tm_layout(inner.margins = c(0, 0, 0, 0), bg.color = "#d1ecf9") +
+  tm_layout(inner.margins = c(0, 0, 0, 0), outer.margins = c(0.025, 0, 0, 0), bg.color = "#d1ecf9") +
   tm_credits("SANG-IL LEE, Geography Education at SNU", 
-             size = 0.7, position = c(0.80, -0.005))
+             size = 0.7, position = c(0.90, -0.005))
 my_map
 ```
 
@@ -664,9 +664,9 @@ my_map <- tm_shape(world_whole_proj, bbox = c(-180, -90, 180, 90)) + tm_fill() +
   tm_shape(equator_line) + tm_lines(col = "black", lwd = 1.5) +
   tm_shape(prime_meridian_line) + tm_lines(col = "black", lwd = 1.5) +
   tm_crs(crs_cea_150e) +
-  tm_layout(inner.margins = c(0, 0, 0, 0)) +
+  tm_layout(inner.margins = c(0, 0, 0, 0), outer.margins = c(0.025, 0, 0, 0)) +
   tm_credits("SANG-IL LEE, Geography Education at SNU", 
-             size = 0.7, position = c(0.89, -0.005))
+             size = 0.7, position = c(0.90, -0.005))
 my_map
 ```
 
@@ -719,9 +719,9 @@ my_map <- tm_shape(world_cea, bbox = c(-180, -90, 180, 90)) +
   tm_shape(prime_meridian_line) + tm_lines(col = "black", lwd = 1.5) +
   tm_shape(tissot_sf) + tm_fill(fill = "#e65100", fill_alpha = 0.50) +
   tm_crs(crs_cea_150e) +
-  tm_layout(inner.margins = c(0, 0, 0, 0), bg.color = "#d1ecf9") +
+  tm_layout(inner.margins = c(0, 0, 0, 0), outer.margins = c(0.025, 0, 0, 0), bg.color = "#d1ecf9") +
   tm_credits("SANG-IL LEE, Geography Education at SNU", 
-             size = 0.7, position = c(0.80, -0.005))
+             size = 0.7, position = c(0.90, -0.005))
 my_map
 ```
 

@@ -339,7 +339,7 @@ tmap_save(my_map, filename = my.file.name, height = 12,
 
 ```{r}
 #| fig-height: 12
-#| fig-width: 27.74661
+#| fig-width: 27.69123
 #| fig-dpi: 600
 
 crs_igh  <- "+proj=igh +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +datum=WGS84 +units=m +no_defs"
@@ -446,7 +446,6 @@ tmap_save(my_map, filename = my.file.name, height = 12,
 
 - 지시타원 생성
 
-
 ```{r}
 lat <- seq(-80,80, by=20L)
 lon <- seq(-160,160, by=20L)
@@ -478,7 +477,7 @@ tissot_sf <- indicatrix_list_to_sf(
 
 ```{r}
 #| fig-height: 12
-#| fig-width: 27.74661
+#| fig-width: 27.69122
 #| fig-dpi: 600
 
 tissot_sf_clip <- tissot_sf |> st_intersection(igh_lobes_proj)
@@ -513,7 +512,6 @@ tmap_save(my_map, filename = my.file.name, height = 12,
           width = my.ratio*12, dpi = 600)
 ```
 
-
 ## 구드 호몰로사인 도법(단열형) 2: 해양형
 
 ### 표준 지도
@@ -521,6 +519,9 @@ tmap_save(my_map, filename = my.file.name, height = 12,
 - 지도 제작
 
 ```{r}
+#| fig-height: 12
+#| fig-width: 27.69151
+#| fig-dpi: 600
 
 # ------------------------------------------------------------
 # 1. 해양형 Goode Homolosine 설정
@@ -889,9 +890,6 @@ tmap_save(my_map, filename = my.file.name, height = 12,
 - 지시타원 생성
 
 ```{r}
-# ------------------------------------------------------------
-# 8. 해양형 Goode Homolosine indicatrix 생성
-# ------------------------------------------------------------
 
 get_ocean_lobe <- function(lon, lat) {
   
@@ -992,10 +990,6 @@ make_circle <- function(lon0, lat0, r_deg, n) {
   )
 }
 
-# ------------------------------------------------------------
-# 9. indicatrix 중심점 생성
-# ------------------------------------------------------------
-
 lat <- seq(-80, 80, by = 20)
 lon <- c(seq(-160, 160, by = 20), 180)
 
@@ -1007,10 +1001,6 @@ coord_df_ocean <- expand.grid(lon = lon, lat = lat) |>
       lat == 0 & lon %in% c(-30, 50, -150, 90, -110)
     )
   )
-
-# ------------------------------------------------------------
-# 10. indicatrix 생성
-# ------------------------------------------------------------
 
 a_scale = 6e5
 tissot_ocean <- make_indicatrix_goode_ocean(
@@ -1024,6 +1014,9 @@ tissot_ocean <- make_indicatrix_goode_ocean(
 - 지도 제작
 
 ```{r}
+#| fig-height: 12
+#| fig-width: 27.69151
+#| fig-dpi: 600
 
 grat_ll_ind <- st_graticule(
   lon = seq(-180, 180, 10),
@@ -1092,7 +1085,6 @@ my.file.name <- paste0("D:/My Cartography/지도제작/", my.title, ".png")
 tmap_save(my_map, filename = my.file.name, height = 12, 
           width = my.ratio*12, dpi = 600)
 ```
-
 
 ## 시뉴소이드 도법 1: 0
 

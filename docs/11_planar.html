@@ -426,6 +426,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <ul class="collapse">
 <li><a href="#%ED%91%9C%EC%A4%80%EC%A7%80%EB%8F%84-3" id="toc-표준지도-3" class="nav-link" data-scroll-target="#%ED%91%9C%EC%A4%80%EC%A7%80%EB%8F%84-3"><span class="header-section-number">11.13.1</span> 표준지도</a></li>
   <li><a href="#%EC%A7%80%EC%8B%9C%ED%83%80%EC%9B%90-11" id="toc-지시타원-11" class="nav-link" data-scroll-target="#%EC%A7%80%EC%8B%9C%ED%83%80%EC%9B%90-11"><span class="header-section-number">11.13.2</span> 지시타원</a></li>
+  <li><a href="#%EB%8F%99%EC%8B%AC%EC%9B%90-%EC%A7%80%EB%8F%84" id="toc-동심원-지도" class="nav-link" data-scroll-target="#%EB%8F%99%EC%8B%AC%EC%9B%90-%EC%A7%80%EB%8F%84"><span class="header-section-number">11.13.3</span> 동심원 지도</a></li>
   </ul>
 </li>
   <li>
@@ -472,7 +473,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <div>
     <div class="quarto-title-meta-heading">Modified</div>
     <div class="quarto-title-meta-contents">
-      <p class="date-modified">May 5, 2026</p>
+      <p class="date-modified">May 6, 2026</p>
     </div>
   </div>
     
@@ -1273,7 +1274,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li>지도 제작</li>
 </ul>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb23"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># 문제의 본질: 사축 심사도법처럼 아래와 같은 버퍼원을 해당 투영법으로 만들어 진행하면 world를 잘랐을 때 캄차카 반도 등의 특정 영역이 사라짐. 이 횡축 심사 도법에서만 나타나는 이상한 현상.</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb23"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># 문제의 본질: 사축 심사도법처럼 아래와 같은 버퍼원을 해당 투영법으로 만들어 진행하면 world를 잘랐을 때 캄차카 반도 등의 특정 영역이 사라짐. 이 횡축 심사 도법에서만 나타나는 이상한 현상. </span></span>
 <span></span>
 <span><span class="co"># gnom_bbox &lt;- st_sfc(st_point(c(0, 0)), crs = crs_gnom_150_0) |&gt; </span></span>
 <span><span class="co">#   st_buffer(dist = 22000000, nQuadSegs = 720) </span></span>
@@ -1281,6 +1282,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span><span class="va">crs_gnom_150_0</span> <span class="op">&lt;-</span> <span class="st">"+proj=gnom +lat_0=0 +lon_0=150 +datum=WGS84 +units=m +no_defs"</span></span>
 <span></span>
 <span><span class="co"># 우선 4326 상태에서 작게 자름. 그것 가지고 world를 잘라냄(이 과정에서 뭔가 좋은 일?).</span></span>
+<span><span class="co"># 심사 도법은 아주 작은 영역만 표현할 수 있으므로 먼저 그렇게 하고, 투영 이후에는 아주 작은 거리도 매우 큰 값을 가질 수 있음. 그래서 뒤 22000km로 자르는 것이 가능.(이것이 핵심!!! 투영 이후에는 거리가 맞지 않으므로 지구 상의 거리보다 훨씬 더 큰 값이 가능함)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/s2.html">sf_use_s2</a></span><span class="op">(</span><span class="cn">TRUE</span><span class="op">)</span></span>
 <span><span class="va">visible_disk</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/sfc.html">st_sfc</a></span><span class="op">(</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st.html">st_point</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">150</span>, <span class="fl">0</span><span class="op">)</span><span class="op">)</span>, crs <span class="op">=</span> <span class="fl">4326</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
@@ -1820,6 +1822,62 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <ul>
 <li>저장</li>
+</ul></section><section id="동심원-지도" class="level3" data-number="11.13.3"><h3 data-number="11.13.3" class="anchored" data-anchor-id="동심원-지도">
+<span class="header-section-number">11.13.3</span> 동심원 지도</h3>
+<ul>
+<li>지도 제작</li>
+</ul>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb38"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">world_aeqd_127_37.5</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_transform.html">st_transform</a></span><span class="op">(</span><span class="va">world</span>, <span class="va">crs_aeqd_127_37.5</span><span class="op">)</span> </span>
+<span></span>
+<span><span class="va">grat_clip</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_graticule.html">st_graticule</a></span><span class="op">(</span></span>
+<span>  lon <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="op">-</span><span class="fl">180</span>, <span class="fl">180</span>, <span class="fl">20</span><span class="op">)</span>,</span>
+<span>  lat <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="op">-</span><span class="fl">90</span>, <span class="fl">90</span>, <span class="fl">15</span><span class="op">)</span></span>
+<span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_precision.html">st_set_precision</a></span><span class="op">(</span><span class="fl">1e6</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_break_antimeridian.html">st_break_antimeridian</a></span><span class="op">(</span>lon_0 <span class="op">=</span> <span class="fl">127</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_transform.html">st_transform</a></span><span class="op">(</span>crs <span class="op">=</span> <span class="va">crs_aeqd_127_37.5</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/geos_binary_ops.html">st_intersection</a></span><span class="op">(</span><span class="va">aeqd_bbox</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">center</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/sfc.html">st_sfc</a></span><span class="op">(</span></span>
+<span>  <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st.html">st_point</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>  crs <span class="op">=</span> <span class="va">crs_aeqd_127_37.5</span></span>
+<span><span class="op">)</span></span>
+<span><span class="va">radii</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">2500000</span>, <span class="fl">5000000</span>, <span class="fl">7500000</span>, <span class="fl">10000000</span><span class="op">)</span></span>
+<span><span class="va">circles</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/sfc.html">st_sfc</a></span><span class="op">(</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/lapply.html">lapply</a></span><span class="op">(</span></span>
+<span>    <span class="va">radii</span>,</span>
+<span>    \<span class="op">(</span><span class="va">d</span><span class="op">)</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/geos_unary.html">st_buffer</a></span><span class="op">(</span><span class="va">center</span>, dist <span class="op">=</span> <span class="va">d</span>, nQuadSegs <span class="op">=</span> <span class="fl">720</span><span class="op">)</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span></span>
+<span>  <span class="op">)</span>,</span>
+<span>  crs <span class="op">=</span> <span class="va">crs_aeqd_127_37.5</span></span>
+<span><span class="op">)</span></span>
+<span><span class="va">circles</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/sf.html">st_sf</a></span><span class="op">(</span></span>
+<span>  radius_km <span class="op">=</span> <span class="va">radii</span> <span class="op">/</span> <span class="fl">1000</span>,</span>
+<span>  geometry <span class="op">=</span> <span class="va">circles</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://r-tmap.github.io/tmap/reference/qtm.html">qtm</a></span><span class="op">(</span><span class="va">circles</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure"><p><a href="11_planar_files/figure-html/unnamed-chunk-62-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-25"><img src="11_planar_files/figure-html/unnamed-chunk-62-1.png" class="img-fluid figure-img" width="4200"></a></p>
+</figure>
+</div>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb39"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">my_map</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tm_shape.html">tm_shape</a></span><span class="op">(</span><span class="va">aeqd_bbox</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tm_polygons.html">tm_fill</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="st">"#d1ecf9"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tm_shape.html">tm_shape</a></span><span class="op">(</span><span class="va">world</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tm_polygons.html">tm_fill</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="st">"#fffff0"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tm_shape.html">tm_shape</a></span><span class="op">(</span><span class="va">grat_clip</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tm_lines.html">tm_lines</a></span><span class="op">(</span>lwd <span class="op">=</span> <span class="fl">0.5</span>, col <span class="op">=</span> <span class="st">"gray30"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tm_shape.html">tm_shape</a></span><span class="op">(</span><span class="va">aeqd_bbox</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tm_polygons.html">tm_borders</a></span><span class="op">(</span>lwd <span class="op">=</span> <span class="fl">1.5</span>, col <span class="op">=</span> <span class="st">"black"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tm_shape.html">tm_shape</a></span><span class="op">(</span><span class="va">circles</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tm_polygons.html">tm_borders</a></span><span class="op">(</span>lwd <span class="op">=</span> <span class="fl">3</span>, col <span class="op">=</span> <span class="st">"black"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tm_layout.html">tm_layout</a></span><span class="op">(</span>inner.margins <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">0</span><span class="op">)</span>, earth_boundary <span class="op">=</span> <span class="cn">FALSE</span>, frame <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="op">+</span>  </span>
+<span>  <span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tm_credits.html">tm_credits</a></span><span class="op">(</span><span class="st">"SANG-IL LEE, Geography Education at SNU"</span>, </span>
+<span>             size <span class="op">=</span> <span class="fl">0.7</span>, position <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0.80</span>, <span class="op">-</span><span class="fl">0.005</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">my_map</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure"><p><a href="11_planar_files/figure-html/unnamed-chunk-62-2.png" class="lightbox" data-gallery="quarto-lightbox-gallery-26"><img src="11_planar_files/figure-html/unnamed-chunk-62-2.png" class="img-fluid figure-img" width="4200"></a></p>
+</figure>
+</div>
+</div>
+</div>
+<ul>
+<li>저장</li>
 </ul></section></section><section id="람베르트-정적방위-도법-1-0-90" class="level2" data-number="11.14"><h2 data-number="11.14" class="anchored" data-anchor-id="람베르트-정적방위-도법-1-0-90">
 <span class="header-section-number">11.14</span> 람베르트 정적방위 도법 1: 0-90</h2>
 <section id="표준지도-4" class="level3" data-number="11.14.1"><h3 data-number="11.14.1" class="anchored" data-anchor-id="표준지도-4">
@@ -1828,7 +1886,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li>지도 제작</li>
 </ul>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb38"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">crs_laea_0_90</span> <span class="op">&lt;-</span> <span class="st">"+proj=laea +lat_0=90 +lon_0=0 +datum=WGS84 +units=m +no_defs"</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb40"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">crs_laea_0_90</span> <span class="op">&lt;-</span> <span class="st">"+proj=laea +lat_0=90 +lon_0=0 +datum=WGS84 +units=m +no_defs"</span></span>
 <span></span>
 <span><span class="va">origin_lines</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/sfc.html">st_sfc</a></span><span class="op">(</span></span>
 <span>  <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st.html">st_linestring</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/matrix.html">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">180</span>, <span class="fl">0</span>, <span class="fl">180</span>, <span class="fl">0</span><span class="op">)</span>, ncol <span class="op">=</span> <span class="fl">2</span>, byrow <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span>, </span>
@@ -1852,11 +1910,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span><span class="fu"><a href="https://r-tmap.github.io/tmap/reference/qtm.html">qtm</a></span><span class="op">(</span><span class="va">world_clip</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
-<figure class="figure"><p><a href="11_planar_files/figure-html/unnamed-chunk-62-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-25"><img src="11_planar_files/figure-html/unnamed-chunk-62-1.png" class="img-fluid figure-img" width="7199"></a></p>
+<figure class="figure"><p><a href="11_planar_files/figure-html/unnamed-chunk-64-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-27"><img src="11_planar_files/figure-html/unnamed-chunk-64-1.png" class="img-fluid figure-img" width="7199"></a></p>
 </figure>
 </div>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb39"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">grat_clip</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_graticule.html">st_graticule</a></span><span class="op">(</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb41"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">grat_clip</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_graticule.html">st_graticule</a></span><span class="op">(</span></span>
 <span>  lon <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="op">-</span><span class="fl">180</span>, <span class="fl">180</span>, <span class="fl">20</span><span class="op">)</span>,</span>
 <span>  lat <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="op">-</span><span class="fl">90</span>, <span class="fl">90</span>, <span class="fl">15</span><span class="op">)</span></span>
 <span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_transform.html">st_transform</a></span><span class="op">(</span><span class="va">crs_laea_0_90</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/geos_binary_ops.html">st_intersection</a></span><span class="op">(</span><span class="va">laea_bbox</span><span class="op">)</span></span>
@@ -1885,7 +1943,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span><span class="va">my_map</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
-<figure class="figure"><p><a href="11_planar_files/figure-html/unnamed-chunk-62-2.png" class="lightbox" data-gallery="quarto-lightbox-gallery-26"><img src="11_planar_files/figure-html/unnamed-chunk-62-2.png" class="img-fluid figure-img" width="7199"></a></p>
+<figure class="figure"><p><a href="11_planar_files/figure-html/unnamed-chunk-64-2.png" class="lightbox" data-gallery="quarto-lightbox-gallery-28"><img src="11_planar_files/figure-html/unnamed-chunk-64-2.png" class="img-fluid figure-img" width="7199"></a></p>
 </figure>
 </div>
 </div>
@@ -1898,7 +1956,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li>지시타원 생성</li>
 </ul>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb40"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">lat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="op">-</span><span class="fl">80</span>, <span class="fl">80</span>, by<span class="op">=</span><span class="fl">20L</span><span class="op">)</span> <span class="co"># 0보다 큰 값</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb42"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">lat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="op">-</span><span class="fl">80</span>, <span class="fl">80</span>, by<span class="op">=</span><span class="fl">20L</span><span class="op">)</span> <span class="co"># 0보다 큰 값</span></span>
 <span><span class="va">lon</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="op">-</span><span class="fl">160</span>, <span class="fl">180</span>, by<span class="op">=</span><span class="fl">20L</span><span class="op">)</span> <span class="co"># -180을 하면 -180과 180에 각각 생겨 두 개가 중첩됨</span></span>
 <span><span class="va">coord</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html">as.matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/expand.grid.html">expand.grid</a></span><span class="op">(</span><span class="va">lon</span>,<span class="va">lat</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
@@ -1911,7 +1969,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li>지도 제작</li>
 </ul>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb41"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">world_crs_laes_0_90</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_transform.html">st_transform</a></span><span class="op">(</span><span class="va">world</span>, <span class="va">crs_laea_0_90</span><span class="op">)</span> <span class="co"># world_whole은 안 먹음. 희안함.</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb43"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">world_crs_laes_0_90</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_transform.html">st_transform</a></span><span class="op">(</span><span class="va">world</span>, <span class="va">crs_laea_0_90</span><span class="op">)</span> <span class="co"># world_whole은 안 먹음. 희안함.</span></span>
 <span></span>
 <span><span class="va">tissot_sf</span> <span class="op">&lt;-</span> <span class="va">tissot_sf</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">scale_k</span> <span class="op">&lt;</span> <span class="fl">50</span><span class="op">)</span></span>
 <span></span>
@@ -1940,7 +1998,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span><span class="va">my_map</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
-<figure class="figure"><p><a href="11_planar_files/figure-html/unnamed-chunk-65-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-27"><img src="11_planar_files/figure-html/unnamed-chunk-65-1.png" class="img-fluid figure-img" width="4200"></a></p>
+<figure class="figure"><p><a href="11_planar_files/figure-html/unnamed-chunk-67-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-29"><img src="11_planar_files/figure-html/unnamed-chunk-67-1.png" class="img-fluid figure-img" width="4200"></a></p>
 </figure>
 </div>
 </div>
@@ -1955,7 +2013,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li>지도 제작</li>
 </ul>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb42"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">crs_laea_150_0</span> <span class="op">&lt;-</span> <span class="st">"+proj=laea +lat_0=0 +lon_0=150 +datum=WGS84 +units=m +no_defs"</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb44"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">crs_laea_150_0</span> <span class="op">&lt;-</span> <span class="st">"+proj=laea +lat_0=0 +lon_0=150 +datum=WGS84 +units=m +no_defs"</span></span>
 <span></span>
 <span><span class="va">grat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_graticule.html">st_graticule</a></span><span class="op">(</span></span>
 <span>  lon <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="op">-</span><span class="fl">180</span>, <span class="fl">180</span>, <span class="fl">20</span><span class="op">)</span>,</span>
@@ -1981,7 +2039,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span><span class="va">my_map</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
-<figure class="figure"><p><a href="11_planar_files/figure-html/unnamed-chunk-67-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-28"><img src="11_planar_files/figure-html/unnamed-chunk-67-1.png" class="img-fluid figure-img" width="7200"></a></p>
+<figure class="figure"><p><a href="11_planar_files/figure-html/unnamed-chunk-69-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-30"><img src="11_planar_files/figure-html/unnamed-chunk-69-1.png" class="img-fluid figure-img" width="7200"></a></p>
 </figure>
 </div>
 </div>
@@ -1994,7 +2052,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li>지시타원 생성</li>
 </ul>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb43"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">lat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="op">-</span><span class="fl">80</span>, <span class="fl">80</span>, by<span class="op">=</span><span class="fl">20L</span><span class="op">)</span> <span class="co"># 0보다 큰 값</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb45"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">lat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="op">-</span><span class="fl">80</span>, <span class="fl">80</span>, by<span class="op">=</span><span class="fl">20L</span><span class="op">)</span> <span class="co"># 0보다 큰 값</span></span>
 <span><span class="va">lon</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="op">-</span><span class="fl">160</span>, <span class="fl">180</span>, by<span class="op">=</span><span class="fl">20L</span><span class="op">)</span> <span class="co"># -180을 하면 -180과 180에 각각 생겨 두 개가 중첩됨</span></span>
 <span><span class="va">coord</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html">as.matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/expand.grid.html">expand.grid</a></span><span class="op">(</span><span class="va">lon</span>,<span class="va">lat</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
@@ -2007,7 +2065,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li>지도 제작</li>
 </ul>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb44"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">world_laea_150_0</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_transform.html">st_transform</a></span><span class="op">(</span><span class="va">world</span>, <span class="va">crs_laea_150_0</span><span class="op">)</span> <span class="co"># world_whole은 안 먹음. 희안함.</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb46"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">world_laea_150_0</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_transform.html">st_transform</a></span><span class="op">(</span><span class="va">world</span>, <span class="va">crs_laea_150_0</span><span class="op">)</span> <span class="co"># world_whole은 안 먹음. 희안함.</span></span>
 <span></span>
 <span><span class="va">tissot_sf</span> <span class="op">&lt;-</span> <span class="va">tissot_sf</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">scale_k</span> <span class="op">&lt;</span> <span class="fl">50</span><span class="op">)</span></span>
 <span></span>
@@ -2037,7 +2095,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span><span class="va">my_map</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
-<figure class="figure"><p><a href="11_planar_files/figure-html/unnamed-chunk-70-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-29"><img src="11_planar_files/figure-html/unnamed-chunk-70-1.png" class="img-fluid figure-img" width="7200"></a></p>
+<figure class="figure"><p><a href="11_planar_files/figure-html/unnamed-chunk-72-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-31"><img src="11_planar_files/figure-html/unnamed-chunk-72-1.png" class="img-fluid figure-img" width="7200"></a></p>
 </figure>
 </div>
 </div>
@@ -2050,7 +2108,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li>지도 제작</li>
 </ul>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb45"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">crs_laea_127_37.5</span> <span class="op">&lt;-</span> <span class="st">"+proj=laea +lat_0=37.5 +lon_0=127 +datum=WGS84 +units=m +no_defs"</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb47"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">crs_laea_127_37.5</span> <span class="op">&lt;-</span> <span class="st">"+proj=laea +lat_0=37.5 +lon_0=127 +datum=WGS84 +units=m +no_defs"</span></span>
 <span></span>
 <span><span class="va">grat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_graticule.html">st_graticule</a></span><span class="op">(</span></span>
 <span>  lon <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="op">-</span><span class="fl">180</span>, <span class="fl">180</span>, <span class="fl">20</span><span class="op">)</span>,</span>
@@ -2070,7 +2128,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span><span class="va">my_map</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
-<figure class="figure"><p><a href="11_planar_files/figure-html/unnamed-chunk-72-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-30"><img src="11_planar_files/figure-html/unnamed-chunk-72-1.png" class="img-fluid figure-img" width="7200"></a></p>
+<figure class="figure"><p><a href="11_planar_files/figure-html/unnamed-chunk-74-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-32"><img src="11_planar_files/figure-html/unnamed-chunk-74-1.png" class="img-fluid figure-img" width="7200"></a></p>
 </figure>
 </div>
 </div>
@@ -2084,7 +2142,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li>지시타원 생성</li>
 </ul>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb46"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">lat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="op">-</span><span class="fl">80</span>, <span class="fl">80</span>, by<span class="op">=</span><span class="fl">20L</span><span class="op">)</span> <span class="co"># 0보다 큰 값</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb48"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">lat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="op">-</span><span class="fl">80</span>, <span class="fl">80</span>, by<span class="op">=</span><span class="fl">20L</span><span class="op">)</span> <span class="co"># 0보다 큰 값</span></span>
 <span><span class="va">lon</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="op">-</span><span class="fl">160</span>, <span class="fl">180</span>, by<span class="op">=</span><span class="fl">20L</span><span class="op">)</span> <span class="co"># -180을 하면 -180과 180에 각각 생겨 두 개가 중첩됨</span></span>
 <span><span class="va">coord</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html">as.matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/expand.grid.html">expand.grid</a></span><span class="op">(</span><span class="va">lon</span>,<span class="va">lat</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
@@ -2097,7 +2155,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li>지도 제작</li>
 </ul>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb47"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">world_laea_127_37.5</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_transform.html">st_transform</a></span><span class="op">(</span><span class="va">world</span>, <span class="va">crs_laea_127_37.5</span><span class="op">)</span> <span class="co"># world_whole은 안 먹음. 희안함.</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb49"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">world_laea_127_37.5</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_transform.html">st_transform</a></span><span class="op">(</span><span class="va">world</span>, <span class="va">crs_laea_127_37.5</span><span class="op">)</span> <span class="co"># world_whole은 안 먹음. 희안함.</span></span>
 <span></span>
 <span><span class="va">tissot_sf</span> <span class="op">&lt;-</span> <span class="va">tissot_sf</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">scale_k</span> <span class="op">&lt;</span> <span class="fl">50</span><span class="op">)</span></span>
 <span></span>
@@ -2127,7 +2185,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span><span class="va">my_map</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
-<figure class="figure"><p><a href="11_planar_files/figure-html/unnamed-chunk-75-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-31"><img src="11_planar_files/figure-html/unnamed-chunk-75-1.png" class="img-fluid figure-img" width="7200"></a></p>
+<figure class="figure"><p><a href="11_planar_files/figure-html/unnamed-chunk-77-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-33"><img src="11_planar_files/figure-html/unnamed-chunk-77-1.png" class="img-fluid figure-img" width="7200"></a></p>
 </figure>
 </div>
 </div>

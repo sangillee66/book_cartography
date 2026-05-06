@@ -494,7 +494,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <div>
     <div class="quarto-title-meta-heading">Modified</div>
     <div class="quarto-title-meta-contents">
-      <p class="date-modified">May 5, 2026</p>
+      <p class="date-modified">May 6, 2026</p>
     </div>
   </div>
     
@@ -874,7 +874,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span><span class="va">my_map</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
-<figure class="figure"><p><a href="12_other_files/figure-html/unnamed-chunk-12-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-5"><img src="12_other_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid figure-img" width="16647"></a></p>
+<figure class="figure"><p><a href="12_other_files/figure-html/unnamed-chunk-12-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-5"><img src="12_other_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid figure-img" width="16614"></a></p>
 </figure>
 </div>
 </div>
@@ -935,7 +935,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span><span class="va">my_map</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
-<figure class="figure"><p><a href="12_other_files/figure-html/unnamed-chunk-15-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-6"><img src="12_other_files/figure-html/unnamed-chunk-15-1.png" class="img-fluid figure-img" width="16647"></a></p>
+<figure class="figure"><p><a href="12_other_files/figure-html/unnamed-chunk-15-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-6"><img src="12_other_files/figure-html/unnamed-chunk-15-1.png" class="img-fluid figure-img" width="16614"></a></p>
 </figure>
 </div>
 </div>
@@ -1299,7 +1299,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span><span class="va">my_map</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
-<figure class="figure"><p><a href="12_other_files/figure-html/unnamed-chunk-17-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-7"><img src="12_other_files/figure-html/unnamed-chunk-17-1.png" class="img-fluid figure-img" width="4200"></a></p>
+<figure class="figure"><p><a href="12_other_files/figure-html/unnamed-chunk-17-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-7"><img src="12_other_files/figure-html/unnamed-chunk-17-1.png" class="img-fluid figure-img" width="16614"></a></p>
 </figure>
 </div>
 </div>
@@ -1312,11 +1312,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li>지시타원 생성</li>
 </ul>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb12"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># ------------------------------------------------------------</span></span>
-<span><span class="co"># 8. 해양형 Goode Homolosine indicatrix 생성</span></span>
-<span><span class="co"># ------------------------------------------------------------</span></span>
-<span></span>
-<span><span class="va">get_ocean_lobe</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">lon</span>, <span class="va">lat</span><span class="op">)</span> <span class="op">{</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb12"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">get_ocean_lobe</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">lon</span>, <span class="va">lat</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  </span>
 <span>  <span class="kw">if</span> <span class="op">(</span><span class="va">lat</span> <span class="op">&gt;=</span> <span class="fl">0</span><span class="op">)</span> <span class="op">{</span></span>
 <span>    </span>
@@ -1415,10 +1411,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span>  <span class="op">)</span></span>
 <span><span class="op">}</span></span>
 <span></span>
-<span><span class="co"># ------------------------------------------------------------</span></span>
-<span><span class="co"># 9. indicatrix 중심점 생성</span></span>
-<span><span class="co"># ------------------------------------------------------------</span></span>
-<span></span>
 <span><span class="va">lat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="op">-</span><span class="fl">80</span>, <span class="fl">80</span>, by <span class="op">=</span> <span class="fl">20</span><span class="op">)</span></span>
 <span><span class="va">lon</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="op">-</span><span class="fl">160</span>, <span class="fl">160</span>, by <span class="op">=</span> <span class="fl">20</span><span class="op">)</span>, <span class="fl">180</span><span class="op">)</span></span>
 <span></span>
@@ -1430,10 +1422,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span>      <span class="va">lat</span> <span class="op">==</span> <span class="fl">0</span> <span class="op">&amp;</span> <span class="va">lon</span> <span class="op"><a href="https://rdrr.io/r/base/match.html">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">30</span>, <span class="fl">50</span>, <span class="op">-</span><span class="fl">150</span>, <span class="fl">90</span>, <span class="op">-</span><span class="fl">110</span><span class="op">)</span></span>
 <span>    <span class="op">)</span></span>
 <span>  <span class="op">)</span></span>
-<span></span>
-<span><span class="co"># ------------------------------------------------------------</span></span>
-<span><span class="co"># 10. indicatrix 생성</span></span>
-<span><span class="co"># ------------------------------------------------------------</span></span>
 <span></span>
 <span><span class="va">a_scale</span> <span class="op">=</span> <span class="fl">6e5</span></span>
 <span><span class="va">tissot_ocean</span> <span class="op">&lt;-</span> <span class="fu">make_indicatrix_goode_ocean</span><span class="op">(</span></span>
@@ -1500,7 +1488,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span><span class="va">my_map</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
-<figure class="figure"><p><a href="12_other_files/figure-html/unnamed-chunk-20-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-8"><img src="12_other_files/figure-html/unnamed-chunk-20-1.png" class="img-fluid figure-img" width="4200"></a></p>
+<figure class="figure"><p><a href="12_other_files/figure-html/unnamed-chunk-20-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-8"><img src="12_other_files/figure-html/unnamed-chunk-20-1.png" class="img-fluid figure-img" width="16614"></a></p>
 </figure>
 </div>
 </div>
