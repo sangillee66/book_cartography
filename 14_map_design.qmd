@@ -62,6 +62,8 @@ seoul_sido <- read_sf(
 ```{r}
 #| fig-height: 12
 #| fig-width: 9.047974
+#| fig-dpi: 600
+
 my_map <- tm_shape(sido) + tm_polygons() +
   tm_shape(sido_polyline) + tm_lines(col = "black", lwd = 1.75) +
   tm_shape(bbox_ulleung) + tm_lines() +
@@ -90,6 +92,9 @@ tmap_save(
 ```{r}
 #| fig-height: 12
 #| fig-width: 9.047974
+#| fig-dpi: 600
+#| eval: false
+
 my_map <- ggplot() +
   geom_sf(data = sido) +
   geom_sf(data = sido_polyline) +
@@ -122,6 +127,8 @@ ggsave(my_map, filename = my.file.name, height = 12, width = 9.047974, dpi = 600
 ```{r}
 #| fig-height: 12
 #| fig-width: 8.961803
+#| fig-dpi: 600
+
 my_map <- tm_shape(sigungu1) + tm_polygons() +
   tm_shape(sido_polyline) + tm_lines(col = "black", lwd = 1.75) +
   tm_shape(bbox_ulleung) + tm_lines() +
@@ -153,6 +160,8 @@ tmap_save(
 ```{r}
 #| fig-height: 12
 #| fig-width: 9.047974
+#| fig-dpi: 600
+
 my_map <- tm_shape(emd) + tm_polygons() +
   tm_shape(sido_polyline) + tm_lines(col = "black", lwd = 1.75) +
   tm_shape(bbox_ulleung) + tm_lines() +
@@ -220,6 +229,7 @@ emd_adj_data <- emd_adj_data |>
 ```{r}
 #| fig-height: 12
 #| fig-width: 8.882838
+#| fig-dpi: 600
 
 bbox_ulleung_polygon <- bbox_ulleung |> 
   st_cast("POLYGON")
@@ -272,6 +282,7 @@ tmap_save(
 ```{r}
 #| fig-height: 12
 #| fig-width: 8.9538
+#| fig-dpi: 600
 
 emd_adj_data_1 <- emd_adj_data |> 
   mutate(
