@@ -32,6 +32,7 @@ library(tidyverse)
 library(readxl) 
 library(sf) 
 library(tmap)
+library(tmaptools)
 library(ggspatial)
 ```
 
@@ -39,51 +40,56 @@ library(ggspatial)
 
 ```{r}
 #| results: hide
-sido <- st_read("D:/My R/Korean Administrative Areas/행정구역 셰이프 파일/3 Generalization/2020_2Q/SIDO_2020_2Q_GEN_0050.shp", options = "ENCODING=CP949")
-sigun1 <- st_read("D:/My R/Korean Administrative Areas/행정구역 셰이프 파일/3 Generalization/2020_2Q/SIGUN1_2020_2Q_GEN_0050.shp", options = "ENCODING=CP949")
-sigungu1 <- st_read("D:/My R/Korean Administrative Areas/행정구역 셰이프 파일/3 Generalization/2020_2Q/SIGUNGU1_2020_2Q_GEN_0050.shp", options = "ENCODING=CP949")
-emd <- st_read("D:/My R/Korean Administrative Areas/행정구역 셰이프 파일/3 Generalization/2020_2Q/EMD_2020_2Q_GEN_0050.shp", options = "ENCODING=CP949")
-sido_polyline <- st_read("D:/My R/Korean Administrative Areas/행정구역 셰이프 파일/3 Generalization/2020_2Q/SIDO_Polyline_2020_2Q_GEN_0050.shp", options = "ENCODING=CP949")
-bbox_ulleung <- st_read("D:/My R/Korean Administrative Areas/행정구역 셰이프 파일/3 Generalization/2020_2Q/BBOX_Ulleung_2020_2Q_GEN_0050.shp", options = "ENCODING=CP949")
-bbox_seohae <- st_read("D:/My R/Korean Administrative Areas/행정구역 셰이프 파일/3 Generalization/2020_2Q/BBOX_Seohae3_2020_2Q_GEN_0050.shp", options = "ENCODING=CP949")
-seoul_gu <- st_read(
+sido <- read_sf("D:/My R/Korean Administrative Areas/행정구역 셰이프 파일/3 Generalization/2020_2Q/SIDO_2020_2Q_GEN_0050.shp", options = "ENCODING=CP949")
+sigun1 <- read_sf("D:/My R/Korean Administrative Areas/행정구역 셰이프 파일/3 Generalization/2020_2Q/SIGUN1_2020_2Q_GEN_0050.shp", options = "ENCODING=CP949")
+sigungu1 <- read_sf("D:/My R/Korean Administrative Areas/행정구역 셰이프 파일/3 Generalization/2020_2Q/SIGUNGU1_2020_2Q_GEN_0050.shp", options = "ENCODING=CP949")
+emd <- read_sf("D:/My R/Korean Administrative Areas/행정구역 셰이프 파일/3 Generalization/2020_2Q/EMD_2020_2Q_GEN_0050.shp", options = "ENCODING=CP949")
+sido_polyline <- read_sf("D:/My R/Korean Administrative Areas/행정구역 셰이프 파일/3 Generalization/2020_2Q/SIDO_Polyline_2020_2Q_GEN_0050.shp", options = "ENCODING=CP949")
+bbox_ulleung <- read_sf("D:/My R/Korean Administrative Areas/행정구역 셰이프 파일/3 Generalization/2020_2Q/BBOX_Ulleung_2020_2Q_GEN_0050.shp", options = "ENCODING=CP949")
+bbox_seohae <- read_sf("D:/My R/Korean Administrative Areas/행정구역 셰이프 파일/3 Generalization/2020_2Q/BBOX_Seohae3_2020_2Q_GEN_0050.shp", options = "ENCODING=CP949")
+seoul_gu <- read_sf(
   "D:/My R/Korean Administrative Areas/행정구역 셰이프 파일/2 Original Cleaning/2021_4Q/SEOUL_GU_2021_4Q.shp", options = "ENCODING=CP949"
   ) 
-seoul_sido <- st_read(
+seoul_sido <- read_sf(
   "D:/My R/Korean Administrative Areas/행정구역 셰이프 파일/2 Original Cleaning/2021_4Q/SEOUL_SIDO_2021_4Q.shp", options = "ENCODING=CP949"
   )
 ```
 
 #### 시도 경계 지도
 
-- 지도 제작
+- [**tmap**](https://r-tmap.github.io/tmap/index.html): 지도 제작
 
 ```{r}
+#| fig-height: 12
+#| fig-width: 9.047974
 my_map <- tm_shape(sido) + tm_polygons() +
   tm_shape(sido_polyline) + tm_lines(col = "black", lwd = 1.75) +
   tm_shape(bbox_ulleung) + tm_lines() +
   tm_shape(bbox_seohae) + tm_lines() +
-  tm_layout(inner.margins = c(0.02, 0.02, 0.02, 0.03))
+  tm_layout(inner.margins = c(0.02, 0.02, 0.02, 0.03)) +
+  tm_scalebar(breaks = seq(0, 200, 50), text.size = 0.6, color.dark = "gray60", 
+             position = c(0.52, 0.03), allow_clipping = TRUE)
 my_map 
 ```
 
-- 저장
+- [**tmap**](https://r-tmap.github.io/tmap/index.html): 저장
 
 ```{r}
+#| eval: false
 #| echo: false
-my_title <- "10_2_01"
-my.path.name <- "outputs/"
-my.file.name <- paste0(my.path.name, my_title, ".png")
+my.ratio <- get_asp_ratio(my_map)
+
+my.title <- "9-2-01-1 시도 경계 tmap"
+my.file.name <- paste0("D:/My Cartography/지도제작/", my.title, ".png")
 tmap_save(
-  my_map, 
-  filename = my.file.name, 
-  width = 1202/96, height = 1158/96,
-  dpi = 600)
+  my_map, filename = my.file.name,  height = 12, width = my.ratio*12, dpi = 600)
 ```
 
-- `ggplot2`: 지도 제작
+- [**ggplot2**](https://ggplot2.tidyverse.org/): 지도 제작
 
 ```{r}
+#| fig-height: 12
+#| fig-width: 9.047974
 my_map <- ggplot() +
   geom_sf(data = sido) +
   geom_sf(data = sido_polyline) +
@@ -92,23 +98,21 @@ my_map <- ggplot() +
   annotation_scale(location = "br", bar_cols = c("gray40", "white"), width_hint = 0.4) +
   theme_void() +
   theme(
-    panel.background = element_rect(color = "gray20", fill = "white")
+    panel.background = element_rect(color = "gray20", fill = "white", linewidth = 1),
+    plot.margin = margin(5, 5, 5, 5)
   )
 my_map
 ```
 
-- `ggplot2`: 저장
+- [**ggplot2**](https://ggplot2.tidyverse.org/): 저장
 
 ```{r}
 #| echo: false
-my_title <- "10_2_01_1"
-my.path.name <- "outputs/"
-my.file.name <- paste0(my.path.name, my_title, ".png")
-ggsave(
-  my_map, 
-  filename = my.file.name, 
-  width = 0.728*1202/96, height = 1158/96,
-  dpi = 900)
+#| eval: false
+
+my.title <- "9-2-01-2 시도 경계 ggplot"
+my.file.name <- paste0("D:/My Cartography/지도제작/", my.title, ".png")
+ggsave(my_map, filename = my.file.name, height = 12, width = 9.047974, dpi = 600)
 ```
 
 #### 시군구 경계 지도
@@ -116,11 +120,14 @@ ggsave(
 - 지도 제작
 
 ```{r}
+#| fig-height: 12
+#| fig-width: 8.961803
 my_map <- tm_shape(sigungu1) + tm_polygons() +
   tm_shape(sido_polyline) + tm_lines(col = "black", lwd = 1.75) +
   tm_shape(bbox_ulleung) + tm_lines() +
   tm_shape(bbox_seohae) + tm_lines() +
-  tm_scale_bar(breaks = seq(0, 200, 50), text.size = 0.5, color.dark = "gray60", position = c(0.52, 0.01)) +
+  tm_scalebar(breaks = seq(0, 200, 50), text.size = 0.6, color.dark = "gray60", 
+             position = c(0.52, 0.03), allow_clipping = TRUE)
   tm_layout(inner.margins = c(0.02, 0.02, 0.02, 0.03))
 my_map
 ```
@@ -129,44 +136,14 @@ my_map
 
 ```{r}
 #| echo: false
-my_title <- "10_2_02"
-my.path.name <- "outputs/"
-my.file.name <- paste0(my.path.name, my_title, ".png")
+#| eval: false
+
+my.ratio <- get_asp_ratio(my_map)
+
+my.title <- "9-2-02-1 시군도 경계 tmap"
+my.file.name <- paste0("D:/My Cartography/지도제작/", my.title, ".png")
 tmap_save(
-  my_map, 
-  filename = my.file.name, 
-  width = 1202/96, height = 1158/96,
-  dpi = 600)
-```
-
-- ggplot2: 지도 제작
-
-```{r}
-my_map <- ggplot() +
-  geom_sf(data = sigungu1) +
-  geom_sf(data = sido_polyline) + 
-  geom_sf(data = bbox_ulleung) +
-  geom_sf(data = bbox_seohae) +
-  annotation_scale(location = "br", bar_cols = c("gray40", "white"), width_hint = 0.4) +
-  theme_void() +
-  theme(
-    panel.background = element_rect(color = "gray20", fill = "white")
-  )
-my_map
-```
-
-- ggplot2: 저장
-
-```{r}
-#| echo: false
-my_title <- "10_2_02_1"
-my.path.name <- "outputs/"
-my.file.name <- paste0(my.path.name, my_title, ".png")
-ggsave(
-  my_map, 
-  filename = my.file.name, 
-  width = 0.728*1202/96, height = 1158/96,
-  dpi = 900)
+  my_map, filename = my.file.name,  height = 12, width = my.ratio*12, dpi = 600)
 ```
 
 #### 읍면동 경계 지도
@@ -174,11 +151,14 @@ ggsave(
 - 지도 제작
 
 ```{r}
+#| fig-height: 12
+#| fig-width: 9.047974
 my_map <- tm_shape(emd) + tm_polygons() +
   tm_shape(sido_polyline) + tm_lines(col = "black", lwd = 1.75) +
   tm_shape(bbox_ulleung) + tm_lines() +
   tm_shape(bbox_seohae) + tm_lines() +
-  tm_scale_bar(breaks = seq(0, 200, 50), text.size = 0.5, color.dark = "gray60", position = c(0.52, 0.01)) +
+  tm_scalebar(breaks = seq(0, 200, 50), text.size = 0.6, color.dark = "gray60", 
+             position = c(0.52, 0.03), allow_clipping = TRUE) +
   tm_layout(inner.margins = c(0.02, 0.02, 0.02, 0.03))
 my_map
 ```
@@ -187,57 +167,24 @@ my_map
 
 ```{r}
 #| echo: false
-my_title <- "10_2_03"
-my.path.name <- "outputs/"
-my.file.name <- paste0(my.path.name, my_title, ".png")
+#| eval: false
+
+my.ratio <- get_asp_ratio(my_map)
+
+my.title <- "9-2-03-1 읍면동 경계 tmap"
+my.file.name <- paste0("D:/My Cartography/지도제작/", my.title, ".png")
 tmap_save(
-  my_map, 
-  filename = my.file.name, 
-  width = 1202/96, height = 1158/96,
-  dpi = 600)
-```
-
-- ggplot2: 지도 제작
-
-```{r}
-my_map <- ggplot() +
-  geom_sf(data = emd) +
-  geom_sf(data = sido_polyline) +
-  geom_sf(data = bbox_ulleung) +
-  geom_sf(data = bbox_seohae) +
-  annotation_scale(location = "br", bar_cols = c("gray40", "white"), width_hint = 0.4) +
-  theme_void() +
-  theme(
-    panel.background = element_rect(color = "gray20", fill = "white")
-  )
-my_map
-```
-
-- ggplot2: 저장
-
-```{r}
-#| echo: false
-my_title <- "10_2_03_1"
-my.path.name <- "outputs/"
-my.file.name <- paste0(my.path.name, my_title, ".png")
-ggsave(
-  my_map, 
-  filename = my.file.name, 
-  width = 0.728*1202/96, height = 1158/96,
-  dpi = 900)
+  my_map, filename = my.file.name,  height = 12, width = my.ratio*12, dpi = 600)
 ```
 
 ### 지도 디자인: 예시
 
 #### 데이터 준비
 
-읍면동 단위 인구밀도도
-
 - 형상 데이터 불러오기: 읍면동 변동을 반영한 데이터
 
 ```{r}
-#| results: hide
-emd_adj <- st_read("D:/My R/Korean Administrative Areas/행정구역 셰이프 파일/3 Generalization/2020_Census_Adj/EMD_2020_Census_GEN_0020.shp", options = "ENCODING=CP949")
+emd_adj <- read_sf("D:/My R/Korean Administrative Areas/행정구역 셰이프 파일/3 Generalization/2020_Census_Adj/EMD_2020_Census_GEN_0020.shp", options = "ENCODING=CP949")
 ```
 
 - 속성 데이터 불러오기: 읍면동 변동을 반영한 데이터
@@ -268,85 +215,64 @@ emd_adj_data <- emd_adj_data |>
   )
 ```
 
-- 지도 제작
+- [**tmap**](https://r-tmap.github.io/tmap/index.html): 지도 제작
 
 ```{r}
-#| fig-height: 8
-#| out-width: 70%
-#| fig-align: center
+#| fig-height: 12
+#| fig-width: 8.882838
 
 bbox_ulleung_polygon <- bbox_ulleung |> 
   st_cast("POLYGON")
 
-my_map <- tm_graticules(col = "white", x = seq(126, 130, 1), y = seq(33, 39, 1)) +
-  tm_shape(bbox_ulleung_polygon) + tm_borders() + tm_fill("gray90") +
-  tm_shape(emd_adj_data, is.master = TRUE) +
-  tm_polygons(col = "pop_den", breaks = c(0, 50, 250, 500, 1000, 5000, 10000, Inf),
-              palette = "YlGnBu", title = "People per square km",
-              # title = expression(paste("People / ", "km"^"2")),
-              border.col = NULL) +
+my_map <- tm_graticules(col = "white", x = seq(126, 130, 1), y = seq(33, 39, 1), labels.size = 0.75) +
+  tm_shape(bbox_ulleung_polygon) + tm_fill(fill = "gray90") +
+  tm_shape(emd_adj_data, is.main = TRUE) +
+  tm_polygons(
+    fill = "pop_den", col = NULL,
+    fill.scale = tm_scale(
+      breaks = c(0, 50, 250, 500, 1000, 5000, 10000, Inf),
+      labels = c("0 - 50", "50 - 250", "250 - 500", "500 - 1,000", 
+                 "1,000 - 5,000", "5,000 - 10,000", "10,000+"),
+      values = "brewer.yl_gn_bu"
+    ),
+    fill.legend = tm_legend(
+      title = expression("People/km"^2), 
+      position = tm_pos_in(0.75, 0.28),
+      title.size = 1.2, text.size = 1
+    )
+  ) +
   tm_shape(sigungu1) + tm_borders() +
   tm_shape(sido_polyline) + tm_lines(col = "black", lwd = 1.75) +
-  tm_shape(bbox_seohae) + tm_lines() +
-  tm_legend(legend.position = c(0.65, 0.06), legend.bg.color = "white",
-            legend.title.size = 1.5, legend.text.size = 1.2) +
-  tm_layout(bg.color = "gray90",
-            title = "Population Distribution, 2020", title.size = 1.8,
-            inner.margins = c(0.07, 0.1, 0.05, 0.07)) +
-  tm_scale_bar(breaks = seq(0, 200, 50), text.size = 0.5, color.dark = "gray60", position = c(0.52, 0.01)) +
-  tm_credits("SANG-IL LEE, Geography Education at SNU, 2024", size = 0.7, position = c(0.025, 0.01))
-
+  tm_shape(bbox_seohae) + tm_borders() +
+  tm_shape(bbox_ulleung_polygon) + tm_borders() +
+  tm_title_in("Population Distribution, 2020", size = 2) +
+  tm_layout(bg.color = "gray90", inner.margins = c(0.05, 0.09, 0.05, 0.05)) +
+  tm_scalebar(breaks = seq(0, 200, 50), text.size = 0.6, color.dark = "gray60", 
+             position = c(0.52, 0.03), allow_clipping = TRUE) +
+  tm_credits("SANG-IL LEE, Geography Education at SNU", size = 0.7, position = c(0.025, 0.02))
 my_map
 ```
 
-```{r}
-#| fig-height: 8
-#| out-width: 70%
-#| fig-align: center
-
-# 위와 같이 설정한다고 해도 Plots 창의 것과 렌더링 이후의 것이 같지 않음(ggplot2와 다른 점). 
-# 렌더링 결과도 동일함(ggplot2와 다른 점.
-
-bbox_ulleung_polygon <- bbox_ulleung |> 
-  st_cast("POLYGON")
-
-my_map <- tm_graticules(col = "white", x = seq(126, 130, 1), y = seq(33, 39, 1)) +
-  tm_shape(bbox_ulleung_polygon) + tm_borders() + tm_fill("gray90") +
-  tm_shape(emd_adj_data, is.master = TRUE) +
-  tm_polygons(col = "pop_den", breaks = c(0, 50, 250, 500, 1000, 5000, 10000, Inf),
-              palette = "YlGnBu", title = "People per square km",
-              # title = expression(paste("People / ", "km"^"2")),
-              border.col = NULL) +
-  tm_shape(sigungu1) + tm_borders() +
-  tm_shape(sido_polyline) + tm_lines(col = "black", lwd = 1.75) +
-  tm_shape(bbox_seohae) + tm_lines() +
-  tm_legend(legend.position = c(0.65, 0.06), legend.bg.color = "white",
-            legend.title.size = 1.5, legend.text.size = 1.2) +
-  tm_layout(bg.color = "gray90",
-            title = "Population Distribution, 2020", title.size = 1.8,
-            inner.margins = c(0.07, 0.1, 0.05, 0.07)) +
-  tm_scale_bar(breaks = seq(0, 200, 50), text.size = 0.5, color.dark = "gray60", position = c(0.52, 0.01)) +
-  tm_credits("SANG-IL LEE, Geography Education at SNU, 2024", size = 0.7, position = c(0.025, 0.01))
-
-my_map
-```
-
-- 저장
+- [**tmap**](https://r-tmap.github.io/tmap/index.html): 지도 저장
 
 ```{r}
 #| echo: false
-my_title <- "10_3_01"
-my.path.name <- "outputs/"
-my.file.name <- paste0(my.path.name, my_title, ".png")
+#| eval: false
+
+my.ratio <- get_asp_ratio(my_map)
+
+my.title <- "9-2-04-1 인구 밀도 지도 tmap"
+my.file.name <- paste0("D:/My Cartography/지도제작/", my.title, ".png")
 tmap_save(
-  my_map, 
-  filename = my.file.name,  
-  height = 12, dpi = 600)
+  my_map, filename = my.file.name,  height = 12, width = my.ratio*12, dpi = 600)
 ```
 
-- `ggplot2`: 지도 제작
+- [**ggplot2**](https://ggplot2.tidyverse.org/): 지도 제작
 
 ```{r}
+#| fig-height: 12
+#| fig-width: 8.9538
+
 emd_adj_data_1 <- emd_adj_data |> 
   mutate(
     pop_den = cut(pop_den, 
@@ -362,80 +288,27 @@ my_map <- ggplot() +
   geom_sf(data = sigungu1, fill = NA) +
   geom_sf(data = sido_polyline) +
   geom_sf(data = bbox_seohae, lwd = 0.1) +
-  theme(
-    legend.position = "inside",
-    legend.position.inside = c(0.85, 0.15),
-    legend.background = element_rect(fill = "white")) +
-  scale_fill_brewer(palette = "YlGnBu", name = expression(paste("People / ", "km"^"2"))) +
-  labs(
-    title = "Population Density, 2020", 
-    x = "", y = "", caption = "SANG-IL LEE, Geography Education at SNU, 2024") +
+  scale_fill_brewer(palette = "YlGnBu", name = expression("People/km"^2)) +
   annotate("text", x = -Inf, y = Inf, hjust = -0.05, vjust = 2, size = 7.5,   
            label = "Population Distribution, 2020") +
   annotate("text", x = -Inf, y = -Inf, hjust = -0.1, vjust = -1.5, size = 3.5,   
-           label = "SANG-IL LEE, Geography Education at SNU, 2024") +
-  annotation_scale(location = "br", bar_cols = c("gray40", "white"), width_hint = 0.4, pad_y = unit(0.5, "cm"))
-my_map
-```
-
-```{r}
-#| fig-height: 8 
-#| out-width: 70%
-#| fig-align: center
-
-# 위와 같이 세 가지를 지정하면 Plots 창에 그려진 것과 거의 동일한 것이 Quarto 렌더링에 나타남(tmap은 다 다름). 
-# 렌더링 결과는 이게 더 좋아 보임.
- 
-emd_adj_data_1 <- emd_adj_data |> 
-  mutate(
-    pop_den = cut(pop_den, 
-                  breaks = c(-Inf, 50, 250, 500, 1000, 5000, 10000, Inf),
-                  labels = c("0 to 50", "50 to 250", "250 to 500", "500 to 1,000", 
-                             "1,000 to 5,000", "5,000 to 10,000", "10,000 or more"))
-  )
-
-my_map <- ggplot() + 
-  geom_sf(data = bbox_ulleung_polygon, fill = "gray92", lwd = 0.1) +
-  geom_sf(
-    data = emd_adj_data_1, aes(fill = pop_den), color = NA) +
-  geom_sf(data = sigungu1, fill = NA) +
-  geom_sf(data = sido_polyline) +
-  geom_sf(data = bbox_seohae, lwd = 0.1) +
+           label = "SANG-IL LEE, Geography Education at SNU") +
+  annotation_scale(location = "br", bar_cols = c("gray40", "white"), 
+                   width_hint = 0.4, pad_y = unit(0.5, "cm")) +
   theme(
     legend.position = "inside",
-    legend.position.inside = c(0.85, 0.18),
-    legend.background = element_rect(fill = "white")) +
-  scale_fill_brewer(palette = "YlGnBu", name = expression(paste("People / ", "km"^"2"))) +
-  labs(x = "", y = "") +
-  annotate("text", x = -Inf, y = Inf, hjust = -0.05, vjust = 2, size = 5,   
-           label = "Population Distribution, 2020") +
-  annotate("text", x = -Inf, y = -Inf, hjust = -0.1, vjust = -1.5, size = 2,   
-           label = "SANG-IL LEE, Geography Education at SNU, 2024") +
-  annotation_scale(location = "br", bar_cols = c("gray40", "white"), width_hint = 0.4, pad_y = unit(0.2, "cm"))
+    legend.position.inside = c(0.85, 0.15),
+    legend.background = element_rect(fill = "white")) 
 my_map
 ```
 
-```{r}
-#| echo: false
-my_title <- "10_3_01_2"
-my.path.name <- "outputs/"
-my.file.name <- paste0(my.path.name, my_title, ".png")
-ggsave(
-  my_map, 
-  filename = my.file.name, width = 8*0.79*2, height = 8*2, scale = 1,
-  dpi = 600)
-```
-
-- `ggplot2`: 저장
+- [**ggplot2**](https://ggplot2.tidyverse.org/): 저장
 
 ```{r}
 #| echo: false
-my_title <- "10_3_01_1"
-my.path.name <- "outputs/"
-my.file.name <- paste0(my.path.name, my_title, ".png")
-ggsave(
-  my_map, 
-  filename = my.file.name, 
-  width = 0.728*1202/96, height = 1158/96,
-  dpi = 600)
+#| eval: false
+
+my.title <- "9-2-04-2 인구 밀도 지도 ggplot"
+my.file.name <- paste0("D:/My Cartography/지도제작/", my.title, ".png")
+ggsave(my_map, filename = my.file.name, height = 12, width = 9, dpi = 600)
 ```
