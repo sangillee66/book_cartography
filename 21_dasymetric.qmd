@@ -116,6 +116,9 @@ landcover_color <- c("주거지역" = "#fee6c2",
 - 지도 제작
 
 ```{r}
+#| fig-height: 12
+#| fig-width: 14.65581
+#| fig-dpi: 600
 my_map <- tm_shape(seoul_landcover) + 
   tm_polygons(
     fill = "L2_NAME", col = NULL, 
@@ -125,6 +128,7 @@ my_map <- tm_shape(seoul_landcover) +
     fill.legend = tm_legend_hide()
   ) +
   tm_shape(seoul_gu) + tm_borders() +
+  tm_layout(inner.margins = c(0.05, 0.05, 0.05, 0.05)) +   
   tm_scalebar(color.dark = "gray60", position = c(0.025, 0.025), 
               breaks = seq(0, 20, 5), allow_clipping = TRUE
   ) + 
@@ -137,30 +141,15 @@ my_map
 - 저장
 
 ```{r}
-my_map <- tm_shape(seoul_landcover) + 
-  tm_polygons(col = "L2_NAME", style = "cat", palette = landcover_color, border.alpha = 0, legend.show = FALSE) +
-  tm_shape(seoul_gu) + tm_borders() +
-  tm_layout(
-    title.size = 2,
-    inner.margins = c(0.05, 0.04, 0.04, 0.04), 
-    title.position = c(0.02, 0.97)
-  ) +
-  tm_scale_bar(
-    color.dark = "gray60",
-    text.size = 0.6,
-    breaks = seq(0, 20, 5),
-    position = c(0.03, 0.01)) + 
-  tm_credits(
-    "SANG-IL LEE, Geography Education at SNU, 2024", 
-    size = 0.7, position = c(0.75, 0.01)
-  )
-my_title <- "17_1_02"
-my.path.name <- "D:/R_Books/Cartography/outputs/"
-my.file.name <- paste0(my.path.name, my_title, ".jpg")
+#| echo: false
+#| eval: false
+
+my.ratio <- get_asp_ratio(my_map)
+
+my.title <- "21_1_01 서울 토지이용도 tmap"
+my.file.name <- paste0("D:/My Cartography/지도제작/", my.title, ".png")
 tmap_save(
-  my_map, 
-  filename = my.file.name, width = 12.1, dpi = 600
-)
+  my_map, filename = my.file.name,  height = 12, width = my.ratio*12, dpi = 600)
 ```
 
 #### 대시메트릭 매핑
@@ -173,17 +162,14 @@ seoul_landcover_1 <- seoul_landcover |>
   filter(
     L2_NAME %in% c("주거지역", "상업지역")
   )
-# qtm(seoul_landcover_1)
 
 # 데이터 유니언
 seoul_landcover_2 <- st_union(seoul_landcover_1) |> 
   st_as_sf()
-# qtm(seoul_landcover_2)
 
 # 데이터 인터섹션: 토지피복도(주거와 상업만)를 동으로 분할하고, 속성을 전이함
 seoul_landcover_3 <- st_intersection(seoul_landcover_2, my_df) |> 
   st_as_sf()
-# qtm(seoul_landcover_3)
 ```
 
 - 인구밀도 재계산
@@ -202,53 +188,41 @@ seoul_landcover_3 <- seoul_landcover_3 |>
 - 지도 제작
 
 ```{r}
-my_map <- tm_shape(seoul_gu) + tm_borders() +
-  tm_shape(seoul_landcover_3) + 
-  tm_polygons(col = "pop_den_t", style = "fixed", palette = "Oranges", 
-              border.alpha = 0,
-              breaks = c(-Inf, 10000, 15000, 20000, 25000, 30000, 40000, Inf), legend.show = FALSE
-              ) +
-  tm_scale_bar(
-    color.dark = "gray60",
-    text.size = 0.25,
-    breaks = seq(0, 10, 2),
-    position = c(0.03, 0.01)) + 
-  tm_credits(
-    "SANG-IL LEE, Geography Education at SNU, 2024", 
-    size = 0.3, position = c(0.78, 0.01)
+#| fig-height: 12
+#| fig-width: 15.05719
+#| fig-dpi: 600
+my_map <- tm_shape(seoul_landcover_3) +
+  tm_polygons(
+    fill = "pop_den_t", fill_alpha = 1, col = NULL, lwd = 0.75,  
+    fill.scale = tm_scale_intervals(
+      breaks = c(-Inf, 10000, 15000, 20000, 25000, 30000, 40000, Inf), 
+      values = "brewer.oranges"
+    ),
+    fill.legend = tm_legend_hide()
+  ) +
+  tm_shape(seoul_gu, is.main = TRUE) + tm_borders(col = "gray20", lwd = 1.75) +
+  tm_layout(inner.margins = c(0.05, 0.05, 0.05, 0.05)) +
+  tm_scalebar(color.dark = "gray60", position = c(0.025, 0.025), 
+              breaks = seq(0, 20, 5), allow_clipping = TRUE
+  ) + 
+  tm_credits("SANG-IL LEE, Geography Education at SNU", 
+             size = 0.7, position = c(0.82, 0.025)
   )
-my_map
+my_map 
 ```
 
 - 저장
 
 ```{r}
-my_map <- tm_shape(seoul_gu) + tm_borders() +
-  tm_shape(seoul_landcover_3) + 
-  tm_polygons(col = "pop_den_t", style = "fixed", palette = "Oranges", 
-              border.alpha = 0,
-              breaks = c(-Inf, 10000, 15000, 20000, 25000, 30000, 40000, Inf), legend.show = FALSE
-              ) +
-  tm_layout(
-    title.size = 2,
-    inner.margins = c(0.05, 0.04, 0.04, 0.04), 
-    title.position = c(0.02, 0.97)
-  ) +
-  tm_scale_bar(
-    color.dark = "gray60",
-    text.size = 0.6,
-    breaks = seq(0, 20, 5),
-    position = c(0.03, 0.01)) + 
-  tm_credits(
-    "SANG-IL LEE, Geography Education at SNU, 2024", 
-    size = 0.7, position = c(0.75, 0.01)
-  )
-my_title <- "17_1_01"
-my.path.name <- "D:/R_Books/Cartography/outputs/"
-my.file.name <- paste0(my.path.name, my_title, ".jpg")
+#| echo: false
+#| eval: false
+
+my.ratio <- get_asp_ratio(my_map)
+
+my.title <- "21_1_02 서울 대시매트릭 맵 tmap"
+my.file.name <- paste0("D:/My Cartography/지도제작/", my.title, ".png")
 tmap_save(
-  my_map, 
-  filename = my.file.name, width = 12.1, dpi = 600)  
+  my_map, filename = my.file.name,  height = 12, width = my.ratio*12, dpi = 600)
 ```
 
 #### 점밀도도 대시매트릭 매핑
@@ -265,19 +239,18 @@ my_seoul_point <- seoul_landcover_3 |>
 - 지도 제작
 
 ```{r}
-my_map <- tm_shape(my_df) + 
-  tm_borders(col = "gray10", lwd = 0.25) +
-  tm_shape(my_seoul_point) + 
-  tm_dots(size = 0.005, alpha = 0.75, col = "#a63603") +
-  tm_shape(seoul_gu) + tm_borders(col = "gray10", lwd = 0.75) +
-  tm_scale_bar(
-    color.dark = "gray60",
-    text.size = 0.25,
-    breaks = seq(0, 10, 2),
-    position = c(0.03, 0.01)) + 
-  tm_credits(
-    "SANG-IL LEE, Geography Education at SNU, 2024", 
-    size = 0.3, position = c(0.78, 0.01)
+#| fig-height: 12
+#| fig-width: 14.65581
+#| fig-dpi: 600
+my_map <- tm_shape(my_df) + tm_borders(col = "gray10", lwd = 0.75) +
+  tm_shape(my_seoul_point) + tm_dots(size = 0.15, fill_alpha = 0.75, fill = "#a63603") +
+  tm_shape(seoul_gu) + tm_borders(col = "gray10", lwd = 1.75) +
+  tm_layout(inner.margins = c(0.05, 0.05, 0.05, 0.05)) +
+  tm_scalebar(color.dark = "gray60", position = c(0.025, 0.025), 
+              breaks = seq(0, 20, 5), allow_clipping = TRUE
+  ) + 
+  tm_credits("SANG-IL LEE, Geography Education at SNU", 
+             size = 0.7, position = c(0.82, 0.025)
   )
 my_map
 ```
@@ -285,12 +258,13 @@ my_map
 - 저장
 
 ```{r}
-my_title <- "17_1_03"
-my.path.name <- "D:/R_Books/Cartography/outputs/"
-my.file.name <- paste0(my.path.name, my_title, ".png")
+#| echo: false
+#| eval: false
+
+my.ratio <- get_asp_ratio(my_map)
+
+my.title <- "21_1_03 서울 대시매트릭 맵 tmap"
+my.file.name <- paste0("D:/My Cartography/지도제작/", my.title, ".png")
 tmap_save(
-  my_map, 
-  filename = my.file.name, 
-  width = 5.75, 
-  dpi = 1200)
+  my_map, filename = my.file.name,  height = 12, width = my.ratio*12, dpi = 600)
 ```

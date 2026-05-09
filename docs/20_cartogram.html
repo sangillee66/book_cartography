@@ -230,7 +230,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./12_other.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">원통 도법</span></span></a>
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">기타 도법</span></span></a>
   </div>
 </li>
       </ul>
@@ -375,7 +375,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <div>
     <div class="quarto-title-meta-heading">Modified</div>
     <div class="quarto-title-meta-contents">
-      <p class="date-modified">May 4, 2026</p>
+      <p class="date-modified">May 9, 2026</p>
     </div>
   </div>
     
@@ -413,17 +413,17 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li>기하 데이터 불러오기</li>
 </ul>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">sido</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_read.html">st_read</a></span><span class="op">(</span><span class="st">"D:/My R/Korean Administrative Areas/행정구역 셰이프 파일/3 Generalization/2020_2Q/SIDO_2020_2Q_GEN_0050.shp"</span>, options <span class="op">=</span> <span class="st">"ENCODING=CP949"</span><span class="op">)</span></span>
-<span><span class="va">sigun1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_read.html">st_read</a></span><span class="op">(</span><span class="st">"D:/My R/Korean Administrative Areas/행정구역 셰이프 파일/3 Generalization/2020_2Q/SIGUN1_2020_2Q_GEN_0050.shp"</span>, options <span class="op">=</span> <span class="st">"ENCODING=CP949"</span><span class="op">)</span></span>
-<span><span class="va">sigungu1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_read.html">st_read</a></span><span class="op">(</span><span class="st">"D:/My R/Korean Administrative Areas/행정구역 셰이프 파일/3 Generalization/2020_2Q/SIGUNGU1_2020_2Q_GEN_0050.shp"</span>, options <span class="op">=</span> <span class="st">"ENCODING=CP949"</span><span class="op">)</span></span>
-<span><span class="va">emd</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_read.html">st_read</a></span><span class="op">(</span><span class="st">"D:/My R/Korean Administrative Areas/행정구역 셰이프 파일/3 Generalization/2020_2Q/EMD_2020_2Q_GEN_0050.shp"</span>, options <span class="op">=</span> <span class="st">"ENCODING=CP949"</span><span class="op">)</span></span>
-<span><span class="va">sido_polyline</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_read.html">st_read</a></span><span class="op">(</span><span class="st">"D:/My R/Korean Administrative Areas/행정구역 셰이프 파일/3 Generalization/2020_2Q/SIDO_Polyline_2020_2Q_GEN_0050.shp"</span>, options <span class="op">=</span> <span class="st">"ENCODING=CP949"</span><span class="op">)</span></span>
-<span><span class="va">bbox_ulleung</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_read.html">st_read</a></span><span class="op">(</span><span class="st">"D:/My R/Korean Administrative Areas/행정구역 셰이프 파일/3 Generalization/2020_2Q/BBOX_Ulleung_2020_2Q_GEN_0050.shp"</span>, options <span class="op">=</span> <span class="st">"ENCODING=CP949"</span><span class="op">)</span></span>
-<span><span class="va">bbox_seohae</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_read.html">st_read</a></span><span class="op">(</span><span class="st">"D:/My R/Korean Administrative Areas/행정구역 셰이프 파일/3 Generalization/2020_2Q/BBOX_Seohae3_2020_2Q_GEN_0050.shp"</span>, options <span class="op">=</span> <span class="st">"ENCODING=CP949"</span><span class="op">)</span></span>
-<span><span class="va">seoul_gu</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_read.html">st_read</a></span><span class="op">(</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">sido</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_read.html">read_sf</a></span><span class="op">(</span><span class="st">"D:/My R/Korean Administrative Areas/행정구역 셰이프 파일/3 Generalization/2020_2Q/SIDO_2020_2Q_GEN_0050.shp"</span>, options <span class="op">=</span> <span class="st">"ENCODING=CP949"</span><span class="op">)</span></span>
+<span><span class="va">sigun1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_read.html">read_sf</a></span><span class="op">(</span><span class="st">"D:/My R/Korean Administrative Areas/행정구역 셰이프 파일/3 Generalization/2020_2Q/SIGUN1_2020_2Q_GEN_0050.shp"</span>, options <span class="op">=</span> <span class="st">"ENCODING=CP949"</span><span class="op">)</span></span>
+<span><span class="va">sigungu1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_read.html">read_sf</a></span><span class="op">(</span><span class="st">"D:/My R/Korean Administrative Areas/행정구역 셰이프 파일/3 Generalization/2020_2Q/SIGUNGU1_2020_2Q_GEN_0050.shp"</span>, options <span class="op">=</span> <span class="st">"ENCODING=CP949"</span><span class="op">)</span></span>
+<span><span class="va">emd</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_read.html">read_sf</a></span><span class="op">(</span><span class="st">"D:/My R/Korean Administrative Areas/행정구역 셰이프 파일/3 Generalization/2020_2Q/EMD_2020_2Q_GEN_0050.shp"</span>, options <span class="op">=</span> <span class="st">"ENCODING=CP949"</span><span class="op">)</span></span>
+<span><span class="va">sido_polyline</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_read.html">read_sf</a></span><span class="op">(</span><span class="st">"D:/My R/Korean Administrative Areas/행정구역 셰이프 파일/3 Generalization/2020_2Q/SIDO_Polyline_2020_2Q_GEN_0050.shp"</span>, options <span class="op">=</span> <span class="st">"ENCODING=CP949"</span><span class="op">)</span></span>
+<span><span class="va">bbox_ulleung</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_read.html">read_sf</a></span><span class="op">(</span><span class="st">"D:/My R/Korean Administrative Areas/행정구역 셰이프 파일/3 Generalization/2020_2Q/BBOX_Ulleung_2020_2Q_GEN_0050.shp"</span>, options <span class="op">=</span> <span class="st">"ENCODING=CP949"</span><span class="op">)</span></span>
+<span><span class="va">bbox_seohae</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_read.html">read_sf</a></span><span class="op">(</span><span class="st">"D:/My R/Korean Administrative Areas/행정구역 셰이프 파일/3 Generalization/2020_2Q/BBOX_Seohae3_2020_2Q_GEN_0050.shp"</span>, options <span class="op">=</span> <span class="st">"ENCODING=CP949"</span><span class="op">)</span></span>
+<span><span class="va">seoul_gu</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_read.html">read_sf</a></span><span class="op">(</span></span>
 <span>  <span class="st">"D:/My R/Korean Administrative Areas/행정구역 셰이프 파일/2 Original Cleaning/2021_4Q/SEOUL_GU_2021_4Q.shp"</span>, options <span class="op">=</span> <span class="st">"ENCODING=CP949"</span></span>
 <span>  <span class="op">)</span> </span>
-<span><span class="va">seoul_sido</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_read.html">st_read</a></span><span class="op">(</span></span>
+<span><span class="va">seoul_sido</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_read.html">read_sf</a></span><span class="op">(</span></span>
 <span>  <span class="st">"D:/My R/Korean Administrative Areas/행정구역 셰이프 파일/2 Original Cleaning/2021_4Q/SEOUL_SIDO_2021_4Q.shp"</span>, options <span class="op">=</span> <span class="st">"ENCODING=CP949"</span></span>
 <span>  <span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
