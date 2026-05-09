@@ -32,19 +32,20 @@ library(tidyverse)
 library(readxl) 
 library(sf) 
 library(tmap) 
+library(tmaptools)
 ```
 
 - 도형 데이터: 서울 행정구역
 
 ```{r}
 #| results: hide
-seoul_EMD_2020 <- st_read(
+seoul_EMD_2020 <- read_sf(
   "D:/My R/Korean Administrative Areas/행정구역 셰이프 파일/2 Original Cleaning/2020_2Q/SEOUL_EMD_2020_2Q.shp", options = "ENCODING=CP949"
   ) 
-seoul_gu <- st_read(
+seoul_gu <- read_sf(
   "D:/My R/Korean Administrative Areas/행정구역 셰이프 파일/2 Original Cleaning/2021_4Q/SEOUL_GU_2021_4Q.shp", options = "ENCODING=CP949"
   ) 
-seoul_sido <- st_read(
+seoul_sido <- read_sf(
   "D:/My R/Korean Administrative Areas/행정구역 셰이프 파일/2 Original Cleaning/2021_4Q/SEOUL_SIDO_2021_4Q.shp", options = "ENCODING=CP949"
   )
 ```
@@ -81,8 +82,7 @@ my_df <- my_df |>
 
 ```{r}
 #| results: hide
-seoul_landcover <- st_read("D:/My R/Vector Data Manipulation Korea/Korea_Landcover/seoul_landcover_M_2023.shp", options = "ENCODING=CP949")
-qtm(seoul_landcover)
+seoul_landcover <- read_sf("D:/My R/Vector Data Manipulation Korea/Korea_Landcover/seoul_landcover_M_2023.shp", options = "ENCODING=CP949")
 ```
 
 - 색상의 지정: <https://egis.me.go.kr/intro/land.do>
@@ -117,16 +117,19 @@ landcover_color <- c("주거지역" = "#fee6c2",
 
 ```{r}
 my_map <- tm_shape(seoul_landcover) + 
-  tm_polygons(col = "L2_NAME", style = "cat", palette = landcover_color, border.alpha = 0, legend.show = FALSE) +
+  tm_polygons(
+    fill = "L2_NAME", col = NULL, 
+    fill.scale = tm_scale_categorical(
+      values = landcover_color
+    ),
+    fill.legend = tm_legend_hide()
+  ) +
   tm_shape(seoul_gu) + tm_borders() +
-  tm_scale_bar(
-    color.dark = "gray60",
-    text.size = 0.25,
-    breaks = seq(0, 10, 2),
-    position = c(0.03, 0.01)) + 
-  tm_credits(
-    "SANG-IL LEE, Geography Education at SNU, 2024", 
-    size = 0.3, position = c(0.78, 0.01)
+  tm_scalebar(color.dark = "gray60", position = c(0.025, 0.025), 
+              breaks = seq(0, 20, 5), allow_clipping = TRUE
+  ) + 
+  tm_credits("SANG-IL LEE, Geography Education at SNU", 
+             size = 0.7, position = c(0.82, 0.025)
   )
 my_map
 ```
