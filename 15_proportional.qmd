@@ -444,8 +444,8 @@ my_map <- tm_shape(my_sg_data) + tm_borders() +
   tm_title_in(text = "Population Distribution, 2020", size = 1.8) +
   tm_layout(inner.margins = c(0.05, 0.025, 0.07, 0.05)) +
   tm_scalebar(breaks = seq(0, 200, 50), text.size = 0.6, color.dark = "gray60", 
-             position = c(0.52, 0.03), allow_clipping = TRUE) +
-  tm_credits("SANG-IL LEE, Geography Education at SNU", size = 0.7, position = c(0.025, 0.02))
+             position = c(0.025, 0.03), allow_clipping = TRUE) +
+  tm_credits("SANG-IL LEE, Geography Education at SNU", size = 0.7, position = c(0.69, 0.02))
 my_map
 ```
 
@@ -506,8 +506,8 @@ my_map <- tm_shape(my_sg_data_1) + tm_borders() +
   tm_title_in(text = "Population Distribution, 2020", size = 1.8) +
   tm_layout(inner.margins = c(0.05, 0.025, 0.07, 0.05)) +
   tm_scalebar(breaks = seq(0, 200, 50), text.size = 0.6, color.dark = "gray60", 
-             position = c(0.52, 0.03), allow_clipping = TRUE) +
-  tm_credits("SANG-IL LEE, Geography Education at SNU", size = 0.7, position = c(0.025, 0.02))
+             position = c(0.025, 0.03), allow_clipping = TRUE) +
+  tm_credits("SANG-IL LEE, Geography Education at SNU", size = 0.7, position = c(0.69, 0.02))
 my_map
 ```
 
@@ -582,7 +582,7 @@ my_map
 
 my.ratio <- get_asp_ratio(my_map)
 
-my.title <- "10_2_06 혼합 tmap"
+my.title <- "10_2_07 혼합 tmap"
 my.file.name <- paste0("D:/My Cartography/지도제작/", my.title, ".png")
 tmap_save(
   my_map, filename = my.file.name,  height = 12, width = my.ratio*12, dpi = 600)

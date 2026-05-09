@@ -104,9 +104,6 @@ gangwon_point_500 <- gangwon_emd_data |>
 - 케이스 1(250, 0.1): 지도 제작
 
 ```{r}
-#| fig-height: 12
-#| fig-width: 13.75384
-#| fig-dpi: 600
 my_map <- tm_shape(gangwon_sgg) + tm_borders() +
   tm_shape(gangwon_point_250) + 
   tm_dots(size = 0.3, fill_alpha = 0.75, fill = "black") +
@@ -228,3 +225,4 @@ my.file.name <- paste0("D:/My Cartography/지도제작/", my.title, ".png")
 tmap_save(
   my_map, filename = my.file.name,  height = 12, width = my.ratio*12, dpi = 600)
 ```
+
