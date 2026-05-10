@@ -55,7 +55,7 @@ seoul_sido <- read_sf(
 
 #### 단위점의 수치와 크기: 강원도의 사례
 
-- 강원도 형상 데이터
+- 강원도 기하 데이터
 
 ```{r}
 gangwon_emd <- emd |> 
@@ -110,7 +110,7 @@ gangwon_point_500 <- gangwon_emd_data |>
 my_map <- tm_shape(gangwon_sgg) + tm_borders() +
   tm_shape(gangwon_point_250) + 
   tm_dots(size = 0.3, fill_alpha = 0.75, fill = "black") +
-  tm_title_in(text = "Dot Value: 250\n Dot Size: 0.10", size = 1.8) +
+  tm_title_in(text = "Dot Value: 250\nDot Size: 0.10", size = 1.8) +
   tm_layout(inner.margins = c(0.05, 0.05, 0.05, 0.05)) +
   tm_scalebar(color.dark = "gray60", text.size = 0.6, position = c(0.015, 0.030), 
               breaks = seq(0, 50, 10), allow_clipping = TRUE) + 
@@ -142,7 +142,7 @@ tmap_save(
 my_map <- tm_shape(gangwon_sgg) + tm_borders() +
   tm_shape(gangwon_point_50) + 
   tm_dots(size = 0.15, fill_alpha = 0.75, fill = "black") +
-  tm_title_in(text = "Dot Value: 250\n Dot Size: 0.10", size = 1.8) +
+  tm_title_in(text = "Dot Value: 50\nDot Size: 0.05", size = 1.8) +
   tm_layout(inner.margins = c(0.05, 0.05, 0.05, 0.05)) +
   tm_scalebar(color.dark = "gray60", text.size = 0.6, position = c(0.015, 0.030), 
               breaks = seq(0, 50, 10), allow_clipping = TRUE) + 
@@ -174,7 +174,7 @@ tmap_save(
 my_map <- tm_shape(gangwon_sgg) + tm_borders() +
   tm_shape(gangwon_point_500) + 
   tm_dots(size = 0.15, fill_alpha = 0.75, fill = "black") +
-  tm_title_in(text = "Dot Value: 250\n Dot Size: 0.10", size = 1.8) +
+  tm_title_in(text = "Dot Value: 500\nDot Size: 0.05", size = 1.8) +
   tm_layout(inner.margins = c(0.05, 0.05, 0.05, 0.05)) +
   tm_scalebar(color.dark = "gray60", text.size = 0.6, position = c(0.015, 0.030), 
               breaks = seq(0, 50, 10), allow_clipping = TRUE) + 
@@ -206,7 +206,7 @@ tmap_save(
 my_map <- tm_shape(gangwon_sgg) + tm_borders() +
   tm_shape(gangwon_point_250) + 
   tm_dots(size = 0.15, fill_alpha = 0.75, fill = "black") +
-  tm_title_in(text = "Dot Value: 250\n Dot Size: 0.10", size = 1.8) +
+  tm_title_in(text = "Dot Value: 250\nDot Size: 0.05", size = 1.8) +
   tm_layout(inner.margins = c(0.05, 0.05, 0.05, 0.05)) +
   tm_scalebar(color.dark = "gray60", text.size = 0.6, position = c(0.015, 0.030), 
               breaks = seq(0, 50, 10), allow_clipping = TRUE) + 
