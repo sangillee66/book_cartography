@@ -477,7 +477,7 @@ my_map <- tm_shape(grat_bb_m, crs = "+proj=robin") + tm_borders(lwd = 1) +
     bg = TRUE, bg.color = "grey95", bg.alpha = 1
   ) +  
   tm_layout(inner.margins = c(0.01, 0.01, 0.02, 0.01), frame = FALSE) +
-  tm_credits("SANG-IL LEE, Geography Education at SNU", size = 0.7, position = c(0.55, 0.02))
+  tm_credits("SANG-IL LEE, Geography Education at SNU", size = 0.7, position = c(0.87, 0.02))
 my_map
 ```
 
@@ -528,7 +528,7 @@ my_map <- tm_shape(grat_bb_m, crs = "+proj=robin") + tm_borders(lwd = 1) +
     bg = TRUE, bg.color = "grey95", bg.alpha = 1
   ) +  
   tm_layout(inner.margins = c(0.01, 0.01, 0.02, 0.01), frame = FALSE) +
-  tm_credits("SANG-IL LEE, Geography Education at SNU", size = 0.7, position = c(0.55, 0.02))
+  tm_credits("SANG-IL LEE, Geography Education at SNU", size = 0.7, position = c(0.87, 0.02))
 my_map
 ```
 
@@ -579,7 +579,7 @@ my_map <- tm_shape(grat_bb_m, crs = "+proj=robin") + tm_borders(lwd = 1) +
     bg = TRUE, bg.color = "grey95", bg.alpha = 1
   ) +  
   tm_layout(inner.margins = c(0.01, 0.01, 0.02, 0.01), frame = FALSE) +
-  tm_credits("SANG-IL LEE, Geography Education at SNU", size = 0.7, position = c(0.55, 0.02))
+  tm_credits("SANG-IL LEE, Geography Education at SNU", size = 0.7, position = c(0.87, 0.02))
 my_map
 ```
 
@@ -630,7 +630,7 @@ my_map <- tm_shape(grat_bb_m, crs = "+proj=robin") + tm_borders(lwd = 1) +
     bg = TRUE, bg.color = "grey95", bg.alpha = 1
   ) +  
   tm_layout(inner.margins = c(0.01, 0.01, 0.02, 0.01), frame = FALSE) +
-  tm_credits("SANG-IL LEE, Geography Education at SNU", size = 0.7, position = c(0.55, 0.02))
+  tm_credits("SANG-IL LEE, Geography Education at SNU", size = 0.7, position = c(0.87, 0.02))
 my_map
 ```
 
@@ -699,7 +699,7 @@ my_map <- tm_shape(grat_bb_m, crs = "+proj=robin") + tm_borders(lwd = 1) +
     bg = TRUE, bg.color = "grey95", bg.alpha = 1
   ) +  
   tm_layout(inner.margins = c(0.01, 0.01, 0.02, 0.01), frame = FALSE) +
-  tm_credits("SANG-IL LEE, Geography Education at SNU", size = 0.7, position = c(0.55, 0.02))
+  tm_credits("SANG-IL LEE, Geography Education at SNU", size = 0.7, position = c(0.87, 0.02))
 my_map
 ```
 
@@ -752,7 +752,7 @@ my_map <- tm_shape(grat_bb_m, crs = "+proj=robin") + tm_borders(lwd = 1) +
     bg = TRUE, bg.color = "grey95", bg.alpha = 1
   ) +  
   tm_layout(inner.margins = c(0.01, 0.01, 0.02, 0.01), frame = FALSE) +
-  tm_credits("SANG-IL LEE, Geography Education at SNU", size = 0.7, position = c(0.55, 0.02))
+  tm_credits("SANG-IL LEE, Geography Education at SNU", size = 0.7, position = c(0.87, 0.02))
 my_map
 ```
 
@@ -805,7 +805,7 @@ my_map <- tm_shape(grat_bb_m, crs = "+proj=robin") + tm_borders(lwd = 1) +
     bg = TRUE, bg.color = "grey95", bg.alpha = 1
   ) +  
   tm_layout(inner.margins = c(0.01, 0.01, 0.02, 0.01), frame = FALSE) +
-  tm_credits("SANG-IL LEE, Geography Education at SNU", size = 0.7, position = c(0.55, 0.02))
+  tm_credits("SANG-IL LEE, Geography Education at SNU", size = 0.7, position = c(0.87, 0.02))
 my_map
 ```
 
@@ -858,7 +858,7 @@ my_map <- tm_shape(grat_bb_m, crs = "+proj=robin") + tm_borders(lwd = 1) +
     bg = TRUE, bg.color = "grey95", bg.alpha = 1
   ) +  
   tm_layout(inner.margins = c(0.01, 0.01, 0.02, 0.01), frame = FALSE) +
-  tm_credits("SANG-IL LEE, Geography Education at SNU", size = 0.7, position = c(0.55, 0.02))
+  tm_credits("SANG-IL LEE, Geography Education at SNU", size = 0.7, position = c(0.87, 0.02))
 my_map
 ```
 
@@ -900,7 +900,7 @@ my_map <- tm_shape(grat_bb_m, crs = "+proj=robin") + tm_borders(lwd = 1) +
   ) +
   tm_shape(tiny_m) + tm_dots(size = 0.01) +
   tm_layout(inner.margins = c(0.01, 0.01, 0.02, 0.01), frame = FALSE) +
-  tm_credits("SANG-IL LEE, Geography Education at SNU", size = 0.7, position = c(0.55, 0.02))
+  tm_credits("SANG-IL LEE, Geography Education at SNU", size = 0.7, position = c(0.87, 0.02))
 my_map
 ```
 

@@ -142,7 +142,7 @@ seoul_gu_pop <- seoul_gu |>
 seoul_gu_cent <- st_centroid(seoul_gu_pop)
 my_map <- tm_shape(seoul_gu) + tm_polygons() +
   tm_shape(seoul_gu_cent) + 
-  tm_dots(size = 0.5) +
+  tm_dots(size = 1) +
   tm_layout(inner.margins = c(0.05, 0.05, 0.05, 0.05)) +
   tm_scalebar(color.dark = "gray60", text.size = 0.6, position = c(0.015, 0.030), 
               breaks = seq(0, 20, 5), allow_clipping = TRUE) + 
