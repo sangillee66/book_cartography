@@ -155,7 +155,7 @@ my_map <- tm_shape(seoul_df) +
       values = "brewer.bu_pu"
     ),
     fill.legend = tm_legend(
-      title = "One Person (2020)", title.size = 1.2, 
+      title = "One-Person (%)", title.size = 1.2, 
       title.align = "center", 
       text.size = 1, item.space = 0
     ),
@@ -206,7 +206,7 @@ my_map <- tm_shape(seoul_df) +
       label.format = tm_label_format(digits = 1)
     ),
     fill.legend = tm_legend(
-      title = "One Person (2020)", title.size = 1.2, 
+      title = "One-Person (%)", title.size = 1.2, 
       title.align = "center", 
       text.size = 1, item.space = 0
     ),
@@ -257,7 +257,7 @@ my_map <- tm_shape(seoul_df) +
       label.format = tm_label_format(digits = 1)
     ),
     fill.legend = tm_legend(
-      title = "One Person (2020)", title.size = 1.2, 
+      title = "One-Person (%)", title.size = 1.2, 
       title.align = "center", 
       text.size = 1, item.space = 0
     ),
@@ -308,7 +308,7 @@ my_map <- tm_shape(seoul_df) +
       label.format = tm_label_format(digits = 1)
     ),
     fill.legend = tm_legend(
-      title = "One Person (2020)", title.size = 1.2, 
+      title = "One-Person (%)", title.size = 1.2, 
       title.align = "center", 
       text.size = 1, item.space = 0
     ),
@@ -357,7 +357,7 @@ my_map <- tm_shape(seoul_df) +
       label.format = tm_label_format(digits = 1)
     ),
     fill.legend = tm_legend(
-      title = "One Person (2020)", title.size = 1.2, 
+      title = "One-Person (%)", title.size = 1.2, 
       title.align = "center", 
       text.size = 1, item.space = 0
     ),
@@ -407,7 +407,7 @@ my_map <- tm_shape(seoul_df) +
       label.format = tm_label_format(digits = 0)
     ),
     fill.legend = tm_legend(
-      title = "One Person (2020)", title.size = 1.2, 
+      title = "One-Person (%)", title.size = 1.2, 
       title.align = "center", 
       text.size = 1, item.space = 0, height = 20
     )
@@ -1089,7 +1089,7 @@ my_map <- tm_shape(seoul_df) +
       values = "brewer.bu_pu"
     ),
     fill.legend = tm_legend(
-      title = "One Person (%)", frame = FALSE, position = c(0.86, 0.22), 
+      title = "One-Person (%)", frame = FALSE, position = c(0.86, 0.22), 
       title.size = 1.2, text.size = 1, item.space = 0
     )
   ) +
