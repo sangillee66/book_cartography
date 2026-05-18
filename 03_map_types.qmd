@@ -308,7 +308,7 @@ my_map <- tm_shape(my_df) +
       values = "brewer.bu_pu"
     ),
     fill.legend = tm_legend(
-      title = "One Person", frame = FALSE, position = c(0.86, 0.22), 
+      title = "One-Person (%)", frame = FALSE, position = c(0.86, 0.22), 
       title.size = 1.2, text.size = 1, item.space = 0
     )
   ) +

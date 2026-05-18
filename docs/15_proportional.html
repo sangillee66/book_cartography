@@ -366,6 +366,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <ul class="collapse">
 <li><a href="#%EC%9D%B8%EA%B5%AC%EA%B7%9C%EB%AA%A8%EC%99%80-%EC%9D%B8%EA%B5%AC%EC%84%B1%EC%9E%A5%EB%A5%A0-1" id="toc-인구규모와-인구성장률-1" class="nav-link" data-scroll-target="#%EC%9D%B8%EA%B5%AC%EA%B7%9C%EB%AA%A8%EC%99%80-%EC%9D%B8%EA%B5%AC%EC%84%B1%EC%9E%A5%EB%A5%A0-1"><span class="header-section-number">15.3.1</span> 인구규모와 인구성장률 1</a></li>
   <li><a href="#%EC%9D%B8%EA%B5%AC%EA%B7%9C%EB%AA%A8%EC%99%80-%EC%9D%B8%EA%B5%AC%EC%84%B1%EC%9E%A5%EB%A5%A0-2" id="toc-인구규모와-인구성장률-2" class="nav-link" data-scroll-target="#%EC%9D%B8%EA%B5%AC%EA%B7%9C%EB%AA%A8%EC%99%80-%EC%9D%B8%EA%B5%AC%EC%84%B1%EC%9E%A5%EB%A5%A0-2"><span class="header-section-number">15.3.2</span> 인구규모와 인구성장률 2</a></li>
+  <li><a href="#%ED%8C%8C%EC%9D%B4%EC%B0%A8%ED%8A%B8-%EC%A7%80%EB%8F%84" id="toc-파이차트-지도" class="nav-link" data-scroll-target="#%ED%8C%8C%EC%9D%B4%EC%B0%A8%ED%8A%B8-%EC%A7%80%EB%8F%84"><span class="header-section-number">15.3.3</span> 파이차트 지도</a></li>
   </ul>
 </li>
   </ul></nav>
@@ -392,7 +393,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <div>
     <div class="quarto-title-meta-heading">Modified</div>
     <div class="quarto-title-meta-contents">
-      <p class="date-modified">May 9, 2026</p>
+      <p class="date-modified">May 18, 2026</p>
     </div>
   </div>
     
@@ -1046,10 +1047,178 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <ul>
 <li>저장</li>
-</ul>
+</ul></section><section id="파이차트-지도" class="level3" data-number="15.3.3"><h3 data-number="15.3.3" class="anchored" data-anchor-id="파이차트-지도">
+<span class="header-section-number">15.3.3</span> 파이차트 지도</h3>
+<section id="데이터" class="level4" data-number="15.3.3.1"><h4 data-number="15.3.3.1" class="anchored" data-anchor-id="데이터">
+<span class="header-section-number">15.3.3.1</span> 데이터</h4>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb22"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org">tidyverse</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://r-spatial.github.io/sf/">sf</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">SD_shp</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_read.html">read_sf</a></span><span class="op">(</span><span class="st">"D:/My R/Korean Administrative Areas/행정구역 셰이프 파일/3 Generalization/2023_2Q/NOT_MOVE/SIDO_NM_2023_2Q_GEN_0050.shp"</span>, options <span class="op">=</span> <span class="st">"ENCODING=CP949"</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb23"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://httr2.r-lib.org">httr2</a></span><span class="op">)</span></span>
+<span><span class="va">data_api</span> <span class="op">&lt;-</span> <span class="va">my_url</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://httr2.r-lib.org/reference/request.html">request</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://httr2.r-lib.org/reference/req_perform.html">req_perform</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://httr2.r-lib.org/reference/resp_body_raw.html">resp_body_json</a></span><span class="op">(</span>check_type <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/bind_rows.html">bind_rows</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="va">df</span> <span class="op">&lt;-</span> <span class="va">data_api</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">DT</span>, <span class="va">C1</span>, <span class="va">ITM_NM</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span></span>
+<span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/across.html">across</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="va">C1</span>, <span class="va">DT</span><span class="op">)</span>, <span class="va">as.numeric</span><span class="op">)</span>,</span>
+<span>  <span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">C1</span> <span class="op">&gt;</span> <span class="fl">10</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://tidyr.tidyverse.org/reference/pivot_wider.html">pivot_wider</a></span><span class="op">(</span></span>
+<span>    id_cols <span class="op">=</span> <span class="va">C1</span>,</span>
+<span>    names_from <span class="op">=</span> <span class="va">ITM_NM</span>, </span>
+<span>    values_from <span class="op">=</span> <span class="va">DT</span></span>
+<span>  <span class="op">)</span></span>
+<span><span class="va">df_long</span> <span class="op">&lt;-</span> <span class="va">df</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://tidyr.tidyverse.org/reference/pivot_longer.html">pivot_longer</a></span><span class="op">(</span></span>
+<span>    cols <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"남자"</span>, <span class="st">"여자"</span><span class="op">)</span>, </span>
+<span>    names_to <span class="op">=</span> <span class="st">"gender"</span>,</span>
+<span>    values_to <span class="op">=</span> <span class="st">"pop"</span></span>
+<span>  <span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/rename.html">rename</a></span><span class="op">(</span>SD_CD <span class="op">=</span> <span class="va">C1</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">SD_df</span> <span class="op">&lt;-</span> <span class="va">sido</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html">left_join</a></span><span class="op">(</span></span>
+<span>    <span class="va">df</span>, <span class="fu"><a href="https://dplyr.tidyverse.org/reference/join_by.html">join_by</a></span><span class="op">(</span><span class="va">SD_CD</span> <span class="op">==</span> <span class="va">C1</span><span class="op">)</span></span>
+<span>  <span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section><section id="방식1-ggplot2-tmap" class="level4" data-number="15.3.3.2"><h4 data-number="15.3.3.2" class="anchored" data-anchor-id="방식1-ggplot2-tmap">
+<span class="header-section-number">15.3.3.2</span> 방식1: ggplot2 + tmap</h4>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb24"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/r-tmap/tmap">tmap</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/r-tmap/tmaptools">tmaptools</a></span><span class="op">)</span></span>
+<span><span class="va">SD_pt</span> <span class="op">&lt;-</span> <span class="va">SD_df</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://r-spatial.github.io/sf/reference/geos_unary.html">st_point_on_surface</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="va">SD_pt_shift</span> <span class="op">&lt;-</span> <span class="va">SD_df</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://r-spatial.github.io/sf/reference/geos_unary.html">st_point_on_surface</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="va">idx</span> <span class="op">&lt;-</span> <span class="va">SD_pt_shift</span><span class="op">$</span><span class="va">SD_NM</span> <span class="op">==</span> <span class="st">"경기도"</span></span>
+<span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_geometry.html">st_geometry</a></span><span class="op">(</span><span class="va">SD_pt_shift</span><span class="op">)</span><span class="op">[</span><span class="va">idx</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_geometry.html">st_geometry</a></span><span class="op">(</span><span class="va">SD_pt_shift</span><span class="op">)</span><span class="op">[</span><span class="va">idx</span><span class="op">]</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">20000</span>, <span class="fl">0</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">df_long_a</span> <span class="op">&lt;-</span> <span class="va">df_long</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span></span>
+<span>    gender <span class="op">=</span> <span class="fu"><a href="https://forcats.tidyverse.org/reference/fct.html">fct</a></span><span class="op">(</span><span class="va">gender</span>, levels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"남자"</span>, <span class="st">"여자"</span><span class="op">)</span><span class="op">)</span></span>
+<span>  <span class="op">)</span></span>
+<span><span class="va">gender_cols</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span></span>
+<span>  <span class="st">"남자"</span> <span class="op">=</span> <span class="st">"#66c2a5"</span>,</span>
+<span>  <span class="st">"여자"</span> <span class="op">=</span> <span class="st">"#fc8d62"</span></span>
+<span><span class="op">)</span></span>
+<span><span class="va">grobs2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html">lapply</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/split.html">split</a></span><span class="op">(</span><span class="va">df_long_a</span>, <span class="va">df_long_a</span><span class="op">$</span><span class="va">SD_CD</span><span class="op">)</span>, <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplotGrob.html">ggplotGrob</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="va">x</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x<span class="op">=</span><span class="st">""</span>, y <span class="op">=</span> <span class="va">pop</span>, fill <span class="op">=</span> <span class="va">gender</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>               <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_bar.html">geom_bar</a></span><span class="op">(</span></span>
+<span>                 width<span class="op">=</span><span class="fl">1</span>, stat<span class="op">=</span><span class="st">"identity"</span>,</span>
+<span>                 color <span class="op">=</span> <span class="st">"black"</span>, linewidth <span class="op">=</span> <span class="fl">0.3</span></span>
+<span>               <span class="op">)</span> <span class="op">+</span></span>
+<span>               <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/coord_radial.html">coord_polar</a></span><span class="op">(</span><span class="st">"y"</span>, start<span class="op">=</span><span class="fl">0</span><span class="op">)</span> <span class="op">+</span></span>
+<span>               <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_continuous.html">scale_y_continuous</a></span><span class="op">(</span>expand<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">0</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>               <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_manual.html">scale_fill_manual</a></span><span class="op">(</span></span>
+<span>                 values <span class="op">=</span> <span class="va">gender_cols</span><span class="op">)</span> <span class="op">+</span></span>
+<span>               <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_void</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>               <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html">theme</a></span><span class="op">(</span></span>
+<span>                 legend.position <span class="op">=</span> <span class="st">"none"</span>,</span>
+<span>                 plot.margin <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html">margin</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">0</span><span class="op">)</span></span>
+<span>              <span class="op">)</span><span class="op">)</span></span>
+<span><span class="op">}</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">legend_vals</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">10000000</span>, <span class="fl">3000000</span>, <span class="fl">500000</span><span class="op">)</span></span>
+<span><span class="va">legend_sizes</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">sqrt</a></span><span class="op">(</span><span class="va">legend_vals</span> <span class="op">/</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html">max</a></span><span class="op">(</span><span class="va">legend_vals</span><span class="op">)</span><span class="op">)</span> <span class="op">*</span> <span class="fl">7.5</span></span>
+<span></span>
+<span><span class="va">my_map</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tm_shape.html">tm_shape</a></span><span class="op">(</span><span class="va">SD_df</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tm_polygons.html">tm_polygons</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tm_shape.html">tm_shape</a></span><span class="op">(</span><span class="va">sido_polyline</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tm_lines.html">tm_lines</a></span><span class="op">(</span>col <span class="op">=</span> <span class="st">"black"</span>, lwd <span class="op">=</span> <span class="fl">1.5</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tm_shape.html">tm_shape</a></span><span class="op">(</span><span class="va">bbox_ulleung</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tm_lines.html">tm_lines</a></span><span class="op">(</span>col <span class="op">=</span> <span class="st">"black"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tm_shape.html">tm_shape</a></span><span class="op">(</span><span class="va">bbox_seohae</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tm_lines.html">tm_lines</a></span><span class="op">(</span>col <span class="op">=</span> <span class="st">"black"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tm_shape.html">tm_shape</a></span><span class="op">(</span><span class="va">SD_pt_shift</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tm_symbols.html">tm_symbols</a></span><span class="op">(</span>shape <span class="op">=</span> <span class="st">"SD_CD"</span>, </span>
+<span>             shape.scale <span class="op">=</span> <span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tm_scale_categorical.html">tm_scale_categorical</a></span><span class="op">(</span></span>
+<span>               values <span class="op">=</span> <span class="va">grobs2</span></span>
+<span>             <span class="op">)</span>, </span>
+<span>             shape.legend <span class="op">=</span> <span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tm_legend.html">tm_legend_hide</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>             size <span class="op">=</span> <span class="st">"총인구"</span>,</span>
+<span>             size.scale <span class="op">=</span> <span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tm_scale_continuous.html">tm_scale_continuous</a></span><span class="op">(</span></span>
+<span>               values.scale <span class="op">=</span> <span class="fl">3</span></span>
+<span>             <span class="op">)</span>,</span>
+<span>             size.legend <span class="op">=</span> <span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tm_legend.html">tm_legend_hide</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tm_add_legend.html">tm_add_legend</a></span><span class="op">(</span></span>
+<span>    type <span class="op">=</span> <span class="st">"polygons"</span>,</span>
+<span>    labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Male"</span>, <span class="st">"Female"</span><span class="op">)</span>,</span>
+<span>    fill <span class="op">=</span> <span class="va">gender_cols</span>,</span>
+<span>    title <span class="op">=</span> <span class="st">"Gender"</span>, title.size <span class="op">=</span> <span class="fl">1.2</span>, title.align <span class="op">=</span> <span class="st">"center"</span>,</span>
+<span>    text.size <span class="op">=</span> <span class="fl">1</span>, position <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0.75</span>, <span class="fl">0.30</span><span class="op">)</span>, frame <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span>  <span class="op">)</span> <span class="op">+</span></span>
+<span>    <span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tm_add_legend.html">tm_add_legend</a></span><span class="op">(</span></span>
+<span>    title <span class="op">=</span> <span class="st">"Population (10,000 Persons)"</span>, title.align <span class="op">=</span> <span class="st">"center"</span>,</span>
+<span>    title.size <span class="op">=</span> <span class="fl">1.2</span>, </span>
+<span>    type <span class="op">=</span> <span class="st">"symbols"</span>,</span>
+<span>    size <span class="op">=</span> <span class="va">legend_sizes</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>,</span>
+<span>    col <span class="op">=</span> <span class="st">"gray20"</span>, fill <span class="op">=</span> <span class="cn">NA</span>, position <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0.65</span>, <span class="fl">0.193</span><span class="op">)</span>, </span>
+<span>    frame <span class="op">=</span> <span class="cn">FALSE</span>, bg.alpha <span class="op">=</span> <span class="fl">0</span>,</span>
+<span>    margins <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0</span>, <span class="op">-</span><span class="fl">0.5</span>, <span class="fl">0</span><span class="op">)</span></span>
+<span>  <span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tm_add_legend.html">tm_add_legend</a></span><span class="op">(</span></span>
+<span>    type <span class="op">=</span> <span class="st">"symbols"</span>,</span>
+<span>    size <span class="op">=</span> <span class="va">legend_sizes</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span>,</span>
+<span>    col <span class="op">=</span> <span class="st">"gray20"</span>, fill <span class="op">=</span> <span class="cn">NA</span>, position <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0.685</span>, <span class="fl">0.127</span><span class="op">)</span>, </span>
+<span>    frame <span class="op">=</span> <span class="cn">FALSE</span>, bg.alpha <span class="op">=</span> <span class="fl">0</span></span>
+<span>  <span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tm_add_legend.html">tm_add_legend</a></span><span class="op">(</span></span>
+<span>    type <span class="op">=</span> <span class="st">"symbols"</span>,</span>
+<span>    size <span class="op">=</span> <span class="va">legend_sizes</span><span class="op">[</span><span class="fl">3</span><span class="op">]</span>,</span>
+<span>    col <span class="op">=</span> <span class="st">"gray20"</span>, fill <span class="op">=</span> <span class="cn">NA</span>, position <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0.715</span>, <span class="fl">0.0905</span><span class="op">)</span>, </span>
+<span>    frame <span class="op">=</span> <span class="cn">FALSE</span>, bg.alpha <span class="op">=</span> <span class="fl">0</span></span>
+<span>  <span class="op">)</span> <span class="op">+</span>  </span>
+<span>  <span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tm_title.html">tm_title_in</a></span><span class="op">(</span>text <span class="op">=</span> <span class="st">"Population Distribution, 2020"</span>, size <span class="op">=</span> <span class="fl">1.8</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tm_layout.html">tm_layout</a></span><span class="op">(</span>inner.margins <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0.05</span>, <span class="fl">0.025</span>, <span class="fl">0.07</span>, <span class="fl">0.05</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tm_scalebar.html">tm_scalebar</a></span><span class="op">(</span>breaks <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">200</span>, <span class="fl">50</span><span class="op">)</span>, text.size <span class="op">=</span> <span class="fl">0.6</span>, color.dark <span class="op">=</span> <span class="st">"gray60"</span>, </span>
+<span>             position <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0.025</span>, <span class="fl">0.03</span><span class="op">)</span>, allow_clipping <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tm_credits.html">tm_credits</a></span><span class="op">(</span><span class="st">"1,000"</span>, size <span class="op">=</span> <span class="fl">1</span>, position <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0.84</span>, <span class="fl">0.159</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tm_credits.html">tm_credits</a></span><span class="op">(</span><span class="st">"300"</span>, size <span class="op">=</span> <span class="fl">1</span>, position <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0.84</span>, <span class="fl">0.114</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tm_credits.html">tm_credits</a></span><span class="op">(</span><span class="st">"50"</span>, size <span class="op">=</span> <span class="fl">1</span>, position <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0.84</span>, <span class="fl">0.084</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tm_credits.html">tm_credits</a></span><span class="op">(</span><span class="st">"SANG-IL LEE, Geography Education at SNU"</span>, size <span class="op">=</span> <span class="fl">0.7</span>, position <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0.69</span>, <span class="fl">0.02</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">my_map</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure"><p><a href="15_proportional_files/figure-html/unnamed-chunk-37-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-15"><img src="15_proportional_files/figure-html/unnamed-chunk-37-1.png" class="img-fluid figure-img" width="4200"></a></p>
+</figure>
+</div>
+</div>
+</div>
+<ul>
+<li>저장</li>
+</ul></section><section id="방식2-tmap.glyphs-이상함" class="level4" data-number="15.3.3.3"><h4 data-number="15.3.3.3" class="anchored" data-anchor-id="방식2-tmap.glyphs-이상함">
+<span class="header-section-number">15.3.3.3</span> 방식2: tmap.glyphs (이상함)</h4>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb25"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/r-tmap/tmap">tmap</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/r-tmap/tmap.glyphs">tmap.glyphs</a></span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tm_shape.html">tm_shape</a></span><span class="op">(</span><span class="va">SD_df</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tm_polygons.html">tm_polygons</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tm_shape.html">tm_shape</a></span><span class="op">(</span><span class="va">sido_polyline</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tm_lines.html">tm_lines</a></span><span class="op">(</span>col <span class="op">=</span> <span class="st">"black"</span>, lwd <span class="op">=</span> <span class="fl">1.5</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tm_shape.html">tm_shape</a></span><span class="op">(</span><span class="va">bbox_ulleung</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tm_lines.html">tm_lines</a></span><span class="op">(</span>col <span class="op">=</span> <span class="st">"black"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tm_shape.html">tm_shape</a></span><span class="op">(</span><span class="va">bbox_seohae</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tm_lines.html">tm_lines</a></span><span class="op">(</span>col <span class="op">=</span> <span class="st">"black"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tm_shape.html">tm_shape</a></span><span class="op">(</span><span class="va">SD_pt_shift</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://r-tmap.github.io/tmap.glyphs/reference/tm_donuts.html">tm_donuts</a></span><span class="op">(</span></span>
+<span>    parts <span class="op">=</span> <span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tm_vars.html">tm_vars</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"남자"</span>, <span class="st">"여자"</span><span class="op">)</span>, multivariate <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,</span>
+<span>    size <span class="op">=</span> <span class="st">"총인구"</span>, lwd <span class="op">=</span> <span class="fl">1</span>, </span>
+<span>    size.scale <span class="op">=</span> <span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tm_scale_continuous.html">tm_scale_continuous</a></span><span class="op">(</span></span>
+<span>      ticks <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">500000</span>, <span class="fl">3000000</span>, <span class="fl">10000000</span><span class="op">)</span>,</span>
+<span>      values.scale <span class="op">=</span> <span class="fl">3</span></span>
+<span>    <span class="op">)</span>,</span>
+<span>    size.legend <span class="op">=</span> <span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tm_legend.html">tm_legend_hide</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>    options <span class="op">=</span> <span class="fu"><a href="https://r-tmap.github.io/tmap.glyphs/reference/tm_donuts.html">opt_tm_donuts</a></span><span class="op">(</span>fill_hole <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span>  <span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure"><p><a href="15_proportional_files/figure-html/unnamed-chunk-39-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-16"><img src="15_proportional_files/figure-html/unnamed-chunk-39-1.png" class="img-fluid figure-img" width="4200"></a></p>
+</figure>
+</div>
+</div>
+</div>
 
 
-</section></section></main><!-- /main --><script id="quarto-html-after-body" type="application/javascript">
+</section></section></section></main><!-- /main --><script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
     const icon = "";
     const anchorJS = new window.AnchorJS();
