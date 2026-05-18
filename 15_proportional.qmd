@@ -783,7 +783,9 @@ tmap_save(
 
 ### 파이차트 지도
 
-#### 데이터
+#### 방식1-1 성비: ggplot2 + tmap
+
+- 데이터
 
 ```{r}
 library(tidyverse)
@@ -792,11 +794,15 @@ library(sf)
 SD_shp <- read_sf("D:/My R/Korean Administrative Areas/행정구역 셰이프 파일/3 Generalization/2023_2Q/NOT_MOVE/SIDO_NM_2023_2Q_GEN_0050.shp", options = "ENCODING=CP949")
 ```
 
+- URL 지정
+
 ```{r}
 #| include: FALSE
 # Sys.getenv("KOSIS_API_KEY")
 my_url <- "https://kosis.kr/openapi/Param/statisticsParameterData.do?method=getList&apiKey=MTc5NDRlYzQzZWY0ZjhkYTQxZmJmZDM0MDBhNGNiMjQ=&itmId=T100+T110+T120+&objL1=00+04+05+03+11+21+22+23+24+25+26+29+31+32+33+34+35+36+37+38+39+&objL2=&objL3=&objL4=&objL5=&objL6=&objL7=&objL8=&format=json&jsonVD=Y&prdSe=Y&newEstPrdCnt=1&outputFields=ORG_ID+TBL_ID+TBL_NM+OBJ_ID+OBJ_NM+OBJ_NM_ENG+NM+NM_ENG+ITM_ID+ITM_NM+ITM_NM_ENG+UNIT_NM+UNIT_NM_ENG+PRD_SE+PRD_DE+LST_CHN_DE+&orgId=101&tblId=DT_1IN1502"
 ```
+
+- 데이터 취득 및 정리
 
 ```{r}
 library(httr2)
@@ -830,7 +836,7 @@ SD_df <- sido |>
   )
 ```
 
-#### 방식1: ggplot2 + tmap
+- 지도 제작
 
 ```{r}
 library(tmap)
@@ -938,9 +944,170 @@ tmap_save(
   my_map, filename = my.file.name,  height = 12, width = my.ratio*12, dpi = 600)
 ```
 
-#### 방식2: tmap.glyphs (이상함)
+#### 방식1-2 연령 구조: ggplot2 + tmap
+
+- 데이터
 
 ```{r}
+library(tidyverse)
+library(sf)
+
+SD_shp <- read_sf("D:/My R/Korean Administrative Areas/행정구역 셰이프 파일/3 Generalization/2023_2Q/NOT_MOVE/SIDO_NM_2023_2Q_GEN_0050.shp", options = "ENCODING=CP949")
+```
+
+- URL 지정
+
+```{r}
+#| include: FALSE
+my_url <- "https://kosis.kr/openapi/Param/statisticsParameterData.do?method=getList&apiKey=MTc5NDRlYzQzZWY0ZjhkYTQxZmJmZDM0MDBhNGNiMjQ=&itmId=T00+&objL1=11+21+22+23+24+25+26+29+31+32+33+34+35+36+37+38+39+&objL2=000+102+103+104+&objL3=&objL4=&objL5=&objL6=&objL7=&objL8=&format=json&jsonVD=Y&prdSe=Y&newEstPrdCnt=1&orgId=101&tblId=DT_1IN1503"
+```
+
+- 데이터 취득 및 정리
+
+```{r}
+library(httr2)
+data_api <- my_url |> 
+  request() |> 
+  req_perform() |> 
+  resp_body_json(check_type = FALSE) |> 
+  bind_rows()
+df <- data_api |> 
+  select(DT, C1, C2_NM) |> 
+  mutate(
+    across(c(C1, DT), as.numeric)
+  ) |> 
+  filter(C1 > 10) |> 
+  pivot_wider(
+    names_from = C2_NM, 
+    values_from = DT
+  )
+df_long <- df |> 
+  pivot_longer(
+    cols = c("15세미만", "15~64세", "65세이상"), 
+    names_to = "age",
+    values_to = "pop"
+  ) |> 
+  rename(SD_CD = C1)
+
+SD_df <- sido |> 
+  left_join(
+    df, join_by(SD_CD == C1)
+  )
+```
+
+- 지도 제작
+
+```{r}
+library(tmap)
+library(tmaptools)
+SD_pt <- SD_df |>
+  st_point_on_surface()
+SD_pt_shift <- SD_df |>
+  st_point_on_surface()
+idx <- SD_pt_shift$SD_NM == "경기도"
+st_geometry(SD_pt_shift)[idx] <- st_geometry(SD_pt_shift)[idx] + c(20000, 0)
+
+df_long_a <- df_long |> 
+  mutate(
+    age = fct(age, levels = c("15세미만", "15~64세", "65세이상"))
+  )
+age_cols <- c(
+  "15세미만" = "#7fc97f",
+  "15~64세" = "#beaed4",
+  "65세이상" = "#fdc086"
+)
+grobs2 <- lapply(split(df_long_a, df_long_a$SD_CD), function(x) {
+  ggplotGrob(ggplot(x, aes(x="", y = pop, fill = age)) +
+               geom_bar(
+                 width=1, stat="identity",
+                 color = "black", linewidth = 0.3
+               ) +
+               coord_polar("y", start=0) +
+               scale_y_continuous(expand=c(0,0)) +
+               scale_fill_manual(
+                 values = age_cols) +
+               theme_void() +
+               theme(
+                 legend.position = "none",
+                 plot.margin = margin(0, 0, 0, 0)
+              ))
+})
+
+legend_vals <- c(10000000, 3000000, 500000)
+legend_sizes <- sqrt(legend_vals / max(legend_vals)) * 7.5
+
+my_map <- tm_shape(SD_df) + tm_polygons() +
+  tm_shape(sido_polyline) + tm_lines(col = "black", lwd = 1.5) +
+  tm_shape(bbox_ulleung) + tm_lines(col = "black") +
+  tm_shape(bbox_seohae) + tm_lines(col = "black") +
+  tm_shape(SD_pt_shift) +
+  tm_symbols(shape = "SD_CD", 
+             shape.scale = tm_scale_categorical(
+               values = grobs2
+             ), 
+             shape.legend = tm_legend_hide(),
+             size = "합계",
+             size.scale = tm_scale_continuous(
+               values.scale = 3
+             ),
+             size.legend = tm_legend_hide()) +
+  tm_add_legend(
+    type = "polygons",
+    labels = c("< 15", "15~64", ">= 65"),
+    fill = age_cols,
+    title = "Age Groups", title.size = 1.2, title.align = "center",
+    text.size = 1, position = c(0.75, 0.31), frame = FALSE
+  ) +
+    tm_add_legend(
+    title = "Population (10,000 Persons)", title.align = "center",
+    title.size = 1.2, 
+    type = "symbols",
+    size = legend_sizes[1],
+    col = "gray20", fill = NA, position = c(0.65, 0.193), 
+    frame = FALSE, bg.alpha = 0,
+    margins = c(0, 0, -0.5, 0)
+  ) +
+  tm_add_legend(
+    type = "symbols",
+    size = legend_sizes[2],
+    col = "gray20", fill = NA, position = c(0.685, 0.127), 
+    frame = FALSE, bg.alpha = 0
+  ) +
+  tm_add_legend(
+    type = "symbols",
+    size = legend_sizes[3],
+    col = "gray20", fill = NA, position = c(0.715, 0.0905), 
+    frame = FALSE, bg.alpha = 0
+  ) +  
+  tm_title_in(text = "Population Distribution, 2020", size = 1.8) +
+  tm_layout(inner.margins = c(0.05, 0.025, 0.07, 0.05)) +
+  tm_scalebar(breaks = seq(0, 200, 50), text.size = 0.6, color.dark = "gray60", 
+             position = c(0.025, 0.03), allow_clipping = TRUE) +
+  tm_credits("1,000", size = 1, position = c(0.84, 0.159)) +
+  tm_credits("300", size = 1, position = c(0.84, 0.114)) +
+  tm_credits("50", size = 1, position = c(0.84, 0.084)) +
+  tm_credits("SANG-IL LEE, Geography Education at SNU", size = 0.7, position = c(0.69, 0.02))
+my_map
+```
+
+- 저장
+
+```{r}
+#| echo: false
+#| eval: false
+
+my.ratio <- get_asp_ratio(my_map)
+
+my.title <- "10_2_08_1 파이차트 tmap"
+my.file.name <- paste0("D:/My Cartography/지도제작/", my.title, ".png")
+tmap_save(
+  my_map, filename = my.file.name,  height = 12, width = my.ratio*12, dpi = 600)
+```
+
+#### 방식 2: tmap.glyphs (이상함)
+
+```{r}
+#| eval: FALSE
 library(tmap)
 library(tmap.glyphs)
 tm_shape(SD_df) + tm_polygons() +
