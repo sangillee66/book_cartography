@@ -2,15 +2,21 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.8.26">
+<meta name="generator" content="quarto-1.10.18">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 <meta name="author" content="Sang-Il Lee">
 <title>3&nbsp; 지도의 종류 – Cartography</title>
 <style>
-code{white-space: pre-wrap;}
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
 span.smallcaps{font-variant: small-caps;}
-div.columns{display: flex; gap: min(4vw, 1.5em);}
-div.column{flex: auto; overflow-x: auto;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
 div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
 ul.task-list{list-style: none;}
 ul.task-list li input[type="checkbox"] {
@@ -66,15 +72,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="./02_map_cartography.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
-<script src="site_libs/quarto-html/axe/axe-check.js" type="module"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-587c61ba64f3a5504c4d52d930310e48.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-64a204ab8560d761af7679ceaba22944.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-f2c6d6e2b784ddc5de38779acc06f37d.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-5630e6732664d48c7cde3b526013eeb9.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script src="site_libs/quarto-contrib/glightbox/glightbox.min.js"></script>
 <link href="site_libs/quarto-contrib/glightbox/glightbox.min.css" rel="stylesheet">
 <link href="site_libs/quarto-contrib/glightbox/lightbox.css" rel="stylesheet"><script id="quarto-search-options" type="application/json">{
@@ -416,8 +421,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span class="header-section-number">3.1</span> 개요</h2>
 <p><a href="images/지도의 종류.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1"><img src="images/지도의 종류.png" class="img-fluid"></a></p>
 <p>지도는 다양한 기준에 따라 유형화할 수 있으며, 본 장에서는 매체, 표현 방식, 그리고 내용의 세 가지 관점에서 지도의 종류를 체계적으로 정리한다.</p>
-<p>먼저 <strong>매체의 종류</strong>에 따라 지도는 <strong>심상 지도, 물리적 지도, 디지털 지도</strong>로 구분된다. 심상 지도(mental map)는 인간의 인지 체계 속에 형성된 내적 공간 표상으로, 개인이 경험과 기억을 통해 구성한 주관적 지도를 의미한다. 예를 들어, 자신이 거주하는 도시의 길이나 장소를 머릿속에 떠올리는 것이 이에 해당한다. 이러한 심상 지도는 물리적으로 존재하지 않으며 개인의 지각과 해석에 따라 달라진다. 물리적 지도(tangible map)는 종이와 같은 물질적 매체 위에 표현된 전통적인 형태의 지도이다. 인쇄 지도, 벽걸이 지도, 지도책 등이 이에 해당하며, 고정된 형태로 정보를 전달한다는 특징을 가진다. 디지털 지도(digital map)는 디지털 공간데이터를 기반으로 컴퓨터 환경에서 생성ㆍ저장ㆍ처리되는 지도이다. 이는 GIS, 웹 지도, 모바일 지도 등 다양한 형태로 구현되며, 상호작용성(interactivity)과 동적 표현(dynamic representation)이 가능하다는 점에서 물리적 지도와 구별된다. 심상 지도는 인간의 인지 속에 존재하는 특수한 형태이므로, 일반적으로 ’지도’라고 할 때는 물리적 지도와 디지털 지도를 지칭하는 경우가 많다.</p>
-<p>다음으로 <strong>표현 방식</strong>에 따라 지도는 <strong>심볼 지도와 영상 지도</strong>로 나뉜다. 심볼 지도(symbolic map)는 점, 선, 면, 색채, 명암, 질감 등과 같은 시각적 기호를 활용하여 지리공간적 사상을 추상적으로 표현한 지도이다. 대부분의 전통적인 지도와 주제도는 이러한 심볼 체계를 기반으로 한다. 반면 영상 지도(image-based map)는 항공사진이나 위성영상과 같이 현실 세계를 직접 촬영하거나 센싱하여 얻은 영상을 기반으로 한 지도이다. 이들은 대상의 형태와 질감을 비교적 사실적으로 전달한다는 특징을 가진다. 최근 원격탐사 기술과 디지털 환경의 발달로 영상 지도의 활용이 급속히 확대되고 있으나, 지도학에서 ’지도’라는 용어는 여전히 기호적 표현을 중심으로 한 심볼 지도를 지칭하는 경우가 일반적이다.</p>
+<p>먼저 <strong>매체의 종류</strong>에 따라 지도는 <strong>심상 지도, 물리적 지도, 디지털 지도</strong>로 구분된다. 심상 지도(mental map)는 인간의 인지 체계 속에 형성된 내적 공간 표상으로, 개인이 경험과 기억을 통해 구성한 주관적 지도를 의미한다. 예를 들어, 자신이 거주하는 도시의 길이나 장소를 머릿속에 떠올리는 것이 이에 해당한다. 이러한 심상 지도는 물리적으로 존재하지 않으며 개인의 지각과 해석에 따라 달라진다. 물리적 지도(tangible map)는 종이와 같은 물질적 매체 위에 표현된 전통적인 형태의 지도이다. 인쇄 지도, 벽걸이 지도, 지도책 등이 이에 해당하며, 고정된 형태로 정보를 전달한다는 특징을 가진다. 디지털 지도(digital map)는 디지털 공간데이터를 기반으로 컴퓨터 환경에서 생성ㆍ저장ㆍ처리되는 지도이다. 이는 GIS, 웹 지도, 모바일 지도 등 다양한 형태로 구현되며, 상호작용성(interactivity)과 동적 표현(dynamic representation)이 가능하다는 점에서 물리적 지도와 구별된다. 심상 지도는 인간의 인지 속에 존재하는 특수한 형태이므로, 일반적으로 ‘지도’라고 할 때는 물리적 지도와 디지털 지도를 지칭하는 경우가 많다.</p>
+<p>다음으로 <strong>표현 방식</strong>에 따라 지도는 <strong>심볼 지도와 영상 지도</strong>로 나뉜다. 심볼 지도(symbolic map)는 점, 선, 면, 색채, 명암, 질감 등과 같은 시각적 기호를 활용하여 지리공간적 사상을 추상적으로 표현한 지도이다. 대부분의 전통적인 지도와 주제도는 이러한 심볼 체계를 기반으로 한다. 반면 영상 지도(image-based map)는 항공사진이나 위성영상과 같이 현실 세계를 직접 촬영하거나 센싱하여 얻은 영상을 기반으로 한 지도이다. 이들은 대상의 형태와 질감을 비교적 사실적으로 전달한다는 특징을 가진다. 최근 원격탐사 기술과 디지털 환경의 발달로 영상 지도의 활용이 급속히 확대되고 있으나, 지도학에서 ‘지도’라는 용어는 여전히 기호적 표현을 중심으로 한 심볼 지도를 지칭하는 경우가 일반적이다.</p>
 <p>마지막으로 <strong>내용</strong>에 따라 지도는 <strong>일반도와 주제도</strong>로 구분된다. 일반도(general map)는 지형, 하천, 도로, 도시 등 다양한 지리적 요소를 종합적으로 표현하는 지도이다. 지형도나 도로지도와 같이 특정 주제에 국한되지 않고 여러 정보를 함께 제공하는 것이 특징이다. 주제도(thematic map)는 특정한 주제나 현상에 초점을 맞추어 그 공간적 분포나 패턴을 강조하여 표현한 지도이다. 예를 들어 인구 밀도, 기온 분포, 산업 구조 등을 나타낸 지도가 이에 해당한다.</p>
 <p>주제도는 다시 두 가지 기준에 따라 세분된다. 첫째, <strong>속성의 성격</strong>에 따라 <strong>정성적 주제도와 정량적 주제도</strong>로 구분된다. 정성적 주제도는 범주나 유형과 같은 질적 차이를 표현하며, 정량적 주제도는 수치적 크기나 양적 차이를 표현한다. 둘째, <strong>속성의 개수</strong>에 따라 <strong>단변량 주제도와 다변량 주제도</strong>로 나뉜다. 단변량 주제도는 하나의 변수만을 표현하는 반면, 다변량 주제도는 두 개 이상의 변수를 동시에 표현하여 보다 복합적인 공간적 관계를 드러낸다.</p>
 </section><section id="심상지도-물리적-지도-디지털-지도" class="level2" data-number="3.2"><h2 data-number="3.2" class="anchored" data-anchor-id="심상지도-물리적-지도-디지털-지도">
@@ -439,7 +444,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span class="header-section-number">3.2.2</span> 물리적 지도</h3>
 <p>물리적 지도는 종이와 같은 <strong>물리적 매체 위에 고정된 형태로 제작된 지도</strong>를 의미한다. 이는 전통적인 지도 개념에 해당하며, 인간이 지리공간적 사상을 외부에 표현하기 위해 가장 오래전부터 사용해 온 방식이다.</p>
 <p>물리적 지도는 <strong>형태가 고정되어 있으며 변하지 않는다</strong>는 특징을 가진다. 한 번 제작된 이후에는 내용이 쉽게 수정되지 않으며, 동일한 정보를 반복적으로 전달하는 데 적합하다. 이러한 특성은 지도 정보를 안정적으로 보존하고 전달하는 데 장점을 제공한다.</p>
-<p>이 유형은 가장 보편적인 지도 형태로, 흔히 ’지도’라고 할 때 떠올리는 대상이 바로 물리적 지도이다. 대표적인 예로는 <strong>종이 지도, 벽걸이 지도, 지도첩(atlas)</strong> 등이 있다. 특히 지도첩은 다양한 지역과 주제를 체계적으로 수록한 물리적 지도의 집합체로서 오랫동안 지리교육과 연구에서 중요한 역할을 해왔다.</p>
+<p>이 유형은 가장 보편적인 지도 형태로, 흔히 ‘지도’라고 할 때 떠올리는 대상이 바로 물리적 지도이다. 대표적인 예로는 <strong>종이 지도, 벽걸이 지도, 지도첩(atlas)</strong> 등이 있다. 특히 지도첩은 다양한 지역과 주제를 체계적으로 수록한 물리적 지도의 집합체로서 오랫동안 지리교육과 연구에서 중요한 역할을 해왔다.</p>
 <p>물리적 지도는 디지털 지도와 달리 상호작용성이나 동적 변화 기능은 제한적이지만, 직관적인 가독성과 휴대성, 그리고 매체 자체의 독립성이라는 측면에서 여전히 중요한 의미를 지닌다.</p>
 </section><section id="디지털-지도" class="level3" data-number="3.2.3"><h3 data-number="3.2.3" class="anchored" data-anchor-id="디지털-지도">
 <span class="header-section-number">3.2.3</span> 디지털 지도</h3>
@@ -458,11 +463,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>일반도의 대표적인 예로는 **지형도(topographic maps)**가 있다. 이 밖에도 지도첩(atlas), 지세도, 지역 개관도와 같은 지도들이 일반도에 해당한다. 최근에는 웹 기반 지도 서비스도 일반도의 성격을 가지는 경우가 많다. 예를 들어 <strong>네이버 지도나 Google Maps와 같은 웹 지도</strong>는 다양한 공간 객체를 종합적으로 보여주는 <strong>디지털 일반도</strong>라고 볼 수 있다.</p>
 </section><section id="주제도" class="level3" data-number="3.3.2"><h3 data-number="3.3.2" class="anchored" data-anchor-id="주제도">
 <span class="header-section-number">3.3.2</span> 주제도</h3>
-<p><strong>주제도</strong>는 특정한 지리적 현상이나 주제를 강조하여 표현한 지도이다. 일반도와 달리 하나 또는 소수의 특정한 정보를 중심으로 공간적 분포나 패턴을 나타내는 것이 목적이다. 이러한 의미에서 주제도는 전형적인 일반도가 아닌 <strong>특정한 ’테마’가 있는 지도</strong>라고 할 수 있다.</p>
+<p><strong>주제도</strong>는 특정한 지리적 현상이나 주제를 강조하여 표현한 지도이다. 일반도와 달리 하나 또는 소수의 특정한 정보를 중심으로 공간적 분포나 패턴을 나타내는 것이 목적이다. 이러한 의미에서 주제도는 전형적인 일반도가 아닌 <strong>특정한 ‘테마’가 있는 지도</strong>라고 할 수 있다.</p>
 <p>그러나 여기서 말하는 **‘테마’**는 두 가지 방식으로 해석될 수 있다.</p>
 <p>첫째는 **특정한 사물(특히 객체)**을 표현하는 경우이다. 이 경우 지도는 특정한 객체 유형을 강조하여 보여준다. 예를 들어 행정구역도, 교통망도, 관광지도와 같은 지도는 특정한 공간 객체를 중심으로 표현된 지도라고 볼 수 있다.</p>
 <p>둘째는 <strong>특정한 현상</strong>을 표현하는 경우이다. 이 경우 지도는 어떤 속성의 공간적 분포를 나타낸다. 예를 들어 인구 분포도, 강수량도, 기온도, 토지 이용도와 같은 지도는 특정한 현상의 공간적 패턴을 보여주는 주제도에 해당한다.</p>
-<p>이처럼 ’주제’라는 개념은 <strong>객체 중심의 표현과 현상 중심의 표현</strong>이라는 두 가지 관점을 포함할 수 있기 때문에, 일반도와 주제도의 경계는 항상 명확하게 구분되지는 않는다.</p>
+<p>이처럼 ‘주제’라는 개념은 <strong>객체 중심의 표현과 현상 중심의 표현</strong>이라는 두 가지 관점을 포함할 수 있기 때문에, 일반도와 주제도의 경계는 항상 명확하게 구분되지는 않는다.</p>
 <section id="전형적인-주제도" class="level4" data-number="3.3.2.1"><h4 data-number="3.3.2.1" class="anchored" data-anchor-id="전형적인-주제도">
 <span class="header-section-number">3.3.2.1</span> 전형적인 주제도</h4>
 <ul>

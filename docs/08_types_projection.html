@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.8.26">
+<meta name="generator" content="quarto-1.10.18">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -10,10 +10,16 @@
 
 <title>8&nbsp; 지도 투영법의 종류 – Cartography</title>
 <style>
-code{white-space: pre-wrap;}
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
 span.smallcaps{font-variant: small-caps;}
-div.columns{display: flex; gap: min(4vw, 1.5em);}
-div.column{flex: auto; overflow-x: auto;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
 div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
 ul.task-list{list-style: none;}
 ul.task-list li input[type="checkbox"] {
@@ -31,19 +37,18 @@ ul.task-list li input[type="checkbox"] {
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./part_3.html" rel="next">
+<link href="./09_cylindrical.html" rel="next">
 <link href="./07_concept_projection.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
-<script src="site_libs/quarto-html/axe/axe-check.js" type="module"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-587c61ba64f3a5504c4d52d930310e48.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-64a204ab8560d761af7679ceaba22944.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-f2c6d6e2b784ddc5de38779acc06f37d.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-5630e6732664d48c7cde3b526013eeb9.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -183,6 +188,30 @@ ul.task-list li input[type="checkbox"] {
  <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">지도 투영법의 종류</span></span></a>
   </div>
 </li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./09_cylindrical.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">원통 도법</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./10_conic.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">원추 도법</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./11_planar.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">평면(방위) 도법</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./12_other.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">기타 도법</span></span></a>
+  </div>
+</li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
@@ -196,56 +225,56 @@ ul.task-list li input[type="checkbox"] {
       <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./09_spatial_phenomena.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">공간적 현상의 유형화</span></span></a>
+  <a href="./13_spatial_phenomena.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">공간적 현상의 유형화</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./10_map_design.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">주제도 제작의 절차와 지도 디자인</span></span></a>
+  <a href="./14_map_design.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">주제도 제작의 절차와 지도 디자인</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./11_proportional.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">도형표현도</span></span></a>
+  <a href="./15_proportional.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">도형표현도</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./12_dot.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">점밀도도</span></span></a>
+  <a href="./16_dot.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">점밀도도</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./13_chropleth.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">코로플레스맵</span></span></a>
+  <a href="./17_chropleth.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">코로플레스맵</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./14_isoline.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">등치선도</span></span></a>
+  <a href="./18_isoline.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">등치선도</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./15_flow.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">유선도</span></span></a>
+  <a href="./19_flow.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">유선도</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./16_cartogram.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">카토그램</span></span></a>
+  <a href="./20_cartogram.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">카토그램</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./17_dasymetric.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">대시메트릭맵</span></span></a>
+  <a href="./21_dasymetric.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">대시메트릭맵</span></span></a>
   </div>
 </li>
       </ul>
@@ -261,20 +290,20 @@ ul.task-list li input[type="checkbox"] {
       <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./18_web_mapping.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Web Mapping</span></span></a>
+  <a href="./22_web_mapping.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Web Mapping</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./19_ESDA.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Exploratory Spatial Data Analysis</span></span></a>
+  <a href="./23_ESDA.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">Exploratory Spatial Data Analysis</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./20_Future.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Future of Cartography</span></span></a>
+  <a href="./24_future.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">24</span>&nbsp; <span class="chapter-title">Future of Cartography</span></span></a>
   </div>
 </li>
       </ul>
@@ -295,12 +324,23 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#지도-투영법의-종류" id="toc-지도-투영법의-종류" class="nav-link active" data-scroll-target="#지도-투영법의-종류"><span class="header-section-number">8.1</span> 지도 투영법의 종류</a>
+  <li><a href="#분류-체계" id="toc-분류-체계" class="nav-link active" data-scroll-target="#분류-체계"><span class="header-section-number">8.1</span> 분류 체계</a></li>
+  <li><a href="#투영-속성에-의한-분류" id="toc-투영-속성에-의한-분류" class="nav-link" data-scroll-target="#투영-속성에-의한-분류"><span class="header-section-number">8.2</span> 투영 속성에 의한 분류</a>
   <ul class="collapse">
-  <li><a href="#분류-체계" id="toc-분류-체계" class="nav-link" data-scroll-target="#분류-체계"><span class="header-section-number">8.1.1</span> 분류 체계</a></li>
-  <li><a href="#투영-속성에-의한-분류" id="toc-투영-속성에-의한-분류" class="nav-link" data-scroll-target="#투영-속성에-의한-분류"><span class="header-section-number">8.1.2</span> 투영 속성에 의한 분류</a></li>
-  <li><a href="#투영-면에-의한-분류" id="toc-투영-면에-의한-분류" class="nav-link" data-scroll-target="#투영-면에-의한-분류"><span class="header-section-number">8.1.3</span> 투영 면에 의한 분류</a></li>
-  <li><a href="#투영-원점과-왜곡의-양상" id="toc-투영-원점과-왜곡의-양상" class="nav-link" data-scroll-target="#투영-원점과-왜곡의-양상"><span class="header-section-number">8.1.4</span> 투영 원점과 왜곡의 양상</a></li>
+  <li><a href="#정거-도법" id="toc-정거-도법" class="nav-link" data-scroll-target="#정거-도법"><span class="header-section-number">8.2.1</span> 정거 도법</a></li>
+  <li><a href="#정형-도법" id="toc-정형-도법" class="nav-link" data-scroll-target="#정형-도법"><span class="header-section-number">8.2.2</span> 정형 도법</a></li>
+  <li><a href="#정적-도법" id="toc-정적-도법" class="nav-link" data-scroll-target="#정적-도법"><span class="header-section-number">8.2.3</span> 정적 도법</a></li>
+  <li><a href="#정방위-도법" id="toc-정방위-도법" class="nav-link" data-scroll-target="#정방위-도법"><span class="header-section-number">8.2.4</span> 정방위 도법</a></li>
+  <li><a href="#절충-도법" id="toc-절충-도법" class="nav-link" data-scroll-target="#절충-도법"><span class="header-section-number">8.2.5</span> 절충 도법</a></li>
+  </ul></li>
+  <li><a href="#투영-면에-의한-분류" id="toc-투영-면에-의한-분류" class="nav-link" data-scroll-target="#투영-면에-의한-분류"><span class="header-section-number">8.3</span> 투영 면에 의한 분류</a>
+  <ul class="collapse">
+  <li><a href="#투영-계열" id="toc-투영-계열" class="nav-link" data-scroll-target="#투영-계열"><span class="header-section-number">8.3.1</span> 투영 계열</a></li>
+  <li><a href="#투영-파라미터" id="toc-투영-파라미터" class="nav-link" data-scroll-target="#투영-파라미터"><span class="header-section-number">8.3.2</span> 투영 파라미터</a></li>
+  </ul></li>
+  <li><a href="#투영-원점과-왜곡의-양상" id="toc-투영-원점과-왜곡의-양상" class="nav-link" data-scroll-target="#투영-원점과-왜곡의-양상"><span class="header-section-number">8.4</span> 투영 원점과 왜곡의 양상</a>
+  <ul class="collapse">
+  <li><a href="#bp" id="toc-bp" class="nav-link" data-scroll-target="#bp"><span class="header-section-number">8.4.1</span> BP</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -339,45 +379,42 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<section id="지도-투영법의-종류" class="level2" data-number="8.1">
-<h2 data-number="8.1" class="anchored" data-anchor-id="지도-투영법의-종류"><span class="header-section-number">8.1</span> 지도 투영법의 종류</h2>
-<section id="분류-체계" class="level3" data-number="8.1.1">
-<h3 data-number="8.1.1" class="anchored" data-anchor-id="분류-체계"><span class="header-section-number">8.1.1</span> 분류 체계</h3>
+<section id="분류-체계" class="level2" data-number="8.1">
+<h2 data-number="8.1" class="anchored" data-anchor-id="분류-체계"><span class="header-section-number">8.1</span> 분류 체계</h2>
 </section>
-<section id="투영-속성에-의한-분류" class="level3" data-number="8.1.2">
-<h3 data-number="8.1.2" class="anchored" data-anchor-id="투영-속성에-의한-분류"><span class="header-section-number">8.1.2</span> 투영 속성에 의한 분류</h3>
-<section id="정거-도법" class="level4" data-number="8.1.2.1">
-<h4 data-number="8.1.2.1" class="anchored" data-anchor-id="정거-도법"><span class="header-section-number">8.1.2.1</span> 정거 도법</h4>
+<section id="투영-속성에-의한-분류" class="level2" data-number="8.2">
+<h2 data-number="8.2" class="anchored" data-anchor-id="투영-속성에-의한-분류"><span class="header-section-number">8.2</span> 투영 속성에 의한 분류</h2>
+<section id="정거-도법" class="level3" data-number="8.2.1">
+<h3 data-number="8.2.1" class="anchored" data-anchor-id="정거-도법"><span class="header-section-number">8.2.1</span> 정거 도법</h3>
 </section>
-<section id="정형-도법" class="level4" data-number="8.1.2.2">
-<h4 data-number="8.1.2.2" class="anchored" data-anchor-id="정형-도법"><span class="header-section-number">8.1.2.2</span> 정형 도법</h4>
+<section id="정형-도법" class="level3" data-number="8.2.2">
+<h3 data-number="8.2.2" class="anchored" data-anchor-id="정형-도법"><span class="header-section-number">8.2.2</span> 정형 도법</h3>
 </section>
-<section id="정적-도법" class="level4" data-number="8.1.2.3">
-<h4 data-number="8.1.2.3" class="anchored" data-anchor-id="정적-도법"><span class="header-section-number">8.1.2.3</span> 정적 도법</h4>
+<section id="정적-도법" class="level3" data-number="8.2.3">
+<h3 data-number="8.2.3" class="anchored" data-anchor-id="정적-도법"><span class="header-section-number">8.2.3</span> 정적 도법</h3>
 </section>
-<section id="정방위-도법" class="level4" data-number="8.1.2.4">
-<h4 data-number="8.1.2.4" class="anchored" data-anchor-id="정방위-도법"><span class="header-section-number">8.1.2.4</span> 정방위 도법</h4>
+<section id="정방위-도법" class="level3" data-number="8.2.4">
+<h3 data-number="8.2.4" class="anchored" data-anchor-id="정방위-도법"><span class="header-section-number">8.2.4</span> 정방위 도법</h3>
 </section>
-<section id="절충-도법" class="level4" data-number="8.1.2.5">
-<h4 data-number="8.1.2.5" class="anchored" data-anchor-id="절충-도법"><span class="header-section-number">8.1.2.5</span> 절충 도법</h4>
+<section id="절충-도법" class="level3" data-number="8.2.5">
+<h3 data-number="8.2.5" class="anchored" data-anchor-id="절충-도법"><span class="header-section-number">8.2.5</span> 절충 도법</h3>
 </section>
 </section>
-<section id="투영-면에-의한-분류" class="level3" data-number="8.1.3">
-<h3 data-number="8.1.3" class="anchored" data-anchor-id="투영-면에-의한-분류"><span class="header-section-number">8.1.3</span> 투영 면에 의한 분류</h3>
-<section id="투영-계열" class="level4" data-number="8.1.3.1">
-<h4 data-number="8.1.3.1" class="anchored" data-anchor-id="투영-계열"><span class="header-section-number">8.1.3.1</span> 투영 계열</h4>
+<section id="투영-면에-의한-분류" class="level2" data-number="8.3">
+<h2 data-number="8.3" class="anchored" data-anchor-id="투영-면에-의한-분류"><span class="header-section-number">8.3</span> 투영 면에 의한 분류</h2>
+<section id="투영-계열" class="level3" data-number="8.3.1">
+<h3 data-number="8.3.1" class="anchored" data-anchor-id="투영-계열"><span class="header-section-number">8.3.1</span> 투영 계열</h3>
 </section>
-<section id="투영-파라미터" class="level4" data-number="8.1.3.2">
-<h4 data-number="8.1.3.2" class="anchored" data-anchor-id="투영-파라미터"><span class="header-section-number">8.1.3.2</span> 투영 파라미터</h4>
+<section id="투영-파라미터" class="level3" data-number="8.3.2">
+<h3 data-number="8.3.2" class="anchored" data-anchor-id="투영-파라미터"><span class="header-section-number">8.3.2</span> 투영 파라미터</h3>
 </section>
 </section>
-<section id="투영-원점과-왜곡의-양상" class="level3" data-number="8.1.4">
-<h3 data-number="8.1.4" class="anchored" data-anchor-id="투영-원점과-왜곡의-양상"><span class="header-section-number">8.1.4</span> 투영 원점과 왜곡의 양상</h3>
-<section id="bp" class="level4" data-number="8.1.4.1">
-<h4 data-number="8.1.4.1" class="anchored" data-anchor-id="bp"><span class="header-section-number">8.1.4.1</span> BP</h4>
+<section id="투영-원점과-왜곡의-양상" class="level2" data-number="8.4">
+<h2 data-number="8.4" class="anchored" data-anchor-id="투영-원점과-왜곡의-양상"><span class="header-section-number">8.4</span> 투영 원점과 왜곡의 양상</h2>
+<section id="bp" class="level3" data-number="8.4.1">
+<h3 data-number="8.4.1" class="anchored" data-anchor-id="bp"><span class="header-section-number">8.4.1</span> BP</h3>
 
 
-</section>
 </section>
 </section>
 
@@ -789,8 +826,8 @@ ul.task-list li input[type="checkbox"] {
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./part_3.html" class="pagination-link" aria-label="주제도 제작">
-        <span class="nav-page-text">주제도 제작</span> <i class="bi bi-arrow-right-short"></i>
+      <a href="./09_cylindrical.html" class="pagination-link" aria-label="원통 도법">
+        <span class="nav-page-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">원통 도법</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>
